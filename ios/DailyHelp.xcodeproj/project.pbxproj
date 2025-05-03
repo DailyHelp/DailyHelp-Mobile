@@ -11,20 +11,18 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		761780ED2CA45674006654EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EC2CA45674006654EE /* AppDelegate.swift */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		E28ED7C252F7C84B27DEEBB7 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
+		032A405845104208B845A3D5 /* CabinetGrotesk-Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = 5D577423B25D4DB2B37F0B9A /* CabinetGrotesk-Black.otf */; };
+		D5767EF85E4E424F89121C62 /* CabinetGrotesk-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = A75D4D276FF146E997C4F987 /* CabinetGrotesk-Bold.otf */; };
+		DC08856C6AEB49D794BD5E80 /* CabinetGrotesk-Extrabold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 00087175BDAE47F9A9DE7D7D /* CabinetGrotesk-Extrabold.otf */; };
+		BE958D44223A4272A5B3F38C /* CabinetGrotesk-Extralight.otf in Resources */ = {isa = PBXBuildFile; fileRef = A4E418DC66F142B7A5DD08C5 /* CabinetGrotesk-Extralight.otf */; };
+		FDE2A55652F64A91B0F07DBC /* CabinetGrotesk-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 790C5326587047DABA907036 /* CabinetGrotesk-Light.otf */; };
+		1A651E052CEB41F58E353CDF /* CabinetGrotesk-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 0D05CB113E6448059FB78109 /* CabinetGrotesk-Medium.otf */; };
+		F0DF8D02468B4C819D119CA9 /* CabinetGrotesk-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 0D596D1D1A4247E081551717 /* CabinetGrotesk-Regular.otf */; };
+		357B7AD5C2814EB4BC15CBB7 /* CabinetGrotesk-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = 929891D7B8C44516942CF45C /* CabinetGrotesk-Thin.otf */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		00E356F41AD99517003FC87E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 13B07F861A680F5B00A75B9A;
-			remoteInfo = DailyHelp;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
-		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* DailyHelp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DailyHelp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = DailyHelp/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = DailyHelp/Info.plist; sourceTree = "<group>"; };
@@ -35,6 +33,14 @@
 		761780EC2CA45674006654EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = DailyHelp/AppDelegate.swift; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = DailyHelp/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		5D577423B25D4DB2B37F0B9A /* CabinetGrotesk-Black.otf */ = {isa = PBXFileReference; name = "CabinetGrotesk-Black.otf"; path = "../src/assets/fonts/CabinetGrotesk-Black.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		A75D4D276FF146E997C4F987 /* CabinetGrotesk-Bold.otf */ = {isa = PBXFileReference; name = "CabinetGrotesk-Bold.otf"; path = "../src/assets/fonts/CabinetGrotesk-Bold.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		00087175BDAE47F9A9DE7D7D /* CabinetGrotesk-Extrabold.otf */ = {isa = PBXFileReference; name = "CabinetGrotesk-Extrabold.otf"; path = "../src/assets/fonts/CabinetGrotesk-Extrabold.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		A4E418DC66F142B7A5DD08C5 /* CabinetGrotesk-Extralight.otf */ = {isa = PBXFileReference; name = "CabinetGrotesk-Extralight.otf"; path = "../src/assets/fonts/CabinetGrotesk-Extralight.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		790C5326587047DABA907036 /* CabinetGrotesk-Light.otf */ = {isa = PBXFileReference; name = "CabinetGrotesk-Light.otf"; path = "../src/assets/fonts/CabinetGrotesk-Light.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		0D05CB113E6448059FB78109 /* CabinetGrotesk-Medium.otf */ = {isa = PBXFileReference; name = "CabinetGrotesk-Medium.otf"; path = "../src/assets/fonts/CabinetGrotesk-Medium.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		0D596D1D1A4247E081551717 /* CabinetGrotesk-Regular.otf */ = {isa = PBXFileReference; name = "CabinetGrotesk-Regular.otf"; path = "../src/assets/fonts/CabinetGrotesk-Regular.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		929891D7B8C44516942CF45C /* CabinetGrotesk-Thin.otf */ = {isa = PBXFileReference; name = "CabinetGrotesk-Thin.otf"; path = "../src/assets/fonts/CabinetGrotesk-Thin.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -49,14 +55,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		00E356F01AD99517003FC87E /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				00E356F11AD99517003FC87E /* Info.plist */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
 		13B07FAE1A68108700A75B9A /* DailyHelp */ = {
 			isa = PBXGroup;
 			children = (
@@ -93,6 +91,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
+				96963CA45F7746E990CD4B1A /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -115,6 +114,22 @@
 			);
 			path = Pods;
 			sourceTree = "<group>";
+		};
+		96963CA45F7746E990CD4B1A /* Resources */ = {
+			isa = "PBXGroup";
+			children = (
+				5D577423B25D4DB2B37F0B9A /* CabinetGrotesk-Black.otf */,
+				A75D4D276FF146E997C4F987 /* CabinetGrotesk-Bold.otf */,
+				00087175BDAE47F9A9DE7D7D /* CabinetGrotesk-Extrabold.otf */,
+				A4E418DC66F142B7A5DD08C5 /* CabinetGrotesk-Extralight.otf */,
+				790C5326587047DABA907036 /* CabinetGrotesk-Light.otf */,
+				0D05CB113E6448059FB78109 /* CabinetGrotesk-Medium.otf */,
+				0D596D1D1A4247E081551717 /* CabinetGrotesk-Regular.otf */,
+				929891D7B8C44516942CF45C /* CabinetGrotesk-Thin.otf */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+			path = "";
 		};
 /* End PBXGroup section */
 
@@ -172,19 +187,21 @@
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		00E356EC1AD99517003FC87E /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		13B07F8E1A680F5B00A75B9A /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				E28ED7C252F7C84B27DEEBB7 /* PrivacyInfo.xcprivacy in Resources */,
+				032A405845104208B845A3D5 /* CabinetGrotesk-Black.otf in Resources */,
+				D5767EF85E4E424F89121C62 /* CabinetGrotesk-Bold.otf in Resources */,
+				DC08856C6AEB49D794BD5E80 /* CabinetGrotesk-Extrabold.otf in Resources */,
+				BE958D44223A4272A5B3F38C /* CabinetGrotesk-Extralight.otf in Resources */,
+				FDE2A55652F64A91B0F07DBC /* CabinetGrotesk-Light.otf in Resources */,
+				1A651E052CEB41F58E353CDF /* CabinetGrotesk-Medium.otf in Resources */,
+				F0DF8D02468B4C819D119CA9 /* CabinetGrotesk-Regular.otf in Resources */,
+				357B7AD5C2814EB4BC15CBB7 /* CabinetGrotesk-Thin.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -275,14 +292,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		00E356F51AD99517003FC87E /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 13B07F861A680F5B00A75B9A /* DailyHelp */;
-			targetProxy = 00E356F41AD99517003FC87E /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
@@ -408,7 +417,14 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					" ",
+				);
+				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
+				USE_HERMES = true;
 			};
 			name = Debug;
 		};
@@ -473,7 +489,13 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					" ",
+				);
+				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
+				USE_HERMES = true;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;

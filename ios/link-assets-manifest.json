@@ -1,0 +1,37 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "src/assets/fonts/CabinetGrotesk-Black.otf",
+      "sha1": "d4546397a43048a8dde8cd12382c75d08441e717"
+    },
+    {
+      "path": "src/assets/fonts/CabinetGrotesk-Bold.otf",
+      "sha1": "553f503c569a15d5ef012d2bf1bb42acea4ea36e"
+    },
+    {
+      "path": "src/assets/fonts/CabinetGrotesk-Extrabold.otf",
+      "sha1": "62384b4c83a55aed26d4ed8c6afbcd29ed34b3d3"
+    },
+    {
+      "path": "src/assets/fonts/CabinetGrotesk-Extralight.otf",
+      "sha1": "cb3d59bb27c9886eca8b3c0243ff32e20d0a5291"
+    },
+    {
+      "path": "src/assets/fonts/CabinetGrotesk-Light.otf",
+      "sha1": "4b81a8c53088545511067c5828d279acf836939f"
+    },
+    {
+      "path": "src/assets/fonts/CabinetGrotesk-Medium.otf",
+      "sha1": "42a03d5987676ed3dba88c8a5fb19b3754181232"
+    },
+    {
+      "path": "src/assets/fonts/CabinetGrotesk-Regular.otf",
+      "sha1": "f4464f4cc0a4c62c6a331938aaefdba5050a26f7"
+    },
+    {
+      "path": "src/assets/fonts/CabinetGrotesk-Thin.otf",
+      "sha1": "9db4b4182a64322b7405d2be73e1fc7f0dc030d7"
+    }
+  ]
+}
