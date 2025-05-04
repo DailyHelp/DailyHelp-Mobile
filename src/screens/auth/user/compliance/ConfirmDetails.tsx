@@ -5,6 +5,7 @@ import {customFontSize, fonts} from '../../../../shared/themes/Typography';
 import {appStore} from '../../../../shared/stores/appStore';
 import {scale, verticalScale} from '../../../../shared/Scaling';
 import MainButton from '../../../../components/button/MainButton';
+import ScreenHeader from '../../../../components/ScreenHeader';
 
 const ConfirmDetails: IConfirmDetails = ({navigation}) => {
   const user_data = [
@@ -32,24 +33,10 @@ const ConfirmDetails: IConfirmDetails = ({navigation}) => {
 
   return (
     <View style={{flex: 1, width: '90%', alignSelf: 'center'}}>
-      <View style={{flexDirection: 'column', gap: 6}}>
-        <Text
-          style={{
-            fontFamily: fonts.black,
-            fontSize: customFontSize.lg,
-            color: '#121921',
-          }}>
-          Confirm details
-        </Text>
-        <Text
-          style={{
-            fontFamily: fonts.medium,
-            fontSize: customFontSize.md,
-            color: '#757C91',
-          }}>
-          Review your details before submitting for verification.
-        </Text>
-      </View>
+      <ScreenHeader
+        title="Confirm details"
+        description="Review your details before submitting for verification."
+      />
 
       <View
         style={{
@@ -75,22 +62,23 @@ const ConfirmDetails: IConfirmDetails = ({navigation}) => {
             gap: 18,
             marginTop: verticalScale(18),
           }}>
-          {user_data.map(({data, title}) => (
+          {user_data.map(({data, title}, key) => (
             <View
+              key={key}
               style={{
                 flexDirection: 'row',
                 justifyContent: 'space-between',
               }}>
               <Text
                 style={{
-                  fontFamily: fonts.regular,
-                  fontSize: customFontSize.md,
+                  fontFamily: fonts.GeistRegular,
+                  fontSize: customFontSize.sm,
                 }}>
                 {title}
               </Text>
               <Text
                 style={{
-                  fontFamily: fonts.bold,
+                  fontFamily: fonts.GeistBold,
                   fontSize: customFontSize.md,
                 }}>
                 {data}

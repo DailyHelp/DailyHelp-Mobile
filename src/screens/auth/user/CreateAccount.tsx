@@ -5,6 +5,7 @@ import Assets from '../../../assets/Assets';
 import {Text} from 'react-native-paper';
 import {customFontSize, fonts} from '../../../shared/themes/Typography';
 import MainButton from '../../../components/button/MainButton';
+import ScreenHeader from '../../../components/ScreenHeader';
 
 const CreateAccount: ICreateAccount = ({navigation}) => {
   return (
@@ -17,24 +18,11 @@ const CreateAccount: ICreateAccount = ({navigation}) => {
           flexDirection: 'column',
           gap: 20,
         }}>
-        <View style={{flexDirection: 'column', gap: 6}}>
-          <Text
-            style={{
-              fontFamily: fonts.black,
-              fontSize: customFontSize.lg,
-              color: '#121921',
-            }}>
-            Sign up
-          </Text>
-          <Text
-            style={{
-              fontFamily: fonts.medium,
-              fontSize: customFontSize.md,
-              color: '#757C91',
-            }}>
-            Find trusted & vetted professional service providers.
-          </Text>
-        </View>
+        <ScreenHeader
+          title="Sign up"
+          description="Find trusted & vetted professional service providers."
+        />
+
         <CustomInput
           leftIcon={<Assets.UserOutline />}
           placeholder="e.g. Ngozi"

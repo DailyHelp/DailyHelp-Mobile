@@ -8,6 +8,7 @@ import {useNavigation} from '@react-navigation/native';
 import {IAuthRoute, Navigate} from '../@types/routes';
 import AppStorage from '../shared/AppStorage';
 import {UserTypes} from '../shared/Constant';
+import ScreenHeader from './ScreenHeader';
 
 const FindServiceAuthModal: IFindServiceAuthModal = ({
   isVisible,
@@ -42,24 +43,10 @@ const FindServiceAuthModal: IFindServiceAuthModal = ({
               justifyContent: 'space-between',
               gap: 10,
             }}>
-            <View style={{flexDirection: 'column', gap: 6}}>
-              <Text
-                style={{
-                  fontFamily: fonts.black,
-                  fontSize: customFontSize.lg,
-                  color: '#121921',
-                }}>
-                Sign up to find services
-              </Text>
-              <Text
-                style={{
-                  fontFamily: fonts.medium,
-                  fontSize: customFontSize.md,
-                  color: '#757C91',
-                }}>
-                Get the help you need from verified experts.
-              </Text>
-            </View>
+            <ScreenHeader
+              title="Sign up to find services"
+              description="Get the help you need from verified experts."
+            />
             <Icon name="close" size={15} onPress={() => onClose()} />
           </View>
 
@@ -76,6 +63,10 @@ const FindServiceAuthModal: IFindServiceAuthModal = ({
                 navigation.navigate('CreateAccount');
               }}
               mode="outlined"
+              labelStyle={{
+                fontFamily: fonts.GeistBold,
+                fontSize: customFontSize.sm,
+              }}
               contentStyle={{
                 height: verticalScale(50),
                 justifyContent: 'center',
@@ -86,6 +77,10 @@ const FindServiceAuthModal: IFindServiceAuthModal = ({
             <Button
               icon={() => <Assets.GoogleColored />}
               mode="outlined"
+              labelStyle={{
+                fontFamily: fonts.GeistBold,
+                fontSize: customFontSize.sm,
+              }}
               contentStyle={{
                 height: verticalScale(50),
                 justifyContent: 'center',
@@ -96,6 +91,10 @@ const FindServiceAuthModal: IFindServiceAuthModal = ({
             <Button
               icon={() => <Assets.Apple />}
               mode="outlined"
+              labelStyle={{
+                fontFamily: fonts.GeistBold,
+                fontSize: customFontSize.sm,
+              }}
               contentStyle={{
                 height: verticalScale(50),
                 justifyContent: 'center',
@@ -107,20 +106,20 @@ const FindServiceAuthModal: IFindServiceAuthModal = ({
           <View style={{width: '100%'}}>
             <Text
               style={{
-                fontFamily: fonts.bold,
-                fontSize: customFontSize.m2d,
+                fontFamily: fonts.GeistBold,
+                fontSize: customFontSize.sm,
                 color: '#3B4152',
                 textAlign: 'center',
                 lineHeight: 20,
               }}>
               By continuing you agree with{' '}
-              <Text style={{color: '#121419', fontFamily: fonts.bold}}>
+              <Text style={{color: '#121419', fontFamily: fonts.GeistBold}}>
                 our{' '}
               </Text>
-              <Text style={{color: '#006633', fontFamily: fonts.bold}}>
+              <Text style={{color: '#006633', fontFamily: fonts.GeistBold}}>
                 Terms of Use
               </Text>
-              <Text style={{color: '#121419', fontFamily: fonts.bold}}>
+              <Text style={{color: '#121419', fontFamily: fonts.GeistBold}}>
                 {' '}
                 and{' '}
               </Text>
@@ -128,7 +127,7 @@ const FindServiceAuthModal: IFindServiceAuthModal = ({
                 style={{
                   color: '#006633',
                   textAlign: 'center',
-                  fontFamily: fonts.bold,
+                  fontFamily: fonts.GeistBold,
                 }}>
                 Privacy Policies
               </Text>

@@ -13,5 +13,5 @@ export enum ApiMethods {
 
 export enum UserTypes {
   USER = 'user',
-  AGENT = 'agent',
+  HELPERS = 'helpers',
 }

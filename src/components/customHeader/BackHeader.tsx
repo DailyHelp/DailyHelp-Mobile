@@ -16,9 +16,9 @@ const BackHeader: ICustomHeader<NativeStackHeaderProps> = ({
         <Icon name="chevron-back" size={20} color={'#014C2B'} />
         <Text
           style={{
-            fontFamily: fonts.bold,
+            fontFamily: fonts.GeistBold,
             color: '#017441',
-            fontSize: customFontSize.m2d,
+            fontSize: customFontSize.sm,
             paddingTop: 3,
           }}>
           {title}

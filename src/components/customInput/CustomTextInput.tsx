@@ -15,8 +15,8 @@ const CustomTextInput: IInput = ({
     <View style={{flexDirection: 'column', gap: 9}}>
       <Text
         style={{
-          fontFamily: fonts.bold,
-          fontSize: customFontSize.m2d,
+          fontFamily: fonts.GeistBold,
+          fontSize: customFontSize.sm,
           color: '#757C91',
         }}>
         {label}
@@ -46,8 +46,8 @@ const CustomTextInput: IInput = ({
           placeholderTextColor={'#A9AFC2'}
           contentStyle={{
             color: '#757C91',
-            fontFamily: fonts.bold,
-            fontSize: customFontSize.m2d,
+            fontFamily: fonts.GeistBold,
+            fontSize: customFontSize.sm,
           }}
           outlineStyle={{
             borderRadius: 10,

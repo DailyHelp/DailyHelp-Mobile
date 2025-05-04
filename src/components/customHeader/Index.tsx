@@ -2,6 +2,7 @@ import React from 'react';
 import {View} from 'react-native';
 import BackHeader from './BackHeader';
 import {NativeStackHeaderProps} from '@react-navigation/native-stack';
+import HomeHeader from './HomeHeader';
 
 const CustomHeader: ICustomHeader<NativeStackHeaderProps> = ({
   type = 'back',
@@ -10,6 +11,7 @@ const CustomHeader: ICustomHeader<NativeStackHeaderProps> = ({
   return (
     <React.Fragment>
       {type === 'back' && <BackHeader {...props} />}
+      {type === 'home' && <HomeHeader {...props} />}
     </React.Fragment>
   );
 };

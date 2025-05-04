@@ -49,7 +49,7 @@ type ICustomHeader<P> = Props<
   Partial<P> & {
     title: string;
     onPress?: () => void;
-    type?: 'back' | 'close';
+    type?: 'back' | 'close' | 'home';
     goBack?: () => void;
   }
 >;
@@ -79,3 +79,42 @@ type ISelfie = Props<{}>;
 type IPreview = Props<{
   navigation?: any;
 }>;
+
+type ICategorySection = Props<{
+  categories: {label: string; slug?: string; showIcon?: boolean}[];
+}>;
+
+type IVerifyPhoneNumberContainer = Props<{}>;
+
+type IScreenHeader = Props<{
+  title: string;
+  description: string;
+}>;
+
+type IHelperCard = Props<{
+  mode: 'middle' | 'row';
+  image?: any;
+  skill?: string;
+  price?: string;
+  rating?: number;
+  status?: string;
+  jobsCompleted?: number;
+  name?: string;
+}>;
+
+type ICustomFlatListProps<T> = {
+  data: any;
+  // renderItem: (item: any, index: number) => JSX.Element;
+  renderItem: any;
+  keyExtractor: (item: any, index: number) => string;
+  onEndReached?: () => void;
+  onEndReachedThreshold?: number;
+  isLoading?: boolean;
+  emptyMessage?: string;
+  ListFooterComponent?: any;
+  ListHeaderComponent?: any;
+  showsVerticalScrollIndicator?: boolean;
+  refreshing?: boolean;
+  onRefresh?: () => void;
+  ListEmptyComponent?: Props;
+};

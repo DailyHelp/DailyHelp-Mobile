@@ -6,6 +6,9 @@ import MainButton from '../../../components/button/MainButton';
 import CustomInput from '../../../components/customInput/Index';
 import {scale, verticalScale} from '../../../shared/Scaling';
 import {customFontSize, fonts} from '../../../shared/themes/Typography';
+import {observer} from 'mobx-react-lite';
+import {appStore} from '../../../shared/stores/appStore';
+import ScreenHeader from '../../../components/ScreenHeader';
 
 const Login: ILogin = ({navigation}) => {
   return (
@@ -18,24 +21,10 @@ const Login: ILogin = ({navigation}) => {
           flexDirection: 'column',
           gap: 20,
         }}>
-        <View style={{flexDirection: 'column', gap: 6}}>
-          <Text
-            style={{
-              fontFamily: fonts.black,
-              fontSize: customFontSize.lg,
-              color: '#121921',
-            }}>
-            Welcome back
-          </Text>
-          <Text
-            style={{
-              fontFamily: fonts.medium,
-              fontSize: customFontSize.md,
-              color: '#757C91',
-            }}>
-            Let’s get you right back into your account.
-          </Text>
-        </View>
+        <ScreenHeader
+          title="Welcome back"
+          description="Let’s get you right back into your account."
+        />
 
         <CustomInput
           leftIcon={<Assets.EmailInput />}
@@ -49,9 +38,7 @@ const Login: ILogin = ({navigation}) => {
           label="Password"
         />
 
-        <MainButton onPress={() => navigation.navigate('VerifyAccount')}>
-          Login
-        </MainButton>
+        <MainButton onPress={() => appStore.setRoute('app')}>Login</MainButton>
 
         <View
           style={{
@@ -72,8 +59,8 @@ const Login: ILogin = ({navigation}) => {
               style={{
                 textAlign: 'center',
                 color: '#757C91',
-                fontFamily: fonts.bold,
-                fontSize: customFontSize.md,
+                fontFamily: fonts.GeistBold,
+                fontSize: customFontSize.sm,
               }}>
               Or continue with
             </Text>
@@ -96,6 +83,10 @@ const Login: ILogin = ({navigation}) => {
           <Button
             icon={() => <Assets.GoogleColored />}
             mode="outlined"
+            labelStyle={{
+              fontFamily: fonts.GeistBold,
+              fontSize: customFontSize.sm,
+            }}
             contentStyle={{
               height: verticalScale(50),
               justifyContent: 'center',
@@ -106,6 +97,10 @@ const Login: ILogin = ({navigation}) => {
           <Button
             icon={() => <Assets.Apple />}
             mode="outlined"
+            labelStyle={{
+              fontFamily: fonts.GeistBold,
+              fontSize: customFontSize.sm,
+            }}
             contentStyle={{
               height: verticalScale(50),
               justifyContent: 'center',
@@ -115,12 +110,12 @@ const Login: ILogin = ({navigation}) => {
           </Button>
         </View>
 
-        <TouchableOpacity onPress={() => navigation.navigate('VerifyAccount')}>
+        <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
           <Text
             style={{
               color: '#017441',
-              fontFamily: fonts.bold,
-              fontSize: customFontSize.md,
+              fontFamily: fonts.GeistBold,
+              fontSize: customFontSize.sm,
               textAlign: 'center',
               marginTop: verticalScale(150),
             }}>
@@ -131,4 +126,4 @@ const Login: ILogin = ({navigation}) => {
     </ScrollView>
   );
 };
-export default Login;
+export default observer(Login);

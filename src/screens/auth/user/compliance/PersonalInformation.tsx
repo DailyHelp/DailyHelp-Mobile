@@ -7,6 +7,7 @@ import React from 'react';
 import {scale, verticalScale} from '../../../../shared/Scaling';
 import MainButton from '../../../../components/button/MainButton';
 import Icon from 'react-native-vector-icons/Fontisto';
+import ScreenHeader from '../../../../components/ScreenHeader';
 
 const PersonalInformation: IPersonalInformation = ({navigation}) => {
   const [gender, setGender] = React.useState('');
@@ -20,24 +21,10 @@ const PersonalInformation: IPersonalInformation = ({navigation}) => {
           flexDirection: 'column',
           gap: 20,
         }}>
-        <View style={{flexDirection: 'column', gap: 6}}>
-          <Text
-            style={{
-              fontFamily: fonts.black,
-              fontSize: customFontSize.lg,
-              color: '#121921',
-            }}>
-            Personal Information
-          </Text>
-          <Text
-            style={{
-              fontFamily: fonts.medium,
-              fontSize: customFontSize.md,
-              color: '#757C91',
-            }}>
-            Provide some information about yourself.
-          </Text>
-        </View>
+        <ScreenHeader
+          title="Personal Information"
+          description="Provide some information about yourself."
+        />
 
         <CustomInput placeholder="e.g. Ngozi" label="First name" />
 
@@ -54,8 +41,8 @@ const PersonalInformation: IPersonalInformation = ({navigation}) => {
         <View style={{flexDirection: 'column', gap: 10}}>
           <Text
             style={{
-              fontFamily: fonts.bold,
-              fontSize: customFontSize.m2d,
+              fontFamily: fonts.GeistBold,
+              fontSize: customFontSize.sm,
               color: '#757C91',
             }}>
             Gender
@@ -73,7 +60,8 @@ const PersonalInformation: IPersonalInformation = ({navigation}) => {
                   borderColor: item === gender ? '#95D21A' : '',
                 }}
                 labelStyle={{
-                  fontFamily: item === gender ? fonts.bold : fonts.regular,
+                  fontFamily:
+                    item === gender ? fonts.GeistBold : fonts.GeistRegular,
                   fontSize: customFontSize.md,
                   paddingTop: verticalScale(5),
                 }}

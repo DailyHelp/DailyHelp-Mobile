@@ -13,6 +13,7 @@ import {PaperProvider} from 'react-native-paper';
 import {theme} from '../shared/themes/Index';
 import {Observer} from 'mobx-react-lite';
 import {appStore} from '../shared/stores/appStore';
+import AppRouter from './app/Index';
 
 const Routes: Props = () => {
   const navigationRef = useNavigationContainerRef();
@@ -33,6 +34,7 @@ const Routes: Props = () => {
             {() => (
               <React.Fragment>
                 {appStore.route === 'authentication' && <AuthRouter />}
+                {appStore.route === 'app' && <AppRouter />}
               </React.Fragment>
             )}
           </Observer>

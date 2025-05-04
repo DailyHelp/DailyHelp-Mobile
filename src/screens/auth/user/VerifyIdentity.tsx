@@ -18,11 +18,17 @@ const VerifyIdentity: IVerifyIdentity = ({route, navigation}) => {
   return (
     <View style={{flex: 1}}>
       <Assets.Kyc />
-      <View style={{width: '95%', alignSelf: 'center'}}>
+      <View
+        style={{
+          width: '95%',
+          alignSelf: 'center',
+          flexDirection: 'column',
+          gap: 10,
+        }}>
         <Text
           style={{
             color: '#017441',
-            fontFamily: fonts.bold,
+            fontFamily: fonts.GeistBold,
             fontSize: customFontSize.m2d,
           }}>
           Hello {route.params?.name}
@@ -56,8 +62,8 @@ const VerifyIdentity: IVerifyIdentity = ({route, navigation}) => {
           <View style={{width: '93%'}}>
             <Text
               style={{
-                fontFamily: fonts.medium,
-                fontSize: customFontSize.m2d,
+                fontFamily: fonts.GeistMedium,
+                fontSize: customFontSize.sm,
                 color: '#757C91',
               }}>
               We verify identities to ensure a safe experience for you and

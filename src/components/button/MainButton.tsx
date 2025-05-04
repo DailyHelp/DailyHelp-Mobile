@@ -25,8 +25,8 @@ const MainButton: ICustomButton = ({
         flexDirection: moveIconRight ? 'row-reverse' : 'row',
       }}
       labelStyle={{
-        fontSize: customFontSize.md,
-        fontFamily: fonts.bold,
+        fontSize: customFontSize.sm,
+        fontFamily: fonts.GeistBold,
         paddingTop: verticalScale(7),
       }}>
       {children || title}

@@ -24,10 +24,8 @@ const Selfie: ISelfie = ({}) => {
 
   React.useEffect(() => {
     const checkPermissionsAndSetDevice = async () => {
-      if (!hasPermission) {
-        const granted = await requestPermission();
-        if (!granted) return;
-      }
+      const permission = await requestPermission(); // always await this
+      if (!permission) return;
 
       const availableDevices = await Camera.getAvailableCameraDevices();
       const selectedDevice = getCameraDevice(availableDevices, 'front');
@@ -40,7 +38,7 @@ const Selfie: ISelfie = ({}) => {
     };
 
     checkPermissionsAndSetDevice();
-  }, [hasPermission]);
+  }, []);
 
   return (
     <View style={{flex: 1}}>
@@ -129,7 +127,7 @@ const styles = StyleSheet.create({
   instruction: {
     color: 'white',
     padding: 15,
-    fontFamily: fonts.medium,
-    fontSize: customFontSize.md,
+    fontFamily: fonts.GeistMedium,
+    fontSize: customFontSize.sm,
   },
 });

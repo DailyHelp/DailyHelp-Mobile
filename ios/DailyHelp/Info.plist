@@ -57,6 +57,15 @@
 		<string>CabinetGrotesk-Medium.otf</string>
 		<string>CabinetGrotesk-Regular.otf</string>
 		<string>CabinetGrotesk-Thin.otf</string>
+		<string>Geist-Black.ttf</string>
+		<string>Geist-Bold.ttf</string>
+		<string>Geist-ExtraBold.ttf</string>
+		<string>Geist-ExtraLight.ttf</string>
+		<string>Geist-Light.ttf</string>
+		<string>Geist-Medium.ttf</string>
+		<string>Geist-Regular.ttf</string>
+		<string>Geist-SemiBold.ttf</string>
+		<string>Geist-Thin.ttf</string>
 	</array>
 </dict>
 </plist>

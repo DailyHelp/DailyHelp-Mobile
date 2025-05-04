@@ -22,16 +22,16 @@ const VerifyAccount: IVerifyAccount = ({route, navigation}) => {
         <View style={{flexDirection: 'row', gap: 6, flexWrap: 'wrap'}}>
           <Text
             style={{
-              fontFamily: fonts.medium,
-              fontSize: customFontSize.m2d,
+              fontFamily: fonts.GeistMedium,
+              fontSize: customFontSize.sm,
               color: '#757C91',
             }}>
             Enter the 6-digit code sent to
           </Text>
           <Text
             style={{
-              fontFamily: fonts.bold,
-              fontSize: customFontSize.m2d,
+              fontFamily: fonts.GeistBold,
+              fontSize: customFontSize.sm,
               color: '#757C91',
             }}>
             {' '}
@@ -39,8 +39,8 @@ const VerifyAccount: IVerifyAccount = ({route, navigation}) => {
           </Text>
           <Text
             style={{
-              fontFamily: fonts.medium,
-              fontSize: customFontSize.m2d,
+              fontFamily: fonts.GeistMedium,
+              fontSize: customFontSize.sm,
               color: '#757C91',
             }}>
             to verify your account.

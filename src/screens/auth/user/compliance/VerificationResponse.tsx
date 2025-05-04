@@ -20,7 +20,7 @@ const VerificationResponse: IVerificationResponse = ({route, navigation}) => {
           width: '90%',
           alignSelf: 'center',
         }}>
-        {route.params == 'success' ? (
+        {route.params?.status == 'success' ? (
           <Assets.KycSuccess />
         ) : (
           <Assets.KycFailed />
@@ -31,7 +31,8 @@ const VerificationResponse: IVerificationResponse = ({route, navigation}) => {
             fontSize: customFontSize.lg,
             color: '#121921',
           }}>
-          Verification {route.params === 'success' ? 'successful' : 'failed'}
+          Verification{' '}
+          {route.params?.status === 'success' ? 'successful' : 'failed'}
         </Text>
         <Text
           style={{
@@ -40,11 +41,11 @@ const VerificationResponse: IVerificationResponse = ({route, navigation}) => {
             color: '#757C91',
             textAlign: 'center',
           }}>
-          {route.params === 'success'
+          {route.params?.status === 'success'
             ? 'You’re verified! You can now explore and book service providers freely.'
             : 'We couldn’t verify your identity. Please check your details and try again.'}
         </Text>
-        {route.params === 'failed' && (
+        {route.params?.status === 'failed' && (
           <View
             style={{
               padding: scale(20),
@@ -64,7 +65,7 @@ const VerificationResponse: IVerificationResponse = ({route, navigation}) => {
           </View>
         )}
 
-        {route.params === 'success' ? (
+        {route.params?.status === 'success' ? (
           <View style={{marginTop: verticalScale(50), width: '100%', gap: 20}}>
             <MainButton
               moveIconRight

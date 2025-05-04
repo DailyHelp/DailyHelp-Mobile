@@ -32,6 +32,42 @@
     {
       "path": "src/assets/fonts/CabinetGrotesk-Thin.otf",
       "sha1": "9db4b4182a64322b7405d2be73e1fc7f0dc030d7"
+    },
+    {
+      "path": "src/assets/fonts/Geist-Black.ttf",
+      "sha1": "62244731b4441a7a644248871da25cce6477e7d9"
+    },
+    {
+      "path": "src/assets/fonts/Geist-Bold.ttf",
+      "sha1": "7ba01178ac81599ff63c7dc65280c5c9e05656fc"
+    },
+    {
+      "path": "src/assets/fonts/Geist-ExtraBold.ttf",
+      "sha1": "aaf47d76e400bb6bf6170d3178b87e2e2e34fc36"
+    },
+    {
+      "path": "src/assets/fonts/Geist-ExtraLight.ttf",
+      "sha1": "4e1e04b09f9248c16d7aaf1c758df19e47def272"
+    },
+    {
+      "path": "src/assets/fonts/Geist-Light.ttf",
+      "sha1": "0966558a4b5e8fd70268f433ab67174d0af3f105"
+    },
+    {
+      "path": "src/assets/fonts/Geist-Medium.ttf",
+      "sha1": "ab337e8d97011d0e3d11ebcd6c26b42d405a21fb"
+    },
+    {
+      "path": "src/assets/fonts/Geist-Regular.ttf",
+      "sha1": "fd57566101122d90f38e21f47408a3c294c16048"
+    },
+    {
+      "path": "src/assets/fonts/Geist-SemiBold.ttf",
+      "sha1": "7671d1fd0a59bd36f8cbc137ff2ae7f058a15ed2"
+    },
+    {
+      "path": "src/assets/fonts/Geist-Thin.ttf",
+      "sha1": "e311c3a1b896f9de369b98ea35c6efc4e0401a74"
     }
   ]
 }

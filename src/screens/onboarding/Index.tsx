@@ -59,9 +59,9 @@ const Onboarding: IOnboarding = ({navigation}) => {
               </Text>
               <Text
                 style={{
-                  fontFamily: fonts.regular,
+                  fontFamily: fonts.GeistRegular,
                   textAlign: 'center',
-                  fontSize: customFontSize.md,
+                  fontSize: customFontSize.sm,
                 }}>
                 Hire skilled professionals near you
               </Text>
@@ -83,10 +83,10 @@ const Onboarding: IOnboarding = ({navigation}) => {
               </Text>
               <Text
                 style={{
-                  fontFamily: fonts.medium,
+                  fontFamily: fonts.GeistMedium,
                   textAlign: 'center',
                   color: 'white',
-                  fontSize: customFontSize.md,
+                  fontSize: customFontSize.sm,
                 }}>
                 Find clients for the services you offer
               </Text>
@@ -99,9 +99,9 @@ const Onboarding: IOnboarding = ({navigation}) => {
           style={{flexDirection: 'row', justifyContent: 'center', gap: 5}}>
           <Text
             style={{
-              fontFamily: fonts.bold,
+              fontFamily: fonts.GeistBold,
               textAlign: 'center',
-              fontSize: customFontSize.md,
+              fontSize: customFontSize.sm,
               color: '#95D21A',
             }}>
             Login

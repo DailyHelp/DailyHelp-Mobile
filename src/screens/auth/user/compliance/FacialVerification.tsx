@@ -6,6 +6,7 @@ import MainButton from '../../../../components/button/MainButton';
 import Icon from 'react-native-vector-icons/Fontisto';
 import Assets from '../../../../assets/Assets';
 import {IFacialVerification} from '../../../../@types/routes';
+import ScreenHeader from '../../../../components/ScreenHeader';
 
 const FacialVerification: IFacialVerification = ({navigation}) => {
   return (
@@ -24,25 +25,11 @@ const FacialVerification: IFacialVerification = ({navigation}) => {
             flexDirection: 'column',
             gap: 20,
           }}>
-          <View style={{flexDirection: 'column', gap: 6}}>
-            <Text
-              style={{
-                fontFamily: fonts.black,
-                fontSize: customFontSize.lg,
-                color: '#121921',
-              }}>
-              Facial Verification
-            </Text>
-            <Text
-              style={{
-                fontFamily: fonts.medium,
-                fontSize: customFontSize.md,
-                color: '#757C91',
-              }}>
-              Your face data is only used to verify your identity and is
-              securely encrypted.
-            </Text>
-          </View>
+          <ScreenHeader
+            title="Facial Verification"
+            description="Your face data is only used to verify your identity and is
+              securely encrypted."
+          />
 
           <Assets.Selfie
             style={{alignSelf: 'center', marginTop: verticalScale(40)}}
@@ -81,8 +68,8 @@ const FacialVerification: IFacialVerification = ({navigation}) => {
 
                 <Text
                   style={{
-                    fontFamily: fonts.medium,
-                    fontSize: customFontSize.m2d,
+                    fontFamily: fonts.GeistMedium,
+                    fontSize: customFontSize.md,
                     color: '#3B4152',
                     marginTop: verticalScale(9),
                   }}>

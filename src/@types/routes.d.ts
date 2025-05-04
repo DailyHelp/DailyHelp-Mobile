@@ -4,7 +4,7 @@ import {
 } from '@react-navigation/native-stack';
 
 /**
- * Routes for `MainStackRoute`
+ * Routes for `AuthStackRoute`
  */
 type IAuthRoute = {
   Onboarding?: undefined;
@@ -15,6 +15,7 @@ type IAuthRoute = {
   };
   VerifyAccount?: {
     email: string;
+    to: keyof Pick<IAuthRoute, 'VerifyIdentity' | 'ResetPassword'>;
   };
   PersonalInformation?: {
     first_name?: string;
@@ -25,7 +26,9 @@ type IAuthRoute = {
   SelfieVerification?: undefined;
   ConfirmDetails?: undefined;
   Verifying?: undefined;
-  VerificationResponse?: 'success' | 'failed';
+  VerificationResponse?: {
+    status: 'success' | 'failed';
+  };
   ForgotPassword?: undefined;
   ResetPassword?: undefined;
 };
@@ -123,3 +126,19 @@ type IForgotPassword = Props<
 type IResetPassword = Props<
   NativeStackScreenProps<IAuthRoute, 'ResetPassword'>
 >;
+
+/**
+ * Routes for `AppStackRoute`
+ */
+
+type IAppRoute = {
+  HomeIndex?: undefined;
+};
+
+type IHomeRoute = {
+  Home?: undefined;
+};
+/**
+ * Typed interface for `IHome` under  `IHomeRoute`
+ */
+type IHome = Props<NativeStackScreenProps<IHomeRoute, 'Home'>>;

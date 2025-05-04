@@ -20,8 +20,8 @@ const OutlineButton: ICustomButton = ({
       style={{borderRadius: 10, height: 48, borderColor: '#D6DBE7'}}
       textColor={'#017441'}
       labelStyle={{
-        fontSize: customFontSize.md,
-        fontFamily: fonts.bold,
+        fontSize: customFontSize.sm,
+        fontFamily: fonts.GeistBold,
         paddingTop: verticalScale(7),
       }}>
       {children || title}

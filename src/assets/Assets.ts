@@ -22,6 +22,11 @@ import Camera from './svg/camera.svg';
 import HourGlass from './svg/hour_glass.svg';
 import KycSuccess from './svg/kyc_success.svg';
 import KycFailed from './svg/kyc_failed.svg';
+import ActiveHome from './svg/active_home.svg';
+import InActiveHome from './svg/inactive_home.svg';
+import HomeLocationPin from './svg/home_location_pin.svg';
+import HomeBell from './svg/home_bell.svg';
+import VerifyPhone from './svg/verify_phone.svg';
 
 export default {
   Onboarding,
@@ -48,4 +53,9 @@ export default {
   HourGlass,
   KycSuccess,
   KycFailed,
+  ActiveHome,
+  InActiveHome,
+  HomeLocationPin,
+  HomeBell,
+  VerifyPhone,
 };

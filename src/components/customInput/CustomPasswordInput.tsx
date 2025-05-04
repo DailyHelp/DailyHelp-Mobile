@@ -20,8 +20,8 @@ const CustomPasswordInput: IInput = ({
     <View style={{flexDirection: 'column', gap: 9}}>
       <Text
         style={{
-          fontFamily: fonts.bold,
-          fontSize: customFontSize.m2d,
+          fontFamily: fonts.GeistBold,
+          fontSize: customFontSize.sm,
           color: '#757C91',
         }}>
         {label}
@@ -49,8 +49,8 @@ const CustomPasswordInput: IInput = ({
           placeholderTextColor={'#A9AFC2'}
           contentStyle={{
             color: '#757C91',
-            fontFamily: fonts.bold,
-            fontSize: customFontSize.m2d,
+            fontFamily: fonts.GeistBold,
+            fontSize: customFontSize.sm,
           }}
           outlineStyle={{
             borderRadius: 10,
@@ -106,8 +106,8 @@ const CustomPasswordInput: IInput = ({
               <Icon2 name="block-helper" color={'#C0C5D6'} />
               <Text
                 style={{
-                  fontFamily: fonts.medium,
-                  fontSize: customFontSize.md,
+                  fontFamily: fonts.GeistMedium,
+                  fontSize: customFontSize.sm,
                   color: '#757C91',
                 }}>
                 {item}

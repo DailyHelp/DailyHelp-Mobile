@@ -17,8 +17,8 @@ const CustomDateInput: IInput = ({label, placeholder}) => {
       style={{flexDirection: 'column', gap: 9}}>
       <Text
         style={{
-          fontFamily: fonts.bold,
-          fontSize: customFontSize.m2d,
+          fontFamily: fonts.GeistBold,
+          fontSize: customFontSize.sm,
           color: '#757C91',
         }}>
         {label}
@@ -49,8 +49,8 @@ const CustomDateInput: IInput = ({label, placeholder}) => {
         ) : (
           <Text
             style={{
-              fontFamily: fonts.bold,
-              fontSize: customFontSize.m2d,
+            fontFamily: fonts.GeistBold,
+            fontSize: customFontSize.sm,
               color: date ? '#3B4152' : '#A9AFC2',
               paddingTop: verticalScale(16),
               paddingLeft: scale(20),

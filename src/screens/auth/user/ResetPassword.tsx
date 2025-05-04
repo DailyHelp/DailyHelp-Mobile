@@ -6,30 +6,15 @@ import {verticalScale} from '../../../shared/Scaling';
 import MainButton from '../../../components/button/MainButton';
 import CustomInput from '../../../components/customInput/Index';
 import Assets from '../../../assets/Assets';
+import ScreenHeader from '../../../components/ScreenHeader';
 
 const ResetPassword: IResetPassword = ({navigation}) => {
   return (
     <ScrollView style={{width: '90%', alignSelf: 'center', paddingTop: 10}}>
-      <View style={{flexDirection: 'column', gap: 6}}>
-        <Text
-          style={{
-            fontFamily: fonts.black,
-            fontSize: customFontSize.lg,
-            color: '#121921',
-          }}>
-          Reset password
-        </Text>
-        <View style={{flexDirection: 'row', gap: 6, flexWrap: 'wrap'}}>
-          <Text
-            style={{
-              fontFamily: fonts.medium,
-              fontSize: customFontSize.m2d,
-              color: '#757C91',
-            }}>
-            Secure your account with a strong password.
-          </Text>
-        </View>
-      </View>
+      <ScreenHeader
+        title="Reset password"
+        description="Secure your account with a strong password."
+      />
 
       <View
         style={{

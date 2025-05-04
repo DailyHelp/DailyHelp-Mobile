@@ -9,6 +9,15 @@ export const fonts = {
   thin: 'CabinetGrotesk-Thin',
   extraBold: 'CabinetGrotesk-ExtraBold',
   extraLight: 'CabinetGrotesk-ExtraLight',
+  GeistBold: 'Geist-Bold',
+  GeistThin: 'Geist-Thin',
+  GeistLight: 'Geist-Light',
+  GeistBlack: 'Geist-Black',
+  GeistMedium: 'Geist-Medium',
+  GeistRegular: 'Geist-Regular',
+  GeistSemiBold: 'Geist-SemiBold',
+  GeistExtraBold: 'Geist-ExtraBold',
+  GeistExtraBoldLight: 'Geist-ExtraLight',
 };
 
 export const customFontSize = {
