@@ -1,5 +1,6 @@
 import Onboarding from './video/onboard.mp4';
 import Logo from './svg/logo.svg';
+import LogoPng from './img/logo_png.png'
 import OnboardingSearch from './svg/onboarding_search.svg';
 import OnboardingSuitCase from './svg/onboarding_suitcase.svg';
 import GoogleColored from './svg/google_colored.svg';
@@ -27,8 +28,39 @@ import InActiveHome from './svg/inactive_home.svg';
 import HomeLocationPin from './svg/home_location_pin.svg';
 import HomeBell from './svg/home_bell.svg';
 import VerifyPhone from './svg/verify_phone.svg';
+import Worker1 from './img/worker_1.png';
+import WorkerAvatar1 from './img/worker_avatar_1.png';
+import CleaningBroom from './img/cleaning_broom.png';
+import FoodKitchen from './img/food&kitchen.png';
+import Maintenance from './img/repair&maintenance.png';
+import RangeMarker from './svg/range_marker.svg';
+import CurrentLocation from './svg/current_location.svg';
+import DiamondBadge from './svg/diamond_badge.svg';
+import BronzeBadge from './svg/bronze_badge.svg';
+import SilverBadge from './svg/silver_badge.svg';
+import GoldBadge from './svg/gold_badge.svg';
+import ActiveSearch from './svg/active_search.svg';
+import InputSearch from './svg/input_search.svg';
+import SearchResult from './svg/search_result.svg';
+import AutomobileServices from './img/automobile_services.png';
+import SkilledLabour from './img/skilled_labour.png';
+import TransportDelivery from './img/transport_delivery.png';
+import TechDigitalSkills from './img/laptop_digital_help.png';
+import FamilyPersonalCare from './img/family_personal_care.png';
+import EventsSetup from './img/event_setup.png';
+import InActiveSearch from './svg/inactive_search.svg';
+import SuitCase from './svg/suit_case.svg';
+import Dollar from './svg/dollar.svg';
+import SendOffer from './svg/send_offer.svg';
+import OfferLetter from './svg/offer_letter.svg';
 
 export default {
+  LogoPng,
+  FamilyPersonalCare,
+  SkilledLabour,
+  AutomobileServices,
+  TransportDelivery,
+  TechDigitalSkills,
   Onboarding,
   Logo,
   OnboardingSearch,
@@ -58,4 +90,24 @@ export default {
   HomeLocationPin,
   HomeBell,
   VerifyPhone,
+  Worker1,
+  WorkerAvatar1,
+  Maintenance,
+  CleaningBroom,
+  FoodKitchen,
+  RangeMarker,
+  CurrentLocation,
+  BronzeBadge,
+  SilverBadge,
+  DiamondBadge,
+  GoldBadge,
+  ActiveSearch,
+  InActiveSearch,
+  InputSearch,
+  SearchResult,
+  EventsSetup,
+  SuitCase,
+  Dollar,
+  SendOffer,
+  OfferLetter
 };

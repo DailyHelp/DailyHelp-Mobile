@@ -13,6 +13,8 @@ const CustomPasswordInput: IInput = ({
   placeholder,
   value,
   showPasswordRules,
+  onBlur,
+  onFocus,
 }) => {
   const [showPassword, setShowPassword] = React.useState(false);
 
@@ -41,6 +43,8 @@ const CustomPasswordInput: IInput = ({
           {<Assets.PasswordInput />}
         </View>
         <TextInput
+          onFocus={onFocus}
+          onBlur={onBlur}
           mode="outlined"
           outlineColor="transparent"
           activeOutlineColor="transparent"

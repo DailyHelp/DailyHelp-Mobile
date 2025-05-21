@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {Text} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Fontisto';
@@ -9,6 +9,7 @@ import Assets from '../../assets/Assets';
 import FindServiceAuthModal from '../../components/FindServiceAuthModal';
 import {customFontSize, fonts} from '../../shared/themes/Typography';
 import utils from '../../shared/Utils';
+import {scale, verticalScale} from '../../shared/Scaling';
 
 const Onboarding: IOnboarding = ({navigation}) => {
   const videoRef = React.useRef<VideoRef>(null);
@@ -37,7 +38,14 @@ const Onboarding: IOnboarding = ({navigation}) => {
       <LinearGradient
         colors={['transparent', '#000000', '#000000']}
         style={styles.linearGradient}>
-        <Assets.Logo width={100} height={100} />
+        <Image
+          source={Assets.LogoPng}
+          style={{
+            width: scale(50),
+            height: verticalScale(50),
+            alignSelf: 'center',
+          }}
+        />
         <Text variant="displaySmall" style={styles.text1}>
           Your Go-To Platform for Everyday Services.
         </Text>

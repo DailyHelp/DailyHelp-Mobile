@@ -1,12 +1,16 @@
-import { NativeStackHeaderProps } from '@react-navigation/native-stack';
+import {NativeStackHeaderProps} from '@react-navigation/native-stack';
 import React from 'react';
-import { Text } from 'react-native-paper';
+import {Text} from 'react-native-paper';
 import Assets from '../../assets/Assets';
 import CustomHeader from '../../components/customHeader/Index';
 import Home from '../../screens/app/user/home/Index';
-import { scale, verticalScale } from '../../shared/Scaling';
-import { customFontSize, fonts } from '../../shared/themes/Typography';
+import {scale, verticalScale} from '../../shared/Scaling';
+import {customFontSize, fonts} from '../../shared/themes/Typography';
 import HomeRoute from './Home';
+import Search from '../../screens/app/user/search/Index';
+import SearchRoute from './Search';
+import ServiceProfile from '../../screens/app/user/home/ServiceProfile';
+import Reviews from '../../screens/app/user/home/Reviews';
 
 type LabelPosition = 'beside-icon' | 'below-icon';
 
@@ -56,6 +60,38 @@ export const AppStackRoutes = [
         ),
     },
   },
+  {
+    name: 'SearchIndex',
+    component: SearchRoute,
+    options: {
+      headerShown: false,
+      tabBarLabel: (props: TabLabelProps) => (
+        <Text
+          style={{
+            fontFamily: props.focused ? fonts.GeistBold : fonts.GeistRegular,
+            fontSize: customFontSize.md,
+            paddingBottom: verticalScale(6),
+            color: props.focused ? '#121921' : '#A9AFC2',
+          }}>
+          Search
+        </Text>
+      ),
+      tabBarIcon: (props: TabIconProps) =>
+        props.focused ? (
+          <Assets.ActiveSearch
+            fill={props.color}
+            height={verticalScale(28)}
+            width={scale(28)}
+          />
+        ) : (
+          <Assets.InActiveSearch
+            fill={props.color}
+            height={verticalScale(28)}
+            width={scale(28)}
+          />
+        ),
+    },
+  },
 ];
 
 export const HomeStackRoutes = [
@@ -67,6 +103,30 @@ export const HomeStackRoutes = [
       header: (props: NativeStackHeaderProps) => (
         <CustomHeader type="home" title="23 Adebayo street" {...props} />
       ),
+    },
+  },
+  {
+    name: 'ServiceProfile',
+    component: ServiceProfile,
+    options: {
+      headerShown: false,
+    },
+  },
+  {
+    name: 'Reviews',
+    component: Reviews,
+    options: {
+      headerShown: false,
+    },
+  },
+];
+
+export const SearchStackRoutes = [
+  {
+    name: 'Search',
+    component: Search,
+    options: {
+      headerShown: false,
     },
   },
 ];

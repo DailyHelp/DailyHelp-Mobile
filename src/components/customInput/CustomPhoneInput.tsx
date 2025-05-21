@@ -9,6 +9,8 @@ const CustomPhoneInput: IInput = ({
   onChangeText,
   placeholder,
   value,
+  onFocus,
+  onBlur,
 }) => {
   return (
     <View style={{flexDirection: 'column', gap: 9}}>
@@ -42,6 +44,8 @@ const CustomPhoneInput: IInput = ({
           </Text>
         </View>
         <TextInput
+          onFocus={onFocus}
+          onBlur={onBlur}
           keyboardType="phone-pad"
           mode="outlined"
           outlineColor="transparent"

@@ -5,6 +5,7 @@ import {customFontSize, fonts} from '../../shared/themes/Typography';
 import {scale, verticalScale} from '../../shared/Scaling';
 import {NativeStackHeaderProps} from '@react-navigation/native-stack';
 import Assets from '../../assets/Assets';
+import {SheetManager} from 'react-native-actions-sheet';
 
 const HomeHeader: ICustomHeader<NativeStackHeaderProps> = ({
   title,
@@ -20,8 +21,10 @@ const HomeHeader: ICustomHeader<NativeStackHeaderProps> = ({
         width: '100%',
         paddingHorizontal: scale(10),
         paddingTop: scale(15),
+        backgroundColor: 'white',
+        paddingBottom: verticalScale(10),
       }}>
-      <TouchableOpacity onPress={goBack || navigation?.goBack}>
+      <TouchableOpacity onPress={() => SheetManager.show('HomeAddress')}>
         <View style={{flexDirection: 'row', gap: 5}}>
           <Assets.HomeLocationPin style={{width: scale(30)}} />
           <Text

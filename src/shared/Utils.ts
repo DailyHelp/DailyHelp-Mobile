@@ -16,6 +16,7 @@ import {
   setBadgeCount,
   getNotificationBadgeSetting,
 } from 'react-native-notification-badge';
+import { scale, verticalScale } from './Scaling';
 
 // import messaging from '@react-native-firebase/messaging';
 // import {QueryClient} from '@tanstack/react-query';
@@ -134,6 +135,41 @@ class Utils {
       isBiometrics,
       type,
       triggerBiometrics,
+    };
+  }
+
+  useHideBottomTab<T extends ParamListBase, K extends keyof T>(
+    navigation: NativeStackNavigationProp<T, K, undefined>,
+    hide = true,
+  ) {
+    React.useEffect(() => {
+      hide ? hideBottomTab() : showBottomTab();
+      return () => showBottomTab();
+    }, [navigation]);
+
+    const showBottomTab = () => {
+      navigation.getParent()?.setOptions({
+        tabBarStyle: {
+          height: verticalScale(64),
+          backgroundColor: '#FFFFFF',
+          alignItems: 'center',
+          borderTopWidth: 0.5,
+          borderTopColor: '#F1F2F4',
+          gap: scale(9.75),
+        },
+        tabBarVisible: true,
+      });
+    };
+
+    const hideBottomTab = () => {
+      navigation
+        .getParent()
+        ?.setOptions({tabBarStyle: {display: 'none'}, tabBarVisible: false});
+    };
+
+    return {
+      hideBottomTab,
+      showBottomTab,
     };
   }
 

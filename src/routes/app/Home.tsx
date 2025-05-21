@@ -20,7 +20,7 @@ const HomeRoute: Props = () => {
         animation: 'ios_from_right',
         contentStyle: {
           flex: 1,
-          backgroundColor: 'white',
+          backgroundColor: '#f9f9fb',
         },
       }}>
       {route.map(({component, name, options}) => (

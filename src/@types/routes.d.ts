@@ -133,12 +133,49 @@ type IResetPassword = Props<
 
 type IAppRoute = {
   HomeIndex?: undefined;
+  SearchIndex?: undefined;
 };
 
 type IHomeRoute = {
   Home?: undefined;
+  Search?: undefined;
+  Reviews?: undefined;
+  ServiceProfile?: {
+    status?: string;
+    badge?: string;
+    name?: string;
+    skill?: string;
+    about?: string;
+    reviews?: {name: string; remark?: string; rate: number; date: string}[];
+    rating?: number;
+    startingFee?: number;
+    jobsCompleted?: number;
+  };
 };
+
 /**
  * Typed interface for `IHome` under  `IHomeRoute`
  */
 type IHome = Props<NativeStackScreenProps<IHomeRoute, 'Home'>>;
+
+/**
+ * Typed interface for `IReviews` under  `IHomeRoute`
+ */
+type IReviews = Props<NativeStackScreenProps<IHomeRoute, 'Reviews'>>;
+
+/**
+ * Typed interface for `IServiceProfile` under  `IHomeRoute`
+ */
+type IServiceProfile = Props<
+  NativeStackScreenProps<IHomeRoute, 'ServiceProfile'>
+>;
+
+type ISearchRoute = {
+  Home?: undefined;
+  Search?: undefined;
+};
+
+/**
+ * Typed interface for `ISearch` under  `ISearchRoute`
+ */
+type ISearch = Props<NativeStackScreenProps<ISearchRoute, 'Search'>>;

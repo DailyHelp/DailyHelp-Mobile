@@ -10,9 +10,12 @@ const CustomTextInput: IInput = ({
   value,
   leftIcon,
   rightIcon,
+  onBlur,
+  onFocus,
+  containerStyle,
 }) => {
   return (
-    <View style={{flexDirection: 'column', gap: 9}}>
+    <View style={{flexDirection: 'column', gap: 9, ...containerStyle}}>
       <Text
         style={{
           fontFamily: fonts.GeistBold,
@@ -38,6 +41,8 @@ const CustomTextInput: IInput = ({
           </View>
         )}
         <TextInput
+          onFocus={onFocus}
+          onBlur={onBlur}
           mode="outlined"
           outlineColor="transparent"
           activeOutlineColor="transparent"

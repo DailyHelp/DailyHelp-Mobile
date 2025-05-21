@@ -81,7 +81,12 @@ type IPreview = Props<{
 }>;
 
 type ICategorySection = Props<{
-  categories: {label: string; slug?: string; showIcon?: boolean}[];
+  categories: {
+    label: string;
+    slug?: string;
+    showIcon?: boolean;
+    value?: string;
+  }[];
 }>;
 
 type IVerifyPhoneNumberContainer = Props<{}>;
@@ -91,16 +96,23 @@ type IScreenHeader = Props<{
   description: string;
 }>;
 
-type IHelperCard = Props<{
-  mode: 'middle' | 'row';
-  image?: any;
-  skill?: string;
-  price?: string;
-  rating?: number;
-  status?: string;
-  jobsCompleted?: number;
-  name?: string;
-}>;
+type IHelperCard = Props<
+  {
+    mode: 'middle' | 'row';
+    horizontal?: boolean;
+  },
+  {
+    image?: any;
+    brandImage?: any;
+    skill?: string;
+    price?: string;
+    rating?: number;
+    status?: string;
+    jobsCompleted?: number;
+    name?: string;
+    badge?: 'bronze' | 'gold' | 'silver' | 'diamond';
+  }
+>;
 
 type ICustomFlatListProps<T> = {
   data: any;
@@ -114,7 +126,26 @@ type ICustomFlatListProps<T> = {
   ListFooterComponent?: any;
   ListHeaderComponent?: any;
   showsVerticalScrollIndicator?: boolean;
+  showsHorizontalScrollIndicator?: boolean;
   refreshing?: boolean;
   onRefresh?: () => void;
   ListEmptyComponent?: Props;
+  horizontal?: boolean;
 };
+
+type IStatusChip = Props<{
+  backgroundColor?: string;
+  dotColor?: string;
+}>;
+
+type IAllCategory = Props<{}>;
+
+type ISendOffer = Props<{isVisible: boolean; onClose?: () => void}>;
+
+type IReviewCard = Props<{}, {rate: number}>;
+
+type IRecentSearches = Props<{}>;
+
+type IGallery = Props<{isVisible: boolean}>;
+
+type ICategoryCard = Props<{}, {title: string; slug: string; img: any}>;

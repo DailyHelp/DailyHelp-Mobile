@@ -12,12 +12,16 @@ const CustomFlatList = <T extends unknown>({
   ListFooterComponent,
   ListHeaderComponent,
   showsVerticalScrollIndicator = false,
+  showsHorizontalScrollIndicator = false,
   refreshing,
   onRefresh,
   ListEmptyComponent,
+  horizontal,
 }: ICustomFlatListProps<T>) => {
   return (
     <FlatList
+      horizontal={horizontal}
+      showsHorizontalScrollIndicator={showsHorizontalScrollIndicator}
       data={data}
       renderItem={renderItem}
       keyExtractor={keyExtractor}

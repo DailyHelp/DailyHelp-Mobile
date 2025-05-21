@@ -2,8 +2,8 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {IAppRoute} from '../../@types/routes';
 import AppStorage from '../../shared/AppStorage';
 import {UserTypes} from '../../shared/Constant';
-import {AppStackRoutes} from './UserRoutes';
 import { scale, verticalScale } from '../../shared/Scaling';
+import { AppStackRoutes } from './UserRoutes';
 
 const AppStack = createBottomTabNavigator<IAppRoute>();
 

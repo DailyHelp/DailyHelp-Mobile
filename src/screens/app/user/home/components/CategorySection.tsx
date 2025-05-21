@@ -1,18 +1,41 @@
 import {ScrollView, TouchableOpacity, View} from 'react-native';
-import {scale, verticalScale} from '../../../../../shared/Scaling';
+import {scale} from '../../../../../shared/Scaling';
 import {Text} from 'react-native-paper';
 import {customFontSize, fonts} from '../../../../../shared/themes/Typography';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import {SheetManager} from 'react-native-actions-sheet';
+import React from 'react';
 
-const CategorySection: ICategorySection = ({categories}) => {
+const CategorySection: ICategorySection = ({categories: cat}) => {
+  const [categories, setCategories] = React.useState(cat);
+
+  const selectCategory = (sub: string) => {
+    setCategories(prevSelected => {
+      const isSelected = prevSelected.some(item => item.label === sub);
+
+      if (isSelected) {
+        return prevSelected.filter(item => item.label !== sub);
+      } else {
+        // Add new category with only slug (you can expand this if needed)
+        return [...prevSelected, {label: sub, slug: sub, }];
+      }
+    });
+  };
+
+  const onClick = (action: string) => {
+    action = action.toLowerCase();
+    if (action === 'all categories') SheetManager.show('AllCategory');
+    if (action === 'rating') SheetManager.show('Rating');
+    if (action === 'price') SheetManager.show('PriceRange');
+    selectCategory(action);
+  };
+
   return (
-    <ScrollView
-      horizontal
-      showsHorizontalScrollIndicator={false}
-      style={{paddingHorizontal: verticalScale(12)}}>
+    <ScrollView horizontal showsHorizontalScrollIndicator={false}>
       <View style={{flexDirection: 'row', gap: 12}}>
         {categories.map((item, key) => (
           <TouchableOpacity
+            onPress={() => onClick(item.label)}
             key={key}
             style={{
               flexDirection: 'row',
