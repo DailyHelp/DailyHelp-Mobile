@@ -17,10 +17,13 @@ const CustomFlatList = <T extends unknown>({
   onRefresh,
   ListEmptyComponent,
   horizontal,
+  numColumns,
+  height,
 }: ICustomFlatListProps<T>) => {
   return (
     <FlatList
       horizontal={horizontal}
+      numColumns={numColumns}
       showsHorizontalScrollIndicator={showsHorizontalScrollIndicator}
       data={data}
       renderItem={renderItem}
@@ -33,6 +36,7 @@ const CustomFlatList = <T extends unknown>({
       refreshing={refreshing}
       onRefresh={onRefresh}
       ListEmptyComponent={ListEmptyComponent}
+      style={{height}}
     />
   );
 };

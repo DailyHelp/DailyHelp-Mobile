@@ -7,6 +7,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import Icon2 from 'react-native-vector-icons/AntDesign';
 import utils from '../../../../shared/Utils';
 import ReviewsCard from './components/ReviewsCard';
+import Typography from '../../../../components/Typography';
 
 const Reviews: IReviews = ({navigation}) => {
   const rate = 5;
@@ -56,31 +57,18 @@ const Reviews: IReviews = ({navigation}) => {
             justifyContent: 'space-between',
           }}>
           <View style={{flexDirection: 'column'}}>
-            <Text
-              style={{
-                fontFamily: fonts.GeistBold,
-                fontSize: customFontSize.xlg,
-              }}>
+            <Typography fontWeight="bold" size="xlg">
               Reviews &
-            </Text>
-            <Text
-              style={{
-                fontFamily: fonts.GeistBold,
-                fontSize: customFontSize.xlg,
-              }}>
+            </Typography>
+            <Typography fontWeight="bold" size="xlg">
               Ratings
-            </Text>
+            </Typography>
           </View>
 
           <View style={{flexDirection: 'column', gap: 5}}>
-            <Text
-              style={{
-                fontFamily: fonts.GeistBold,
-                fontSize: customFontSize.xxlg,
-                textAlign: 'center',
-              }}>
+            <Typography fontWeight="bold" size="xxlg" textAlign="center">
               4.5
-            </Text>
+            </Typography>
 
             <View style={{flexDirection: 'row', gap: 2, alignSelf: 'center'}}>
               {['', '', '', '', ''].map((_, len) => (
@@ -92,16 +80,13 @@ const Reviews: IReviews = ({navigation}) => {
                 />
               ))}
             </View>
-
-            <Text
-              style={{
-                fontFamily: fonts.GeistMedium,
-                fontSize: customFontSize.md,
-                color: '#757C91',
-                textAlign: 'center',
-              }}>
+            <Typography
+              fontWeight="medium"
+              size="md"
+              textAlign="center"
+              color="#757C91">
               2,000 reviews
-            </Text>
+            </Typography>
           </View>
         </View>
 
@@ -114,10 +99,9 @@ const Reviews: IReviews = ({navigation}) => {
                 gap: 6,
                 paddingLeft: 3,
               }}>
-              <Text>{emoji}</Text>
-              <Text style={{fontFamily: fonts.GeistRegular}}>
-                {utils.numberWithCommas(rate)}
-              </Text>
+              <Typography>{emoji}</Typography>
+              <Typography>{utils.numberWithCommas(rate)}</Typography>
+
               {rating_categories.length !== key + 1 && (
                 <View
                   style={{

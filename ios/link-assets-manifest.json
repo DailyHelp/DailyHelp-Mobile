@@ -34,6 +34,14 @@
       "sha1": "9db4b4182a64322b7405d2be73e1fc7f0dc030d7"
     },
     {
+      "path": "src/assets/fonts/Figtree-Italic.ttf",
+      "sha1": "478151ddbbdac0bcfe6d33c6e5ebd179feee721c"
+    },
+    {
+      "path": "src/assets/fonts/Figtree-Regular.ttf",
+      "sha1": "371ddf33582284211bcdd664470591441720988d"
+    },
+    {
       "path": "src/assets/fonts/Geist-Black.ttf",
       "sha1": "62244731b4441a7a644248871da25cce6477e7d9"
     },

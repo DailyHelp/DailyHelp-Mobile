@@ -3,10 +3,12 @@ import AllCategory from '../screens/app/user/home/components/AllCategory';
 import Rating from '../screens/app/user/home/components/Rating';
 import HomeAddress from '../screens/app/user/home/components/HomeAddress';
 import PriceRange from '../screens/app/user/home/components/PriceRange';
+import Gallery from '../screens/app/user/home/components/Gallery';
 
 registerSheet('AllCategory', AllCategory);
 registerSheet('Rating', Rating);
 registerSheet('HomeAddress', HomeAddress);
+registerSheet('Gallery', Gallery);
 registerSheet('PriceRange', PriceRange);
 
 declare module 'react-native-actions-sheet' {
@@ -21,5 +23,6 @@ declare module 'react-native-actions-sheet' {
     Rating: SheetDefinition<{}>;
     HomeAddress: SheetDefinition<{}>;
     PriceRange: SheetDefinition<{}>;
+    Gallery: SheetDefinition<{}>;
   }
 }

@@ -16,7 +16,9 @@ import {
   setBadgeCount,
   getNotificationBadgeSetting,
 } from 'react-native-notification-badge';
-import { scale, verticalScale } from './Scaling';
+import {scale, verticalScale} from './Scaling';
+import {PermissionsAndroid, Platform} from 'react-native';
+import {CameraRoll} from '@react-native-camera-roll/camera-roll';
 
 // import messaging from '@react-native-firebase/messaging';
 // import {QueryClient} from '@tanstack/react-query';
@@ -173,16 +175,17 @@ class Utils {
     };
   }
 
-  // badge = async (count: number) => {
-  //   const permission = await getNotificationBadgeSetting();
-  //   if (permission === 'enabled') {
-  //     await setBadgeCount(count);
-  //   } else {
-  //     Logger(
-  //       "Badge permission has not yet been granted. I'll ask the user later",
-  //     );
-  //   }
-  // };
+  badge = async (count: number) => {
+    const permission = await getNotificationBadgeSetting();
+    if (permission === 'enabled') {
+      await setBadgeCount(count);
+    } else {
+      console.log
+      (
+        "Badge permission has not yet been granted. I'll ask the user later",
+      );
+    }
+  };
 
   // useNotificationBadgeHandler(notificationCount: number, query: QueryClient) {
   //   const {isSignedIn} = useAuthentication();
@@ -209,6 +212,67 @@ class Utils {
   //     });
   //   }, [isSignedIn]);
   // }
+
+  async hasAndroidPermission() {
+    const getCheckPermissionPromise = () => {
+      if ((Platform.Version as number) >= 33) {
+        return Promise.all([
+          PermissionsAndroid.check(
+            PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES,
+          ),
+          PermissionsAndroid.check(
+            PermissionsAndroid.PERMISSIONS.READ_MEDIA_VIDEO,
+          ),
+        ]).then(
+          ([hasReadMediaImagesPermission, hasReadMediaVideoPermission]) =>
+            hasReadMediaImagesPermission && hasReadMediaVideoPermission,
+        );
+      } else {
+        return PermissionsAndroid.check(
+          PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+        );
+      }
+    };
+
+    const hasPermission = await getCheckPermissionPromise();
+
+    if (hasPermission) return true;
+
+    const getRequestPermissionPromise = () => {
+      if ((Platform.Version as number) >= 33) {
+        return PermissionsAndroid.requestMultiple([
+          PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES,
+          PermissionsAndroid.PERMISSIONS.READ_MEDIA_VIDEO,
+        ]).then(
+          statuses =>
+            statuses[PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES] ===
+              PermissionsAndroid.RESULTS.GRANTED &&
+            statuses[PermissionsAndroid.PERMISSIONS.READ_MEDIA_VIDEO] ===
+              PermissionsAndroid.RESULTS.GRANTED,
+        );
+      } else {
+        return PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+        ).then(status => status === PermissionsAndroid.RESULTS.GRANTED);
+      }
+    };
+
+    return await getRequestPermissionPromise();
+  }
+
+  async getPhotos(first?: number, after?: string) {
+    const photos = await CameraRoll.getPhotos({
+      first: first || 40,
+      assetType: 'All',
+    });
+    return photos;
+  }
+
+  useBoot() {
+    React.useEffect(() => {
+      this.hasAndroidPermission().then(console.log);
+    }, []);
+  }
 }
 
 const utils = Utils.getInstance();

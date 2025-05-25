@@ -1,10 +1,205 @@
-import { Modal, Text } from 'react-native-paper';
+import {PhotoIdentifier} from '@react-native-camera-roll/camera-roll';
+import {observer} from 'mobx-react-lite';
+import React from 'react';
+import {ActivityIndicator, Image, TouchableOpacity, View} from 'react-native';
+import {Text} from 'react-native-paper';
+import {appStore} from '../../../../../shared/stores/appStore';
+import {customFontSize, fonts} from '../../../../../shared/themes/Typography';
+import utils from '../../../../../shared/Utils';
+import {scale, verticalScale} from '../../../../../shared/Scaling';
+import Icon from 'react-native-vector-icons/Ionicons';
+import ActionSheet, {
+  ActionSheetRef,
+  FlatList,
+} from 'react-native-actions-sheet';
+import Video from 'react-native-video';
+import Typography from '../../../../../components/Typography';
 
-const Gallery: IGallery = ({isVisible}) => {
-  return (
-    <Modal visible={isVisible}>
-      <Text>Gallery</Text>
-    </Modal>
-  );
-};
-export default Gallery;
+const Gallery = React.forwardRef<ActionSheetRef, IGallery>(
+  (props, bottomSheetRef) => {
+    const [images, setImages] = React.useState<PhotoIdentifier[]>([]);
+    const [cursor, setCursor] = React.useState('');
+    const [hasNextPage, setHasNextPage] = React.useState(true);
+    const [loading, setLoading] = React.useState(true);
+    const [playingVideoUri, setPlayingVideoUri] = React.useState<string | null>(
+      null,
+    );
+
+    const fetchPhotos = async (page?: number) => {
+      if (!hasNextPage) return;
+      setLoading(true);
+      const response = await utils.getPhotos(page);
+      const newPhotos = response.edges;
+
+      // Filter duplicates
+      setImages(prev => {
+        const existingUris = new Set(prev.map(img => img.node.image.uri));
+        const uniquePhotos = newPhotos.filter(
+          img => !existingUris.has(img.node.image.uri),
+        );
+        return [...prev, ...uniquePhotos];
+      });
+
+      setCursor(response.page_info.end_cursor!);
+      setHasNextPage(response.page_info.has_next_page);
+      setLoading(false);
+    };
+
+    React.useEffect(() => {
+      fetchPhotos();
+    }, []);
+
+    const renderItem = ({item}: {item: any}) => {
+      if (item?.isCamera) {
+        return (
+          <TouchableOpacity
+            style={{
+              width: scale(90),
+              height: verticalScale(90),
+              justifyContent: 'center',
+              alignItems: 'center',
+              backgroundColor: '#eee',
+              margin: 2,
+            }}>
+            <Icon name="camera-outline" size={30} color="#999" />
+          </TouchableOpacity>
+        );
+      }
+
+      const uri = item.node.image.uri;
+      const type = item.node.type;
+      const isVideo = type?.startsWith('video/');
+      const isSelected = appStore.selectedGalleryImages.includes(uri);
+      const isPlaying = playingVideoUri === uri;
+
+      return (
+        <TouchableOpacity
+          onPress={() => appStore.toggleGalleryImageSelection(uri)}
+          style={{margin: 1, position: 'relative'}}>
+          {isVideo && isPlaying ? (
+            <Video
+              source={{uri}}
+              style={{
+                width: scale(92),
+                height: verticalScale(92),
+                opacity: isSelected ? 0.5 : 1,
+              }}
+              muted={false}
+              resizeMode="cover"
+              repeat
+            />
+          ) : (
+            <>
+              <Image
+                source={{uri}}
+                style={{
+                  width: scale(92),
+                  height: verticalScale(92),
+                  opacity: isSelected ? 0.5 : 1,
+                }}
+                resizeMode="cover"
+              />
+
+              {isVideo && (
+                <TouchableOpacity
+                  onPress={() => setPlayingVideoUri(uri)}
+                  style={{
+                    position: 'absolute',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    width: '100%',
+                    height: '100%',
+                  }}
+                  activeOpacity={0.8}>
+                  <Icon name="play-circle-outline" size={30} color="#FFFFFF" />
+                </TouchableOpacity>
+              )}
+            </>
+          )}
+
+          {isSelected && (
+            <View
+              style={{
+                position: 'absolute',
+                top: 4,
+                right: 4,
+                backgroundColor: 'rgba(0, 0, 0, 0.6)',
+                borderRadius: 12,
+                padding: 2,
+              }}>
+              <Icon name="checkmark-circle" size={20} color="#4ADE80" />
+            </View>
+          )}
+        </TouchableOpacity>
+      );
+    };
+
+    const loadMore = React.useCallback(() => {
+      if (hasNextPage && !loading) {
+        fetchPhotos(+cursor + 10);
+      }
+    }, [cursor, hasNextPage, loading]);
+
+    return (
+      <ActionSheet ref={bottomSheetRef} gestureEnabled closable={false}>
+        <View style={{paddingBottom: 20}}>
+          {/* Header */}
+          <View
+            style={{
+              paddingHorizontal: 16,
+              paddingTop: 16,
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}>
+            <TouchableOpacity onPress={() => props?.close?.()}>
+              <Typography fontWeight="bold" size="md" color="#757C91">
+                Cancel
+              </Typography>
+            </TouchableOpacity>
+            <Typography fontWeight="bold" size="md" color="#121921">
+              Image gallery
+            </Typography>
+
+            <TouchableOpacity
+              onPress={() => {
+                props?.close?.();
+              }}>
+              <Typography fontWeight="bold" size="md" color="#757C91">
+                Attach
+              </Typography>
+            </TouchableOpacity>
+          </View>
+
+          {/* Gallery or Loading */}
+          <View style={{maxHeight: '95%', marginTop: 12}}>
+            {loading && images.length === 0 ? (
+              <ActivityIndicator size="large" color="#999" />
+            ) : (
+              <FlatList
+                data={[{isCamera: true}, ...images]}
+                extraData={appStore.selectedGalleryImages}
+                initialNumToRender={12}
+                maxToRenderPerBatch={8}
+                windowSize={5}
+                numColumns={4}
+                keyExtractor={(item: any, index) =>
+                  item.isCamera ? `camera-${index}` : item.node.image.uri
+                }
+                renderItem={renderItem}
+                onEndReached={loadMore}
+                onEndReachedThreshold={0.5}
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={{
+                  paddingBottom: 40,
+                }}
+              />
+            )}
+          </View>
+        </View>
+      </ActionSheet>
+    );
+  },
+);
+
+export default observer(Gallery);

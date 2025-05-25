@@ -8,8 +8,9 @@ import Assets from '../../../../assets/Assets';
 import CategoryCard from './components/CaterogyCard';
 import React from 'react';
 import RecentSearches from './components/RecentSearches';
+import CustomHeader from '../../../../components/customHeader/Index';
 
-const Search: ISearch = () => {
+const Search: ISearch = ({navigation}) => {
   const [isFocused, setIsFocused] = React.useState(false);
 
   const category = [
@@ -62,30 +63,12 @@ const Search: ISearch = () => {
 
   return (
     <View>
-      <View
-        style={{
-          flexDirection: 'column',
-          marginTop: verticalScale(10),
-          backgroundColor: 'white',
-          padding: scale(10),
-        }}>
-        <Text
-          style={{fontFamily: fonts.GeistBold, fontSize: customFontSize.lg}}>
-          Search
-        </Text>
-        <CustomInput
-          type="text"
-          onFocus={() => setIsFocused(true)}
-          onBlur={() => setIsFocused(false)}
-          placeholder="Search user, category, etc"
-          leftIcon={
-            <Assets.InActiveSearch
-              width={scale(20)}
-              style={{bottom: verticalScale(10)}}
-            />
-          }
-        />
-      </View>
+      <CustomHeader
+        navigation={navigation}
+        title="Search"
+        placeHolder="Search user, category, etc"
+        type="search"
+      />
 
       {isFocused && <RecentSearches />}
 

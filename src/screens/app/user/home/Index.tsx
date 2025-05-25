@@ -1,14 +1,12 @@
-import {FlatList, View} from 'react-native';
-import {IHome} from '../../../../@types/routes';
-import CategorySection from './components/CategorySection';
-import {verticalScale} from '../../../../shared/Scaling';
 import React from 'react';
-import VerifyPhoneNumberContainer from './components/VerifyNumberContainer';
-import {Text} from 'react-native-paper';
-import {customFontSize, fonts} from '../../../../shared/themes/Typography';
+import { FlatList, View } from 'react-native';
+import { IHome } from '../../../../@types/routes';
 import CustomFlatList from '../../../../components/CustomFlatList';
-import {top_rated} from '../../../../mock_data';
+import Typography from '../../../../components/Typography';
+import { top_rated } from '../../../../mock_data';
+import CategorySection from './components/CategorySection';
 import HelperCard from './components/HelperCard';
+import VerifyPhoneNumberContainer from './components/VerifyNumberContainer';
 
 const Home: IHome = () => {
   return (
@@ -40,13 +38,10 @@ const Home: IHome = () => {
               flexDirection: 'column',
               gap: 9,
             }}>
-            <Text
-              style={{
-                fontFamily: fonts.GeistBold,
-                fontSize: customFontSize.m3d,
-              }}>
+            <Typography fontWeight="bold" size="m3d">
               Top rated
-            </Text>
+            </Typography>
+
             <CustomFlatList
               data={top_rated}
               horizontal
@@ -64,13 +59,10 @@ const Home: IHome = () => {
               flexDirection: 'column',
               gap: 9,
             }}>
-            <Text
-              style={{
-                fontFamily: fonts.GeistBold,
-                fontSize: customFontSize.m3d,
-              }}>
+            <Typography fontWeight="bold" size="m3d">
               Recommended
-            </Text>
+            </Typography>
+
             <CustomFlatList
               data={top_rated}
               horizontal
@@ -89,13 +81,10 @@ const Home: IHome = () => {
               gap: 9,
               paddingBottom: 24,
             }}>
-            <Text
-              style={{
-                fontFamily: fonts.GeistBold,
-                fontSize: customFontSize.m3d,
-              }}>
+            <Typography fontWeight="bold" size="m3d">
               Explore
-            </Text>
+            </Typography>
+
             <CustomFlatList
               data={top_rated}
               keyExtractor={(item: any, index) => item.name + index}

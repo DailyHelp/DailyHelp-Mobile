@@ -9,6 +9,11 @@ const OutlineButton: ICustomButton = ({
   onPress,
   loading,
   disabled,
+  color = '#017441',
+  width,
+  borderColor = '#D6DBE7',
+  borderStyle,
+  moveIconRight,
 }) => {
   return (
     <Button
@@ -17,8 +22,11 @@ const OutlineButton: ICustomButton = ({
       loading={loading}
       disabled={disabled}
       onPress={onPress}
-      style={{borderRadius: 10, height: 48, borderColor: '#D6DBE7'}}
-      textColor={'#017441'}
+      style={{borderRadius: 10, height: 48, borderColor, width, borderStyle}}
+      textColor={color}
+      contentStyle={{
+        flexDirection: moveIconRight ? 'row-reverse' : 'row',
+      }}
       labelStyle={{
         fontSize: customFontSize.sm,
         fontFamily: fonts.GeistBold,

@@ -5,6 +5,7 @@ import ActionSheet from 'react-native-actions-sheet';
 import Assets from '../../../../../assets/Assets';
 import {scale, verticalScale} from '../../../../../shared/Scaling';
 import {customFontSize, fonts} from '../../../../../shared/themes/Typography';
+import Typography from '../../../../../components/Typography';
 
 const PriceRange = React.forwardRef((props, ref) => {
   const [search, setSearch] = useState('');
@@ -31,32 +32,17 @@ const PriceRange = React.forwardRef((props, ref) => {
             marginBottom: 12,
           }}>
           <TouchableOpacity>
-            <Text
-              style={{
-                fontFamily: fonts.GeistBold,
-                color: '#757C91',
-                fontSize: customFontSize.md,
-              }}>
+            <Typography fontWeight="bold" size="md" color="#757C91">
               Cancel
-            </Text>
+            </Typography>
           </TouchableOpacity>
-          <Text
-            style={{
-              fontFamily: fonts.GeistBold,
-              color: '#121921',
-              fontSize: customFontSize.md,
-            }}>
+          <Typography fontWeight="bold" size="md" color="#121921">
             Price range
-          </Text>
+          </Typography>
           <TouchableOpacity>
-            <Text
-              style={{
-                fontFamily: fonts.GeistBold,
-                color: '#017441',
-                fontSize: customFontSize.md,
-              }}>
+            <Typography fontWeight="bold" size="md" color="#017441">
               Apply
-            </Text>
+            </Typography>
           </TouchableOpacity>
         </View>
 

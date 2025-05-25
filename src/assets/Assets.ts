@@ -1,6 +1,6 @@
 import Onboarding from './video/onboard.mp4';
 import Logo from './svg/logo.svg';
-import LogoPng from './img/logo_png.png'
+import LogoPng from './img/logo_png.png';
 import OnboardingSearch from './svg/onboarding_search.svg';
 import OnboardingSuitCase from './svg/onboarding_suitcase.svg';
 import GoogleColored from './svg/google_colored.svg';
@@ -53,8 +53,23 @@ import SuitCase from './svg/suit_case.svg';
 import Dollar from './svg/dollar.svg';
 import SendOffer from './svg/send_offer.svg';
 import OfferLetter from './svg/offer_letter.svg';
+import ActiveChat from './svg/active_chat.svg';
+import InActiveChat from './svg/inactive_chat.svg';
+import EmptyChat from './svg/empty_chat.svg';
+import DoubleGreenMark from './svg/double_green_mark.svg';
+import GreenMark from './svg/green_mark.svg';
+import GreyMark from './svg/grey_mark.svg';
+import InActiveVideoIcon from './svg/inactive_video_icon.svg';
+import InActiveCallIcon from './svg/inactive_call_icon.svg';
+import ChatAnnouncement from './svg/chat_announcement.svg';
+import ChatOffer from './svg/chat_offer.svg';
+import ActiveVideoIcon from './svg/active_video_icon.svg';
+import ActiveCallIcon from './svg/active_call_icon.svg';
 
 export default {
+  DoubleGreenMark,
+  GreenMark,
+  GreyMark,
   LogoPng,
   FamilyPersonalCare,
   SkilledLabour,
@@ -109,5 +124,14 @@ export default {
   SuitCase,
   Dollar,
   SendOffer,
-  OfferLetter
+  OfferLetter,
+  InActiveChat,
+  ActiveChat,
+  EmptyChat,
+  InActiveCallIcon,
+  InActiveVideoIcon,
+  ActiveCallIcon,
+  ActiveVideoIcon,
+  ChatAnnouncement,
+  ChatOffer,
 };

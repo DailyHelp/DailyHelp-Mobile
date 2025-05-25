@@ -18,6 +18,7 @@ export const fonts = {
   GeistSemiBold: 'Geist-SemiBold',
   GeistExtraBold: 'Geist-ExtraBold',
   GeistExtraBoldLight: 'Geist-ExtraLight',
+  FigtreeItalic: 'Figtree-Italic',
 };
 
 export const customFontSize = {

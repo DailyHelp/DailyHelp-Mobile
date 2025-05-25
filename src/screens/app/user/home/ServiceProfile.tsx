@@ -1,21 +1,26 @@
-import React from 'react';
-import {View, Text, Image, TouchableOpacity, ScrollView} from 'react-native';
-import {IServiceProfile} from '../../../../@types/routes';
 import {
   BottomSheetModal,
-  BottomSheetView,
   BottomSheetModalProvider,
+  BottomSheetView,
 } from '@gorhom/bottom-sheet';
-import {customFontSize, fonts} from '../../../../shared/themes/Typography';
-import {scale, verticalScale} from '../../../../shared/Scaling';
-import {Avatar} from 'react-native-paper';
-import Assets from '../../../../assets/Assets';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import {observer} from 'mobx-react-lite';
+import React from 'react';
+import {Image, ScrollView, TouchableOpacity, View} from 'react-native';
+import {ActionSheetRef} from 'react-native-actions-sheet';
 import Icon2 from 'react-native-vector-icons/AntDesign';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import {IServiceProfile} from '../../../../@types/routes';
+import Assets from '../../../../assets/Assets';
 import MainButton from '../../../../components/button/MainButton';
+import CustomAvatar from '../../../../components/CustomAvatar';
+import Typography from '../../../../components/Typography';
+import {scale, verticalScale} from '../../../../shared/Scaling';
+import {appStore} from '../../../../shared/stores/appStore';
 import utils from '../../../../shared/Utils';
+import Gallery from './components/Gallery';
 import ReviewsCard from './components/ReviewsCard';
-import SendOffer from './components/SendOffer';
+import SendOffer from '../../../../components/offers/SendOffer';
+import homeStyle from './homeStyle';
 
 const STATUS_MAP: any = {
   available: {
@@ -40,15 +45,12 @@ const ServiceProfile: IServiceProfile = ({route, navigation}) => {
 
   const [sendOffer, setSendOffer] = React.useState(false);
 
+  const [gallery, setGallery] = React.useState(false);
+
   let status = route.params?.status || 'available';
 
-  let Badge = Assets.BronzeBadge;
-
-  if (route.params?.badge === 'diamond') Badge = Assets.DiamondBadge;
-  if (route.params?.badge === 'gold') Badge = Assets.GoldBadge;
-  if (route.params?.badge === 'silver') Badge = Assets.SilverBadge;
-
   const bottomSheetRef = React.useRef<BottomSheetModal | null>(null);
+  const galleryBottomSheetRef = React.useRef<ActionSheetRef | null>(null);
 
   const statusInfo = STATUS_MAP[status];
 
@@ -60,326 +62,278 @@ const ServiceProfile: IServiceProfile = ({route, navigation}) => {
     <React.Fragment>
       <TouchableOpacity
         onPress={() => navigation.goBack()}
-        style={{
-          position: 'absolute',
-          width: scale(40),
-          height: verticalScale(40),
-          backgroundColor: 'white',
-          zIndex: 999,
-          borderRadius: 100,
-          flexDirection: 'row',
-          justifyContent: 'center',
-          alignItems: 'center',
-          top: 10,
-          left: 10,
-        }}>
+        style={homeStyle.serviceProfileCloseButton}>
         <Icon2 name="left" size={20} />
       </TouchableOpacity>
       <ScrollView horizontal>
         <Image
           source={Assets.Worker1}
-          style={{
-            height: verticalScale(270),
-            margin: scale(5),
-            borderRadius: 20,
-            width: scale(350),
-          }}
+          style={homeStyle.serviceProfileScrollImage}
         />
         <Image
           source={Assets.Worker1}
-          style={{
-            height: verticalScale(270),
-            margin: scale(5),
-            borderRadius: 20,
-            width: scale(350),
-          }}
+          style={homeStyle.serviceProfileScrollImage}
         />
         <Image
           source={Assets.Worker1}
-          style={{
-            height: verticalScale(270),
-            margin: scale(5),
-            borderRadius: 20,
-            width: scale(350),
-          }}
+          style={homeStyle.serviceProfileScrollImage}
         />
       </ScrollView>
-      <BottomSheetModalProvider>
-        <BottomSheetModal
-          ref={bottomSheetRef}
-          enableDismissOnClose={false}
-          enablePanDownToClose={false}
-          snapPoints={['65%', '95%']}
-          index={0}>
-          <BottomSheetView
-            style={{backgroundColor: statusInfo.bg, height: '65%'}}>
-            <Text
-              style={{
-                textAlign: 'center',
-                padding: scale(10),
-                fontFamily: fonts.GeistMedium,
-                color: statusInfo.color,
-                fontSize: customFontSize.md,
-              }}>
-              {statusInfo.text}
-            </Text>
-            <View
-              style={{
-                backgroundColor: '#F9F9FB',
-                borderRadius: 20,
-                height: '100%',
-                flexDirection: 'column',
-                gap: 10,
-              }}>
+
+      {!gallery ? (
+        <BottomSheetModalProvider>
+          <BottomSheetModal
+            ref={bottomSheetRef}
+            enableDismissOnClose={false}
+            enablePanDownToClose={false}
+            snapPoints={['65%', '95%']}
+            index={0}>
+            <BottomSheetView
+              style={{backgroundColor: statusInfo.bg, height: '65%'}}>
+              <Typography
+                textAlign="center"
+                padding={scale(10)}
+                fontWeight="medium"
+                color={statusInfo.color}
+                size="md">
+                {statusInfo.text}
+              </Typography>
+
               <View
                 style={{
-                  backgroundColor: 'white',
-                  padding: scale(20),
+                  backgroundColor: '#F9F9FB',
                   borderRadius: 20,
+                  height: '100%',
                   flexDirection: 'column',
-                  gap: 12,
+                  gap: 10,
                 }}>
-                <View style={{flexDirection: 'row', gap: 8}}>
-                  <View style={{position: 'relative'}}>
-                    <Avatar.Image size={50} source={Assets.Worker1} />
-                    <Badge
-                      width={scale(25)}
-                      style={{position: 'absolute', bottom: 0, right: 0}}
-                    />
-                  </View>
-                  <View style={{flexDirection: 'column', gap: 5}}>
-                    <Text
-                      style={{
-                        fontFamily: fonts.GeistBold,
-                        fontSize: customFontSize.md,
-                      }}>
-                      Okoye Amarachis
-                    </Text>
-                    <View style={{flexDirection: 'row', gap: 5}}>
-                      <Text
-                        style={{
-                          fontFamily: fonts.GeistMedium,
-                          fontSize: customFontSize.md,
-                          color: '#757C91',
-                        }}>
-                        Hair stylist
-                      </Text>
-                      <View
-                        style={{
-                          width: scale(6),
-                          height: verticalScale(6),
-                          backgroundColor: '#757C91',
-                          borderRadius: 100,
-                          marginTop: verticalScale(7),
-                        }}
-                      />
-                      <Text
-                        style={{
-                          fontFamily: fonts.GeistMedium,
-                          fontSize: customFontSize.md,
-                          color: '#757C91',
-                        }}>
-                        Platinum rated
-                      </Text>
-                    </View>
-                  </View>
-                </View>
                 <View
                   style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
+                    backgroundColor: 'white',
+                    padding: scale(20),
+                    borderRadius: 20,
+                    flexDirection: 'column',
+                    gap: 12,
                   }}>
-                  <View style={{flexDirection: 'column', gap: 5}}>
-                    <Text
-                      style={{
-                        fontFamily: fonts.GeistBold,
-                        fontSize: customFontSize.md,
-                      }}>
-                      ₦20,000
-                    </Text>
-                    <View style={{flexDirection: 'row', gap: 4}}>
-                      <Assets.Dollar />
-                      <Text
-                        style={{
-                          fontFamily: fonts.GeistRegular,
-                          fontSize: customFontSize.sm,
-                          color: '#757C91',
-                        }}>
-                        Starting fee
-                      </Text>
-                    </View>
-                  </View>
-                  <View style={{flexDirection: 'column', gap: 5}}>
-                    <View style={{flexDirection: 'row', gap: 2}}>
-                      <Text
-                        style={{
-                          fontFamily: fonts.GeistBold,
-                          fontSize: customFontSize.md,
-                        }}>
-                        4.5
-                      </Text>
-                      <Text
-                        style={{
-                          fontFamily: fonts.GeistRegular,
-                          fontSize: customFontSize.md,
-                          color: '#757C91',
-                        }}>
-                        (2.1k)
-                      </Text>
-                    </View>
-                    <View style={{flexDirection: 'row', gap: 4}}>
-                      <Icon name="star" size={15} color={'#FFD100'} />
-                      <Text
-                        style={{
-                          fontFamily: fonts.GeistRegular,
-                          fontSize: customFontSize.sm,
-                          color: '#757C91',
-                        }}>
-                        Ratings
-                      </Text>
-                    </View>
-                  </View>
-                  <View style={{flexDirection: 'column', gap: 5}}>
-                    <Text
-                      style={{
-                        fontFamily: fonts.GeistBold,
-                        fontSize: customFontSize.md,
-                      }}>
-                      24
-                    </Text>
-                    <View style={{flexDirection: 'row', gap: 3}}>
-                      <Assets.SuitCase />
-                      <Text
-                        style={{
-                          fontFamily: fonts.GeistRegular,
-                          fontSize: customFontSize.sm,
-                          color: '#757C91',
-                        }}>
-                        Jobs
-                      </Text>
-                    </View>
-                  </View>
-                </View>
-              </View>
+                  <View style={{flexDirection: 'row', gap: 8}}>
+                    <CustomAvatar
+                      avatarSize={50}
+                      data={{image: Assets.Worker1}}
+                    />
 
-              <View
-                style={{
-                  backgroundColor: 'white',
-                  padding: scale(20),
-                  borderRadius: 20,
-                }}>
-                <View style={{flexDirection: 'column', gap: 8}}>
-                  <Text
-                    style={{
-                      fontFamily: fonts.GeistMedium,
-                      fontSize: customFontSize.md,
-                      color: '#757C91',
-                    }}>
-                    ABOUT
-                  </Text>
+                    <View style={{flexDirection: 'column', gap: 5}}>
+                      <Typography fontWeight="bold" size="md">
+                        Okoye Amarachis
+                      </Typography>
 
-                  <View>
-                    <Text
-                      style={{
-                        fontFamily: fonts.GeistRegular,
-                        fontSize: customFontSize.sm,
-                      }}>
-                      Flawless styles, every time. I specialize in knotless
-                      braids, cornrows, lace installs, silk press, twists, and
-                      more — starting from ₦5,000. Available Mon–Sat (9 AM – 6
-                      PM).Home service in Surulere & nearby (extra fee). Your
-                      hair, done right.
-                    </Text>
+                      <View style={{flexDirection: 'row', gap: 5}}>
+                        <Typography fontWeight="bold" size="md" color="#757C91">
+                          Hair stylist
+                        </Typography>
+
+                        <View
+                          style={{
+                            width: scale(6),
+                            height: verticalScale(6),
+                            backgroundColor: '#757C91',
+                            borderRadius: 100,
+                            marginTop: verticalScale(7),
+                          }}
+                        />
+                        <Typography
+                          fontWeight="medium"
+                          size="md"
+                          color="#757C91">
+                          Platinum rated
+                        </Typography>
+                      </View>
+                    </View>
                   </View>
-                </View>
-              </View>
-
-              <View
-                style={{
-                  backgroundColor: 'white',
-                  padding: scale(20),
-                  borderRadius: 20,
-                  flexDirection: 'column',
-                  gap: 15,
-                }}>
-                <View style={{flexDirection: 'column', gap: 8}}>
                   <View
                     style={{
                       flexDirection: 'row',
                       justifyContent: 'space-between',
                     }}>
-                    <Text
-                      style={{
-                        fontFamily: fonts.GeistMedium,
-                        fontSize: customFontSize.md,
-                        color: '#757C91',
-                      }}>
-                      REVIEWS
-                    </Text>
-                    <View style={{flexDirection: 'row', gap: 3}}>
-                      <Icon name="star" size={15} color={'#FFD100'} />
-                      <Text
-                        style={{
-                          fontFamily: fonts.GeistBold,
-                          fontSize: customFontSize.md,
-                        }}>
-                        4.5
-                      </Text>
-                      <Text
-                        style={{
-                          fontFamily: fonts.GeistBold,
-                          fontSize: customFontSize.md,
-                          color: '#757C91',
-                        }}>
-                        (2000)
-                      </Text>
+                    <View style={{flexDirection: 'column', gap: 5}}>
+                      <Typography fontWeight="bold" size="md">
+                        ₦20,000
+                      </Typography>
+
+                      <View style={{flexDirection: 'row', gap: 4}}>
+                        <Assets.Dollar style={{marginTop: verticalScale(1)}} />
+                        <Typography
+                          fontWeight="regular"
+                          size="sm"
+                          color="#757C91">
+                          Starting fee
+                        </Typography>
+                      </View>
+                    </View>
+                    <View style={{flexDirection: 'column', gap: 5}}>
+                      <View style={{flexDirection: 'row', gap: 2}}>
+                        <Typography fontWeight="bold" size="md">
+                          4.5
+                        </Typography>
+                        <Typography
+                          fontWeight="regular"
+                          size="md"
+                          color="#757C91">
+                          (2.1k)
+                        </Typography>
+                      </View>
+                      <View style={{flexDirection: 'row', gap: 4}}>
+                        <Icon name="star" size={15} color={'#FFD100'} />
+                        <Typography
+                          fontWeight="regular"
+                          size="sm"
+                          color="#757C91">
+                          Ratings
+                        </Typography>
+                      </View>
+                    </View>
+                    <View style={{flexDirection: 'column', gap: 5}}>
+                      <Typography fontWeight="bold" size="md">
+                        24
+                      </Typography>
+                      <View style={{flexDirection: 'row', gap: 3}}>
+                        <Assets.SuitCase />
+                        <Typography
+                          fontWeight="regular"
+                          size="sm"
+                          color="#757C91">
+                          Jobs
+                        </Typography>
+                      </View>
                     </View>
                   </View>
                 </View>
 
                 <View
                   style={{
-                    flexDirection: 'column',
-                    gap: 10,
+                    backgroundColor: 'white',
+                    padding: scale(20),
+                    borderRadius: 20,
                   }}>
-                  <ReviewsCard data={{rate: 5}} />
-                  <ReviewsCard data={{rate: 2}} />
+                  <View style={{flexDirection: 'column', gap: 8}}>
+                    <Typography fontWeight="semibold" size="md" color="#757C91">
+                      ABOUT
+                    </Typography>
+
+                    <View>
+                      <Typography limit={100} readMore readMoreConstant>
+                        Flawless styles, every time. I specialize in knotless
+                        braids, cornrows, lace installs, silk press, twists, and
+                        more — starting from ₦5,000. Available Mon–Sat (9 AM – 6
+                        PM).Home service in Surulere & nearby (extra fee). Your
+                        hair, done right.
+                      </Typography>
+                    </View>
+                  </View>
                 </View>
+
+                <View
+                  style={{
+                    backgroundColor: 'white',
+                    padding: scale(20),
+                    borderRadius: 20,
+                    flexDirection: 'column',
+                    gap: 15,
+                  }}>
+                  <View style={{flexDirection: 'column', gap: 8}}>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                      }}>
+                      <Typography
+                        fontWeight="semibold"
+                        size="md"
+                        color="#757C91">
+                        REVIEWS
+                      </Typography>
+
+                      <View style={{flexDirection: 'row', gap: 3}}>
+                        <Icon name="star" size={15} color={'#FFD100'} />
+                        <Typography size="md" fontWeight="bold">
+                          4.5
+                        </Typography>
+                        <Typography size="md" fontWeight="bold" color="#757C91">
+                          (2000)
+                        </Typography>
+                      </View>
+                    </View>
+                  </View>
+
+                  <View
+                    style={{
+                      flexDirection: 'column',
+                      gap: 10,
+                    }}>
+                    <ReviewsCard data={{rate: 5}} />
+                    <ReviewsCard data={{rate: 2}} />
+                  </View>
+                </View>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate('Reviews')}
+                  style={{
+                    padding: scale(20),
+                    backgroundColor: '#F9F9FB',
+                    borderRadius: 10,
+                    width: '95%',
+                    alignSelf: 'center',
+                  }}>
+                  <Typography textAlign="center" fontWeight="bold">
+                    View all
+                  </Typography>
+                </TouchableOpacity>
               </View>
-              <TouchableOpacity
-                onPress={() => navigation.navigate('Reviews')}
-                style={{
-                  padding: scale(20),
-                  backgroundColor: '#F9F9FB',
-                  borderRadius: 10,
-                  width: '95%',
-                  alignSelf: 'center',
-                }}>
-                <Text
-                  style={{textAlign: 'center', fontFamily: fonts.GeistBold}}>
-                  View all
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </BottomSheetView>
-        </BottomSheetModal>
-      </BottomSheetModalProvider>
+            </BottomSheetView>
+          </BottomSheetModal>
+        </BottomSheetModalProvider>
+      ) : (
+        <Gallery
+          ref={galleryBottomSheetRef}
+          close={() => {
+            galleryBottomSheetRef.current?.show();
+            setGallery(false);
+            setSendOffer(true);
+          }}
+        />
+      )}
 
-      <View
-        style={{
-          padding: scale(10),
-          backgroundColor: 'white',
-          borderTopWidth: 1,
-          borderColor: '#F1F2F4',
-        }}>
-        <MainButton onPress={() => setSendOffer(true)} icon={Assets.SendOffer}>
-          Send offer
-        </MainButton>
-      </View>
+      {!gallery && (
+        <View
+          style={{
+            padding: scale(10),
+            backgroundColor: 'white',
+            borderTopWidth: 1,
+            borderColor: '#F1F2F4',
+          }}>
+          <MainButton
+            onPress={() => setSendOffer(true)}
+            icon={() => (
+              <Assets.SendOffer style={{marginTop: verticalScale(12)}} />
+            )}>
+            Send offer
+          </MainButton>
+        </View>
+      )}
 
-      <SendOffer isVisible={sendOffer} onClose={() => setSendOffer(false)} />
+      <SendOffer
+        isVisible={sendOffer}
+        onClose={() => {
+          setSendOffer(false);
+          bottomSheetRef.current?.present();
+          appStore.clearSelectedGalleryImages();
+        }}
+        openGallery={() => {
+          setSendOffer(false);
+          setGallery(true);
+          setTimeout(() => galleryBottomSheetRef.current?.show(), 1000);
+        }}
+      />
     </React.Fragment>
   );
 };
 
-export default ServiceProfile;
+export default observer(ServiceProfile);

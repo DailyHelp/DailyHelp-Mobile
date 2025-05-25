@@ -8,6 +8,11 @@ type Props<P = {}, D = {}> = React.FC<
     data?: D;
     children?: React.ReactNode;
     key?: any;
+    height?: `${number}%` | number;
+    width?: `${number}%` | number;
+    margin?: number;
+    marginTop?: number;
+    paddingTop?: number;
   } & P
 >;
 
@@ -43,14 +48,19 @@ type IInput = Props<{
   onBlur?: () => void;
   containerStyle?: object;
   showPasswordRules?: boolean;
+  multiline?: boolean;
+  numberOfLines?: number;
+  fontWeight?: 'bold' | 'regular';
 }>;
 
 type ICustomHeader<P> = Props<
   Partial<P> & {
     title: string;
+    placeHolder?: string;
     onPress?: () => void;
-    type?: 'back' | 'close' | 'home';
+    type?: 'back' | 'close' | 'home' | 'search' | 'chat';
     goBack?: () => void;
+    textMiddle?: boolean;
   }
 >;
 
@@ -61,6 +71,14 @@ type ICustomButton = Props<{
   disabled?: boolean;
   icon?: any;
   moveIconRight?: boolean;
+  color?: string;
+  borderColor?: string;
+  disableColor?: string;
+  enableColor?: string;
+  enableButtonColor?: string;
+  disableButtonColor?: string;
+  borderStyle?: 'solid' | 'dotted' | 'dashed';
+  borderRadius?: number;
 }>;
 
 type IOtp = Props<{
@@ -69,8 +87,6 @@ type IOtp = Props<{
   pinCount?: number;
   secureTextEntry?: boolean;
   errorValue?: string;
-  width?: number;
-  height?: number;
   marginTop?: number;
 }>;
 
@@ -116,7 +132,7 @@ type IHelperCard = Props<
 
 type ICustomFlatListProps<T> = {
   data: any;
-  // renderItem: (item: any, index: number) => JSX.Element;
+  numColumns?: number;
   renderItem: any;
   keyExtractor: (item: any, index: number) => string;
   onEndReached?: () => void;
@@ -131,6 +147,7 @@ type ICustomFlatListProps<T> = {
   onRefresh?: () => void;
   ListEmptyComponent?: Props;
   horizontal?: boolean;
+  height?: `${number}%` | number;
 };
 
 type IStatusChip = Props<{
@@ -140,12 +157,74 @@ type IStatusChip = Props<{
 
 type IAllCategory = Props<{}>;
 
-type ISendOffer = Props<{isVisible: boolean; onClose?: () => void}>;
+type IOffer = Props<{
+  isVisible: boolean;
+  type?: 'send' | 'cancel' | 'decline';
+  onClose?: () => void;
+  openGallery?: () => void;
+}>;
 
 type IReviewCard = Props<{}, {rate: number}>;
 
 type IRecentSearches = Props<{}>;
 
-type IGallery = Props<{isVisible: boolean}>;
+type IGallery = {
+  close?: () => void;
+};
 
 type ICategoryCard = Props<{}, {title: string; slug: string; img: any}>;
+
+type ICustomAvatar = Props<
+  {
+    badgeSize?: number;
+    avatarSize?: number;
+    bottom?: number;
+    right?: number;
+    showBadge?: boolean;
+  },
+  {image?: any; badge?: string}
+>;
+
+type ITypography = Props<{
+  fontWeight?:
+    | 'bold'
+    | 'regular'
+    | 'medium'
+    | 'semibold'
+    | 'extrabold'
+    | 'italics';
+  size?: 'sm' | 'xs' | 'md' | 'lg' | 'xxlg' | 'xlg' | 'm2d' | 'm3d';
+  color?: string;
+  textAlign?: 'auto' | 'left' | 'right' | 'center' | 'justify';
+  fontType?: 'Geist' | 'CabinetGrotesk' | 'Figtree';
+  padding?: number;
+  limit?: number;
+  readMore?: boolean;
+  readMoreConstant?: boolean;
+  currency?: boolean;
+  lineHeight?: number;
+  textDecorationLine?:
+    | 'none'
+    | 'underline'
+    | 'line-through'
+    | 'underline line-through';
+}>;
+
+type IChatFooter = Props<{}>;
+
+type IMessages = Props<
+  {
+    decline?: (value?: number | string) => void;
+    accept?: (value?: number | string) => void;
+    backgroundColor?: string;
+    position?: 'left' | 'right';
+  },
+  {
+    status: 'rejected' | 'canceled' | 'offer' | 'accepted';
+    time?: string;
+    attachments: [];
+    message?: string;
+  }
+>;
+
+type IAttachment = Props<{canClose?: boolean}, {attachment: string[]}>;

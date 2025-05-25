@@ -1,12 +1,12 @@
 import React, {useState} from 'react';
-import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
+import {ScrollView, TouchableOpacity, View} from 'react-native';
 import ActionSheet from 'react-native-actions-sheet';
 import {List} from 'react-native-paper';
 import Icon2 from 'react-native-vector-icons/AntDesign';
 import Assets from '../../../../../assets/Assets';
 import CustomInput from '../../../../../components/customInput/Index';
+import Typography from '../../../../../components/Typography';
 import {verticalScale} from '../../../../../shared/Scaling';
-import {customFontSize, fonts} from '../../../../../shared/themes/Typography';
 
 const savedLocations = [
   '88 Ilaje road, yaba, Lagos',
@@ -39,14 +39,9 @@ const HomeAddress = React.forwardRef((props, ref) => {
           <TouchableOpacity>
             <Icon2 color={'#757C91'} name={'close'} size={16} />
           </TouchableOpacity>
-          <Text
-            style={{
-              fontFamily: fonts.GeistBold,
-              color: '#121921',
-              fontSize: customFontSize.md,
-            }}>
+          <Typography fontWeight="bold" size="md" color="#121921">
             Home Address
-          </Text>
+          </Typography>
         </View>
 
         <ScrollView style={{flex: 1, backgroundColor: '#fff'}}>

@@ -29,6 +29,8 @@
 		E026D63037DF44B08E53711E /* Geist-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9A22FC7260C946D08E352362 /* Geist-Regular.ttf */; };
 		D5B486839B89485A9A1E3F8B /* Geist-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BFC13772C8E043B1A9942040 /* Geist-SemiBold.ttf */; };
 		58BFD918093E4AB7B85AA272 /* Geist-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 301C93FE6381406C9ACFA44D /* Geist-Thin.ttf */; };
+		3A2C6F25425B4CE5B6FC33BE /* Figtree-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 34CDBD8AE8AD44A2B3B7068C /* Figtree-Italic.ttf */; };
+		7D8EE183882A46D6ADC0E7D6 /* Figtree-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FCE0209F05B946D5A364A9EF /* Figtree-Regular.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -59,6 +61,8 @@
 		9A22FC7260C946D08E352362 /* Geist-Regular.ttf */ = {isa = PBXFileReference; name = "Geist-Regular.ttf"; path = "../src/assets/fonts/Geist-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		BFC13772C8E043B1A9942040 /* Geist-SemiBold.ttf */ = {isa = PBXFileReference; name = "Geist-SemiBold.ttf"; path = "../src/assets/fonts/Geist-SemiBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		301C93FE6381406C9ACFA44D /* Geist-Thin.ttf */ = {isa = PBXFileReference; name = "Geist-Thin.ttf"; path = "../src/assets/fonts/Geist-Thin.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		34CDBD8AE8AD44A2B3B7068C /* Figtree-Italic.ttf */ = {isa = PBXFileReference; name = "Figtree-Italic.ttf"; path = "../src/assets/fonts/Figtree-Italic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		FCE0209F05B946D5A364A9EF /* Figtree-Regular.ttf */ = {isa = PBXFileReference; name = "Figtree-Regular.ttf"; path = "../src/assets/fonts/Figtree-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -153,6 +157,8 @@
 				9A22FC7260C946D08E352362 /* Geist-Regular.ttf */,
 				BFC13772C8E043B1A9942040 /* Geist-SemiBold.ttf */,
 				301C93FE6381406C9ACFA44D /* Geist-Thin.ttf */,
+				34CDBD8AE8AD44A2B3B7068C /* Figtree-Italic.ttf */,
+				FCE0209F05B946D5A364A9EF /* Figtree-Regular.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -238,6 +244,8 @@
 				E026D63037DF44B08E53711E /* Geist-Regular.ttf in Resources */,
 				D5B486839B89485A9A1E3F8B /* Geist-SemiBold.ttf in Resources */,
 				58BFD918093E4AB7B85AA272 /* Geist-Thin.ttf in Resources */,
+				3A2C6F25425B4CE5B6FC33BE /* Figtree-Italic.ttf in Resources */,
+				7D8EE183882A46D6ADC0E7D6 /* Figtree-Regular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

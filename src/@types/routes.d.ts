@@ -134,6 +134,7 @@ type IResetPassword = Props<
 type IAppRoute = {
   HomeIndex?: undefined;
   SearchIndex?: undefined;
+  ChatIndex?: undefined;
 };
 
 type IHomeRoute = {
@@ -179,3 +180,20 @@ type ISearchRoute = {
  * Typed interface for `ISearch` under  `ISearchRoute`
  */
 type ISearch = Props<NativeStackScreenProps<ISearchRoute, 'Search'>>;
+
+type IChatRoute = {
+  Chat?: undefined;
+  HomeIndex?: undefined;
+  SearchIndex?: undefined;
+  ChatBox?: undefined;
+  Checkout?: undefined;
+  VoiceCall?: undefined;
+};
+
+type IChat = Props<NativeStackScreenProps<IChatRoute, 'Chat'>>;
+
+type IChatBox = Props<NativeStackScreenProps<IChatRoute, 'ChatBox'>>;
+
+type ICheckout = Props<NativeStackScreenProps<IChatRoute, 'Checkout'>>;
+
+type IVoiceCall = Props<NativeStackScreenProps<IChatRoute, 'VoiceCall'>>;

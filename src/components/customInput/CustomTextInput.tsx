@@ -13,7 +13,15 @@ const CustomTextInput: IInput = ({
   onBlur,
   onFocus,
   containerStyle,
+  numberOfLines,
+  multiline,
+  height = 50,
+  fontWeight
 }) => {
+  let fontFamily = fonts.GeistBold
+
+  if(fontWeight === 'regular') fontFamily = fonts.GeistRegular
+
   return (
     <View style={{flexDirection: 'column', gap: 9, ...containerStyle}}>
       <Text
@@ -43,6 +51,8 @@ const CustomTextInput: IInput = ({
         <TextInput
           onFocus={onFocus}
           onBlur={onBlur}
+          multiline={multiline}
+          numberOfLines={numberOfLines}
           mode="outlined"
           outlineColor="transparent"
           activeOutlineColor="transparent"
@@ -51,7 +61,7 @@ const CustomTextInput: IInput = ({
           placeholderTextColor={'#A9AFC2'}
           contentStyle={{
             color: '#757C91',
-            fontFamily: fonts.GeistBold,
+            fontFamily,
             fontSize: customFontSize.sm,
           }}
           outlineStyle={{
@@ -59,7 +69,7 @@ const CustomTextInput: IInput = ({
           }}
           style={{
             backgroundColor: '#F9F9FB',
-            height: 50,
+            height,
             width: leftIcon ? '80%' : '100%',
           }}
           value={value}

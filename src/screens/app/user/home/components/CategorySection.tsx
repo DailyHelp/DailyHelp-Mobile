@@ -5,6 +5,7 @@ import {customFontSize, fonts} from '../../../../../shared/themes/Typography';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {SheetManager} from 'react-native-actions-sheet';
 import React from 'react';
+import Typography from '../../../../../components/Typography';
 
 const CategorySection: ICategorySection = ({categories: cat}) => {
   const [categories, setCategories] = React.useState(cat);
@@ -17,7 +18,7 @@ const CategorySection: ICategorySection = ({categories: cat}) => {
         return prevSelected.filter(item => item.label !== sub);
       } else {
         // Add new category with only slug (you can expand this if needed)
-        return [...prevSelected, {label: sub, slug: sub, }];
+        return [...prevSelected, {label: sub, slug: sub}];
       }
     });
   };
@@ -44,14 +45,10 @@ const CategorySection: ICategorySection = ({categories: cat}) => {
               backgroundColor: '#F9F9FB',
               borderRadius: 100,
             }}>
-            <Text
-              style={{
-                fontFamily: fonts.GeistMedium,
-                fontSize: customFontSize.sm,
-                color: '#3B4152',
-              }}>
+            <Typography fontWeight="medium" size="sm" color="#3B4152">
               {item.label}
-            </Text>
+            </Typography>
+
             {item.showIcon && (
               <Icon name="chevron-down" size={14} color={'#757C91'} />
             )}

@@ -1,7 +1,6 @@
-import {View} from 'react-native';
-import {Text} from 'react-native-paper';
-import {customFontSize, fonts} from '../../../../../shared/themes/Typography';
+import { View } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import Typography from '../../../../../components/Typography';
 
 const ReviewsCard: IReviewCard = ({data}) => {
   return (
@@ -18,28 +17,15 @@ const ReviewsCard: IReviewCard = ({data}) => {
           flexDirection: 'column',
           gap: 6,
         }}>
-        <Text
-          style={{
-            fontFamily: fonts.GeistBold,
-            fontSize: customFontSize.md,
-          }}>
+        <Typography fontWeight="bold" size="md">
           Funmi A
-        </Text>
-        <Text
-          style={{
-            fontFamily: fonts.GeistRegular,
-            fontSize: customFontSize.md,
-            color: '#757C91',
-          }}>
+        </Typography>
+        <Typography fontWeight="regular" size="md" color="#757C91">
           23, Mar
-        </Text>
-        <Text
-          style={{
-            fontFamily: fonts.GeistRegular,
-            fontSize: customFontSize.md,
-          }}>
+        </Typography>
+        <Typography fontWeight="bold" size="md">
           She did amazing well when she came
-        </Text>
+        </Typography>
       </View>
 
       <View style={{flexDirection: 'row', gap: 2}}>
