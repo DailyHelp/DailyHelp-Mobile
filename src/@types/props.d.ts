@@ -55,10 +55,10 @@ type IInput = Props<{
 
 type ICustomHeader<P> = Props<
   Partial<P> & {
-    title: string;
+    title?: string;
     placeHolder?: string;
-    onPress?: () => void;
-    type?: 'back' | 'close' | 'home' | 'search' | 'chat';
+    onPress?: (data?: any) => void;
+    type?: 'back' | 'close' | 'home' | 'search' | 'chat' | 'jobs';
     goBack?: () => void;
     textMiddle?: boolean;
   }
@@ -88,6 +88,7 @@ type IOtp = Props<{
   secureTextEntry?: boolean;
   errorValue?: string;
   marginTop?: number;
+  editable?: boolean;
 }>;
 
 type ISelfie = Props<{}>;
@@ -202,6 +203,7 @@ type ITypography = Props<{
   readMore?: boolean;
   readMoreConstant?: boolean;
   currency?: boolean;
+  backgroundColor?: string;
   lineHeight?: number;
   textDecorationLine?:
     | 'none'
@@ -210,7 +212,7 @@ type ITypography = Props<{
     | 'underline line-through';
 }>;
 
-type IChatFooter = Props<{}>;
+type IChatFooter<N = any> = Props<{navigation: N}>;
 
 type IMessages = Props<
   {
@@ -228,3 +230,33 @@ type IMessages = Props<
 >;
 
 type IAttachment = Props<{canClose?: boolean}, {attachment: string[]}>;
+
+type IEmptyState<N = any> = Props<{
+  navigation?: N;
+  header: string;
+  title: string;
+  subTitle?: string;
+  type?: 'chat' | 'jobs';
+}>;
+
+type IJobsCard = Props<{
+  type?: 'pending' | 'ongoing' | 'completed';
+  viewDetails?: () => void;
+  chat?: () => void;
+  rate?: () => void;
+}>;
+
+type IFaceMatch = {};
+
+type ICancelJob = {};
+
+type IJobTimeline = Props<{}>;
+
+type IWorkerSuggestion = {};
+
+type ICustomKeyPad = Props<{
+  onPress?: (key: string) => void;
+  onDelete?: () => void;
+  disabledKeys?: string[];
+  showDelete?: boolean;
+}>;

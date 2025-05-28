@@ -1,10 +1,11 @@
-import {TextInput, TouchableOpacity, View} from 'react-native';
-import chatStyle from '../chatStyle';
-import Typography from '../../../../../components/Typography';
+import { TextInput, TouchableOpacity, View } from 'react-native';
+import { IChatRoute, Navigate } from '../../../../../@types/routes';
 import Assets from '../../../../../assets/Assets';
 import MainButton from '../../../../../components/button/MainButton';
+import Typography from '../../../../../components/Typography';
+import chatStyle from '../chatStyle';
 
-const ChatFooter: IChatFooter = () => {
+const ChatFooter: IChatFooter<Navigate<IChatRoute>> = ({navigation}) => {
   return (
     <View style={chatStyle.chatFooterContainer}>
       <View style={{flexDirection: 'row', gap: 6}}>
@@ -23,7 +24,7 @@ const ChatFooter: IChatFooter = () => {
               <Typography size="md">Send offer</Typography>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('Report')}>
             <View style={chatStyle.chatFooterButton}>
               <Assets.ChatAnnouncement style={{marginTop: 2}} />
               <Typography size="md">Report</Typography>

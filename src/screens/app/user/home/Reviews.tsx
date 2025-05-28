@@ -1,13 +1,11 @@
-import {View} from 'react-native';
-import {IReviews} from '../../../../@types/routes';
-import {Text} from 'react-native-paper';
-import {scale, verticalScale} from '../../../../shared/Scaling';
-import {customFontSize, fonts} from '../../../../shared/themes/Typography';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import { View } from 'react-native';
 import Icon2 from 'react-native-vector-icons/AntDesign';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { IReviews } from '../../../../@types/routes';
+import Typography from '../../../../components/Typography';
+import { scale, verticalScale } from '../../../../shared/Scaling';
 import utils from '../../../../shared/Utils';
 import ReviewsCard from './components/ReviewsCard';
-import Typography from '../../../../components/Typography';
 
 const Reviews: IReviews = ({navigation}) => {
   const rate = 5;

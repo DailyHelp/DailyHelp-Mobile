@@ -188,6 +188,7 @@ type IChatRoute = {
   ChatBox?: undefined;
   Checkout?: undefined;
   VoiceCall?: undefined;
+  Report?: undefined;
 };
 
 type IChat = Props<NativeStackScreenProps<IChatRoute, 'Chat'>>;
@@ -197,3 +198,23 @@ type IChatBox = Props<NativeStackScreenProps<IChatRoute, 'ChatBox'>>;
 type ICheckout = Props<NativeStackScreenProps<IChatRoute, 'Checkout'>>;
 
 type IVoiceCall = Props<NativeStackScreenProps<IChatRoute, 'VoiceCall'>>;
+
+type IReport = Props<
+  {scroll?: (title: string) => void} & NativeStackScreenProps<
+    IChatRoute,
+    'Report'
+  >
+>;
+
+type IJobsRoute = {
+  Jobs?: undefined;
+  JobsIndex?: undefined;
+  ViewDetails?: undefined;
+  VerificationPin?: undefined;
+};
+
+type IJobs = Props<NativeStackScreenProps<IJobsRoute, 'Jobs'>>;
+
+type IViewDetails = Props<NativeStackScreenProps<IJobsRoute, 'ViewDetails'>>;
+
+type IVerificationPin = Props<NativeStackScreenProps<IJobsRoute, 'VerificationPin'>>;

@@ -52,6 +52,7 @@ const BackHeader: ICustomHeader<NativeStackHeaderProps> = ({
           alignItems: 'center',
           gap: 3,
           padding: scale(15),
+          backgroundColor: 'white',
         }}>
         <Icon name="chevron-back" size={20} color={'#014C2B'} />
         <Text

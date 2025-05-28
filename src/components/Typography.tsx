@@ -21,6 +21,7 @@ const Typography: ITypography = ({
   textDecorationLine,
   lineHeight,
   currency,
+  backgroundColor,
 }) => {
   const [ellipse, setEllipse] = React.useState(limit);
   const [showMore, setShowMore] = React.useState(readMore);
@@ -76,6 +77,7 @@ const Typography: ITypography = ({
             margin,
             marginTop,
             lineHeight,
+            backgroundColor,
           }}>
           {children}
         </Text>
@@ -113,6 +115,7 @@ const Typography: ITypography = ({
         marginTop,
         textDecorationLine,
         lineHeight,
+        backgroundColor,
       }}>
       {children}
     </Text>

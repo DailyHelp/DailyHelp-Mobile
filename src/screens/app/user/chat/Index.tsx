@@ -1,64 +1,23 @@
-import {TouchableOpacity, View} from 'react-native';
-import {IChat} from '../../../../@types/routes';
-import CustomFlatList from '../../../../components/CustomFlatList';
-import {scale, verticalScale} from '../../../../shared/Scaling';
-import {Divider, Text} from 'react-native-paper';
-import {customFontSize, fonts} from '../../../../shared/themes/Typography';
-import CustomInput from '../../../../components/customInput/Index';
-import Assets from '../../../../assets/Assets';
-import MainButton from '../../../../components/button/MainButton';
-import CustomHeader from '../../../../components/customHeader/Index';
-import CustomAvatar from '../../../../components/CustomAvatar';
-import Typography from '../../../../components/Typography';
 import React from 'react';
+import { TouchableOpacity, View } from 'react-native';
+import { Divider } from 'react-native-paper';
+import { IChat } from '../../../../@types/routes';
+import Assets from '../../../../assets/Assets';
+import CustomAvatar from '../../../../components/CustomAvatar';
+import CustomFlatList from '../../../../components/CustomFlatList';
+import CustomHeader from '../../../../components/customHeader/Index';
+import EmptyState from '../../../../components/EmptyState';
+import Typography from '../../../../components/Typography';
+import { scale, verticalScale } from '../../../../shared/Scaling';
 
 const Chat: IChat = ({navigation}) => {
   const empty = () => (
-    <View
-      style={{
-        flex: 1,
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        gap: 25,
-        height: verticalScale(600),
-      }}>
-      <Assets.EmptyChat />
-
-      <Text
-        style={{
-          fontFamily: fonts.GeistBold,
-          fontSize: customFontSize.m2d,
-          textAlign: 'center',
-        }}>
-        No Offers yet!
-      </Text>
-
-      <View style={{flexDirection: 'column', gap: 7}}>
-        <Text
-          style={{
-            fontFamily: fonts.GeistRegular,
-            fontSize: customFontSize.m2d,
-            textAlign: 'center',
-            color: '#757C91',
-          }}>
-          Send an offer to start chatting with
-        </Text>
-        <Text
-          style={{
-            fontFamily: fonts.GeistRegular,
-            fontSize: customFontSize.m2d,
-            textAlign: 'center',
-            color: '#757C91',
-          }}>
-          service providers
-        </Text>
-      </View>
-
-      <MainButton onPress={() => navigation.navigate('HomeIndex')}>
-        Find service providers
-      </MainButton>
-    </View>
+    <EmptyState
+      navigation={navigation}
+      header="No Offers yet!"
+      title="Send an offer to start chatting with"
+      subTitle=" service providers"
+    />
   );
 
   const renderItem = React.useCallback(

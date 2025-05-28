@@ -65,6 +65,15 @@ import ChatAnnouncement from './svg/chat_announcement.svg';
 import ChatOffer from './svg/chat_offer.svg';
 import ActiveVideoIcon from './svg/active_video_icon.svg';
 import ActiveCallIcon from './svg/active_call_icon.svg';
+import JobsEmpty from './svg/jobs_empty.svg';
+import ActiveJobs from './svg/active_jobs.svg';
+import InActiveJobs from './svg/inactive_jobs.svg';
+import ActiveMore from './svg/active_more.svg';
+import InActiveMore from './svg/inactive_more.svg';
+import JobsHourGlass from './svg/jobs_hour_glass.svg';
+import ConfirmFace from './svg/confirm_face.svg';
+import Accepted from './svg/accepted.svg';
+import DoubleRightArrow from './svg/double_right_arrow.svg';
 
 export default {
   DoubleGreenMark,
@@ -134,4 +143,13 @@ export default {
   ActiveVideoIcon,
   ChatAnnouncement,
   ChatOffer,
+  JobsEmpty,
+  ActiveJobs,
+  InActiveJobs,
+  ActiveMore,
+  InActiveMore,
+  JobsHourGlass,
+  ConfirmFace,
+  Accepted,
+  DoubleRightArrow,
 };

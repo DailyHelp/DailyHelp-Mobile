@@ -33,28 +33,28 @@ const ChatBox: IChatBox = ({navigation}) => {
   }, []);
 
   return (
-    <View
-      style={{
-        flex: 1,
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-      }}>
-      <CustomFlatList
-        data={['', '']}
-        ListHeaderComponent={() => (
-          <CustomHeader
-            title="Okoye Amarachi"
-            type="chat"
-            navigation={navigation}
-          />
-        )}
-        renderItem={renderItem}
-        keyExtractor={(item, ind) => ind.toString()}
+    <React.Fragment>
+      <CustomHeader
+        title="Okoye Amarachi"
+        type="chat"
+        navigation={navigation}
       />
-      <ChatFooter />
+      <View
+        style={{
+          flex: 1,
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+        }}>
+        <CustomFlatList
+          data={['', '']}
+          renderItem={renderItem}
+          keyExtractor={(item, ind) => ind.toString()}
+        />
+        <ChatFooter navigation={navigation} />
 
-      <Offer type={offer.type} isVisible={offer.visible} onClose={close} />
-    </View>
+        <Offer type={offer.type} isVisible={offer.visible} onClose={close} />
+      </View>
+    </React.Fragment>
   );
 };
 export default ChatBox;

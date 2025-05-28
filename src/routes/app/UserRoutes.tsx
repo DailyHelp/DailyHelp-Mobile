@@ -16,6 +16,11 @@ import Chat from '../../screens/app/user/chat/Index';
 import ChatBox from '../../screens/app/user/chat/ChatBox';
 import Checkout from '../../screens/app/user/chat/Checkout';
 import VoiceCall from '../../screens/app/user/chat/VoiceCall';
+import Report from '../../screens/app/user/chat/report/Index';
+import Jobs from '../../screens/app/user/jobs/Index';
+import JobsRoute from './Jobs';
+import ViewDetails from '../../screens/app/user/jobs/ViewDetails';
+import VerificationPin from '../../screens/app/user/jobs/VerificationPin';
 
 type LabelPosition = 'beside-icon' | 'below-icon';
 
@@ -129,6 +134,38 @@ export const AppStackRoutes = [
         ),
     },
   },
+  {
+    name: 'JobsIndex',
+    component: JobsRoute,
+    options: {
+      headerShown: false,
+      tabBarLabel: (props: TabLabelProps) => (
+        <Text
+          style={{
+            fontFamily: props.focused ? fonts.GeistBold : fonts.GeistRegular,
+            fontSize: customFontSize.md,
+            paddingBottom: verticalScale(6),
+            color: props.focused ? '#121921' : '#A9AFC2',
+          }}>
+          Jobs
+        </Text>
+      ),
+      tabBarIcon: (props: TabIconProps) =>
+        props.focused ? (
+          <Assets.ActiveJobs
+            fill={props.color}
+            height={verticalScale(28)}
+            width={scale(28)}
+          />
+        ) : (
+          <Assets.InActiveJobs
+            fill={props.color}
+            height={verticalScale(28)}
+            width={scale(28)}
+          />
+        ),
+    },
+  },
 ];
 
 export const HomeStackRoutes = [
@@ -184,6 +221,13 @@ export const ChatStackRoutes = [
     },
   },
   {
+    name: 'Report',
+    component: Report,
+    options: {
+      headerShown: false,
+    },
+  },
+  {
     name: 'Checkout',
     component: Checkout,
     options: {
@@ -200,6 +244,36 @@ export const ChatStackRoutes = [
       headerShown: true,
       header: (props: NativeStackHeaderProps) => (
         <CustomHeader type="back" title="In-app call" {...props} textMiddle />
+      ),
+    },
+  },
+];
+
+export const JobsStackRoutes = [
+  {
+    name: 'Jobs',
+    component: Jobs,
+    options: {
+      headerShown: false,
+    },
+  },
+  {
+    name: 'ViewDetails',
+    component: ViewDetails,
+    options: {
+      headerShown: true,
+      header: (props: NativeStackHeaderProps) => (
+        <CustomHeader type="back" title="Job Details" {...props} textMiddle />
+      ),
+    },
+  },
+  {
+    name: 'VerificationPin',
+    component: VerificationPin,
+    options: {
+      headerShown: true,
+      header: (props: NativeStackHeaderProps) => (
+        <CustomHeader type="back" {...props} />
       ),
     },
   },

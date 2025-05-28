@@ -3,13 +3,19 @@ import AllCategory from '../screens/app/user/home/components/AllCategory';
 import Rating from '../screens/app/user/home/components/Rating';
 import HomeAddress from '../screens/app/user/home/components/HomeAddress';
 import PriceRange from '../screens/app/user/home/components/PriceRange';
-import Gallery from '../screens/app/user/home/components/Gallery';
+import Gallery from '../components/Gallery';
+import FaceMatch from '../screens/app/user/jobs/components/FaceMatch';
+import CancelJob from '../screens/app/user/jobs/components/CancelJob';
+import WorkerSuggestions from '../screens/app/user/jobs/components/WorkerSugestions';
 
 registerSheet('AllCategory', AllCategory);
 registerSheet('Rating', Rating);
 registerSheet('HomeAddress', HomeAddress);
 registerSheet('Gallery', Gallery);
 registerSheet('PriceRange', PriceRange);
+registerSheet('FaceMatch', FaceMatch);
+registerSheet('CancelJob', CancelJob);
+registerSheet('WorkerSuggestion', WorkerSuggestions);
 
 declare module 'react-native-actions-sheet' {
   interface Sheets {
@@ -24,5 +30,8 @@ declare module 'react-native-actions-sheet' {
     HomeAddress: SheetDefinition<{}>;
     PriceRange: SheetDefinition<{}>;
     Gallery: SheetDefinition<{}>;
+    FaceMatch: SheetDefinition<{}>;
+    CancelJob: SheetDefinition<{}>;
+    WorkerSuggestion: SheetDefinition<{}>;
   }
 }

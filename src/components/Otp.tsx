@@ -15,12 +15,15 @@ const Otp: IOtp = ({
   width = 18,
   height = 7,
   marginTop = 30,
+  editable = true,
 }) => {
   return (
     <React.Fragment>
       <OTPInputView
         pinCount={pinCount}
+        code={value}
         autoFocusOnLoad={false}
+        editable={editable}
         placeholderCharacter=""
         placeholderTextColor="#233040"
         codeInputFieldStyle={{

@@ -1,8 +1,8 @@
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {IChatRoute, IHomeRoute} from '../../@types/routes';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { IChatRoute } from '../../@types/routes';
 import AppStorage from '../../shared/AppStorage';
-import {UserTypes} from '../../shared/Constant';
-import {ChatStackRoutes, SearchStackRoutes} from './UserRoutes';
+import { UserTypes } from '../../shared/Constant';
+import { ChatStackRoutes } from './UserRoutes';
 
 const ChatStack = createNativeStackNavigator<IChatRoute>();
 

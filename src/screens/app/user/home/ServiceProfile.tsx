@@ -17,7 +17,7 @@ import Typography from '../../../../components/Typography';
 import {scale, verticalScale} from '../../../../shared/Scaling';
 import {appStore} from '../../../../shared/stores/appStore';
 import utils from '../../../../shared/Utils';
-import Gallery from './components/Gallery';
+import Gallery from '../../../../components/Gallery';
 import ReviewsCard from './components/ReviewsCard';
 import SendOffer from '../../../../components/offers/SendOffer';
 import homeStyle from './homeStyle';

@@ -18,15 +18,16 @@ const MainButton: ICustomButton = ({
   borderRadius = 10,
   height = 48,
   paddingTop = 7,
+  width,
 }) => {
   return (
     <Button
-      mode="contained"
+      mode={disableButtonColor === 'transparent' ? 'text' : 'contained'}
       icon={icon}
       loading={loading}
-      disabled={disabled}
+      // disabled={disabled}
       onPress={onPress}
-      style={{borderRadius, height, borderColor}}
+      style={{borderRadius, height, borderColor, width}}
       textColor={disabled ? disableColor : enableColor}
       buttonColor={disabled ? disableButtonColor : enableButtonColor}
       contentStyle={{
