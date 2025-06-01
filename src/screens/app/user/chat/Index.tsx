@@ -1,14 +1,14 @@
 import React from 'react';
-import { TouchableOpacity, View } from 'react-native';
-import { Divider } from 'react-native-paper';
-import { IChat } from '../../../../@types/routes';
+import {TouchableOpacity, View} from 'react-native';
+import {Divider} from 'react-native-paper';
+import {IChat} from '../../../../@types/routes';
 import Assets from '../../../../assets/Assets';
 import CustomAvatar from '../../../../components/CustomAvatar';
 import CustomFlatList from '../../../../components/CustomFlatList';
 import CustomHeader from '../../../../components/customHeader/Index';
 import EmptyState from '../../../../components/EmptyState';
 import Typography from '../../../../components/Typography';
-import { scale, verticalScale } from '../../../../shared/Scaling';
+import {scale, verticalScale} from '../../../../shared/Scaling';
 
 const Chat: IChat = ({navigation}) => {
   const empty = () => (
@@ -68,10 +68,11 @@ const Chat: IChat = ({navigation}) => {
           <View style={{flexDirection: 'row', gap: 7, alignItems: 'center'}}>
             <Assets.GreenMark style={{marginTop: verticalScale(3)}} />
             <Typography
+              currency
               color="#27A535"
               fontWeight="medium"
               fontType="CabinetGrotesk">
-              ₦15,000
+              15000
             </Typography>
           </View>
         </View>

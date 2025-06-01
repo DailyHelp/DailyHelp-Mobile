@@ -63,11 +63,11 @@ const Checkout: ICheckout = () => {
               )}
 
               {title.toLowerCase() == 'total' ? (
-                <Typography fontWeight="bold">
-                  ₦{utils.numberWithCommas(value)}
+                <Typography fontWeight="bold" currency>
+                  {value}
                 </Typography>
               ) : (
-                <Typography>₦{utils.numberWithCommas(value)}</Typography>
+                <Typography currency>{value}</Typography>
               )}
             </View>
           ))}

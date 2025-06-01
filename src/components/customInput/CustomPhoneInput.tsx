@@ -3,6 +3,8 @@ import {View} from 'react-native';
 import {TextInput} from 'react-native-paper';
 import {customFontSize, fonts} from '../../shared/themes/Typography';
 import Assets from '../../assets/Assets';
+import IconF from 'react-native-vector-icons/Feather';
+import {verticalScale} from '../../shared/Scaling';
 
 const CustomPhoneInput: IInput = ({
   label,
@@ -11,7 +13,10 @@ const CustomPhoneInput: IInput = ({
   value,
   onFocus,
   onBlur,
+  error,
 }) => {
+  const hasError = !!error;
+
   return (
     <View style={{flexDirection: 'column', gap: 9}}>
       <Text
@@ -53,6 +58,7 @@ const CustomPhoneInput: IInput = ({
           placeholder={placeholder}
           textColor="#3B4152"
           placeholderTextColor={'#A9AFC2'}
+          cursorColor="#A9AFC2"
           contentStyle={{
             color: '#757C91',
             fontFamily: fonts.GeistBold,
@@ -64,12 +70,27 @@ const CustomPhoneInput: IInput = ({
           style={{
             backgroundColor: '#F9F9FB',
             height: 50,
-            width: '70%',
+            flex: 1,
           }}
           value={value}
           onChangeText={onChangeText}
         />
       </View>
+
+      {hasError && (
+        <View style={{flexDirection: 'row', gap: 4, alignItems: 'center'}}>
+          <IconF name={'alert-circle'} color="#FF3333" />
+          <Text
+            style={{
+              color: '#FF3333',
+              fontSize: customFontSize.sm,
+              fontFamily: fonts.GeistRegular,
+              marginTop: verticalScale(-5),
+            }}>
+            {error}
+          </Text>
+        </View>
+      )}
     </View>
   );
 };

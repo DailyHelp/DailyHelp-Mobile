@@ -31,9 +31,9 @@ export default class ThrowError extends Error {
 
   static handleServerResponse(res: void | Response | undefined) {
     if (!res?.ok) {
-      console.warn(`${res?.url.replace(BASE_URL, 'api')} => ${res?.status}`);
+      console.warn(`${res?.url.replace(BASE_URL, '')} => ${res?.status}`);
     } else {
-      console.info(`${res?.url.replace(BASE_URL, 'api')} => ${res?.status}`);
+      console.info(`${res?.url.replace(BASE_URL, '')} => ${res?.status}`);
     }
 
     if (res?.status! > 500) {

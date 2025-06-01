@@ -1,5 +1,6 @@
 import React from 'react';
 import {FlatList} from 'react-native';
+import {verticalScale} from '../shared/Scaling';
 
 const CustomFlatList = <T extends unknown>({
   data,
@@ -37,6 +38,9 @@ const CustomFlatList = <T extends unknown>({
       onRefresh={onRefresh}
       ListEmptyComponent={ListEmptyComponent}
       style={{height}}
+      contentContainerStyle={{
+        paddingBottom: verticalScale(20),
+      }}
     />
   );
 };

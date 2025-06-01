@@ -155,8 +155,8 @@ const ServiceProfile: IServiceProfile = ({route, navigation}) => {
                       justifyContent: 'space-between',
                     }}>
                     <View style={{flexDirection: 'column', gap: 5}}>
-                      <Typography fontWeight="bold" size="md">
-                        ₦20,000
+                      <Typography fontWeight="bold" size="md" currency>
+                        20000
                       </Typography>
 
                       <View style={{flexDirection: 'row', gap: 4}}>

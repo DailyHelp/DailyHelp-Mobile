@@ -7,6 +7,7 @@ import {scale, verticalScale} from '../../shared/Scaling';
 import MainButton from '../button/MainButton';
 import CustomInput from '../customInput/Index';
 import Typography from '../Typography';
+import utils from '../../shared/Utils';
 
 const DeclineOffer: IOffer = ({isVisible, onClose, type}) => {
   const [id, setId] = React.useState<number | undefined>();
@@ -105,7 +106,7 @@ const DeclineOffer: IOffer = ({isVisible, onClose, type}) => {
                   fontWeight="medium"
                   size="md"
                   color="#F0443A">
-                  {type === 'cancel' ? 'Cancel' : 'Decline'} offer
+                  {utils.capitalizeFirstLetter(type)} offer
                 </Typography>
               </View>
 
@@ -153,7 +154,9 @@ const DeclineOffer: IOffer = ({isVisible, onClose, type}) => {
           </View>
         </View>
 
-        <MainButton>Send offer</MainButton>
+        <View style={{padding: scale(10)}}>
+          <MainButton>{utils.capitalizeFirstLetter(type)} offer</MainButton>
+        </View>
       </View>
     </Modal>
   );

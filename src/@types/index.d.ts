@@ -16,6 +16,7 @@ declare module '@env' {
 
 type ApiResponse<T> = {
   status: boolean;
+  statusCode: number;
   data: T;
   message: string;
   error: boolean;

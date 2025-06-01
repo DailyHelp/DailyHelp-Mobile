@@ -1,12 +1,12 @@
-import { useNavigation } from '@react-navigation/native';
-import { TouchableOpacity, View } from 'react-native';
-import { Card } from 'react-native-paper';
+import {useNavigation} from '@react-navigation/native';
+import {TouchableOpacity, View} from 'react-native';
+import {Card} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { IHomeRoute, Navigate } from '../../../../../@types/routes';
+import {IHomeRoute, Navigate} from '../../../../../@types/routes';
 import CustomAvatar from '../../../../../components/CustomAvatar';
 import StatusChip from '../../../../../components/StatusChip';
 import Typography from '../../../../../components/Typography';
-import { scale, verticalScale } from '../../../../../shared/Scaling';
+import {scale, verticalScale} from '../../../../../shared/Scaling';
 
 const HelperCard: IHelperCard = ({data, mode, horizontal}) => {
   const navigation = useNavigation<Navigate<IHomeRoute>>();
@@ -91,11 +91,12 @@ const HelperCard: IHelperCard = ({data, mode, horizontal}) => {
                   From
                 </Typography>
                 <Typography
+                  currency
                   fontWeight="bold"
                   size="md"
                   color="#757C91"
                   textAlign="center">
-                  ₦{data?.price}
+                  {data?.price}
                 </Typography>
                 <Typography
                   fontWeight="bold"
@@ -189,8 +190,8 @@ const HelperCard: IHelperCard = ({data, mode, horizontal}) => {
                     <Typography fontWeight="regular" size="md" color="#757C91">
                       From
                     </Typography>
-                    <Typography fontWeight="bold" size="md">
-                      ₦{data?.price}
+                    <Typography currency fontWeight="bold" size="md">
+                      {data?.price}
                     </Typography>
                   </View>
                 </View>

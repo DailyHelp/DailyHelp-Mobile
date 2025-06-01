@@ -3,9 +3,11 @@ import {Text, TextInput} from 'react-native-paper';
 import {customFontSize, fonts} from '../../shared/themes/Typography';
 import React from 'react';
 import Icon from 'react-native-vector-icons/Feather';
-import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons';
+import IconM from 'react-native-vector-icons/MaterialCommunityIcons';
+import IconI from 'react-native-vector-icons/Ionicons';
 import Assets from '../../assets/Assets';
 import {scale, verticalScale} from '../../shared/Scaling';
+import IconF from 'react-native-vector-icons/Feather';
 
 const CustomPasswordInput: IInput = ({
   label,
@@ -15,8 +17,26 @@ const CustomPasswordInput: IInput = ({
   showPasswordRules,
   onBlur,
   onFocus,
+  error,
 }) => {
   const [showPassword, setShowPassword] = React.useState(false);
+  const [passwordValidate, setPasswordValidate] = React.useState({
+    charLength: false,
+    hasUppercase: false,
+    hasSymbol: false,
+  });
+
+  const hasError = !!error;
+
+  const validate = (password: string) => {
+    const minLength = 8;
+    const hasUppercase = /[A-Z]/.test(password);
+    const hasSymbol = /[^A-Za-z0-9]/.test(password);
+
+    const charLength = password.length >= minLength;
+
+    return {charLength, hasUppercase, hasSymbol};
+  };
 
   return (
     <View style={{flexDirection: 'column', gap: 9}}>
@@ -51,6 +71,7 @@ const CustomPasswordInput: IInput = ({
           placeholder={placeholder}
           textColor="#3B4152"
           placeholderTextColor={'#A9AFC2'}
+          cursorColor="#A9AFC2"
           contentStyle={{
             color: '#757C91',
             fontFamily: fonts.GeistBold,
@@ -62,10 +83,13 @@ const CustomPasswordInput: IInput = ({
           style={{
             backgroundColor: '#F9F9FB',
             height: 50,
-            width: '90%',
+            flex: 1,
           }}
           value={value}
-          onChangeText={onChangeText}
+          onChangeText={text => {
+            onChangeText?.(text);
+            setPasswordValidate(validate(text));
+          }}
           right={
             <TextInput.Icon
               icon={() =>
@@ -102,22 +126,57 @@ const CustomPasswordInput: IInput = ({
             borderRadius: 10,
           }}>
           {[
-            'At least 8 characters long',
-            'Contains 1 uppercase',
-            'At least 1 symbol or number 12&#%',
+            {
+              title: 'At least 8 characters long',
+              validate: passwordValidate.charLength,
+            },
+            {
+              title: 'Contains 1 uppercase',
+              validate: passwordValidate.hasUppercase,
+            },
+            {
+              title: 'At least 1 symbol or number 12&#%',
+              validate: passwordValidate.hasSymbol,
+            },
           ].map((item, index) => (
             <View key={index} style={{flexDirection: 'row', gap: 5}}>
-              <Icon2 name="block-helper" color={'#C0C5D6'} />
+              {item.validate ? (
+                <IconI
+                  name={'checkmark-circle-outline'}
+                  color={item.validate ? '#27A535' : '#C0C5D6'}
+                  size={15}
+                />
+              ) : (
+                <IconM
+                  name={'block-helper'}
+                  color={item.validate ? '#27A535' : '#C0C5D6'}
+                />
+              )}
               <Text
                 style={{
                   fontFamily: fonts.GeistMedium,
                   fontSize: customFontSize.sm,
-                  color: '#757C91',
+                  color: item.validate ? '#27A535' : '#757C91',
                 }}>
-                {item}
+                {item.title}
               </Text>
             </View>
           ))}
+        </View>
+      )}
+
+      {hasError && (
+        <View style={{flexDirection: 'row', gap: 4, alignItems: 'center'}}>
+          <IconF name={'alert-circle'} color="#FF3333" />
+          <Text
+            style={{
+              color: '#FF3333',
+              fontSize: customFontSize.sm,
+              fontFamily: fonts.GeistRegular,
+              marginTop: verticalScale(-5),
+            }}>
+            {error}
+          </Text>
         </View>
       )}
     </View>

@@ -12,13 +12,16 @@ import Routes from './routes/Index';
 import 'react-native-reanimated';
 import 'react-native-gesture-handler';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
-import {SafeAreaProvider} from 'react-native-safe-area-context';
+import 'reflect-metadata';
 import utils from './shared/Utils';
+import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
 
   utils.useBoot();
+
+  const queryClient = new QueryClient();
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
@@ -42,7 +45,9 @@ function App(): React.JSX.Element {
         backgroundColor={backgroundStyle.backgroundColor}
       />
       <GestureHandlerRootView style={{flex: 1}}>
-        <Routes />
+        <QueryClientProvider client={queryClient}>
+          <Routes />
+        </QueryClientProvider>
       </GestureHandlerRootView>
     </View>
   );

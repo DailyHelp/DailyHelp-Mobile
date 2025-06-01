@@ -6,7 +6,7 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import Assets from '../../assets/Assets';
 import {scale, verticalScale} from '../../shared/Scaling';
 import {appStore} from '../../shared/stores/appStore';
-import Attachment from '../Attactments';
+import Attachment from '../Attachments';
 import MainButton from '../button/MainButton';
 import CustomInput from '../customInput/Index';
 import Typography from '../Typography';
@@ -121,7 +121,9 @@ const SendOffer: IOffer = ({isVisible, onClose, openGallery}) => {
           </View>
         </View>
 
-        <MainButton>Send offer</MainButton>
+        <View style={{padding: scale(10)}}>
+          <MainButton>Send offer</MainButton>
+        </View>
       </View>
     </Modal>
   );

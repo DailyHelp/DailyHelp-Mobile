@@ -7,6 +7,7 @@ import {Divider} from 'react-native-paper';
 import OutlineButton from '../../../../../components/button/OutlineButton';
 import MainButton from '../../../../../components/button/MainButton';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {SheetManager} from 'react-native-actions-sheet';
 
 const JobsCard: IJobsCard = ({type = 'pending', viewDetails}) => {
   return (
@@ -79,6 +80,7 @@ const JobsCard: IJobsCard = ({type = 'pending', viewDetails}) => {
 
       {type === 'completed' ? (
         <OutlineButton
+          onPress={() => SheetManager.show('RateService')}
           icon={() => (
             <Icon
               name="star"

@@ -22,6 +22,7 @@ const Typography: ITypography = ({
   lineHeight,
   currency,
   backgroundColor,
+  paddingBottom,
 }) => {
   const [ellipse, setEllipse] = React.useState(limit);
   const [showMore, setShowMore] = React.useState(readMore);
@@ -61,7 +62,7 @@ const Typography: ITypography = ({
 
   if (ellipse) children = utils.ellipseText(children as string, ellipse);
 
-  if (currency) children = utils.numberWithCommas(children as number);
+  if (currency) children = `₦${utils.numberWithCommas(children as number)}`;
 
   if (showMore || readMoreConstant)
     return (
@@ -78,6 +79,7 @@ const Typography: ITypography = ({
             marginTop,
             lineHeight,
             backgroundColor,
+            paddingBottom,
           }}>
           {children}
         </Text>
@@ -116,6 +118,7 @@ const Typography: ITypography = ({
         textDecorationLine,
         lineHeight,
         backgroundColor,
+        paddingBottom,
       }}>
       {children}
     </Text>

@@ -9,6 +9,8 @@ const storage = new MMKV({
 class AppStorageData {
   user_type?: UserTypes;
   routes?: Route;
+  access_token?: string;
+  user_id?: string;
 }
 
 export default class AppStorage {

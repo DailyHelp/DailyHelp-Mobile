@@ -2,15 +2,15 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {IJobsRoute} from '../../@types/routes';
 import AppStorage from '../../shared/AppStorage';
 import {UserTypes} from '../../shared/Constant';
-import {JobsStackRoutes} from './UserRoutes';
+import {UserJobsStackRoutes} from './UserRoutes';
 
 const JobsStack = createNativeStackNavigator<IJobsRoute>();
 
 const JobsRoute: Props = () => {
   const user_type = AppStorage.find('user_type');
+  const isUser = user_type === UserTypes.USER;
 
-  const route =
-    user_type === UserTypes.USER ? JobsStackRoutes : JobsStackRoutes;
+  const route = isUser ? UserJobsStackRoutes : UserJobsStackRoutes;
 
   return (
     <JobsStack.Navigator

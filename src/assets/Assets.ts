@@ -74,9 +74,22 @@ import JobsHourGlass from './svg/jobs_hour_glass.svg';
 import ConfirmFace from './svg/confirm_face.svg';
 import Accepted from './svg/accepted.svg';
 import DoubleRightArrow from './svg/double_right_arrow.svg';
+import Verified from './svg/verified.svg';
+import AccountSettings from './svg/accountSettings.svg';
+import Disputes from './svg/disputes.svg';
+import HelpAndSupport from './svg/helpSupport.svg';
+import WalletBalance from './svg/walletBallance.svg';
+import FeedBack from './svg/feedback.svg';
+import TermsOfUse from './svg/termsOfUse.svg';
 
 export default {
   DoubleGreenMark,
+  TermsOfUse,
+  FeedBack,
+  AccountSettings,
+  HelpAndSupport,
+  WalletBalance,
+  Disputes,
   GreenMark,
   GreyMark,
   LogoPng,
@@ -152,4 +165,5 @@ export default {
   ConfirmFace,
   Accepted,
   DoubleRightArrow,
+  Verified,
 };

@@ -4,10 +4,14 @@ import {Text} from 'react-native-paper';
 import {fonts} from '../shared/themes/Typography';
 
 const StatusChip: IStatusChip = ({children, backgroundColor, dotColor}) => {
-  let textColor = '';
+  let textColor = '#757C91';
   if (typeof children === 'string') {
     const text = (children as string)?.toLowerCase();
-    if (text === 'available') textColor = '#27A535';
+    if (text === 'available') {
+      textColor = '#27A535';
+      backgroundColor = '#E6FFF4';
+      dotColor = '#27A535';
+    }
     if (text === 'engaged') textColor = '#FF6B01';
     if (text === 'unavailable') textColor = '#F0443A';
   }

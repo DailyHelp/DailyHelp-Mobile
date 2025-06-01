@@ -6,7 +6,8 @@ import PriceRange from '../screens/app/user/home/components/PriceRange';
 import Gallery from '../components/Gallery';
 import FaceMatch from '../screens/app/user/jobs/components/FaceMatch';
 import CancelJob from '../screens/app/user/jobs/components/CancelJob';
-import WorkerSuggestions from '../screens/app/user/jobs/components/WorkerSugestions';
+import WorkerSuggestions from '../screens/app/user/jobs/components/WorkerSuggestions';
+import RateService from '../screens/app/user/jobs/components/RateService';
 
 registerSheet('AllCategory', AllCategory);
 registerSheet('Rating', Rating);
@@ -16,6 +17,7 @@ registerSheet('PriceRange', PriceRange);
 registerSheet('FaceMatch', FaceMatch);
 registerSheet('CancelJob', CancelJob);
 registerSheet('WorkerSuggestion', WorkerSuggestions);
+registerSheet('RateService', RateService);
 
 declare module 'react-native-actions-sheet' {
   interface Sheets {
@@ -33,5 +35,6 @@ declare module 'react-native-actions-sheet' {
     FaceMatch: SheetDefinition<{}>;
     CancelJob: SheetDefinition<{}>;
     WorkerSuggestion: SheetDefinition<{}>;
+    RateService: SheetDefinition<{}>;
   }
 }

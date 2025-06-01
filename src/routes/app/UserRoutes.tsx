@@ -21,6 +21,8 @@ import Jobs from '../../screens/app/user/jobs/Index';
 import JobsRoute from './Jobs';
 import ViewDetails from '../../screens/app/user/jobs/ViewDetails';
 import VerificationPin from '../../screens/app/user/jobs/VerificationPin';
+import More from '../../screens/app/user/more/Index';
+import MoreRoute from './More';
 
 type LabelPosition = 'beside-icon' | 'below-icon';
 
@@ -37,7 +39,7 @@ type TabIconProps = {
   size: number;
 };
 
-export const AppStackRoutes = [
+export const UserAppStackRoutes = [
   {
     name: 'HomeIndex',
     component: HomeRoute,
@@ -166,9 +168,41 @@ export const AppStackRoutes = [
         ),
     },
   },
+  {
+    name: 'MoreIndex',
+    component: MoreRoute,
+    options: {
+      headerShown: false,
+      tabBarLabel: (props: TabLabelProps) => (
+        <Text
+          style={{
+            fontFamily: props.focused ? fonts.GeistBold : fonts.GeistRegular,
+            fontSize: customFontSize.md,
+            paddingBottom: verticalScale(6),
+            color: props.focused ? '#121921' : '#A9AFC2',
+          }}>
+          More
+        </Text>
+      ),
+      tabBarIcon: (props: TabIconProps) =>
+        props.focused ? (
+          <Assets.ActiveMore
+            fill={props.color}
+            height={verticalScale(28)}
+            width={scale(28)}
+          />
+        ) : (
+          <Assets.InActiveMore
+            fill={props.color}
+            height={verticalScale(28)}
+            width={scale(28)}
+          />
+        ),
+    },
+  },
 ];
 
-export const HomeStackRoutes = [
+export const UserHomeStackRoutes = [
   {
     name: 'Home',
     component: Home,
@@ -205,7 +239,7 @@ export const SearchStackRoutes = [
   },
 ];
 
-export const ChatStackRoutes = [
+export const UserChatStackRoutes = [
   {
     name: 'Chat',
     component: Chat,
@@ -249,7 +283,7 @@ export const ChatStackRoutes = [
   },
 ];
 
-export const JobsStackRoutes = [
+export const UserJobsStackRoutes = [
   {
     name: 'Jobs',
     component: Jobs,
@@ -261,10 +295,7 @@ export const JobsStackRoutes = [
     name: 'ViewDetails',
     component: ViewDetails,
     options: {
-      headerShown: true,
-      header: (props: NativeStackHeaderProps) => (
-        <CustomHeader type="back" title="Job Details" {...props} textMiddle />
-      ),
+      headerShown: false,
     },
   },
   {
@@ -275,6 +306,16 @@ export const JobsStackRoutes = [
       header: (props: NativeStackHeaderProps) => (
         <CustomHeader type="back" {...props} />
       ),
+    },
+  },
+];
+
+export const UserMoreStackRoutes = [
+  {
+    name: 'More',
+    component: More,
+    options: {
+      headerShown: false,
     },
   },
 ];

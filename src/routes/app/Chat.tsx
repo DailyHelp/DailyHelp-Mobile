@@ -1,16 +1,16 @@
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { IChatRoute } from '../../@types/routes';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {IChatRoute} from '../../@types/routes';
 import AppStorage from '../../shared/AppStorage';
-import { UserTypes } from '../../shared/Constant';
-import { ChatStackRoutes } from './UserRoutes';
+import {UserTypes} from '../../shared/Constant';
+import {UserChatStackRoutes} from './UserRoutes';
 
 const ChatStack = createNativeStackNavigator<IChatRoute>();
 
 const ChatRoute: Props = () => {
   const user_type = AppStorage.find('user_type');
+  const isUser = user_type === UserTypes.USER;
 
-  const route =
-    user_type === UserTypes.USER ? ChatStackRoutes : ChatStackRoutes;
+  const route = isUser ? UserChatStackRoutes : UserChatStackRoutes;
 
   return (
     <ChatStack.Navigator

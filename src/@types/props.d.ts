@@ -13,6 +13,7 @@ type Props<P = {}, D = {}> = React.FC<
     margin?: number;
     marginTop?: number;
     paddingTop?: number;
+    paddingBottom?: number;
   } & P
 >;
 
@@ -260,3 +261,5 @@ type ICustomKeyPad = Props<{
   disabledKeys?: string[];
   showDelete?: boolean;
 }>;
+
+type IUserDataCard = Props<{}>

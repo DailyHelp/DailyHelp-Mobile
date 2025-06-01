@@ -16,8 +16,9 @@ const MainButton: ICustomButton = ({
   enableButtonColor = '#C1FF1D',
   borderColor,
   borderRadius = 10,
-  height = 48,
-  paddingTop = 7,
+  height = 45,
+  paddingTop = 5,
+  paddingBottom,
   width,
 }) => {
   return (
@@ -37,6 +38,7 @@ const MainButton: ICustomButton = ({
         fontSize: customFontSize.sm,
         fontFamily: fonts.GeistBold,
         paddingTop: verticalScale(paddingTop),
+        paddingBottom: verticalScale(paddingBottom || 0),
       }}>
       {children || title}
     </Button>

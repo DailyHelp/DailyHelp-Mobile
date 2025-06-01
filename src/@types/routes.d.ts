@@ -209,7 +209,9 @@ type IReport = Props<
 type IJobsRoute = {
   Jobs?: undefined;
   JobsIndex?: undefined;
-  ViewDetails?: undefined;
+  ViewDetails?: {
+    type: 'pending' | 'ongoing' | 'completed';
+  };
   VerificationPin?: undefined;
 };
 
@@ -217,4 +219,13 @@ type IJobs = Props<NativeStackScreenProps<IJobsRoute, 'Jobs'>>;
 
 type IViewDetails = Props<NativeStackScreenProps<IJobsRoute, 'ViewDetails'>>;
 
-type IVerificationPin = Props<NativeStackScreenProps<IJobsRoute, 'VerificationPin'>>;
+type IVerificationPin = Props<
+  NativeStackScreenProps<IJobsRoute, 'VerificationPin'>
+>;
+
+type IMoreRoute = {
+  MoreIndex?: undefined;
+  More?: undefined;
+};
+
+type IMore = Props<NativeStackScreenProps<IMoreRoute, 'More'>>;

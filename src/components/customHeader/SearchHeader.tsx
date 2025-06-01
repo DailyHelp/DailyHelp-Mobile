@@ -1,10 +1,9 @@
-import {View} from 'react-native';
-import {scale, verticalScale} from '../../shared/Scaling';
-import {Text} from 'react-native-paper';
-import CustomInput from '../customInput/Index';
-import {customFontSize, fonts} from '../../shared/themes/Typography';
+import { NativeStackHeaderProps } from '@react-navigation/native-stack';
+import { View } from 'react-native';
 import Assets from '../../assets/Assets';
-import {NativeStackHeaderProps} from '@react-navigation/native-stack';
+import { scale, verticalScale } from '../../shared/Scaling';
+import CustomInput from '../customInput/Index';
+import Typography from '../Typography';
 
 const SearchHeader: ICustomHeader<NativeStackHeaderProps> = ({
   title,
@@ -18,9 +17,10 @@ const SearchHeader: ICustomHeader<NativeStackHeaderProps> = ({
         backgroundColor: 'white',
         padding: scale(10),
       }}>
-      <Text style={{fontFamily: fonts.GeistBold, fontSize: customFontSize.lg}}>
+      <Typography fontWeight="bold" size="lg">
         {title}
-      </Text>
+      </Typography>
+
       <CustomInput
         type="text"
         placeholder={placeHolder}

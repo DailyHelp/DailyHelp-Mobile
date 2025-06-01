@@ -19,6 +19,7 @@ import {
 import {scale, verticalScale} from './Scaling';
 import {PermissionsAndroid, Platform} from 'react-native';
 import {CameraRoll} from '@react-native-camera-roll/camera-roll';
+import { validate } from 'class-validator';
 
 // import messaging from '@react-native-firebase/messaging';
 // import {QueryClient} from '@tanstack/react-query';
@@ -79,6 +80,13 @@ class Utils {
   responsiveWidth = (width: number) => wp(width);
 
   responsiveHeight = (height: number) => hp(height);
+
+  capitalizeFirstLetter(value: any) {
+    return (
+      `${value?.substring(0, 1).toUpperCase()}` +
+      `${value?.substring(1, value.length)}`
+    );
+  }
 
   numberWithCommas(x: number) {
     return x?.toString()?.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
@@ -180,8 +188,7 @@ class Utils {
     if (permission === 'enabled') {
       await setBadgeCount(count);
     } else {
-      console.log
-      (
+      console.log(
         "Badge permission has not yet been granted. I'll ask the user later",
       );
     }
