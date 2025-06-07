@@ -23,6 +23,21 @@ type IFindServiceAuthModal = Props<{
   onPress: () => void;
 }>;
 
+type IWalletFunded = Props<{
+  isVisible: boolean;
+  onClose: () => void;
+  onPress: () => void;
+  header?: string;
+  title?: string;
+  description?: string;
+}>;
+
+type ICategoryActionSheet = {
+  onClose: () => void;
+};
+
+type IFundWallet = {};
+
 type IInput = Props<{
   label?: string;
   placeholder?: string;
@@ -59,11 +74,19 @@ type ICustomHeader<P> = Props<
     title?: string;
     placeHolder?: string;
     onPress?: (data?: any) => void;
-    type?: 'back' | 'close' | 'home' | 'search' | 'chat' | 'jobs';
+    type?: 'back' | 'close' | 'home' | 'search' | 'chat' | 'tabs';
     goBack?: () => void;
     textMiddle?: boolean;
+    tabs?: {title: string; slug: string}[];
+    initialTab?: string;
   }
 >;
+
+type ITabs = Props<{
+  initialTab?: string;
+  tabs?: {title: string; slug: string}[];
+  onPress?: (string: string) => void;
+}>;
 
 type ICustomButton = Props<{
   title?: string;
@@ -93,10 +116,6 @@ type IOtp = Props<{
 }>;
 
 type ISelfie = Props<{}>;
-
-type IPreview = Props<{
-  navigation?: any;
-}>;
 
 type ICategorySection = Props<{
   categories: {
@@ -262,4 +281,26 @@ type ICustomKeyPad = Props<{
   showDelete?: boolean;
 }>;
 
-type IUserDataCard = Props<{}>
+type IUserDataCard = Props<{
+  isVerified?: boolean;
+}>;
+
+type ITransactionCard = Props<
+  {
+    type?: 'credit' | 'debit';
+  },
+  {
+    amount: number;
+    title: string;
+    date: string;
+  }
+>;
+
+type IDisputeCard = Props<
+  {
+    type?: 'ongoing' | 'resolved';
+  },
+  {
+    status?: 'partial' | 'full' | '';
+  }
+>;

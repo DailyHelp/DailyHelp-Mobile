@@ -8,7 +8,7 @@ import {verticalScale, scale} from '../../../shared/Scaling';
 import {customFontSize, fonts} from '../../../shared/themes/Typography';
 import Icon from 'react-native-vector-icons/Fontisto';
 
-const FacialVerification: IFacialVerification = ({navigation}) => {
+const FacialVerification: IFacialVerification = ({navigation, route}) => {
   return (
     <ScrollView>
       <View
@@ -81,15 +81,11 @@ const FacialVerification: IFacialVerification = ({navigation}) => {
         </View>
 
         <MainButton
-          icon={() => (
-            <Icon
-              name="arrow-right-l"
-              color={'#014C2B'}
-              style={{marginTop: 3}}
-            />
-          )}
+          icon={() => <Icon name="arrow-right-l" color={'#014C2B'} />}
           moveIconRight
-          onPress={() => navigation.navigate('SelfieVerification')}>
+          onPress={() => {
+            navigation.navigate('SelfieVerification', route.params);
+          }}>
           Start
         </MainButton>
       </View>

@@ -1,19 +1,25 @@
-import {IsEmail, IsString} from 'class-validator';
+import {IsEmail, IsString, IsStrongPassword} from 'class-validator';
 
 export default class RegisterDTO {
-  @IsEmail()
+  @IsEmail(undefined, {message: 'Email is required'})
   email?: string;
 
-  @IsString()
+  @IsString({message: 'Firstname is required'})
   firstname?: string;
 
-  @IsString()
+  @IsString({message: 'Lastname is required'})
   lastname?: string;
 
-  @IsString()
+  @IsString({message: 'Phone number is required'})
   phone?: string;
 
-  @IsString()
+  @IsStrongPassword({
+    minLength: 6,
+    minUppercase: 1,
+    minSymbols: 1,
+    minNumbers: 1,
+    minLowercase: 1,
+  })
   password?: string;
 
   constructor(dto?: RegisterDTO) {

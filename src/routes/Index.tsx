@@ -15,7 +15,6 @@ import {Observer} from 'mobx-react-lite';
 import {appStore} from '../shared/stores/appStore';
 import AppRouter from './app/Index';
 
-
 const Routes: Props = () => {
   const navigationRef = useNavigationContainerRef();
 
@@ -30,14 +29,13 @@ const Routes: Props = () => {
   return (
     <NavigationContainer ref={navigationRef}>
       <PaperProvider theme={theme}>
-        <SheetProvider context='global'>
+        <SheetProvider context="global">
           <Observer>
             {() => (
               <React.Fragment>
-                {appStore.route === 'authentication' && <AuthRouter />}
-                {appStore.route === 'app' && <AppRouter />}
+                {appStore.isAuthenticated ? <AppRouter /> : <AuthRouter />}
               </React.Fragment>
-            )} 
+            )}
           </Observer>
           <ToastManager />
         </SheetProvider>

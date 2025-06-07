@@ -84,12 +84,12 @@ const VerificationResponse: IVerificationResponse = ({route, navigation}) => {
                   size={15}
                 />
               )}
-              onPress={() => navigation.navigate('ConfirmDetails')}>
+              onPress={() => navigation.replace('IdentityVerification')}>
               Edit details
             </MainButton>
 
             <TouchableOpacity
-              onPress={() => {}}
+              onPress={() => navigation.replace('VerifyIdentity')}
               style={{
                 backgroundColor: '#F9F9FB',
                 flexDirection: 'row',

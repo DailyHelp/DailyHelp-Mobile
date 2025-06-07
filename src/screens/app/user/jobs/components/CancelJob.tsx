@@ -53,26 +53,12 @@ const CancelJob = React.forwardRef<ActionSheetRef, ICancelJob>((props, ref) => {
             SheetManager.hide('CancelJob');
             navigation.navigate('VerificationPin');
           }}
-          icon={() => (
-            <IconF
-              name="lock"
-              color={'#014C2B'}
-              size={15}
-              style={{marginTop: verticalScale(7)}}
-            />
-          )}
+          icon={() => <IconF name="lock" color={'#014C2B'} size={15} />}
           enableButtonColor="#D6F5D9">
           Verify with PIN
         </MainButton>
         <MainButton
-          icon={() => (
-            <Icon
-              name="close"
-              color={'#F0443A'}
-              size={15}
-              style={{marginTop: verticalScale(7)}}
-            />
-          )}
+          icon={() => <Icon name="close" color={'#F0443A'} size={15} />}
           enableColor="#F0443A"
           enableButtonColor="#FDE9E7">
           Cancel job

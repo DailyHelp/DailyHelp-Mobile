@@ -4,8 +4,11 @@ import CustomAvatar from '../../../../../components/CustomAvatar';
 import Assets from '../../../../../assets/Assets';
 import Typography from '../../../../../components/Typography';
 import MainButton from '../../../../../components/button/MainButton';
+import AppStorage from '../../../../../shared/AppStorage';
+import React from 'react';
+import Icon from 'react-native-vector-icons/Feather';
 
-const UserDataCard: IUserDataCard = () => {
+const UserDataCard: IUserDataCard = ({isVerified}) => {
   return (
     <View
       style={{
@@ -23,7 +26,8 @@ const UserDataCard: IUserDataCard = () => {
         data={{image: Assets.Worker1}}
       />
       <Typography fontWeight="bold" size="m2d">
-        Adebayo James
+        {AppStorage.find('firstname') as string}{' '}
+        {AppStorage.find('lastname') as string}
       </Typography>
 
       <View
@@ -32,11 +36,17 @@ const UserDataCard: IUserDataCard = () => {
           gap: 3,
           padding: scale(5),
           borderRadius: 100,
-          backgroundColor: '#E6FFF4',
+          backgroundColor: !isVerified ? '#FDE9E7' : '#E6FFF4',
           alignItems: 'center',
         }}>
-        <Assets.Verified />
-        <Typography color="#27A535">Verified</Typography>
+        {isVerified ? (
+          <Assets.Verified />
+        ) : (
+          <Icon name="alert-circle" color={'#F0443A'} />
+        )}
+        <Typography color="#F0443A">
+          {isVerified ? 'Verified' : 'Unverified'}
+        </Typography>
       </View>
 
       <View
@@ -61,4 +71,4 @@ const UserDataCard: IUserDataCard = () => {
     </View>
   );
 };
-export default UserDataCard;
+export default React.memo(UserDataCard);

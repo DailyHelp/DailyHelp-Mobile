@@ -8,6 +8,8 @@ import OutlineButton from '../../components/button/OutlineButton';
 import {verticalScale} from '../../shared/Scaling';
 import {customFontSize, fonts} from '../../shared/themes/Typography';
 import {Text} from 'react-native-paper';
+import Typography from '../../components/Typography';
+import {appStore} from '../../shared/stores/appStore';
 
 const VerifyIdentity: IVerifyIdentity = ({route, navigation}) => {
   React.useEffect(() => {
@@ -24,14 +26,9 @@ const VerifyIdentity: IVerifyIdentity = ({route, navigation}) => {
           flexDirection: 'column',
           gap: 10,
         }}>
-        <Text
-          style={{
-            color: '#017441',
-            fontFamily: fonts.GeistBold,
-            fontSize: customFontSize.m2d,
-          }}>
-          Hello {route.params?.name}
-        </Text>
+        <Typography fontWeight="bold" size="m2d">
+          Hello {route.params?.last_name}
+        </Typography>
 
         <View
           style={{
@@ -59,15 +56,10 @@ const VerifyIdentity: IVerifyIdentity = ({route, navigation}) => {
           </View>
 
           <View style={{width: '93%'}}>
-            <Text
-              style={{
-                fontFamily: fonts.GeistMedium,
-                fontSize: customFontSize.sm,
-                color: '#757C91',
-              }}>
+            <Typography fontWeight="medium" size="sm">
               We verify identities to ensure a safe experience for you and
               service providers. This won’t take long.
-            </Text>
+            </Typography>
           </View>
 
           <View
@@ -80,7 +72,9 @@ const VerifyIdentity: IVerifyIdentity = ({route, navigation}) => {
               onPress={() => navigation.navigate('PersonalInformation')}>
               Verify identity
             </MainButton>
-            <OutlineButton>Do this later</OutlineButton>
+            <OutlineButton onPress={() => appStore.setIsAuthenticated(true)}>
+              Do this later
+            </OutlineButton>
           </View>
         </View>
       </View>

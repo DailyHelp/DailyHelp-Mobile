@@ -1,16 +1,22 @@
+import {createValidator} from 'class-validator-formik';
+import {Formik} from 'formik';
 import {observer} from 'mobx-react-lite';
-import {ScrollView, View, TouchableOpacity} from 'react-native';
+import React from 'react';
+import {ScrollView, TouchableOpacity, View} from 'react-native';
+import {Button, Text} from 'react-native-paper';
 import {ILogin} from '../../@types/routes';
 import Assets from '../../assets/Assets';
 import MainButton from '../../components/button/MainButton';
 import CustomInput from '../../components/customInput/Index';
 import ScreenHeader from '../../components/ScreenHeader';
 import {scale, verticalScale} from '../../shared/Scaling';
-import {appStore} from '../../shared/stores/appStore';
 import {customFontSize, fonts} from '../../shared/themes/Typography';
-import {Button, Text} from 'react-native-paper';
+import LoginDto from './dto/LoginDto';
+import authService from './services/Auth.service';
 
 const Login: ILogin = ({navigation}) => {
+  const {loading, onSubmit} = authService.useLogin();
+
   return (
     <ScrollView>
       <View
@@ -26,19 +32,43 @@ const Login: ILogin = ({navigation}) => {
           description="Let’s get you right back into your account."
         />
 
-        <CustomInput
-          leftIcon={<Assets.EmailInput />}
-          placeholder="e.g. adebayoada@gmail.com"
-          label="Email address"
-        />
+        <Formik
+          initialValues={
+            new LoginDto({
+              email: 'emmanuelcox39+1@gmail.com',
+              password: 'Neutron@@360',
+            })
+          }
+          onSubmit={onSubmit}
+          validateOnChange={false}
+          validateOnBlur={false}
+          validate={createValidator(LoginDto)}>
+          {({errors, values, handleSubmit, handleChange}) => (
+            <React.Fragment>
+              <CustomInput
+                leftIcon={<Assets.EmailInput />}
+                placeholder="e.g. adebayoada@gmail.com"
+                label="Email address"
+                value={values.email}
+                error={errors.email}
+                onChangeText={handleChange('email')}
+              />
 
-        <CustomInput
-          type="password"
-          placeholder="Enter password"
-          label="Password"
-        />
+              <CustomInput
+                type="password"
+                placeholder="Enter password"
+                label="Password"
+                value={values.password}
+                error={errors.password}
+                onChangeText={handleChange('password')}
+              />
 
-        <MainButton onPress={() => appStore.setRoute('app')}>Login</MainButton>
+              <MainButton loading={loading} onPress={handleSubmit}>
+                Login
+              </MainButton>
+            </React.Fragment>
+          )}
+        </Formik>
 
         <View
           style={{

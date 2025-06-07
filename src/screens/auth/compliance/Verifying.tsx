@@ -5,9 +5,22 @@ import {IVerifying} from '../../../@types/routes';
 import Assets from '../../../assets/Assets';
 import {verticalScale} from '../../../shared/Scaling';
 import {customFontSize, fonts} from '../../../shared/themes/Typography';
+import {observer} from 'mobx-react-lite';
+import authService from '../services/Auth.service';
+import {appStore} from '../../../shared/stores/appStore';
 
-const Verifying: IVerifying = () => {
+const Verifying: IVerifying = ({route, navigation}) => {
   const rotateAnim = React.useRef(new Animated.Value(0)).current;
+
+  authService.useVerifyIdentity(
+    route.params!,
+    () => {
+      navigation.navigate('VerificationResponse', {status: 'success'});
+    },
+    () => {
+      navigation.navigate('VerificationResponse', {status: 'failed'});
+    },
+  );
 
   React.useEffect(() => {
     Animated.loop(
@@ -61,4 +74,4 @@ const Verifying: IVerifying = () => {
     </View>
   );
 };
-export default Verifying;
+export default React.memo(observer(Verifying));

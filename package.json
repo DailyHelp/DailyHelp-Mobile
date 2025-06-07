@@ -7,6 +7,7 @@
     "ios": "react-native run-ios  --port 8082",
     "lint": "eslint .",
     "start": "react-native start --port 8082 --reset-cache",
+    "apk": "yarn android --mode release",
     "test": "jest"
   },
   "dependencies": {

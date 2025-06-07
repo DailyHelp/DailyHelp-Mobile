@@ -109,12 +109,9 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
 
                 <React.Fragment>
                   <OutlineButton
+                    height={verticalScale(50)}
                     onPress={() => SheetManager.show('FaceMatch')}
-                    icon={() => (
-                      <Assets.ConfirmFace
-                        style={{marginTop: verticalScale(6)}}
-                      />
-                    )}>
+                    icon={() => <Assets.ConfirmFace />}>
                     Confirm face
                   </OutlineButton>
                 </React.Fragment>
@@ -184,13 +181,7 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
                     enableButtonColor="#F9F9FB"
                     enableColor="#121921"
                     width={'45%'}
-                    icon={() => (
-                      <Assets.SendOffer
-                        style={{
-                          marginTop: verticalScale(5),
-                        }}
-                      />
-                    )}>
+                    icon={() => <Assets.SendOffer />}>
                     Chat
                   </MainButton>
                 </View>

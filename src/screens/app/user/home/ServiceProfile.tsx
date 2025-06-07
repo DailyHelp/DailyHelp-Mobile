@@ -312,7 +312,7 @@ const ServiceProfile: IServiceProfile = ({route, navigation}) => {
           <MainButton
             onPress={() => setSendOffer(true)}
             icon={() => (
-              <Assets.SendOffer style={{marginTop: verticalScale(12)}} />
+              <Assets.SendOffer />
             )}>
             Send offer
           </MainButton>

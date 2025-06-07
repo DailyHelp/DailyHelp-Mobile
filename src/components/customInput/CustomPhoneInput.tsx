@@ -14,6 +14,7 @@ const CustomPhoneInput: IInput = ({
   onFocus,
   onBlur,
   error,
+  maxLength,
 }) => {
   const hasError = !!error;
 
@@ -59,6 +60,7 @@ const CustomPhoneInput: IInput = ({
           textColor="#3B4152"
           placeholderTextColor={'#A9AFC2'}
           cursorColor="#A9AFC2"
+          maxLength={maxLength}
           contentStyle={{
             color: '#757C91',
             fontFamily: fonts.GeistBold,

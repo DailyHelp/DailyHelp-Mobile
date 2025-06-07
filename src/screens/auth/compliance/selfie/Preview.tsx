@@ -7,8 +7,9 @@ import MainButton from '../../../../components/button/MainButton';
 import Icon from 'react-native-vector-icons/Fontisto';
 import {Text} from 'react-native-paper';
 import {customFontSize, fonts} from '../../../../shared/themes/Typography';
+import {ISelfieVerification} from '../../../../@types/routes';
 
-const Preview: IPreview = ({navigation}) => {
+const Preview: ISelfieVerification = ({navigation, route}) => {
   return (
     <View style={{flex: 1}}>
       <View
@@ -47,7 +48,12 @@ const Preview: IPreview = ({navigation}) => {
               />
             )}
             moveIconRight
-            onPress={() => navigation.navigate('ConfirmDetails')}>
+            onPress={() =>
+              navigation.navigate('ConfirmDetails', {
+                ...route.params,
+                photo: appStore.selfiePhoto?.path,
+              })
+            }>
             Looks good
           </MainButton>
 

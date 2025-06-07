@@ -81,14 +81,7 @@ const JobsCard: IJobsCard = ({type = 'pending', viewDetails}) => {
       {type === 'completed' ? (
         <OutlineButton
           onPress={() => SheetManager.show('RateService')}
-          icon={() => (
-            <Icon
-              name="star"
-              size={15}
-              color={'#FFD100'}
-              style={{marginTop: verticalScale(5)}}
-            />
-          )}
+          icon={() => <Icon name="star" size={15} color={'#FFD100'} />}
           color="black">
           Rate service provider
         </OutlineButton>

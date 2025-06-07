@@ -1,11 +1,9 @@
-import {ScrollView, TouchableOpacity, View} from 'react-native';
-import {scale} from '../../../../../shared/Scaling';
-import {Text} from 'react-native-paper';
-import {customFontSize, fonts} from '../../../../../shared/themes/Typography';
-import Icon from 'react-native-vector-icons/FontAwesome5';
-import {SheetManager} from 'react-native-actions-sheet';
 import React from 'react';
+import { ScrollView, TouchableOpacity, View } from 'react-native';
+import { SheetManager } from 'react-native-actions-sheet';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 import Typography from '../../../../../components/Typography';
+import { scale } from '../../../../../shared/Scaling';
 
 const CategorySection: ICategorySection = ({categories: cat}) => {
   const [categories, setCategories] = React.useState(cat);

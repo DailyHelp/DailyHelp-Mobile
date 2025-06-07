@@ -2,6 +2,8 @@ import {
   NativeStackScreenProps,
   NativeStackNavigationProp,
 } from '@react-navigation/native-stack';
+import {OtpActionType} from '../screens/auth/dto/VerifyOtpDto';
+import {VerifyIdentityDTO} from '../screens/auth/dto/VerifyIdentityDto';
 
 /**
  * Routes for `AuthStackRoute`
@@ -11,21 +13,27 @@ type IAuthRoute = {
   CreateAccount?: undefined;
   Login?: undefined;
   VerifyIdentity?: {
-    name?: string;
+    first_name?: string;
+    last_name?: string;
   };
   VerifyAccount?: {
     email: string;
-    to: keyof Pick<IAuthRoute, 'VerifyIdentity' | 'ResetPassword'>;
+    type: OtpActionType;
+    to?: keyof IAuthRoute;
+    user_id: string;
+    pin: string;
+    phone?: string;
+    payload?: any;
   };
   PersonalInformation?: {
     first_name?: string;
     last_name?: string;
   };
-  IdentityVerification?: undefined;
-  FacialVerification?: undefined;
-  SelfieVerification?: undefined;
-  ConfirmDetails?: undefined;
-  Verifying?: undefined;
+  IdentityVerification?: VerifyIdentityDTO;
+  FacialVerification?: VerifyIdentityDTO;
+  SelfieVerification?: VerifyIdentityDTO;
+  ConfirmDetails?: VerifyIdentityDTO;
+  Verifying?: VerifyIdentityDTO;
   VerificationResponse?: {
     status: 'success' | 'failed';
   };
@@ -226,6 +234,37 @@ type IVerificationPin = Props<
 type IMoreRoute = {
   MoreIndex?: undefined;
   More?: undefined;
+  AccountSettings?: undefined;
+  UpdatePassword?: undefined;
+  WalletBalance?: undefined;
+  Disputes?: undefined;
+  PersonalInformation?: undefined;
+  IdentityVerification?: undefined;
+  FacialVerification?: undefined;
+  SelfieVerification?: undefined;
+  ConfirmDetails?: undefined;
+  Verifying?: undefined;
+  VerificationResponse?: undefined;
+  Address?: undefined;
+  Feedback?: undefined;
 };
 
 type IMore = Props<NativeStackScreenProps<IMoreRoute, 'More'>>;
+
+type IAccountSettings = Props<
+  NativeStackScreenProps<IMoreRoute, 'AccountSettings'>
+>;
+
+type IUpdatePassword = Props<
+  NativeStackScreenProps<IMoreRoute, 'UpdatePassword'>
+>;
+
+type IWalletBalance = Props<
+  NativeStackScreenProps<IMoreRoute, 'WalletBalance'>
+>;
+
+type IDisputes = Props<NativeStackScreenProps<IMoreRoute, 'Disputes'>>;
+
+type IAddress = Props<NativeStackScreenProps<IMoreRoute, 'Address'>>;
+
+type IFeedback = Props<NativeStackScreenProps<IMoreRoute, 'Feedback'>>;

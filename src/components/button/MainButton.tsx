@@ -17,7 +17,7 @@ const MainButton: ICustomButton = ({
   borderColor,
   borderRadius = 10,
   height = 45,
-  paddingTop = 5,
+  paddingTop,
   paddingBottom,
   width,
 }) => {
@@ -26,18 +26,18 @@ const MainButton: ICustomButton = ({
       mode={disableButtonColor === 'transparent' ? 'text' : 'contained'}
       icon={icon}
       loading={loading}
-      // disabled={disabled}
       onPress={onPress}
-      style={{borderRadius, height, borderColor, width}}
+      style={{borderRadius, borderColor, width}}
       textColor={disabled ? disableColor : enableColor}
       buttonColor={disabled ? disableButtonColor : enableButtonColor}
       contentStyle={{
         flexDirection: moveIconRight ? 'row-reverse' : 'row',
+        height,
       }}
       labelStyle={{
         fontSize: customFontSize.sm,
         fontFamily: fonts.GeistBold,
-        paddingTop: verticalScale(paddingTop),
+        paddingTop: verticalScale(paddingTop || 0),
         paddingBottom: verticalScale(paddingBottom || 0),
       }}>
       {children || title}

@@ -86,9 +86,10 @@ const CustomPasswordInput: IInput = ({
             flex: 1,
           }}
           value={value}
+          secureTextEntry={!showPassword}
           onChangeText={text => {
             onChangeText?.(text);
-            setPasswordValidate(validate(text));
+            if (showPasswordRules) setPasswordValidate(validate(text));
           }}
           right={
             <TextInput.Icon

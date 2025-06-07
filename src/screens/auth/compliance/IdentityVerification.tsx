@@ -5,8 +5,14 @@ import MainButton from '../../../components/button/MainButton';
 import CustomInput from '../../../components/customInput/Index';
 import ScreenHeader from '../../../components/ScreenHeader';
 import {verticalScale} from '../../../shared/Scaling';
+import {Formik} from 'formik';
+import {NationalityDetailsDTO} from '../dto/VerifyIdentityDto';
+import {createValidator} from 'class-validator-formik';
+import utils from '../../../shared/Utils';
 
-const IdentityVerification: IIdentityVerification = ({navigation}) => {
+const IdentityVerification: IIdentityVerification = ({navigation, route}) => {
+  utils.useHideBottomTab(navigation);
+  
   return (
     <ScrollView>
       <View
@@ -23,33 +29,52 @@ const IdentityVerification: IIdentityVerification = ({navigation}) => {
           description="We use NIN and BVN together to confirm who you are and comply with
               regulatory requirements."
         />
-        <View
-          style={{height: verticalScale(600), justifyContent: 'space-between'}}>
-          <View style={{flexDirection: 'column', gap: 10}}>
-            <CustomInput
-              placeholder="Enter your NIN"
-              label="National Identification Number"
-            />
+        <Formik
+          initialValues={new NationalityDetailsDTO()}
+          onSubmit={data =>
+            navigation.navigate('FacialVerification', {
+              ...data,
+              ...route.params,
+            })
+          }
+          validateOnChange={false}
+          validateOnBlur={false}
+          validate={createValidator(NationalityDetailsDTO)}>
+          {({values, errors, handleChange, handleSubmit}) => (
+            <View
+              style={{
+                height: verticalScale(600),
+                justifyContent: 'space-between',
+              }}>
+              <View style={{flexDirection: 'column', gap: 10}}>
+                <CustomInput
+                  placeholder="Enter your NIN"
+                  label="National Identification Number"
+                  value={values.nin}
+                  error={errors.nin}
+                  onChangeText={handleChange('nin')}
+                  maxLength={11}
+                />
 
-            <CustomInput
-              placeholder="Enter your BVN"
-              label="Bank Verification Number"
-            />
-          </View>
+                <CustomInput
+                  placeholder="Enter your BVN"
+                  label="Bank Verification Number"
+                  value={values.bvn}
+                  error={errors.bvn}
+                  onChangeText={handleChange('bvn')}
+                  maxLength={11}
+                />
+              </View>
 
-          <MainButton
-            icon={() => (
-              <Icon
-                name="arrow-right-l"
-                color={'#014C2B'}
-                style={{marginTop: 3}}
-              />
-            )}
-            moveIconRight
-            onPress={() => navigation.navigate('FacialVerification')}>
-            Next
-          </MainButton>
-        </View>
+              <MainButton
+                icon={() => <Icon name="arrow-right-l" color={'#014C2B'} />}
+                moveIconRight
+                onPress={handleSubmit}>
+                Next
+              </MainButton>
+            </View>
+          )}
+        </Formik>
       </View>
     </ScrollView>
   );

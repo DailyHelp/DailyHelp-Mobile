@@ -7,10 +7,18 @@ const storage = new MMKV({
 });
 
 class AppStorageData {
-  user_type?: UserTypes;
-  routes?: Route;
-  access_token?: string;
-  user_id?: string;
+  user_type: UserTypes = UserTypes.USER;
+  routes: Route = 'authentication';
+  access_token: string = '';
+  user_id: string = '';
+  email: string = '';
+  phone: string = '';
+  firstname: string = '';
+  lastname: string = '';
+  middlename: string = '';
+  isAuthenticated: boolean = false;
+  isPhoneVerified: boolean = false;
+  isIdentityVerified: boolean = false;
 }
 
 export default class AppStorage {

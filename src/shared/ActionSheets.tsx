@@ -8,6 +8,8 @@ import FaceMatch from '../screens/app/user/jobs/components/FaceMatch';
 import CancelJob from '../screens/app/user/jobs/components/CancelJob';
 import WorkerSuggestions from '../screens/app/user/jobs/components/WorkerSuggestions';
 import RateService from '../screens/app/user/jobs/components/RateService';
+import FundedWallet from '../screens/app/user/more/components/FundWallet';
+import AddressOptions from '../screens/app/user/more/components/AddressOptions';
 
 registerSheet('AllCategory', AllCategory);
 registerSheet('Rating', Rating);
@@ -18,6 +20,8 @@ registerSheet('FaceMatch', FaceMatch);
 registerSheet('CancelJob', CancelJob);
 registerSheet('WorkerSuggestion', WorkerSuggestions);
 registerSheet('RateService', RateService);
+registerSheet('FundWallet', FundedWallet);
+registerSheet('AddressOptions', AddressOptions);
 
 declare module 'react-native-actions-sheet' {
   interface Sheets {
@@ -29,6 +33,11 @@ declare module 'react-native-actions-sheet' {
       returnValue: {};
     }>;
     Rating: SheetDefinition<{}>;
+    FundWallet: SheetDefinition<{
+      returnValue: {
+        amount: number;
+      };
+    }>;
     HomeAddress: SheetDefinition<{}>;
     PriceRange: SheetDefinition<{}>;
     Gallery: SheetDefinition<{}>;
@@ -36,5 +45,6 @@ declare module 'react-native-actions-sheet' {
     CancelJob: SheetDefinition<{}>;
     WorkerSuggestion: SheetDefinition<{}>;
     RateService: SheetDefinition<{}>;
+    AddressOptions: SheetDefinition<{}>;
   }
 }

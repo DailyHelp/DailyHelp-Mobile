@@ -1,5 +1,10 @@
-import React from 'react';
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import React, {useEffect, useRef, useState} from 'react';
+import {
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  ActivityIndicator,
+} from 'react-native';
 import {Text} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {
@@ -19,37 +24,66 @@ const FRAME_SIZE = 300;
 
 const Selfie: ISelfie = ({}) => {
   const {hasPermission, requestPermission} = useCameraPermission();
-  const [device, setDevice] = React.useState<CameraDevice | undefined>();
-  const camera = React.useRef<Camera>(null);
+  const [device, setDevice] = useState<CameraDevice | undefined>();
+  const [loading, setLoading] = useState(true);
+  const camera = useRef<Camera>(null);
 
-  React.useEffect(() => {
-    const checkPermissionsAndSetDevice = async () => {
-      const permission = await requestPermission(); // always await this
-      if (!permission) return;
+  useEffect(() => {
+    let isMounted = true;
 
-      const availableDevices = await Camera.getAvailableCameraDevices();
-      const selectedDevice = getCameraDevice(availableDevices, 'front');
+    const init = async () => {
+      const granted = await requestPermission();
+      if (!granted || !isMounted) return;
 
-      if (!selectedDevice) {
-        throw new ThrowError('No camera device found!');
+      const devices = await Camera.getAvailableCameraDevices();
+      const front = getCameraDevice(devices, 'front');
+      if (!front) {
+        throw new ThrowError('No front camera device found');
       }
 
-      setDevice(selectedDevice);
+      if (isMounted) {
+        setDevice(front);
+        setLoading(false);
+      }
     };
 
-    checkPermissionsAndSetDevice();
+    init();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
+  const takePhoto = async () => {
+    try {
+      const photo = await camera.current?.takePhoto();
+      appStore.setSelfiePhoto(photo!);
+      appStore.setHideSelfieVerificationHeader(false);
+    } catch (err) {
+      console.error('Error taking photo', err);
+    }
+  };
+
   return (
-    <View style={{flex: 1}}>
+    <View style={{flex: 1, backgroundColor: 'black'}}>
+      {/* Close Button */}
       <Icon
         name="close"
         color={'white'}
-        size={20}
+        size={24}
         onPress={() => appStore.setHideSelfieVerificationHeader(false)}
         style={{position: 'absolute', zIndex: 999, right: 20, top: 20}}
       />
-      {device && (
+
+      {/* Show loading indicator until camera is ready */}
+      {loading && (
+        <View style={[StyleSheet.absoluteFill, styles.center]}>
+          <ActivityIndicator size="large" color="#fff" />
+        </View>
+      )}
+
+      {/* Render camera only when device is ready */}
+      {!loading && device && hasPermission && (
         <Camera
           ref={camera}
           style={StyleSheet.absoluteFill}
@@ -59,6 +93,7 @@ const Selfie: ISelfie = ({}) => {
         />
       )}
 
+      {/* UI Overlay */}
       <View style={StyleSheet.absoluteFill}>
         {/* Top dimmed area */}
         <View style={{flex: 0.4, backgroundColor: 'rgba(0,0,0,0.6)'}} />
@@ -70,7 +105,7 @@ const Selfie: ISelfie = ({}) => {
           <View style={{flex: 1, backgroundColor: 'rgba(0,0,0,0.6)'}} />
         </View>
 
-        {/* Bottom area */}
+        {/* Bottom dimmed area */}
         <View
           style={{
             flex: 1,
@@ -98,12 +133,7 @@ const Selfie: ISelfie = ({}) => {
           </View>
 
           <TouchableOpacity
-            onPress={async () => {
-              const photo = await camera.current?.takePhoto();
-
-              appStore.setSelfiePhoto(photo!);
-              appStore.setHideSelfieVerificationHeader(false);
-            }}
+            onPress={takePhoto}
             style={{marginTop: verticalScale(150)}}>
             <Assets.Shutter />
           </TouchableOpacity>
@@ -129,5 +159,10 @@ const styles = StyleSheet.create({
     padding: 15,
     fontFamily: fonts.GeistMedium,
     fontSize: customFontSize.sm,
+  },
+  center: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'black',
   },
 });

@@ -3,6 +3,7 @@ import Toast from 'react-native-toast-message';
 import ThrowError from '../errors/throwError';
 import utils from '../Utils';
 import AppStorage from '../AppStorage';
+import {customFontSize, fonts} from '../themes/Typography';
 
 type Headers = {
   Authorization: string;
@@ -88,6 +89,8 @@ export default class Http {
 
     if (res) {
       const data: ApiResponse<T> = await res.json();
+      console.log(data);
+      
 
       if (unauthorized.includes(res.status)) {
         ThrowError.handleUnAuthentication();
@@ -106,6 +109,10 @@ export default class Http {
       text1: 'Success',
       text2: message,
       visibilityTime: 10000,
+      text2Style: {
+        fontFamily: fonts.GeistRegular,
+        fontSize: customFontSize.sm,
+      },
     });
   };
 
@@ -115,6 +122,10 @@ export default class Http {
       text1: 'Error',
       text2: message,
       visibilityTime: 10000,
+      text2Style: {
+        fontFamily: fonts.GeistRegular,
+        fontSize: customFontSize.sm,
+      },
     });
   };
 
@@ -125,6 +136,10 @@ export default class Http {
       text1: 'Note',
       text2: message,
       visibilityTime: 10000,
+      text2Style: {
+        fontFamily: fonts.GeistRegular,
+        fontSize: customFontSize.sm,
+      },
     });
   };
 }

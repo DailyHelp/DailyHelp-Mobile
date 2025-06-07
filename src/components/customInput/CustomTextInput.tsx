@@ -18,6 +18,7 @@ const CustomTextInput: IInput = ({
   multiline,
   height = 50,
   fontWeight,
+  maxLength,
   error,
 }) => {
   let fontFamily = fonts.GeistBold;
@@ -66,6 +67,7 @@ const CustomTextInput: IInput = ({
           placeholder={placeholder}
           textColor="#3B4152"
           placeholderTextColor={'#A9AFC2'}
+          maxLength={maxLength}
           cursorColor="#A9AFC2"
           contentStyle={{
             color: '#757C91',

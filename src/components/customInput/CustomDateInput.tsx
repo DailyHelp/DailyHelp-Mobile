@@ -8,7 +8,7 @@ import Assets from '../../assets/Assets';
 import dayjs from 'dayjs';
 import IconF from 'react-native-vector-icons/Feather';
 
-const CustomDateInput: IInput = ({label, placeholder, error}) => {
+const CustomDateInput: IInput = ({label, placeholder, error, onChangeText}) => {
   const [date, setDate] = React.useState<Date | undefined>();
   const [open, setOpen] = React.useState(false);
 
@@ -45,6 +45,7 @@ const CustomDateInput: IInput = ({label, placeholder, error}) => {
               onConfirm={date => {
                 setOpen(false);
                 setDate(date);
+                onChangeText?.(date.toISOString());
               }}
               onCancel={() => {
                 setOpen(false);

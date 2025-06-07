@@ -9,6 +9,12 @@ import CustomFlatList from '../../../../components/CustomFlatList';
 const Jobs: IJobs = props => {
   const [type, setType] = React.useState('pending');
 
+  const jobs = [
+    {title: 'Pending', slug: 'pending'},
+    {title: 'Ongoing', slug: 'ongoing'},
+    {title: 'Completed', slug: 'completed'},
+  ];
+
   const renderItem = React.useCallback(() => {
     return (
       <View style={{marginBottom: scale(16)}}>
@@ -24,7 +30,14 @@ const Jobs: IJobs = props => {
 
   return (
     <View style={{flex: 1}}>
-      <CustomHeader type="jobs" {...props} title="Jobs" onPress={setType} />
+      <CustomHeader
+        type="tabs"
+        {...props}
+        title="Jobs"
+        onPress={setType}
+        initialTab="pending"
+        tabs={jobs}
+      />
       <View style={{padding: scale(15), height: '90%'}}>
         <CustomFlatList
           data={['1', '2', '3', '4', '5']}

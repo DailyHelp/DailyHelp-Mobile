@@ -1,13 +1,17 @@
-import React, {useState} from 'react';
-import {View, Text, TouchableOpacity, ScrollView, Image} from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import Icon2 from 'react-native-vector-icons/Ionicons';
+import React from 'react';
+import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import ActionSheet, {
+  ActionSheetRef,
+  SheetManager,
+} from 'react-native-actions-sheet';
 import Collapsible from 'react-native-collapsible';
-import ActionSheet from 'react-native-actions-sheet';
-import CustomInput from '../../../../../components/customInput/Index';
-import {verticalScale} from '../../../../../shared/Scaling';
-import {customFontSize, fonts} from '../../../../../shared/themes/Typography';
+import Icon2 from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Assets from '../../../../../assets/Assets';
+import CustomInput from '../../../../../components/customInput/Index';
+import Typography from '../../../../../components/Typography';
+import { verticalScale } from '../../../../../shared/Scaling';
+import { customFontSize, fonts } from '../../../../../shared/themes/Typography';
 
 const categories = [
   {
@@ -37,10 +41,13 @@ const categories = [
   // Add more...
 ];
 
-const CategoryActionSheet = React.forwardRef((props, ref) => {
-  const [search, setSearch] = useState('');
-  const [selected, setSelected] = useState<string[]>([]);
-  const [openSections, setOpenSections] = useState<string[]>([
+const CategoryActionSheet = React.forwardRef<
+  ActionSheetRef,
+  ICategoryActionSheet
+>((props, ref) => {
+  const [search, setSearch] = React.useState('');
+  const [selected, setSelected] = React.useState<string[]>([]);
+  const [openSections, setOpenSections] = React.useState<string[]>([
     'Home & Cleaning',
   ]);
 
@@ -62,9 +69,11 @@ const CategoryActionSheet = React.forwardRef((props, ref) => {
 
   return (
     <ActionSheet
-      ref={ref as any}
+      ref={ref}
+      id="AllCategory"
       closeOnPressBack={false}
       gestureEnabled={true}
+      closable={false}
       containerStyle={{
         borderTopLeftRadius: 16,
         borderTopRightRadius: 16,
@@ -81,33 +90,19 @@ const CategoryActionSheet = React.forwardRef((props, ref) => {
             justifyContent: 'space-between',
             marginBottom: 12,
           }}>
-          <TouchableOpacity>
-            <Text
-              style={{
-                fontFamily: fonts.GeistBold,
-                color: '#757C91',
-                fontSize: customFontSize.md,
-              }}>
+          <TouchableOpacity onPress={() => SheetManager.hide('AllCategory')}>
+            <Typography fontWeight="bold" size="sm" color="#757C91">
               Cancel
-            </Text>
+            </Typography>
           </TouchableOpacity>
-          <Text
-            style={{
-              fontFamily: fonts.GeistBold,
-              color: '#121921',
-              fontSize: customFontSize.md,
-            }}>
+          <Typography fontWeight="bold" size="md">
             Select category
-          </Text>
+          </Typography>
+
           <TouchableOpacity>
-            <Text
-              style={{
-                fontFamily: fonts.GeistBold,
-                color: '#757C91',
-                fontSize: customFontSize.md,
-              }}>
+            <Typography fontWeight="bold" size="sm" color="#757C91">
               Apply
-            </Text>
+            </Typography>
           </TouchableOpacity>
         </View>
 

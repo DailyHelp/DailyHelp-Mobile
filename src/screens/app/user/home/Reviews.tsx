@@ -1,11 +1,12 @@
-import { View } from 'react-native';
+import {View} from 'react-native';
 import Icon2 from 'react-native-vector-icons/AntDesign';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { IReviews } from '../../../../@types/routes';
+import {IReviews} from '../../../../@types/routes';
 import Typography from '../../../../components/Typography';
-import { scale, verticalScale } from '../../../../shared/Scaling';
+import {scale, verticalScale} from '../../../../shared/Scaling';
 import utils from '../../../../shared/Utils';
 import ReviewsCard from './components/ReviewsCard';
+import React from 'react';
 
 const Reviews: IReviews = ({navigation}) => {
   const rate = 5;
@@ -132,4 +133,4 @@ const Reviews: IReviews = ({navigation}) => {
     </View>
   );
 };
-export default Reviews;
+export default React.memo(Reviews);

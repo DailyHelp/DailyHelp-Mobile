@@ -81,11 +81,19 @@ import HelpAndSupport from './svg/helpSupport.svg';
 import WalletBalance from './svg/walletBallance.svg';
 import FeedBack from './svg/feedback.svg';
 import TermsOfUse from './svg/termsOfUse.svg';
+import Bin from './svg/bin.svg';
+import Logout from './svg/logout.svg';
+import FundedWallet from './svg/fundedWallet.svg';
+import Location from './svg/location.svg';
 
 export default {
   DoubleGreenMark,
+  Location,
+  FundedWallet,
   TermsOfUse,
   FeedBack,
+  Logout,
+  Bin,
   AccountSettings,
   HelpAndSupport,
   WalletBalance,

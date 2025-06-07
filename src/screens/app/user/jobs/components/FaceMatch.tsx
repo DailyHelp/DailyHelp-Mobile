@@ -72,26 +72,12 @@ const FaceMatch = React.forwardRef<ActionSheetRef, IFaceMatch>((props, ref) => {
               clearTimeout(timer);
             }, 1000);
           }}
-          icon={() => (
-            <IconI
-              name="checkmark"
-              color={'#27A535'}
-              size={15}
-              style={{marginTop: verticalScale(7)}}
-            />
-          )}
+          icon={() => <IconI name="checkmark" color={'#27A535'} size={15} />}
           enableButtonColor="#D6F5D9">
           Yes, it is them
         </MainButton>
         <MainButton
-          icon={() => (
-            <Icon
-              name="close"
-              color={'#F0443A'}
-              size={15}
-              style={{marginTop: verticalScale(7)}}
-            />
-          )}
+          icon={() => <Icon name="close" color={'#F0443A'} size={15} />}
           enableColor="#F0443A"
           enableButtonColor="#FDE9E7">
           No, it's not them

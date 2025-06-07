@@ -7,6 +7,8 @@ import {PhotoIdentifier} from '@react-native-camera-roll/camera-roll';
 class AppStore {
   route?: Route = (AppStorage.find('routes') as Route) || 'authentication';
 
+  isAuthenticated = AppStorage.find('isAuthenticated') || false;
+
   user_types?: UserTypes;
 
   hideSelfieVerificationHeader: boolean = true;
@@ -41,7 +43,6 @@ class AppStore {
     );
   }
 
-  // example MobX action
   toggleGalleryImageSelection(uri: string) {
     if (this.selectedGalleryImages.includes(uri)) {
       this.selectedGalleryImages = this.selectedGalleryImages.filter(
@@ -54,6 +55,11 @@ class AppStore {
 
   clearSelectedGalleryImages() {
     this.selectedGalleryImages = [];
+  }
+
+  setIsAuthenticated(dto: boolean) {
+    this.isAuthenticated = dto;
+    AppStorage.save('isAuthenticated', dto);
   }
 }
 

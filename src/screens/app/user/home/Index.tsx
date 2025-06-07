@@ -1,12 +1,13 @@
 import React from 'react';
-import { FlatList, View } from 'react-native';
-import { IHome } from '../../../../@types/routes';
+import {FlatList, View} from 'react-native';
+import {IHome} from '../../../../@types/routes';
 import CustomFlatList from '../../../../components/CustomFlatList';
 import Typography from '../../../../components/Typography';
-import { top_rated } from '../../../../mock_data';
+import {top_rated} from '../../../../mock_data';
 import CategorySection from './components/CategorySection';
 import HelperCard from './components/HelperCard';
 import VerifyPhoneNumberContainer from './components/VerifyNumberContainer';
+import AppStorage from '../../../../shared/AppStorage';
 
 const Home: IHome = () => {
   return (
@@ -28,7 +29,9 @@ const Home: IHome = () => {
                 {label: 'Rating', showIcon: true},
               ]}
             />
-            <VerifyPhoneNumberContainer />
+            {!AppStorage.find('isPhoneVerified') && (
+              <VerifyPhoneNumberContainer />
+            )}
           </View>
 
           <View
@@ -101,4 +104,4 @@ const Home: IHome = () => {
     />
   );
 };
-export default Home;
+export default React.memo(Home);

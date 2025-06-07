@@ -5,28 +5,29 @@ import ScreenHeader from '../../../components/ScreenHeader';
 import {verticalScale, scale} from '../../../shared/Scaling';
 import {appStore} from '../../../shared/stores/appStore';
 import {customFontSize, fonts} from '../../../shared/themes/Typography';
+import dayjs from 'dayjs';
 
-const ConfirmDetails: IConfirmDetails = ({navigation}) => {
+const ConfirmDetails: IConfirmDetails = ({navigation, route}) => {
   const user_data = [
     {
       title: 'Full name',
-      data: 'Adebayo Tobiloba James',
+      data: `${route.params?.firstname} ${route.params?.middlename} ${route.params?.lastname}`,
     },
     {
       title: 'Date of Birth',
-      data: '23 May, 1994',
+      data: dayjs(route.params?.dob).format('DD MMM, YYYY'),
     },
     {
       title: 'Gender',
-      data: 'Male',
+      data: route.params?.gender,
     },
     {
       title: 'NIN',
-      data: '8123761890231',
+      data: route.params?.nin,
     },
     {
       title: 'BVN',
-      data: '22346578912',
+      data: route.params?.bvn,
     },
   ];
 
@@ -87,7 +88,8 @@ const ConfirmDetails: IConfirmDetails = ({navigation}) => {
         </View>
 
         <View style={{marginTop: verticalScale(100)}}>
-          <MainButton onPress={() => navigation.navigate('Verifying')}>
+          <MainButton
+            onPress={() => navigation.navigate('Verifying', route.params)}>
             Verify Identity
           </MainButton>
         </View>

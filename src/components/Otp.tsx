@@ -43,7 +43,7 @@ const Otp: IOtp = ({
           alignSelf: 'center',
         }}
         secureTextEntry={secureTextEntry}
-        onCodeChanged={handleChange}
+        onCodeFilled={handleChange}
         keyboardType="number-pad"
       />
       {errorValue && (
