@@ -1,9 +1,10 @@
-import {MMKV, Mode} from 'react-native-mmkv';
+import {STORAGE_ENCRYPTION_KEY} from '@env';
+import {MMKV} from 'react-native-mmkv';
 import {UserTypes} from './Constant';
 
 const storage = new MMKV({
   id: 'storage',
-  encryptionKey: '30ba48b9a8d622c34318',
+  encryptionKey: STORAGE_ENCRYPTION_KEY,
 });
 
 class AppStorageData {
@@ -41,6 +42,12 @@ export default class AppStorage {
 
   static remove(key: keyof AppStorageData) {
     storage.delete(key);
+  }
+
+  static removeSelected(keys: (keyof AppStorageData)[]) {
+    keys.forEach(key => {
+      storage.delete(key);
+    });
   }
 
   static removeAll() {

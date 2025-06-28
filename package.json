@@ -3,11 +3,12 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "android": "react-native run-android   --port 8082",
-    "ios": "react-native run-ios  --port 8082",
+    "android": "react-native run-android --port 8082",
+    "ios": "react-native run-ios  --simulator='iPhone 16 Pro' --port 8082",
+    "pod": "cd ios && pod install && cd .. && yarn ios",
     "lint": "eslint .",
-    "start": "react-native start --port 8082 --reset-cache",
     "apk": "yarn android --mode release",
+    "start": "react-native start --port 8082",
     "test": "jest"
   },
   "dependencies": {

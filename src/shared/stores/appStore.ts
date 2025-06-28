@@ -57,9 +57,10 @@ class AppStore {
     this.selectedGalleryImages = [];
   }
 
-  setIsAuthenticated(dto: boolean) {
+  setIsAuthenticated(dto: boolean, user_type: UserTypes = UserTypes.USER) {
     this.isAuthenticated = dto;
     AppStorage.save('isAuthenticated', dto);
+    if (dto) AppStorage.save('user_type', user_type);
   }
 }
 

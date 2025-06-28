@@ -15,6 +15,7 @@ import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import 'reflect-metadata';
 import utils from './shared/Utils';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
@@ -46,7 +47,9 @@ function App(): React.JSX.Element {
       />
       <GestureHandlerRootView style={{flex: 1}}>
         <QueryClientProvider client={queryClient}>
-          <Routes />
+          <SafeAreaView edges={['top']}>
+            <Routes />
+          </SafeAreaView>
         </QueryClientProvider>
       </GestureHandlerRootView>
     </View>
