@@ -10,10 +10,15 @@ import VerifyOtpDTO, {
   VerifyOtpResponse,
 } from '../dto/VerifyOtpDto';
 import LoginDto from '../dto/LoginDto';
+import {
+  GoogleSignin,
+  statusCodes,
+} from '@react-native-google-signin/google-signin';
 import {appStore} from '../../../shared/stores/appStore';
 import ForgotPasswordDTO, {ResetPasswordDTO} from '../dto/ForgotPasswordDto';
 import {VerifyIdentityDTO} from '../dto/VerifyIdentityDto';
 import React from 'react';
+import {WEB_CLIENT_ID} from '@env';
 
 export class AuthService extends AuthApi {
   private static instance: AuthService;
@@ -162,6 +167,73 @@ export class AuthService extends AuthApi {
       resendLoading: rsLoading,
       onSubmit,
       onResendOtp,
+    };
+  }
+
+useGoogleSignAuth() {
+   
+
+    const {tokenUpdate} = this.useUpdateFcmToken();
+
+    React.useEffect(() => {
+      GoogleSignin.configure({webClientId: WEB_CLIENT_ID});
+    }, []);
+
+    const {mutate, isPending} = useMutation({
+      mutationKey: ['googleAuth'],
+      mutationFn: async (body: GoogleAuthDto) => await this.googleAuth(body),
+      onSuccess: async data => {
+        tokenUpdate(await messaging().getToken());
+       
+      },
+      onError: error => {
+        new CatchError(error, true);
+        
+      },
+    });
+
+    // Somewhere in your code
+    const signIn = async () => {
+      GoogleSignin.signOut();
+      try {
+        await GoogleSignin.hasPlayServices();
+        const response = await GoogleSignin.signIn();
+        if (response.type === 'success') {
+          mutate({
+            email: response.data.user.email,
+            familyName: response.data.user.familyName!,
+            givenName: response.data.user.givenName!,
+            id: response.data.user.id,
+          });
+        }
+      } catch (error: any) {
+        if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+          // user cancelled the login flow
+        } else if (error.code === statusCodes.IN_PROGRESS) {
+          // operation (e.g. sign in) is in progress already
+        } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+          // play services not available or outdated
+        } else {
+          new CatchError(error, true);
+        }
+      }
+    };
+
+    return {
+      signIn,
+      isGooglePending: isPending,
+    };
+  }
+
+  useUpdateFcmToken() {
+    const {mutate} = useMutation({
+      mutationKey: ['fcmToken'],
+      mutationFn: async (body: string) => await this.updateFmcToken(body),
+      onError: error => new CatchError(error, true),
+    });
+
+    return {
+      tokenUpdate: mutate,
     };
   }
 

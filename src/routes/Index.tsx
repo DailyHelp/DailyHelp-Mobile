@@ -33,6 +33,7 @@ const Routes: Props = () => {
           <Observer>
             {() => (
               <React.Fragment>
+            
                 {appStore.isAuthenticated ? <AppRouter /> : <AuthRouter />}
               </React.Fragment>
             )}

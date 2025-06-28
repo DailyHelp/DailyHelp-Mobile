@@ -6,12 +6,18 @@ import {scale, verticalScale} from '../../shared/Scaling';
 import {NativeStackHeaderProps} from '@react-navigation/native-stack';
 import Assets from '../../assets/Assets';
 import {SheetManager} from 'react-native-actions-sheet';
+import homeService from '../../screens/app/user/home/services/Home.service';
 
 const HomeHeader: ICustomHeader<NativeStackHeaderProps> = ({
   title,
   navigation,
   goBack,
 }) => {
+  const { data } = homeService.useSavedLocation();
+
+  const location = data?.[0]?.description || title;
+  const trimmedLocation = location && location.length > 10 ? location.substring(0, 10) + '…' : location;
+
   return (
     <View
       style={{
@@ -20,7 +26,6 @@ const HomeHeader: ICustomHeader<NativeStackHeaderProps> = ({
         alignItems: 'center',
         width: '100%',
         paddingHorizontal: scale(10),
-        paddingTop: scale(15),
         backgroundColor: 'white',
         paddingBottom: verticalScale(10),
       }}>
@@ -33,7 +38,7 @@ const HomeHeader: ICustomHeader<NativeStackHeaderProps> = ({
               color: '#121921',
               fontSize: customFontSize.sm,
             }}>
-            {title}
+            {trimmedLocation} 
           </Text>
           <Icon name="chevron-down" color={'#757C91'} size={16} />
         </View>

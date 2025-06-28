@@ -18,7 +18,7 @@ const FacialVerification: IFacialVerification = ({navigation, route}) => {
           flexDirection: 'column',
           justifyContent: 'space-between',
           flex: 1,
-          height: verticalScale(700),
+          height: verticalScale(650),
         }}>
         <View
           style={{

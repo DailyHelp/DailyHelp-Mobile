@@ -38,6 +38,7 @@ import Verifying from '../../screens/auth/compliance/Verifying';
 import VerificationResponse from '../../screens/auth/compliance/VerificationResponse';
 import Address from '../../screens/app/user/more/Address';
 import Feedback from '../../screens/app/user/more/Feedback';
+import ReportSumitted from '../../screens/app/user/chat/report/ReportSumitted';
 
 type LabelPosition = 'beside-icon' | 'below-icon';
 
@@ -274,6 +275,16 @@ export const UserChatStackRoutes = [
     component: Report,
     options: {
       headerShown: false,
+    },
+  },
+  {
+    name: 'ReportSumitted',
+    component: ReportSumitted,
+    options: {
+      headerShown: true,
+      header: (props: NativeStackHeaderProps) => (
+        <CustomHeader type="back" title="" {...props} textMiddle />
+      ),
     },
   },
   {

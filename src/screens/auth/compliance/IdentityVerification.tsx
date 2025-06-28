@@ -43,7 +43,7 @@ const IdentityVerification: IIdentityVerification = ({navigation, route}) => {
           {({values, errors, handleChange, handleSubmit}) => (
             <View
               style={{
-                height: verticalScale(600),
+                height: verticalScale(550),
                 justifyContent: 'space-between',
               }}>
               <View style={{flexDirection: 'column', gap: 10}}>

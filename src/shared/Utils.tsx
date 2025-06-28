@@ -19,7 +19,7 @@ import {
 import {scale, verticalScale} from './Scaling';
 import {PermissionsAndroid, Platform} from 'react-native';
 import {CameraRoll} from '@react-native-camera-roll/camera-roll';
-import { validate } from 'class-validator';
+import {validate} from 'class-validator';
 
 // import messaging from '@react-native-firebase/messaging';
 // import {QueryClient} from '@tanstack/react-query';
@@ -101,6 +101,41 @@ class Utils {
     const res = await launchCamera({mediaType: 'photo'});
     return res;
   }
+
+  async requestLocationPermission(): Promise<boolean> {
+    if (Platform.OS === 'android') {
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+          {
+            title: 'Location Permission',
+            message: 'This app needs access to your location.',
+            buttonNeutral: 'Ask Me Later',
+            buttonNegative: 'Cancel',
+            buttonPositive: 'OK',
+          },
+        );
+        return granted === PermissionsAndroid.RESULTS.GRANTED;
+      } catch (err) {
+        console.warn(err);
+        return false;
+      }
+    }
+
+    return true; 
+  }
+
+  extractAddressParts(components: any[]) {
+    const getComponent = (type: string) =>
+      components.find(c => c.types.includes(type))?.long_name || '';
+
+    return {
+      address: `${getComponent('street_number')} ${getComponent('route')}`.trim(),
+      state: getComponent('administrative_area_level_1'),
+      lga: getComponent('locality') || getComponent('administrative_area_level_2'), // fallback to county if city missing
+    };
+  }
+
 
   useBiometrics() {
     const [isBiometrics, setIsBiometrics] = React.useState(false);

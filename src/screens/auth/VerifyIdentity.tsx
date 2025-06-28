@@ -26,8 +26,8 @@ const VerifyIdentity: IVerifyIdentity = ({route, navigation}) => {
           flexDirection: 'column',
           gap: 10,
         }}>
-        <Typography fontWeight="bold" size="m2d">
-          Hello {route.params?.last_name}
+        <Typography fontWeight="bold" size="m2d" color='#017441'>
+          Hello {route.params?.last_name}!
         </Typography>
 
         <View
@@ -56,7 +56,7 @@ const VerifyIdentity: IVerifyIdentity = ({route, navigation}) => {
           </View>
 
           <View style={{width: '93%'}}>
-            <Typography fontWeight="medium" size="sm">
+            <Typography fontWeight="medium" size="sm" color='#757C91'>
               We verify identities to ensure a safe experience for you and
               service providers. This won’t take long.
             </Typography>

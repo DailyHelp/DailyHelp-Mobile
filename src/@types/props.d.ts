@@ -34,6 +34,7 @@ type IWalletFunded = Props<{
 
 type ICategoryActionSheet = {
   onClose: () => void;
+  onCategoriesSelected?: (categories: string[]) => void;
 };
 
 type IFundWallet = {};
@@ -81,6 +82,15 @@ type ICustomHeader<P> = Props<
     initialTab?: string;
   }
 >;
+
+type PaymentOptionProps = Props<{
+  id: string | number;
+  icon: string;
+  title: string;
+  subtitle?: string;
+  selected: boolean;
+  onPress: (id: string | number) => void;
+}>
 
 type ITabs = Props<{
   initialTab?: string;

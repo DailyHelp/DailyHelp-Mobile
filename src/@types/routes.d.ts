@@ -197,6 +197,7 @@ type IChatRoute = {
   Checkout?: undefined;
   VoiceCall?: undefined;
   Report?: undefined;
+  ReportSumitted?:undefined
 };
 
 type IChat = Props<NativeStackScreenProps<IChatRoute, 'Chat'>>;
@@ -206,6 +207,8 @@ type IChatBox = Props<NativeStackScreenProps<IChatRoute, 'ChatBox'>>;
 type ICheckout = Props<NativeStackScreenProps<IChatRoute, 'Checkout'>>;
 
 type IVoiceCall = Props<NativeStackScreenProps<IChatRoute, 'VoiceCall'>>;
+
+type IReportSumitted = Props<NativeStackScreenProps<IChatRoute, 'ReportSumitted'>>;
 
 type IReport = Props<
   {scroll?: (title: string) => void} & NativeStackScreenProps<

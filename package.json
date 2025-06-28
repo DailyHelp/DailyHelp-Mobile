@@ -3,9 +3,10 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "android": "react-native run-android   --port 8082",
-    "ios": "react-native run-ios  --port 8082",
+    "android": "react-native run-android   --port 8083",
+    "ios": "react-native run-ios  --port 8083",
     "lint": "eslint .",
+    "pod": "cd ios && pod install && cd .. && yarn ios",
     "start": "react-native start --port 8082 --reset-cache",
     "apk": "yarn android --mode release",
     "test": "jest"
@@ -21,6 +22,9 @@
     "@react-native-masked-view/masked-view": "^0.3.2",
     "@react-navigation/bottom-tabs": "^7.3.11",
     "@react-navigation/elements": "^2.3.8",
+    "@react-native-firebase/app": "^21.6.2",
+    "@react-native-firebase/messaging": "^21.6.2",
+    "@react-native-google-signin/google-signin": "^13.1.0",
     "@react-navigation/native": "^7.1.6",
     "@react-navigation/native-stack": "^7.3.10",
     "@tanstack/react-query": "^5.79.0",
@@ -69,6 +73,7 @@
   "devDependencies": {
     "@babel/core": "^7.25.2",
     "@babel/plugin-proposal-decorators": "^7.27.1",
+    "@babel/plugin-transform-class-properties": "^7.27.1",
     "@babel/preset-env": "^7.25.3",
     "@babel/runtime": "^7.25.0",
     "@react-native-community/cli": "18.0.0",

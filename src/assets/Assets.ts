@@ -85,11 +85,18 @@ import Bin from './svg/bin.svg';
 import Logout from './svg/logout.svg';
 import FundedWallet from './svg/fundedWallet.svg';
 import Location from './svg/location.svg';
+import Comb from './svg/comb.svg'
+import Transport from './svg/transport.svg'
+import Icon from './svg/icon.svg'
+
 
 export default {
   DoubleGreenMark,
+  Transport,
+  Icon,
   Location,
   FundedWallet,
+  Comb,
   TermsOfUse,
   FeedBack,
   Logout,

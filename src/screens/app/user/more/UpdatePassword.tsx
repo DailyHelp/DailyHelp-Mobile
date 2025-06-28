@@ -23,7 +23,7 @@ const UpdatePassword: IUpdatePassword = ({navigation}) => {
           marginTop: verticalScale(20),
           flexDirection: 'column',
           justifyContent: 'space-between',
-          height: verticalScale(700),
+          height: verticalScale(650),
         }}>
         <Formik initialValues={{}} onSubmit={() => {}}>
           {() => (

@@ -12,6 +12,9 @@ declare module '*.mp4';
 
 declare module '@env' {
   export const BASE_URL: string;
+  export const GOOGLE_API_KEY:string;
+  export const WEB_CLIENT_ID:string;
+
 }
 
 type ApiResponse<T> = {

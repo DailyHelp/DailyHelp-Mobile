@@ -7,62 +7,62 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0C80B921A6F3F58F76C31292 /* libPods-DailyHelp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DCACB8F33CDC322A6C60F78 /* libPods-DailyHelp.a */; };
-		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
-		761780ED2CA45674006654EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EC2CA45674006654EE /* AppDelegate.swift */; };
-		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		E28ED7C252F7C84B27DEEBB7 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
 		032A405845104208B845A3D5 /* CabinetGrotesk-Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = 5D577423B25D4DB2B37F0B9A /* CabinetGrotesk-Black.otf */; };
-		D5767EF85E4E424F89121C62 /* CabinetGrotesk-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = A75D4D276FF146E997C4F987 /* CabinetGrotesk-Bold.otf */; };
-		DC08856C6AEB49D794BD5E80 /* CabinetGrotesk-Extrabold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 00087175BDAE47F9A9DE7D7D /* CabinetGrotesk-Extrabold.otf */; };
-		BE958D44223A4272A5B3F38C /* CabinetGrotesk-Extralight.otf in Resources */ = {isa = PBXBuildFile; fileRef = A4E418DC66F142B7A5DD08C5 /* CabinetGrotesk-Extralight.otf */; };
-		FDE2A55652F64A91B0F07DBC /* CabinetGrotesk-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 790C5326587047DABA907036 /* CabinetGrotesk-Light.otf */; };
+		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		1A651E052CEB41F58E353CDF /* CabinetGrotesk-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 0D05CB113E6448059FB78109 /* CabinetGrotesk-Medium.otf */; };
-		F0DF8D02468B4C819D119CA9 /* CabinetGrotesk-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 0D596D1D1A4247E081551717 /* CabinetGrotesk-Regular.otf */; };
 		357B7AD5C2814EB4BC15CBB7 /* CabinetGrotesk-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = 929891D7B8C44516942CF45C /* CabinetGrotesk-Thin.otf */; };
-		BF22A7F4B4A84D62A37B851E /* Geist-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 67B759C1EEF0495590496D57 /* Geist-Black.ttf */; };
-		6D23610D559343939F178268 /* Geist-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7F5923FE1621487B811A60C3 /* Geist-Bold.ttf */; };
-		512230F627D84D7A8C7DCD24 /* Geist-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EE4E638E55BA4B31A4A51FCF /* Geist-ExtraBold.ttf */; };
-		49815BC35E3C4963BBA84FD1 /* Geist-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3169649C740441B09D3203F8 /* Geist-ExtraLight.ttf */; };
-		E273B5FA85584AFDBBAA8BA8 /* Geist-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1904D799C15640C286741979 /* Geist-Light.ttf */; };
-		3DF9A95FB2DD44E7B76D8D9F /* Geist-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 884871C7742E4A509746B9B6 /* Geist-Medium.ttf */; };
-		E026D63037DF44B08E53711E /* Geist-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9A22FC7260C946D08E352362 /* Geist-Regular.ttf */; };
-		D5B486839B89485A9A1E3F8B /* Geist-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BFC13772C8E043B1A9942040 /* Geist-SemiBold.ttf */; };
-		58BFD918093E4AB7B85AA272 /* Geist-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 301C93FE6381406C9ACFA44D /* Geist-Thin.ttf */; };
 		3A2C6F25425B4CE5B6FC33BE /* Figtree-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 34CDBD8AE8AD44A2B3B7068C /* Figtree-Italic.ttf */; };
+		3BFF999AE06377E73E337CF5 /* libPods-DailyHelp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0002A686D0403F5E27B87C82 /* libPods-DailyHelp.a */; };
+		3DF9A95FB2DD44E7B76D8D9F /* Geist-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 884871C7742E4A509746B9B6 /* Geist-Medium.ttf */; };
+		49815BC35E3C4963BBA84FD1 /* Geist-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3169649C740441B09D3203F8 /* Geist-ExtraLight.ttf */; };
+		512230F627D84D7A8C7DCD24 /* Geist-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EE4E638E55BA4B31A4A51FCF /* Geist-ExtraBold.ttf */; };
+		58BFD918093E4AB7B85AA272 /* Geist-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 301C93FE6381406C9ACFA44D /* Geist-Thin.ttf */; };
+		6D23610D559343939F178268 /* Geist-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7F5923FE1621487B811A60C3 /* Geist-Bold.ttf */; };
+		761780ED2CA45674006654EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EC2CA45674006654EE /* AppDelegate.swift */; };
 		7D8EE183882A46D6ADC0E7D6 /* Figtree-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FCE0209F05B946D5A364A9EF /* Figtree-Regular.ttf */; };
+		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		BE958D44223A4272A5B3F38C /* CabinetGrotesk-Extralight.otf in Resources */ = {isa = PBXBuildFile; fileRef = A4E418DC66F142B7A5DD08C5 /* CabinetGrotesk-Extralight.otf */; };
+		BF22A7F4B4A84D62A37B851E /* Geist-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 67B759C1EEF0495590496D57 /* Geist-Black.ttf */; };
+		D5767EF85E4E424F89121C62 /* CabinetGrotesk-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = A75D4D276FF146E997C4F987 /* CabinetGrotesk-Bold.otf */; };
+		D5B486839B89485A9A1E3F8B /* Geist-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BFC13772C8E043B1A9942040 /* Geist-SemiBold.ttf */; };
+		DC08856C6AEB49D794BD5E80 /* CabinetGrotesk-Extrabold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 00087175BDAE47F9A9DE7D7D /* CabinetGrotesk-Extrabold.otf */; };
+		E026D63037DF44B08E53711E /* Geist-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9A22FC7260C946D08E352362 /* Geist-Regular.ttf */; };
+		E273B5FA85584AFDBBAA8BA8 /* Geist-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1904D799C15640C286741979 /* Geist-Light.ttf */; };
+		E28ED7C252F7C84B27DEEBB7 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
+		F0DF8D02468B4C819D119CA9 /* CabinetGrotesk-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 0D596D1D1A4247E081551717 /* CabinetGrotesk-Regular.otf */; };
+		FDE2A55652F64A91B0F07DBC /* CabinetGrotesk-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 790C5326587047DABA907036 /* CabinetGrotesk-Light.otf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0002A686D0403F5E27B87C82 /* libPods-DailyHelp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-DailyHelp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		00087175BDAE47F9A9DE7D7D /* CabinetGrotesk-Extrabold.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "CabinetGrotesk-Extrabold.otf"; path = "../src/assets/fonts/CabinetGrotesk-Extrabold.otf"; sourceTree = "<group>"; };
+		0D05CB113E6448059FB78109 /* CabinetGrotesk-Medium.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "CabinetGrotesk-Medium.otf"; path = "../src/assets/fonts/CabinetGrotesk-Medium.otf"; sourceTree = "<group>"; };
+		0D596D1D1A4247E081551717 /* CabinetGrotesk-Regular.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "CabinetGrotesk-Regular.otf"; path = "../src/assets/fonts/CabinetGrotesk-Regular.otf"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* DailyHelp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DailyHelp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = DailyHelp/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = DailyHelp/Info.plist; sourceTree = "<group>"; };
 		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = DailyHelp/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		3B4392A12AC88292D35C810B /* Pods-DailyHelp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DailyHelp.debug.xcconfig"; path = "Target Support Files/Pods-DailyHelp/Pods-DailyHelp.debug.xcconfig"; sourceTree = "<group>"; };
-		5709B34CF0A7D63546082F79 /* Pods-DailyHelp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DailyHelp.release.xcconfig"; path = "Target Support Files/Pods-DailyHelp/Pods-DailyHelp.release.xcconfig"; sourceTree = "<group>"; };
-		5DCACB8F33CDC322A6C60F78 /* libPods-DailyHelp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-DailyHelp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1904D799C15640C286741979 /* Geist-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Geist-Light.ttf"; path = "../src/assets/fonts/Geist-Light.ttf"; sourceTree = "<group>"; };
+		301C93FE6381406C9ACFA44D /* Geist-Thin.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Geist-Thin.ttf"; path = "../src/assets/fonts/Geist-Thin.ttf"; sourceTree = "<group>"; };
+		3169649C740441B09D3203F8 /* Geist-ExtraLight.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Geist-ExtraLight.ttf"; path = "../src/assets/fonts/Geist-ExtraLight.ttf"; sourceTree = "<group>"; };
+		34CDBD8AE8AD44A2B3B7068C /* Figtree-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Figtree-Italic.ttf"; path = "../src/assets/fonts/Figtree-Italic.ttf"; sourceTree = "<group>"; };
+		4E6F218526B806D01A6D2E70 /* Pods-DailyHelp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DailyHelp.debug.xcconfig"; path = "Target Support Files/Pods-DailyHelp/Pods-DailyHelp.debug.xcconfig"; sourceTree = "<group>"; };
+		5D577423B25D4DB2B37F0B9A /* CabinetGrotesk-Black.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "CabinetGrotesk-Black.otf"; path = "../src/assets/fonts/CabinetGrotesk-Black.otf"; sourceTree = "<group>"; };
+		67B759C1EEF0495590496D57 /* Geist-Black.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Geist-Black.ttf"; path = "../src/assets/fonts/Geist-Black.ttf"; sourceTree = "<group>"; };
 		761780EC2CA45674006654EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = DailyHelp/AppDelegate.swift; sourceTree = "<group>"; };
+		790C5326587047DABA907036 /* CabinetGrotesk-Light.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "CabinetGrotesk-Light.otf"; path = "../src/assets/fonts/CabinetGrotesk-Light.otf"; sourceTree = "<group>"; };
+		7F5923FE1621487B811A60C3 /* Geist-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Geist-Bold.ttf"; path = "../src/assets/fonts/Geist-Bold.ttf"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = DailyHelp/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		884871C7742E4A509746B9B6 /* Geist-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Geist-Medium.ttf"; path = "../src/assets/fonts/Geist-Medium.ttf"; sourceTree = "<group>"; };
+		929891D7B8C44516942CF45C /* CabinetGrotesk-Thin.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "CabinetGrotesk-Thin.otf"; path = "../src/assets/fonts/CabinetGrotesk-Thin.otf"; sourceTree = "<group>"; };
+		9A22FC7260C946D08E352362 /* Geist-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Geist-Regular.ttf"; path = "../src/assets/fonts/Geist-Regular.ttf"; sourceTree = "<group>"; };
+		A0BA239882F1BBABFD1B4601 /* Pods-DailyHelp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DailyHelp.release.xcconfig"; path = "Target Support Files/Pods-DailyHelp/Pods-DailyHelp.release.xcconfig"; sourceTree = "<group>"; };
+		A4E418DC66F142B7A5DD08C5 /* CabinetGrotesk-Extralight.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "CabinetGrotesk-Extralight.otf"; path = "../src/assets/fonts/CabinetGrotesk-Extralight.otf"; sourceTree = "<group>"; };
+		A75D4D276FF146E997C4F987 /* CabinetGrotesk-Bold.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "CabinetGrotesk-Bold.otf"; path = "../src/assets/fonts/CabinetGrotesk-Bold.otf"; sourceTree = "<group>"; };
+		BFC13772C8E043B1A9942040 /* Geist-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Geist-SemiBold.ttf"; path = "../src/assets/fonts/Geist-SemiBold.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		5D577423B25D4DB2B37F0B9A /* CabinetGrotesk-Black.otf */ = {isa = PBXFileReference; name = "CabinetGrotesk-Black.otf"; path = "../src/assets/fonts/CabinetGrotesk-Black.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		A75D4D276FF146E997C4F987 /* CabinetGrotesk-Bold.otf */ = {isa = PBXFileReference; name = "CabinetGrotesk-Bold.otf"; path = "../src/assets/fonts/CabinetGrotesk-Bold.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		00087175BDAE47F9A9DE7D7D /* CabinetGrotesk-Extrabold.otf */ = {isa = PBXFileReference; name = "CabinetGrotesk-Extrabold.otf"; path = "../src/assets/fonts/CabinetGrotesk-Extrabold.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		A4E418DC66F142B7A5DD08C5 /* CabinetGrotesk-Extralight.otf */ = {isa = PBXFileReference; name = "CabinetGrotesk-Extralight.otf"; path = "../src/assets/fonts/CabinetGrotesk-Extralight.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		790C5326587047DABA907036 /* CabinetGrotesk-Light.otf */ = {isa = PBXFileReference; name = "CabinetGrotesk-Light.otf"; path = "../src/assets/fonts/CabinetGrotesk-Light.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		0D05CB113E6448059FB78109 /* CabinetGrotesk-Medium.otf */ = {isa = PBXFileReference; name = "CabinetGrotesk-Medium.otf"; path = "../src/assets/fonts/CabinetGrotesk-Medium.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		0D596D1D1A4247E081551717 /* CabinetGrotesk-Regular.otf */ = {isa = PBXFileReference; name = "CabinetGrotesk-Regular.otf"; path = "../src/assets/fonts/CabinetGrotesk-Regular.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		929891D7B8C44516942CF45C /* CabinetGrotesk-Thin.otf */ = {isa = PBXFileReference; name = "CabinetGrotesk-Thin.otf"; path = "../src/assets/fonts/CabinetGrotesk-Thin.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		67B759C1EEF0495590496D57 /* Geist-Black.ttf */ = {isa = PBXFileReference; name = "Geist-Black.ttf"; path = "../src/assets/fonts/Geist-Black.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		7F5923FE1621487B811A60C3 /* Geist-Bold.ttf */ = {isa = PBXFileReference; name = "Geist-Bold.ttf"; path = "../src/assets/fonts/Geist-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		EE4E638E55BA4B31A4A51FCF /* Geist-ExtraBold.ttf */ = {isa = PBXFileReference; name = "Geist-ExtraBold.ttf"; path = "../src/assets/fonts/Geist-ExtraBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		3169649C740441B09D3203F8 /* Geist-ExtraLight.ttf */ = {isa = PBXFileReference; name = "Geist-ExtraLight.ttf"; path = "../src/assets/fonts/Geist-ExtraLight.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		1904D799C15640C286741979 /* Geist-Light.ttf */ = {isa = PBXFileReference; name = "Geist-Light.ttf"; path = "../src/assets/fonts/Geist-Light.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		884871C7742E4A509746B9B6 /* Geist-Medium.ttf */ = {isa = PBXFileReference; name = "Geist-Medium.ttf"; path = "../src/assets/fonts/Geist-Medium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		9A22FC7260C946D08E352362 /* Geist-Regular.ttf */ = {isa = PBXFileReference; name = "Geist-Regular.ttf"; path = "../src/assets/fonts/Geist-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		BFC13772C8E043B1A9942040 /* Geist-SemiBold.ttf */ = {isa = PBXFileReference; name = "Geist-SemiBold.ttf"; path = "../src/assets/fonts/Geist-SemiBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		301C93FE6381406C9ACFA44D /* Geist-Thin.ttf */ = {isa = PBXFileReference; name = "Geist-Thin.ttf"; path = "../src/assets/fonts/Geist-Thin.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		34CDBD8AE8AD44A2B3B7068C /* Figtree-Italic.ttf */ = {isa = PBXFileReference; name = "Figtree-Italic.ttf"; path = "../src/assets/fonts/Figtree-Italic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		FCE0209F05B946D5A364A9EF /* Figtree-Regular.ttf */ = {isa = PBXFileReference; name = "Figtree-Regular.ttf"; path = "../src/assets/fonts/Figtree-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		EE4E638E55BA4B31A4A51FCF /* Geist-ExtraBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Geist-ExtraBold.ttf"; path = "../src/assets/fonts/Geist-ExtraBold.ttf"; sourceTree = "<group>"; };
+		FCE0209F05B946D5A364A9EF /* Figtree-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Figtree-Regular.ttf"; path = "../src/assets/fonts/Figtree-Regular.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,7 +70,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0C80B921A6F3F58F76C31292 /* libPods-DailyHelp.a in Frameworks */,
+				3BFF999AE06377E73E337CF5 /* libPods-DailyHelp.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -93,7 +93,7 @@
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				5DCACB8F33CDC322A6C60F78 /* libPods-DailyHelp.a */,
+				0002A686D0403F5E27B87C82 /* libPods-DailyHelp.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -128,17 +128,8 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				3B4392A12AC88292D35C810B /* Pods-DailyHelp.debug.xcconfig */,
-				5709B34CF0A7D63546082F79 /* Pods-DailyHelp.release.xcconfig */,
-			);
-			path = Pods;
-			sourceTree = "<group>";
-		};
 		96963CA45F7746E990CD4B1A /* Resources */ = {
-			isa = "PBXGroup";
+			isa = PBXGroup;
 			children = (
 				5D577423B25D4DB2B37F0B9A /* CabinetGrotesk-Black.otf */,
 				A75D4D276FF146E997C4F987 /* CabinetGrotesk-Bold.otf */,
@@ -162,7 +153,15 @@
 			);
 			name = Resources;
 			sourceTree = "<group>";
-			path = "";
+		};
+		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				4E6F218526B806D01A6D2E70 /* Pods-DailyHelp.debug.xcconfig */,
+				A0BA239882F1BBABFD1B4601 /* Pods-DailyHelp.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
@@ -171,13 +170,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "DailyHelp" */;
 			buildPhases = (
-				C38B50BA6285516D6DCD4F65 /* [CP] Check Pods Manifest.lock */,
+				017C242ED8EE60CE6A8ECE43 /* [CP] Check Pods Manifest.lock */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				00EEFC60759A1932668264C0 /* [CP] Embed Pods Frameworks */,
-				E235C05ADACE081382539298 /* [CP] Copy Pods Resources */,
+				E81CB45685B6CB303D82A412 /* [CP] Embed Pods Frameworks */,
+				9887DF8658F2B23737F1293B /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -266,26 +265,9 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"$REACT_NATIVE_PATH/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"$REACT_NATIVE_PATH/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
+			shellScript = "\n";
 		};
-		00EEFC60759A1932668264C0 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-DailyHelp/Pods-DailyHelp-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-DailyHelp/Pods-DailyHelp-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-DailyHelp/Pods-DailyHelp-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		C38B50BA6285516D6DCD4F65 /* [CP] Check Pods Manifest.lock */ = {
+		017C242ED8EE60CE6A8ECE43 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -307,7 +289,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		E235C05ADACE081382539298 /* [CP] Copy Pods Resources */ = {
+		9887DF8658F2B23737F1293B /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -322,6 +304,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-DailyHelp/Pods-DailyHelp-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E81CB45685B6CB303D82A412 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-DailyHelp/Pods-DailyHelp-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-DailyHelp/Pods-DailyHelp-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-DailyHelp/Pods-DailyHelp-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -340,7 +339,7 @@
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3B4392A12AC88292D35C810B /* Pods-DailyHelp.debug.xcconfig */;
+			baseConfigurationReference = 4E6F218526B806D01A6D2E70 /* Pods-DailyHelp.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -368,7 +367,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5709B34CF0A7D63546082F79 /* Pods-DailyHelp.release.xcconfig */;
+			baseConfigurationReference = A0BA239882F1BBABFD1B4601 /* Pods-DailyHelp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;

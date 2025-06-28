@@ -13,10 +13,11 @@ export default class LoginDto {
     minLowercase: 1,
   })
   password?: string;
-
+  deviceToken: string = 'string';
   constructor(dto?: LoginDto) {
     this.email = dto?.email;
     this.password = dto?.password;
+    this.deviceToken =  'string';
   }
 }
 

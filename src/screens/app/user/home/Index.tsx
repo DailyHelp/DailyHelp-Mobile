@@ -8,8 +8,11 @@ import CategorySection from './components/CategorySection';
 import HelperCard from './components/HelperCard';
 import VerifyPhoneNumberContainer from './components/VerifyNumberContainer';
 import AppStorage from '../../../../shared/AppStorage';
+import homeService from './services/Home.service';
+
 
 const Home: IHome = () => {
+  
   return (
     <FlatList
       data={[]}

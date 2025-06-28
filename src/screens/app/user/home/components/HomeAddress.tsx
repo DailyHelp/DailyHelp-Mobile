@@ -1,13 +1,16 @@
 import React, {useState} from 'react';
 import {ScrollView, TouchableOpacity, View} from 'react-native';
-import ActionSheet from 'react-native-actions-sheet';
+import ActionSheet, {SheetManager} from 'react-native-actions-sheet';
 import {List} from 'react-native-paper';
+import {PermissionsAndroid, Platform} from 'react-native';
 import Icon2 from 'react-native-vector-icons/AntDesign';
 import Assets from '../../../../../assets/Assets';
 import CustomInput from '../../../../../components/customInput/Index';
 import Typography from '../../../../../components/Typography';
 import {verticalScale} from '../../../../../shared/Scaling';
-
+import Geolocation from '@react-native-community/geolocation';
+import homeService from '../services/Home.service';
+import utils from '../../../../../shared/Utils';
 const savedLocations = [
   '88 Ilaje road, yaba, Lagos',
   '12 Adebayo street, Lekki-Ajah, Lagos',
@@ -15,6 +18,16 @@ const savedLocations = [
 
 const HomeAddress = React.forwardRef((props, ref) => {
   const [search, setSearch] = useState('');
+
+  const {handleUseCurrentLocation} = homeService.useSaveLocation();
+
+  const getLocation = () => {
+    handleUseCurrentLocation((formattedAddress) => {
+      SheetManager.hide('HomeAddress', {
+        payload: {formatted_address: formattedAddress},
+      });
+    });
+  };
 
   return (
     <ActionSheet
@@ -56,9 +69,7 @@ const HomeAddress = React.forwardRef((props, ref) => {
                 <Assets.CurrentLocation style={{marginTop: verticalScale(7)}} />
               )}
               titleStyle={{color: '#3CBF4E', fontWeight: '600'}}
-              onPress={() => {
-                // implement geolocation logic here
-              }}
+              onPress={getLocation}
             />
 
             {/* Saved locations */}
