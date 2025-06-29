@@ -1,3 +1,5 @@
+type Dimensions = 'full' | '90' | '80' | '70' | '60' | '50';
+
 /**
  * P represent the Props of the component
  * D represents data to be passed int the component
@@ -8,8 +10,8 @@ type Props<P = {}, D = {}> = React.FC<
     data?: D;
     children?: React.ReactNode;
     key?: any;
-    height?: `${number}%` | number;
-    width?: `${number}%` | number;
+    height?: `${number}%` | number | Dimensions;
+    width?: `${number}%` | number | Dimensions;
     margin?: number;
     padding?: number;
     marginTop?: number;
@@ -48,7 +50,14 @@ type IInput = Props<{
   value?: string;
   onChangeText?: (text: string) => void;
   error?: string;
-  type?: 'text' | 'email' | 'password' | 'phone' | 'date';
+  type?:
+    | 'text'
+    | 'email'
+    | 'password'
+    | 'phone'
+    | 'date'
+    | 'address'
+    | 'select';
   autoCapitalize?: 'none' | 'sentences' | 'words' | 'characters';
   autoCompleteType?:
     | 'off'
@@ -69,6 +78,11 @@ type IInput = Props<{
   multiline?: boolean;
   numberOfLines?: number;
   fontWeight?: 'bold' | 'regular';
+  onAddressSelect?: (data?: {
+    address?: string;
+    lat?: number;
+    lng?: number;
+  }) => void;
   keyboardType?:
     | 'default'
     | 'numeric'
@@ -173,8 +187,8 @@ type IHelperCard = Props<
 type ICustomFlatListProps<T> = {
   data: any;
   numColumns?: number;
-  renderItem: any;
-  keyExtractor: (item: any, index: number) => string;
+  renderItem: (data: {item: T; index: number}) => React.ReactElement;
+  keyExtractor: (item: T, index: number) => string;
   onEndReached?: () => void;
   onEndReachedThreshold?: number;
   isLoading?: boolean;

@@ -1,12 +1,13 @@
-import {TouchableHighlight, TouchableOpacity, View} from 'react-native';
-import {Text} from 'react-native-paper';
-import {customFontSize, fonts} from '../../shared/themes/Typography';
-import {scale, verticalScale} from '../../shared/Scaling';
-import React from 'react';
-import DatePicker from 'react-native-date-picker';
-import Assets from '../../assets/Assets';
 import dayjs from 'dayjs';
+import React from 'react';
+import {TouchableOpacity, View} from 'react-native';
+import DatePicker from 'react-native-date-picker';
+import {Text} from 'react-native-paper';
 import IconF from 'react-native-vector-icons/Feather';
+import Assets from '../../assets/Assets';
+import {scale, verticalScale} from '../../shared/Scaling';
+import {customFontSize, fonts} from '../../shared/themes/Typography';
+import Typography from '../Typography';
 
 const CustomDateInput: IInput = ({label, placeholder, error, onChangeText}) => {
   const [date, setDate] = React.useState<Date | undefined>();
@@ -19,14 +20,9 @@ const CustomDateInput: IInput = ({label, placeholder, error, onChangeText}) => {
       <TouchableOpacity
         onPress={() => setOpen(true)}
         style={{flexDirection: 'column', gap: 9}}>
-        <Text
-          style={{
-            fontFamily: fonts.GeistBold,
-            fontSize: customFontSize.sm,
-            color: '#757C91',
-          }}>
+        <Typography size="md" fontWeight="bold" color="#757C91">
           {label}
-        </Text>
+        </Typography>
 
         <View
           style={{

@@ -39,6 +39,7 @@ import VerificationResponse from '../../screens/auth/compliance/VerificationResp
 import Address from '../../screens/app/user/more/Address';
 import Feedback from '../../screens/app/user/more/Feedback';
 import ReportSumitted from '../../screens/app/user/chat/report/ReportSumitted';
+import VerifyPhone from '../../screens/app/user/more/VerifyPhone';
 
 type LabelPosition = 'beside-icon' | 'below-icon';
 
@@ -243,6 +244,16 @@ export const UserHomeStackRoutes = [
       headerShown: false,
     },
   },
+  {
+    name: 'VerifyPhone',
+    component: VerifyPhone,
+    options: {
+      headerShown: true,
+      header: (props: NativeStackHeaderProps) => (
+        <CustomHeader type="back" {...props} />
+      ),
+    },
+  },
 ];
 
 export const SearchStackRoutes = [
@@ -371,6 +382,16 @@ export const UserMoreStackRoutes = [
           {...props}
           textMiddle
         />
+      ),
+    },
+  },
+  {
+    name: 'VerifyPhone',
+    component: VerifyPhone,
+    options: {
+      headerShown: true,
+      header: (props: NativeStackHeaderProps) => (
+        <CustomHeader type="back" {...props} />
       ),
     },
   },

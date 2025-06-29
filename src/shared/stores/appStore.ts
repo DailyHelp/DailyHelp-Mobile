@@ -7,6 +7,12 @@ import {PhotoIdentifier} from '@react-native-camera-roll/camera-roll';
 class AppStore {
   route?: Route = (AppStorage.find('routes') as Route) || 'authentication';
 
+  currentLocation: {
+    address?: string;
+    lng?: number;
+    lat?: number;
+  } = {};
+
   isAuthenticated = AppStorage.find('isAuthenticated') || false;
 
   user_types?: UserTypes;
@@ -55,6 +61,18 @@ class AppStore {
 
   clearSelectedGalleryImages() {
     this.selectedGalleryImages = [];
+  }
+
+  setCurrentLocation(location?: {
+    address?: string;
+    lng?: number;
+    lat?: number;
+  }) {
+    if (!location) {
+      this.currentLocation = {};
+      return;
+    }
+    this.currentLocation = {...this.currentLocation, ...location};
   }
 
   setIsAuthenticated(dto: boolean, user_type: UserTypes = UserTypes.USER) {

@@ -3,6 +3,8 @@ import {Text, TextInput} from 'react-native-paper';
 import IconF from 'react-native-vector-icons/Feather';
 import {verticalScale} from '../../shared/Scaling';
 import {customFontSize, fonts} from '../../shared/themes/Typography';
+import Typography from '../Typography';
+import utils from '../../shared/Utils';
 
 const CustomTextInput: IInput = ({
   label,
@@ -25,18 +27,17 @@ const CustomTextInput: IInput = ({
   let fontFamily = fonts.GeistBold;
   if (fontWeight === 'regular') fontFamily = fonts.GeistRegular;
 
+  if (typeof height !== 'number') {
+    height = utils.getDimensions(height as Dimensions);
+  }
+
   const hasError = !!error;
 
   return (
     <View style={{flexDirection: 'column', gap: 9, ...containerStyle}}>
-      <Text
-        style={{
-          fontFamily: fonts.GeistBold,
-          fontSize: customFontSize.sm,
-          color: '#757C91',
-        }}>
+      <Typography size="md" fontWeight="bold" color="#757C91">
         {label}
-      </Text>
+      </Typography>
 
       <View
         style={{

@@ -1,93 +1,67 @@
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {useMutation, useQuery} from '@tanstack/react-query';
+import Geolocation, {
+  GeolocationResponse,
+} from '@react-native-community/geolocation';
+import CatchError from '../../../../../shared/errors/catchError';
+import HomeApi from '../../../../../shared/services/Home';
+import {appStore} from '../../../../../shared/stores/appStore';
+import utils from '../../../../../shared/Utils';
 import React from 'react';
 
-import { appStore } from '../../../../../shared/stores/appStore';
-import HomeApi from '../../../../../shared/services/Home';
-import Geolocation, { GeolocationResponse } from '@react-native-community/geolocation';
-import { GOOGLE_API_KEY } from '@env';
-import CatchError from '../../../../../shared/errors/catchError';
-import utils from '../../../../../shared/Utils';
-
 class HomeService extends HomeApi {
-    private static instance: HomeService;
-  
-    static getInstance() {
-      if (!this.instance) {
-        this.instance = new HomeService();
-      }
-  
-      return this.instance;
+  private static instance: HomeService;
+
+  static getInstance() {
+    if (!this.instance) {
+      this.instance = new HomeService();
     }
 
-
-  
-
-    useAllCategories() {
-        const {data,isLoading, error} = useQuery({
-          queryKey: ['allCategeries'],
-          queryFn: async () => await this.getAllCategories(),
-          enabled: Boolean(appStore.isAuthenticated),
-        });
-
-        return { data, isLoading, error };
-      }
-
-      useSavedLocation() {
-        const {data,isLoading, error} = useQuery({
-          queryKey: ['savedLocation'],
-          queryFn: async () => await this.getSavedLocation(),
-          enabled: Boolean(appStore.isAuthenticated),
-        });
-
-        return { data, isLoading, error };
-      }
-
-  async getCurrentLocation(latitude: number, longitude: number) {
-    const res = await this.fetchHandler({
-      path: `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${GOOGLE_API_KEY}`,
-      method: 'GET',
-      standAlonePath: true,
-    });
-
-    const data = (await this.handleResponse(res)) as any;
-
-    if (data?.error_message) {
-      throw new Error(data.error_message);
-    }
-
-    return {
-      formatted_address: data?.results[0]?.formatted_address,
-    };
+    return this.instance;
   }
-  
-  useSaveLocation(): {
-    mutate: (data: SaveLocationDto) => void;
-    onSubmit: (values: Partial<SaveLocationDto>) => void;
-    loading: boolean;
-    initialValues: Partial<SaveLocationDto>;
-    handleUseCurrentLocation: (onSuccess?: (formattedAddress: string) => void) => void;
-  } {
-    const {mutate: mutateManifest, isPending} = useMutation({
-      mutationKey: ['saveLocation'],
-      mutationFn: async (body: SaveLocationDto) =>
-        await this.saveLocation(body),
-      onError: error => new CatchError(error, true),
-      onSuccess: data => {
-       
-      },
+
+  useAllCategories() {
+    const {data, isLoading, error} = useQuery({
+      queryKey: ['allCategories'],
+      queryFn: async () => await this.getAllCategories(),
+      enabled: Boolean(appStore.isAuthenticated),
     });
-  
-    const initialValues: Partial<SaveLocationDto> = {
-      lat: 0,
-      address: '',
-      lga: '',
-      description: '',
-      lng: 0,
-      state: '',
-      default: true,
-    };
-  
+
+    return {data, isLoading, error};
+  }
+
+  useSavedLocation() {
+    const {data, isLoading, error} = useQuery({
+      queryKey: ['savedLocation'],
+      queryFn: async () => await this.getSavedLocation(),
+      enabled: Boolean(appStore.isAuthenticated),
+    });
+
+    return {data, isLoading, error};
+  }
+
+  useLocation(search?: string) {
+    const [locations, setLocations] =
+      React.useState<Partial<SaveLocationDto>[]>();
+
+    const {mutate: saveLocation, isPending} = useMutation({
+      mutationKey: ['save-location'],
+      mutationFn: async (body: Partial<SaveLocationDto>) => {
+        return await this.saveLocation(body);
+      },
+      onError: error => new CatchError(error, true),
+      onSuccess: data => {},
+    });
+
+    React.useEffect(() => {
+      if (search) {
+        searchLocation(search).then(locations => {
+          setLocations(locations);
+        });
+      } else {
+        setLocations([]);
+      }
+    }, [search]);
+
     const onSubmit = (values: Partial<SaveLocationDto>) => {
       const payload = {
         ...values,
@@ -98,56 +72,95 @@ class HomeService extends HomeApi {
         description: values.description || '',
         default: true,
       };
-      mutateManifest(payload as SaveLocationDto);
+
+      saveLocation(payload);
     };
-  
-    const handleUseCurrentLocation = async (onSuccess?: (formattedAddress: string) => void) => {
-      const hasPermission = await utils.requestLocationPermission();
-      if (!hasPermission) {
-       
-        return;
+
+    const currentLocation = async (
+      onSuccess?: (formattedAddress: string) => void,
+    ) => {
+      try {
+        const hasPermission = await utils.requestLocationPermission();
+        if (!hasPermission) return;
+
+        const position = await new Promise<GeolocationResponse>(
+          (resolve, reject) => {
+            Geolocation.getCurrentPosition(
+              resolve,
+              error => {
+                if (error.code === error.TIMEOUT) {
+                  Geolocation.getCurrentPosition(resolve, reject, {
+                    enableHighAccuracy: false,
+                    timeout: 10000,
+                  });
+                } else {
+                  reject(error);
+                }
+              },
+              {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
+            );
+          },
+        );
+
+        const {latitude, longitude} = position.coords;
+
+        let formattedAddress = '';
+        try {
+          const data = await this.getAddressFromLatLng(latitude, longitude);
+
+          if (!data) throw new Error('No geocoding data returned');
+
+          const components = data?.address_components || [];
+          const {address, state, lga} = utils.extractAddressParts(components);
+
+          onSubmit({
+            address,
+            state,
+            lga,
+            lat: latitude,
+            lng: longitude,
+            description: data.formatted_address,
+          });
+
+          formattedAddress = data.formatted_address;
+        } catch (geocodeError) {
+          onSubmit({
+            lat: latitude,
+            lng: longitude,
+            description: 'Current location (address lookup failed)',
+          });
+        }
+
+        // 4. Success callback
+        if (onSuccess) onSuccess(formattedAddress);
+      } catch (error) {
+        console.error('Location process failed:', error);
       }
-  
-      Geolocation.getCurrentPosition(
-        async position => {
-          const {latitude, longitude} = position.coords;
-          try {
-            const data = await homeService.getCurrentLocation(latitude, longitude);
-            const components = (data as any)?.address_components || [];
-            const {address, state, lga} = utils.extractAddressParts(components);
-            onSubmit({
-              address,
-              state,
-              lga,
-              lat: latitude,
-              lng: longitude,
-              description: data.formatted_address,
-            });
-  
-            if (onSuccess) {
-              onSuccess(data.formatted_address);
-            }
-          } catch (error) {
-            console.error('Failed to get address:', error);
-          }
-        },
-        error => {
-          console.error('Error getting location:', error.message);
-        },
-        {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
-      );
     };
-  
+
+    const searchLocation = async (
+      addressQuery: string,
+    ): Promise<Partial<SaveLocationDto>[]> => {
+      const res = await this.getAddressFromSearch(addressQuery, 'ng', true);
+
+      return res.map((item: AddressPrediction) => {
+        return {
+          address: item.description,
+          description: item.description,
+          lat: item.coordinates?.lat || 0,
+          lng: item.coordinates?.lng || 0,
+        };
+      });
+    };
+
     return {
-      mutate: mutateManifest,
       onSubmit,
       loading: isPending,
-      initialValues,
-      handleUseCurrentLocation,
+      currentLocation,
+      searchLocation,
+      locations,
     };
   }
-
-  
 }
 
 const homeService = HomeService.getInstance();

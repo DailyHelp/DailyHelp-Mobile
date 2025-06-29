@@ -21,11 +21,6 @@ import {PermissionsAndroid, Platform} from 'react-native';
 import {CameraRoll} from '@react-native-camera-roll/camera-roll';
 import {validate} from 'class-validator';
 
-// import messaging from '@react-native-firebase/messaging';
-// import {QueryClient} from '@tanstack/react-query';
-// import {useAuthentication} from '../store/App';
-// import AppStorage from './AppStorage';
-
 class Utils {
   private static instance: Utils;
   private rnBiometrics = new ReactNativeBiometrics({
@@ -122,7 +117,7 @@ class Utils {
       }
     }
 
-    return true; 
+    return true;
   }
 
   extractAddressParts(components: any[]) {
@@ -130,12 +125,14 @@ class Utils {
       components.find(c => c.types.includes(type))?.long_name || '';
 
     return {
-      address: `${getComponent('street_number')} ${getComponent('route')}`.trim(),
+      address: `${getComponent('street_number')} ${getComponent(
+        'route',
+      )}`.trim(),
       state: getComponent('administrative_area_level_1'),
-      lga: getComponent('locality') || getComponent('administrative_area_level_2'), // fallback to county if city missing
+      lga:
+        getComponent('locality') || getComponent('administrative_area_level_2'), // fallback to county if city missing
     };
   }
-
 
   useBiometrics() {
     const [isBiometrics, setIsBiometrics] = React.useState(false);
@@ -314,6 +311,17 @@ class Utils {
     React.useEffect(() => {
       this.hasAndroidPermission().then(console.log);
     }, []);
+  }
+
+  getDimensions(value: Dimensions) {
+    if (value === 'full') return `100%`;
+    if (value == '90') return `90%`;
+    if (value == '80') return `80%`;
+    if (value == '70') return `70%`;
+    if (value == '60') return `60%`;
+    if (value == '50') return `50%`;
+
+    return value
   }
 }
 
