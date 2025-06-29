@@ -4,8 +4,12 @@ import {Text} from 'react-native-paper';
 import Assets from '../../../../../assets/Assets';
 import {scale, verticalScale} from '../../../../../shared/Scaling';
 import {customFontSize, fonts} from '../../../../../shared/themes/Typography';
+import {useNavigation} from '@react-navigation/native';
+import {IHomeRoute, Navigate} from '../../../../../@types/routes';
 
 const VerifyPhoneNumberContainer: IVerifyPhoneNumberContainer = () => {
+  const navigation = useNavigation<Navigate<IHomeRoute>>();
+
   return (
     <View
       style={{
@@ -44,6 +48,7 @@ const VerifyPhoneNumberContainer: IVerifyPhoneNumberContainer = () => {
       </View>
 
       <TouchableOpacity
+        onPress={() => navigation.navigate('VerifyPhone')}
         style={{
           backgroundColor: '#27A535',
           padding: scale(5),
@@ -54,7 +59,9 @@ const VerifyPhoneNumberContainer: IVerifyPhoneNumberContainer = () => {
           alignItems: 'center',
           justifyContent: 'center',
         }}>
-        <Text style={{color: '#FCFCFC', fontFamily: fonts.GeistBold}}>Verify</Text>
+        <Text style={{color: '#FCFCFC', fontFamily: fonts.GeistBold}}>
+          Verify
+        </Text>
       </TouchableOpacity>
     </View>
   );

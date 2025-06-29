@@ -4,6 +4,7 @@ import CustomAvatar from '../CustomAvatar';
 import Assets from '../../assets/Assets';
 import {NativeStackHeaderProps} from '@react-navigation/native-stack';
 import Typography from '../Typography';
+import { scale } from '../../shared/Scaling';
 
 const ChatHeader: ICustomHeader<NativeStackHeaderProps> = ({
   title,
@@ -25,7 +26,7 @@ const ChatHeader: ICustomHeader<NativeStackHeaderProps> = ({
       <View style={{flexDirection: 'row', gap: 3}}>
         <CustomAvatar avatarSize={40} data={{image: Assets.Worker1}} />
         <View style={{flexDirection: 'column'}}>
-          <Typography fontWeight="bold" size="md">
+          <Typography fontWeight="bold" size="md" >
             {title}
           </Typography>
           <Typography fontWeight="regular" size="md" color="#27A535">

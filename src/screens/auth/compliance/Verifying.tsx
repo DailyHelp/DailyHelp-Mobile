@@ -8,6 +8,7 @@ import {customFontSize, fonts} from '../../../shared/themes/Typography';
 import {observer} from 'mobx-react-lite';
 import authService from '../services/Auth.service';
 import {appStore} from '../../../shared/stores/appStore';
+import Container from '../../../components/container/Index';
 
 const Verifying: IVerifying = ({route, navigation}) => {
   const rotateAnim = React.useRef(new Animated.Value(0)).current;
@@ -38,40 +39,34 @@ const Verifying: IVerifying = ({route, navigation}) => {
   });
 
   return (
-    <View style={{flex: 1}}>
-      <View
+    <Container
+      flex={1}
+      gap={20}
+      justifyContent="center"
+      alignItems="center"
+      height={600}>
+      <Animated.View style={{transform: [{rotate: spin}]}}>
+        <Assets.HourGlass />
+      </Animated.View>
+      <Text
         style={{
-          flexDirection: 'column',
-          gap: 20,
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: verticalScale(600),
-          width: '90%',
-          alignSelf: 'center',
+          fontFamily: fonts.black,
+          fontSize: customFontSize.lg,
+          color: '#121921',
         }}>
-        <Animated.View style={{transform: [{rotate: spin}]}}>
-          <Assets.HourGlass />
-        </Animated.View>
-        <Text
-          style={{
-            fontFamily: fonts.black,
-            fontSize: customFontSize.lg,
-            color: '#121921',
-          }}>
-          Verifying Identity...
-        </Text>
-        <Text
-          style={{
-            fontFamily: fonts.medium,
-            fontSize: customFontSize.md,
-            color: '#757C91',
-            textAlign: 'center',
-          }}>
-          We’re verifying your identity. Please don’t close the app or leave
-          this page. It won’t take long.
-        </Text>
-      </View>
-    </View>
+        Verifying Identity...
+      </Text>
+      <Text
+        style={{
+          fontFamily: fonts.medium,
+          fontSize: customFontSize.md,
+          color: '#757C91',
+          textAlign: 'center',
+        }}>
+        We’re verifying your identity. Please don’t close the app or leave this
+        page. It won’t take long.
+      </Text>
+    </Container>
   );
 };
 export default React.memo(observer(Verifying));

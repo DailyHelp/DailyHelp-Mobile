@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     width: utils.responsiveWidth(100),
-    height: utils.responsiveHeight(60),
+    height: utils.responsiveHeight(55),
     opacity: 0.8,
     flexDirection: 'column',
     gap: 25,

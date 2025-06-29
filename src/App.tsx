@@ -45,13 +45,13 @@ function App(): React.JSX.Element {
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <GestureHandlerRootView style={{flex: 1}}>
-        <QueryClientProvider client={queryClient}>
-          <SafeAreaView edges={['top']}>
+      <SafeAreaView edges={['top']} style={{flex: 1}}>
+        <GestureHandlerRootView>
+          <QueryClientProvider client={queryClient}>
             <Routes />
-          </SafeAreaView>
-        </QueryClientProvider>
-      </GestureHandlerRootView>
+          </QueryClientProvider>
+        </GestureHandlerRootView>
+      </SafeAreaView>
     </View>
   );
 }

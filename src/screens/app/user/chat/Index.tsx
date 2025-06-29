@@ -92,7 +92,7 @@ const Chat: IChat = ({navigation}) => {
   );
 
   return (
-    <View style={{flex: 1}}>
+    <View style={{flex: 1,}}>
       <CustomFlatList
         data={['a', 'b', 'e', 'd']}
         ListEmptyComponent={empty}

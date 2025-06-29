@@ -89,8 +89,6 @@ export default class Http {
 
     if (res) {
       const data: ApiResponse<T> = await res.json();
-      console.log(data);
-      
 
       if (unauthorized.includes(res.status)) {
         ThrowError.handleUnAuthentication();
@@ -108,7 +106,8 @@ export default class Http {
       autoHide: true,
       text1: 'Success',
       text2: message,
-      visibilityTime: 10000,
+      visibilityTime: 5000,
+      topOffset: 0,
       text2Style: {
         fontFamily: fonts.GeistRegular,
         fontSize: customFontSize.sm,
@@ -121,7 +120,8 @@ export default class Http {
       type: 'error',
       text1: 'Error',
       text2: message,
-      visibilityTime: 10000,
+      visibilityTime: 5000,
+      topOffset: 0,
       text2Style: {
         fontFamily: fonts.GeistRegular,
         fontSize: customFontSize.sm,

@@ -1,9 +1,10 @@
-import {Toast} from 'toastify-react-native';
-import ThrowError from './throwError';
+import Toast from 'react-native-toast-message';
+import { extractErrorMessage } from './extractErrorMessage';
 
 export default class CatchError extends Error {
   constructor(public err: any, private toast: boolean = false) {
     super(err.message);
+console.log(err);
 
     this.message = err.message;
     this.cause = err?.cause || '';
@@ -23,8 +24,9 @@ export default class CatchError extends Error {
     Toast.show({
       type: 'error',
       text1: 'Error',
-      text2: this.message,
-      visibilityTime: 10000,
+      text2: extractErrorMessage(this.message),
+      visibilityTime: 5000,
+      topOffset: 0,
     });
     return this;
   };

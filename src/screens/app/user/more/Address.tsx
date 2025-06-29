@@ -9,12 +9,15 @@ import {scale, verticalScale} from '../../../../shared/Scaling';
 import utils from '../../../../shared/Utils';
 import Icon from 'react-native-vector-icons/Feather';
 import {SheetManager} from 'react-native-actions-sheet';
+import homeService from '../home/services/Home.service';
 
 const Address: IAddress = ({navigation, route}) => {
   utils.useHideBottomTab(navigation);
 
+  const {data} = homeService.useSavedLocation();
+
   const Results = React.useCallback(
-    () => (
+    ({name}: {name: string}) => (
       <View
         style={{
           flexDirection: 'row',
@@ -24,11 +27,10 @@ const Address: IAddress = ({navigation, route}) => {
         }}>
         <View style={{flexDirection: 'row', gap: 10}}>
           <Assets.SearchResult width={20} height={20} />
-
-          <Typography size="md">88 Ilaje road, yaba, Lagos</Typography>
+          <Typography size="sm">{utils.ellipseText(name, 50)}</Typography>
         </View>
 
-        <View style={{flexDirection: 'row'}}>
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <TouchableOpacity onPress={() => SheetManager.show('AddressOptions')}>
             <Icon name="more-vertical" size={15} color={'#C0C5D6'} />
           </TouchableOpacity>
@@ -42,13 +44,14 @@ const Address: IAddress = ({navigation, route}) => {
     <View style={{flex: 1, backgroundColor: 'white'}}>
       <View style={{padding: scale(16), flexDirection: 'column', gap: 10}}>
         <CustomInput
+          type="address"
           placeholder="Add new address"
           leftIcon={<Assets.InputSearch />}
         />
 
-        <CustomFlatList
-          data={['', '', '']}
-          renderItem={() => <Results />}
+        <CustomFlatList<SaveLocationDto>
+          data={data}
+          renderItem={({item}) => <Results name={item.description} />}
           keyExtractor={(item, ind) => ind.toString()}
         />
       </View>

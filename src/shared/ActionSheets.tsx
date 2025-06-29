@@ -38,7 +38,17 @@ declare module 'react-native-actions-sheet' {
         amount: number;
       };
     }>;
-    HomeAddress: SheetDefinition<{}>;
+    HomeAddress: SheetDefinition<{
+      payload: {
+        showCurrent?: boolean;
+        label?: string;
+      };
+      returnValue: {
+        lat?: number;
+        lng?: number;
+        address?: string;
+      };
+    }>;
     PriceRange: SheetDefinition<{}>;
     Gallery: SheetDefinition<{}>;
     FaceMatch: SheetDefinition<{}>;

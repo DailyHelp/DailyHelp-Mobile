@@ -9,6 +9,7 @@ import {IAuthRoute, Navigate} from '../@types/routes';
 import AppStorage from '../shared/AppStorage';
 import {UserTypes} from '../shared/Constant';
 import ScreenHeader from './ScreenHeader';
+import authService from '../screens/auth/services/Auth.service';
 
 const FindServiceAuthModal: IFindServiceAuthModal = ({
   isVisible,
@@ -16,6 +17,7 @@ const FindServiceAuthModal: IFindServiceAuthModal = ({
   onPress,
 }) => {
   const navigation = useNavigation<Navigate<IAuthRoute>>();
+  const {signIn, isGooglePending} = authService.useGoogleSignAuth();
 
   return (
     <Portal>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import {Image, ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import ActionSheet, {
   ActionSheetRef,
   SheetManager,
@@ -10,46 +10,83 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Assets from '../../../../../assets/Assets';
 import CustomInput from '../../../../../components/customInput/Index';
 import Typography from '../../../../../components/Typography';
-import { verticalScale } from '../../../../../shared/Scaling';
-import { customFontSize, fonts } from '../../../../../shared/themes/Typography';
+import {verticalScale} from '../../../../../shared/Scaling';
+import {customFontSize, fonts} from '../../../../../shared/themes/Typography';
+import homeService from '../services/Home.service';
 
-const categories = [
-  {
-    name: 'Home & Cleaning',
-    image: Assets.CleaningBroom,
-    subCategories: [
-      'House Cleaner',
-      'Deep Cleaning Specialist',
-      'Laundry Assistant',
-      'Dishwasher',
-      'Upholstery Cleaner',
-      'Pest Control Expert',
-      'Waste Disposal Agent',
-      'Move-in Cleaner',
-    ],
-  },
-  {
-    name: 'Repairs & Maintenance',
-    image: Assets.Maintenance,
-    subCategories: [],
-  },
-  {
-    name: 'Food & Kitchen',
-    image: Assets.FoodKitchen,
-    subCategories: [],
-  },
-  // Add more...
-];
+
+
+const getCategoryImage = (categoryName: string) => {
+  const imageMap = {
+    'Home & Cleaning': Assets.CleaningBroom,
+    'Repairs & Maintenance': Assets.Maintenance,
+    'Food & Kitchen': Assets.FoodKitchen,
+    'Family & Personal Care': Assets.Comb,
+    'Transport & Delivery': Assets.Transport,
+    'Automobile Services': Assets.Transport,
+    'Tech & Digital Help': Assets.Maintenance,
+    'Events & Setup': Assets.Maintenance,
+    'Skilled Labor': Assets.Maintenance,
+  };
+
+  return imageMap[categoryName as keyof typeof imageMap] || Assets.Maintenance;
+};
 
 const CategoryActionSheet = React.forwardRef<
   ActionSheetRef,
   ICategoryActionSheet
 >((props, ref) => {
+  const {data, isLoading, error} = homeService.useAllCategories();
   const [search, setSearch] = React.useState('');
   const [selected, setSelected] = React.useState<string[]>([]);
   const [openSections, setOpenSections] = React.useState<string[]>([
     'Home & Cleaning',
   ]);
+
+  
+  const categories = React.useMemo(() => {
+   
+   
+    let apiCategories: CategoryDto[] = [];
+    
+    if (data?.data && Array.isArray(data.data)) {
+      apiCategories = data.data;
+    }
+
+ 
+    
+    const transformedCategories = apiCategories.map(
+      (apiCategory: CategoryDto): InternalCategory => {
+       
+        const subCategories = (apiCategory.categories || []).map(
+          (subCat: SubCategoryDto) => subCat.name
+        );
+        
+        const transformed = {
+          name: apiCategory.name || 'Untitled Category',
+          image: getCategoryImage(apiCategory.name || ''),
+          subCategories: subCategories,
+          uuid: apiCategory.uuid,
+        };
+        return transformed;
+      }
+    );
+
+    return transformedCategories;
+  }, [data, isLoading]);
+
+  
+  const filteredCategories = React.useMemo(() => {
+    if (!search.trim()) return categories;
+
+    return (categories || []).filter(
+      (category: InternalCategory) =>
+        category.name.toLowerCase().includes(search.toLowerCase()) ||
+        category.subCategories.some(sub =>
+          sub.toLowerCase().includes(search.toLowerCase()),
+        ),
+    );
+  }, [categories, search]);
 
   const toggleSection = (name: string) => {
     setOpenSections(prev =>
@@ -65,6 +102,13 @@ const CategoryActionSheet = React.forwardRef<
         return [...prevSelected, sub];
       }
     });
+  };
+
+  const handleApply = () => {
+    if (props?.onCategoriesSelected) {
+      props.onCategoriesSelected(selected);
+    }
+    SheetManager.hide('AllCategory');
   };
 
   return (
@@ -83,7 +127,7 @@ const CategoryActionSheet = React.forwardRef<
           padding: 16,
           height: verticalScale(750),
         }}>
-        {/* Header */}
+      
         <View
           style={{
             flexDirection: 'row',
@@ -99,14 +143,14 @@ const CategoryActionSheet = React.forwardRef<
             Select category
           </Typography>
 
-          <TouchableOpacity>
+          <TouchableOpacity onPress={handleApply}>
             <Typography fontWeight="bold" size="sm" color="#757C91">
-              Apply
+              Apply ({selected.length})
             </Typography>
           </TouchableOpacity>
         </View>
 
-        {/* Search Input */}
+        
         <CustomInput
           type="text"
           placeholder="Search category"
@@ -114,92 +158,134 @@ const CategoryActionSheet = React.forwardRef<
           onChangeText={setSearch}
         />
 
+       
+
+        {isLoading && (
+          <View style={{padding: 20, alignItems: 'center'}}>
+            <Typography>Loading categories...</Typography>
+          </View>
+        )}
+
+        
+
         <ScrollView style={{maxHeight: 500}}>
-          {categories.map(({image, name, subCategories}) => {
-            const isCollapse = openSections.includes(name);
+          {(filteredCategories || []).map(
+            ({image, name, subCategories, uuid}: InternalCategory) => {
+              const isCollapse: boolean = openSections.includes(name);
 
-            return (
-              <View key={name}>
-                <TouchableOpacity
-                  onPress={() => toggleSection(name)}
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    paddingVertical: 12,
-                  }}>
-                  <View
+              return (
+                <View key={uuid || name}>
+                  <TouchableOpacity
+                    onPress={() => toggleSection(name)}
                     style={{
                       flexDirection: 'row',
+                      justifyContent: 'space-between',
                       alignItems: 'center',
-                      gap: 9,
+                      paddingVertical: 12,
                     }}>
-                    <Image source={image} style={{width: 20, height: 20}} />
-                    <Text
+                    <View
                       style={{
-                        fontFamily: fonts.GeistBold,
-                        color: '#121921',
-                        fontSize: customFontSize.md,
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        gap: 9,
                       }}>
-                      {name}
-                    </Text>
-                  </View>
-                  <Icon
-                    color={'#757C91'}
-                    name={isCollapse ? 'chevron-up' : 'chevron-down'}
-                    size={20}
-                  />
-                </TouchableOpacity>
+                      <Image source={image} style={{width: 20, height: 20}} />
+                      <Text
+                        style={{
+                          fontFamily: fonts.GeistBold,
+                          color: '#121921',
+                          fontSize: customFontSize.md,
+                        }}>
+                        {name}
+                      </Text>
+                    </View>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        gap: 8,
+                      }}>
+                      {subCategories.length > 0 && (
+                        <Typography size="xs" color="#757C91">
+                          {subCategories.length}
+                        </Typography>
+                      )}
+                      <Icon
+                        color={'#757C91'}
+                        name={isCollapse ? 'chevron-up' : 'chevron-down'}
+                        size={20}
+                      />
+                    </View>
+                  </TouchableOpacity>
 
-                <Collapsible collapsed={!isCollapse}>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      flexWrap: 'wrap',
-                      gap: 8,
-                      marginBottom: 8,
-                    }}>
-                    {subCategories.map(sub => {
-                      const isSelected = selected.includes(sub);
+                  <Collapsible collapsed={!isCollapse}>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        flexWrap: 'wrap',
+                        gap: 8,
+                        marginBottom: 8,
+                      }}>
+                      {subCategories.length > 0 ? (
+                        subCategories.map(sub => {
+                          const isSelected = selected.includes(sub);
 
-                      return (
-                        <TouchableOpacity
-                          onPress={() => selectCategory(sub)}
-                          key={sub}
-                          style={{
-                            backgroundColor: isSelected ? '#F9FFEB' : '#F9F9FB',
-                            paddingHorizontal: 12,
-                            paddingVertical: 6,
-                            borderRadius: 20,
-                            margin: 4,
-                            borderWidth: isSelected ? 1 : 0,
-                            borderColor: isSelected ? '#95D21A' : '',
-                            flexDirection: 'row',
-                            gap: 8,
-                          }}>
-                          <Text
-                            style={{
-                              color: '#757C91',
-                              fontFamily: fonts.GeistBold,
-                              fontSize: customFontSize.xs2,
-                            }}>
-                            {sub}
-                          </Text>
+                          return (
+                            <TouchableOpacity
+                              onPress={() => selectCategory(sub)}
+                              key={sub}
+                              style={{
+                                backgroundColor: isSelected
+                                  ? '#F9FFEB'
+                                  : '#F9F9FB',
+                                paddingHorizontal: 12,
+                                paddingVertical: 6,
+                                borderRadius: 20,
+                                margin: 4,
+                                borderWidth: isSelected ? 1 : 0,
+                                borderColor: isSelected ? '#95D21A' : '',
+                                flexDirection: 'row',
+                                gap: 8,
+                              }}>
+                              <Text
+                                style={{
+                                  color: '#757C91',
+                                  fontFamily: fonts.GeistBold,
+                                  fontSize: customFontSize.xs2,
+                                }}>
+                                {sub}
+                              </Text>
 
-                          {isSelected && (
-                            <Icon2
-                              name="checkmark-circle-outline"
-                              color={'#4A6600'}
-                            />
-                          )}
-                        </TouchableOpacity>
-                      );
-                    })}
-                  </View>
-                </Collapsible>
-              </View>
-            );
-          })}
+                              {isSelected && (
+                                <Icon2
+                                  name="checkmark-circle-outline"
+                                  color={'#4A6600'}
+                                />
+                              )}
+                            </TouchableOpacity>
+                          );
+                        })
+                      ) : (
+                        <Typography
+                          size="xs"
+                          color="#757C91">
+                          No subcategories available
+                        </Typography>
+                      )}
+                    </View>
+                  </Collapsible>
+                </View>
+              );
+            },
+          )}
+
+          {filteredCategories?.length === 0 && (
+            <View style={{padding: 20, alignItems: 'center'}}>
+              <Typography color="#757C91">
+                No categories found matching "{search}"
+              </Typography>
+            </View>
+          )}
         </ScrollView>
       </View>
     </ActionSheet>

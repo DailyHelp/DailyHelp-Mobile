@@ -6,6 +6,7 @@ import {verticalScale, scale} from '../../../shared/Scaling';
 import {appStore} from '../../../shared/stores/appStore';
 import {customFontSize, fonts} from '../../../shared/themes/Typography';
 import dayjs from 'dayjs';
+import Container from '../../../components/container/Index';
 
 const ConfirmDetails: IConfirmDetails = ({navigation, route}) => {
   const user_data = [
@@ -32,7 +33,7 @@ const ConfirmDetails: IConfirmDetails = ({navigation, route}) => {
   ];
 
   return (
-    <View style={{flex: 1, width: '90%', alignSelf: 'center'}}>
+    <Container flex={1} paddingTop={10}>
       <ScreenHeader
         title="Confirm details"
         description="Review your details before submitting for verification."
@@ -94,7 +95,7 @@ const ConfirmDetails: IConfirmDetails = ({navigation, route}) => {
           </MainButton>
         </View>
       </View>
-    </View>
+    </Container>
   );
 };
 export default ConfirmDetails;

@@ -21,6 +21,7 @@ export default class RegisterDTO {
     minLowercase: 1,
   })
   password?: string;
+  deviceToken: string = 'string';
 
   constructor(dto?: RegisterDTO) {
     this.email = dto?.email;
@@ -28,6 +29,7 @@ export default class RegisterDTO {
     this.lastname = dto?.lastname;
     this.password = dto?.password;
     this.phone = dto?.phone;
+    this.deviceToken =  'string';
   }
 }
 

@@ -9,21 +9,18 @@ import {Formik} from 'formik';
 import {NationalityDetailsDTO} from '../dto/VerifyIdentityDto';
 import {createValidator} from 'class-validator-formik';
 import utils from '../../../shared/Utils';
+import Container from '../../../components/container/Index';
 
 const IdentityVerification: IIdentityVerification = ({navigation, route}) => {
   utils.useHideBottomTab(navigation);
-  
+
   return (
     <ScrollView>
-      <View
-        style={{
-          width: '90%',
-          alignSelf: 'center',
-          flexDirection: 'column',
-          justifyContent: 'space-between',
-          flex: 1,
-          gap: 30,
-        }}>
+      <Container
+        flex={1}
+        justifyContent="space-between"
+        gap={30}
+        paddingTop={10}>
         <ScreenHeader
           title="Identity Verification"
           description="We use NIN and BVN together to confirm who you are and comply with
@@ -43,7 +40,7 @@ const IdentityVerification: IIdentityVerification = ({navigation, route}) => {
           {({values, errors, handleChange, handleSubmit}) => (
             <View
               style={{
-                height: verticalScale(600),
+                height: verticalScale(550),
                 justifyContent: 'space-between',
               }}>
               <View style={{flexDirection: 'column', gap: 10}}>
@@ -54,6 +51,7 @@ const IdentityVerification: IIdentityVerification = ({navigation, route}) => {
                   error={errors.nin}
                   onChangeText={handleChange('nin')}
                   maxLength={11}
+                  keyboardType="numeric"
                 />
 
                 <CustomInput
@@ -63,6 +61,7 @@ const IdentityVerification: IIdentityVerification = ({navigation, route}) => {
                   error={errors.bvn}
                   onChangeText={handleChange('bvn')}
                   maxLength={11}
+                  keyboardType="numeric"
                 />
               </View>
 
@@ -75,7 +74,7 @@ const IdentityVerification: IIdentityVerification = ({navigation, route}) => {
             </View>
           )}
         </Formik>
-      </View>
+      </Container>
     </ScrollView>
   );
 };

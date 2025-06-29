@@ -5,7 +5,7 @@ import {
 import React from 'react';
 import {SheetProvider} from 'react-native-actions-sheet';
 import SplashScreen from 'react-native-splash-screen';
-import ToastManager from 'toastify-react-native';
+import Toast from 'react-native-toast-message';
 import '../shared/ActionSheets';
 import AuthRouter from './auth/Index';
 import {toastConfig} from '../shared/Toast';
@@ -37,7 +37,7 @@ const Routes: Props = () => {
               </React.Fragment>
             )}
           </Observer>
-          <ToastManager />
+          <Toast config={toastConfig} />
         </SheetProvider>
       </PaperProvider>
     </NavigationContainer>

@@ -22,7 +22,7 @@ const Feedback: IFeedback = ({navigation}) => {
           {() => (
             <View
               style={{
-                height: verticalScale(600),
+                height: verticalScale(550),
                 flexDirection: 'column',
                 justifyContent: 'space-between',
               }}>

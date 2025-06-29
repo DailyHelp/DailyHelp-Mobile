@@ -1,3 +1,5 @@
+type Dimensions = 'full' | '90' | '80' | '70' | '60' | '50';
+
 /**
  * P represent the Props of the component
  * D represents data to be passed int the component
@@ -8,9 +10,10 @@ type Props<P = {}, D = {}> = React.FC<
     data?: D;
     children?: React.ReactNode;
     key?: any;
-    height?: `${number}%` | number;
-    width?: `${number}%` | number;
+    height?: `${number}%` | number | Dimensions;
+    width?: `${number}%` | number | Dimensions;
     margin?: number;
+    padding?: number;
     marginTop?: number;
     paddingTop?: number;
     paddingBottom?: number;
@@ -34,6 +37,7 @@ type IWalletFunded = Props<{
 
 type ICategoryActionSheet = {
   onClose: () => void;
+  onCategoriesSelected?: (categories: string[]) => void;
 };
 
 type IFundWallet = {};
@@ -46,7 +50,14 @@ type IInput = Props<{
   value?: string;
   onChangeText?: (text: string) => void;
   error?: string;
-  type?: 'text' | 'email' | 'password' | 'phone' | 'date';
+  type?:
+    | 'text'
+    | 'email'
+    | 'password'
+    | 'phone'
+    | 'date'
+    | 'address'
+    | 'select';
   autoCapitalize?: 'none' | 'sentences' | 'words' | 'characters';
   autoCompleteType?:
     | 'off'
@@ -67,6 +78,19 @@ type IInput = Props<{
   multiline?: boolean;
   numberOfLines?: number;
   fontWeight?: 'bold' | 'regular';
+  onAddressSelect?: (data?: {
+    address?: string;
+    lat?: number;
+    lng?: number;
+  }) => void;
+  keyboardType?:
+    | 'default'
+    | 'numeric'
+    | 'email-address'
+    | 'phone-pad'
+    | 'number-pad'
+    | 'decimal-pad'
+    | 'url';
 }>;
 
 type ICustomHeader<P> = Props<
@@ -81,6 +105,15 @@ type ICustomHeader<P> = Props<
     initialTab?: string;
   }
 >;
+
+type PaymentOptionProps = Props<{
+  id: string | number;
+  icon: string;
+  title: string;
+  subtitle?: string;
+  selected: boolean;
+  onPress: (id: string | number) => void;
+}>;
 
 type ITabs = Props<{
   initialTab?: string;
@@ -154,8 +187,8 @@ type IHelperCard = Props<
 type ICustomFlatListProps<T> = {
   data: any;
   numColumns?: number;
-  renderItem: any;
-  keyExtractor: (item: any, index: number) => string;
+  renderItem: (data: {item: T; index: number}) => React.ReactElement;
+  keyExtractor: (item: T, index: number) => string;
   onEndReached?: () => void;
   onEndReachedThreshold?: number;
   isLoading?: boolean;
@@ -304,3 +337,21 @@ type IDisputeCard = Props<
     status?: 'partial' | 'full' | '';
   }
 >;
+
+type IContainer = Props<{
+  flex?: number;
+  type?: 'box' | 'scroll';
+  backgroundColor?: string;
+  alignItems?: 'center' | 'flex-start' | 'flex-end' | 'stretch' | 'baseline';
+  justifyContent?:
+    | 'center'
+    | 'flex-start'
+    | 'flex-end'
+    | 'space-between'
+    | 'space-around'
+    | 'space-evenly';
+  flexDirection?: 'row' | 'column' | 'row-reverse' | 'column-reverse';
+  gap?: number;
+  alignSelf?: 'flex-start' | 'flex-end' | 'center' | 'stretch' | 'baseline';
+}>;
+s;

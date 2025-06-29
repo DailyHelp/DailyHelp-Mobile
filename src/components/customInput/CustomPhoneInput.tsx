@@ -1,10 +1,10 @@
-import {Text} from 'react-native';
-import {View} from 'react-native';
+import {Text, View} from 'react-native';
 import {TextInput} from 'react-native-paper';
-import {customFontSize, fonts} from '../../shared/themes/Typography';
-import Assets from '../../assets/Assets';
 import IconF from 'react-native-vector-icons/Feather';
+import Assets from '../../assets/Assets';
 import {verticalScale} from '../../shared/Scaling';
+import {customFontSize, fonts} from '../../shared/themes/Typography';
+import Typography from '../Typography';
 
 const CustomPhoneInput: IInput = ({
   label,
@@ -20,14 +20,9 @@ const CustomPhoneInput: IInput = ({
 
   return (
     <View style={{flexDirection: 'column', gap: 9}}>
-      <Text
-        style={{
-          fontFamily: fonts.GeistBold,
-          fontSize: customFontSize.sm,
-          color: '#757C91',
-        }}>
+      <Typography size="md" fontWeight="bold" color="#757C91">
         {label}
-      </Text>
+      </Typography>
       <View style={{flexDirection: 'row', gap: 10}}>
         <View
           style={{

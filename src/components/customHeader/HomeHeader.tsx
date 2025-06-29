@@ -6,12 +6,20 @@ import {scale, verticalScale} from '../../shared/Scaling';
 import {NativeStackHeaderProps} from '@react-navigation/native-stack';
 import Assets from '../../assets/Assets';
 import {SheetManager} from 'react-native-actions-sheet';
+import homeService from '../../screens/app/user/home/services/Home.service';
+import utils from '../../shared/Utils';
+import Container from '../container/Index';
 
 const HomeHeader: ICustomHeader<NativeStackHeaderProps> = ({
   title,
   navigation,
   goBack,
 }) => {
+  const {data} = homeService.useSavedLocation();
+
+  const location = data?.[0]?.description || title;
+  const trimmedLocation = utils.ellipseText(location);
+
   return (
     <View
       style={{
@@ -20,11 +28,13 @@ const HomeHeader: ICustomHeader<NativeStackHeaderProps> = ({
         alignItems: 'center',
         width: '100%',
         paddingHorizontal: scale(10),
-        paddingTop: scale(15),
         backgroundColor: 'white',
         paddingBottom: verticalScale(10),
       }}>
-      <TouchableOpacity onPress={() => SheetManager.show('HomeAddress')}>
+      <TouchableOpacity
+        onPress={() => {
+          SheetManager.show('HomeAddress', {payload: {showCurrent: true}});
+        }}>
         <View style={{flexDirection: 'row', gap: 5}}>
           <Assets.HomeLocationPin style={{width: scale(30)}} />
           <Text
@@ -33,7 +43,7 @@ const HomeHeader: ICustomHeader<NativeStackHeaderProps> = ({
               color: '#121921',
               fontSize: customFontSize.sm,
             }}>
-            {title}
+            {trimmedLocation}
           </Text>
           <Icon name="chevron-down" color={'#757C91'} size={16} />
         </View>

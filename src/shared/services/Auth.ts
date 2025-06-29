@@ -58,6 +58,42 @@ export default class AuthApi extends Http {
     return data;
   }
 
+  protected async googleAuth(body: GoogleAuthDto) {
+    const req = await this.fetchHandler({
+      path: Endpoints.googleSocialAuth,
+      body,
+    });
+
+    const res = await this.handleResponse<GoogleAuthResponse>(req);
+
+    if (!res?.status) throw new ThrowError(res?.message!);
+
+    this.success(res?.message);
+    AppStorage.save('user_id', res?.data?.user?.id!);
+    AppStorage.save('email', res?.data.user?.email!);
+    AppStorage.save('access_token', res?.data.token!);
+    AppStorage.save('phone', res?.data.user?.phone_number!);
+    AppStorage.save('firstname', res?.data.user?.firstname!);
+    AppStorage.save('lastname', res?.data.user?.lastname!);
+
+    return res;
+  }
+
+  async updateFmcToken(fcm_token: string) {
+    const res = await this.fetchHandler({
+      path: Endpoints.updateFmcToken,
+      body: {fcm_token},
+      method: 'PUT',
+    });
+    const data = await this.handleResponse<any>(res);
+
+    if (!data?.status) throw new ThrowError(data?.message!);
+
+    this.success(data?.message);
+
+    return data;
+  }
+
   protected async verifyOtp(body: VerifyOtpDTO) {
     const res = await this.fetchHandler({
       path: Endpoints.verifyOtp,

@@ -7,19 +7,16 @@ import ScreenHeader from '../../../components/ScreenHeader';
 import {verticalScale, scale} from '../../../shared/Scaling';
 import {customFontSize, fonts} from '../../../shared/themes/Typography';
 import Icon from 'react-native-vector-icons/Fontisto';
+import Container from '../../../components/container/Index';
 
 const FacialVerification: IFacialVerification = ({navigation, route}) => {
   return (
     <ScrollView>
-      <View
-        style={{
-          width: '90%',
-          alignSelf: 'center',
-          flexDirection: 'column',
-          justifyContent: 'space-between',
-          flex: 1,
-          height: verticalScale(700),
-        }}>
+      <Container
+        flex={1}
+        justifyContent="space-between"
+        height={650}
+        paddingTop={10}>
         <View
           style={{
             flexDirection: 'column',
@@ -88,7 +85,7 @@ const FacialVerification: IFacialVerification = ({navigation, route}) => {
           }}>
           Start
         </MainButton>
-      </View>
+      </Container>
     </ScrollView>
   );
 };

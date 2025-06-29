@@ -1,13 +1,13 @@
-import {View} from 'react-native';
-import {Text, TextInput} from 'react-native-paper';
-import {customFontSize, fonts} from '../../shared/themes/Typography';
 import React from 'react';
-import Icon from 'react-native-vector-icons/Feather';
-import IconM from 'react-native-vector-icons/MaterialCommunityIcons';
+import { View } from 'react-native';
+import { Text, TextInput } from 'react-native-paper';
+import { default as Icon, default as IconF } from 'react-native-vector-icons/Feather';
 import IconI from 'react-native-vector-icons/Ionicons';
+import IconM from 'react-native-vector-icons/MaterialCommunityIcons';
 import Assets from '../../assets/Assets';
-import {scale, verticalScale} from '../../shared/Scaling';
-import IconF from 'react-native-vector-icons/Feather';
+import { scale, verticalScale } from '../../shared/Scaling';
+import { customFontSize, fonts } from '../../shared/themes/Typography';
+import Typography from '../Typography';
 
 const CustomPasswordInput: IInput = ({
   label,
@@ -40,14 +40,9 @@ const CustomPasswordInput: IInput = ({
 
   return (
     <View style={{flexDirection: 'column', gap: 9}}>
-      <Text
-        style={{
-          fontFamily: fonts.GeistBold,
-          fontSize: customFontSize.sm,
-          color: '#757C91',
-        }}>
+      <Typography size="md" fontWeight="bold" color="#757C91">
         {label}
-      </Text>
+      </Typography>
       <View
         style={{
           width: '100%',

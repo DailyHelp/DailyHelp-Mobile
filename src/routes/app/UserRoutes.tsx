@@ -38,6 +38,8 @@ import Verifying from '../../screens/auth/compliance/Verifying';
 import VerificationResponse from '../../screens/auth/compliance/VerificationResponse';
 import Address from '../../screens/app/user/more/Address';
 import Feedback from '../../screens/app/user/more/Feedback';
+import ReportSumitted from '../../screens/app/user/chat/report/ReportSumitted';
+import VerifyPhone from '../../screens/app/user/more/VerifyPhone';
 
 type LabelPosition = 'beside-icon' | 'below-icon';
 
@@ -242,6 +244,16 @@ export const UserHomeStackRoutes = [
       headerShown: false,
     },
   },
+  {
+    name: 'VerifyPhone',
+    component: VerifyPhone,
+    options: {
+      headerShown: true,
+      header: (props: NativeStackHeaderProps) => (
+        <CustomHeader type="back" {...props} />
+      ),
+    },
+  },
 ];
 
 export const SearchStackRoutes = [
@@ -274,6 +286,16 @@ export const UserChatStackRoutes = [
     component: Report,
     options: {
       headerShown: false,
+    },
+  },
+  {
+    name: 'ReportSumitted',
+    component: ReportSumitted,
+    options: {
+      headerShown: true,
+      header: (props: NativeStackHeaderProps) => (
+        <CustomHeader type="back" title="" {...props} textMiddle />
+      ),
     },
   },
   {
@@ -360,6 +382,16 @@ export const UserMoreStackRoutes = [
           {...props}
           textMiddle
         />
+      ),
+    },
+  },
+  {
+    name: 'VerifyPhone',
+    component: VerifyPhone,
+    options: {
+      headerShown: true,
+      header: (props: NativeStackHeaderProps) => (
+        <CustomHeader type="back" {...props} />
       ),
     },
   },

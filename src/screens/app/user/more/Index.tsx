@@ -63,7 +63,6 @@ const More: IMore = ({navigation}) => {
       <View
         style={{
           flexDirection: 'column',
-          marginTop: verticalScale(10),
           backgroundColor: 'white',
           padding: scale(10),
         }}>
