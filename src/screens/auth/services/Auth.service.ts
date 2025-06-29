@@ -19,6 +19,7 @@ import ForgotPasswordDTO, {ResetPasswordDTO} from '../dto/ForgotPasswordDto';
 import {VerifyIdentityDTO} from '../dto/VerifyIdentityDto';
 import React from 'react';
 import {WEB_CLIENT_ID} from '@env';
+import messaging from '@react-native-firebase/messaging';
 
 export class AuthService extends AuthApi {
   private static instance: AuthService;
@@ -127,7 +128,7 @@ export class AuthService extends AuthApi {
     });
 
     const {mutateAsync: resendOtp, isPending: rsLoading} = useMutation({
-      mutationKey: ['verify-otp'],
+      mutationKey: ['resend-otp'],
       mutationFn: async (body: VerifyOtpDTO) => await this.sendOtp(body),
       onError: error => new CatchError(error, true),
     });
@@ -170,9 +171,7 @@ export class AuthService extends AuthApi {
     };
   }
 
-useGoogleSignAuth() {
-   
-
+  useGoogleSignAuth() {
     const {tokenUpdate} = this.useUpdateFcmToken();
 
     React.useEffect(() => {
@@ -184,11 +183,9 @@ useGoogleSignAuth() {
       mutationFn: async (body: GoogleAuthDto) => await this.googleAuth(body),
       onSuccess: async data => {
         tokenUpdate(await messaging().getToken());
-       
       },
       onError: error => {
         new CatchError(error, true);
-        
       },
     });
 
@@ -241,7 +238,7 @@ useGoogleSignAuth() {
     const navigation = useNavigation<Navigate<IAuthRoute>>();
 
     const {mutateAsync, isPending} = useMutation({
-      mutationKey: ['verify-otp'],
+      mutationKey: ['forgot-password'],
       mutationFn: async (body: ForgotPasswordDTO) => {
         return await this.initiateForgotPassword(body);
       },
@@ -260,7 +257,7 @@ useGoogleSignAuth() {
     });
 
     const {mutateAsync: resetPassword, isPending: resetLoading} = useMutation({
-      mutationKey: ['verify-otp'],
+      mutationKey: ['reset-password'],
       mutationFn: async (body: ResetPasswordDTO) => {
         return await this.resetPassword(body);
       },
@@ -294,7 +291,7 @@ useGoogleSignAuth() {
     failed?: () => void,
   ) {
     const {mutateAsync, isPending} = useMutation({
-      mutationKey: ['verify-otp'],
+      mutationKey: ['verify-identity'],
       mutationFn: async (body: VerifyIdentityDTO) => {
         return await this.verifyIdentity(body);
       },

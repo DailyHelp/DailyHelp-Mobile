@@ -13,20 +13,14 @@ import PersonalInformationDTO from '../dto/VerifyIdentityDto';
 import {createValidator} from 'class-validator-formik';
 import AppStorage from '../../../shared/AppStorage';
 import utils from '../../../shared/Utils';
+import Container from '../../../components/container/Index';
 
 const PersonalInformation: IPersonalInformation = ({navigation, route}) => {
   utils.useHideBottomTab(navigation);
-  
+
   return (
-    <ScrollView style={{backgroundColor: 'white'}}>
-      <View
-        style={{
-          width: '90%',
-          alignSelf: 'center',
-          paddingTop: 10,
-          flexDirection: 'column',
-          gap: 20,
-        }}>
+    <ScrollView>
+      <Container flex={1} gap={20} paddingTop={10}>
         <ScreenHeader
           title="Personal Information"
           description="Provide some information about yourself."
@@ -131,7 +125,7 @@ const PersonalInformation: IPersonalInformation = ({navigation, route}) => {
             </React.Fragment>
           )}
         </Formik>
-      </View>
+      </Container>
     </ScrollView>
   );
 };

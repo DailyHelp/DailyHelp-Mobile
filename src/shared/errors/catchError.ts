@@ -1,5 +1,4 @@
-import {Toast} from 'toastify-react-native';
-import ThrowError from './throwError';
+import { Toast } from 'toastify-react-native';
 
 export default class CatchError extends Error {
   constructor(public err: any, private toast: boolean = false) {
@@ -24,7 +23,8 @@ export default class CatchError extends Error {
       type: 'error',
       text1: 'Error',
       text2: this.message,
-      visibilityTime: 10000,
+      visibilityTime: 5000,
+      topOffset: 0,
     });
     return this;
   };

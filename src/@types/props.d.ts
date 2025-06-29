@@ -11,6 +11,7 @@ type Props<P = {}, D = {}> = React.FC<
     height?: `${number}%` | number;
     width?: `${number}%` | number;
     margin?: number;
+    padding?: number;
     marginTop?: number;
     paddingTop?: number;
     paddingBottom?: number;
@@ -68,6 +69,14 @@ type IInput = Props<{
   multiline?: boolean;
   numberOfLines?: number;
   fontWeight?: 'bold' | 'regular';
+  keyboardType?:
+    | 'default'
+    | 'numeric'
+    | 'email-address'
+    | 'phone-pad'
+    | 'number-pad'
+    | 'decimal-pad'
+    | 'url';
 }>;
 
 type ICustomHeader<P> = Props<
@@ -90,7 +99,7 @@ type PaymentOptionProps = Props<{
   subtitle?: string;
   selected: boolean;
   onPress: (id: string | number) => void;
-}>
+}>;
 
 type ITabs = Props<{
   initialTab?: string;
@@ -314,3 +323,21 @@ type IDisputeCard = Props<
     status?: 'partial' | 'full' | '';
   }
 >;
+
+type IContainer = Props<{
+  flex?: number;
+  type?: 'box' | 'scroll';
+  backgroundColor?: string;
+  alignItems?: 'center' | 'flex-start' | 'flex-end' | 'stretch' | 'baseline';
+  justifyContent?:
+    | 'center'
+    | 'flex-start'
+    | 'flex-end'
+    | 'space-between'
+    | 'space-around'
+    | 'space-evenly';
+  flexDirection?: 'row' | 'column' | 'row-reverse' | 'column-reverse';
+  gap?: number;
+  alignSelf?: 'flex-start' | 'flex-end' | 'center' | 'stretch' | 'baseline';
+}>;
+s;

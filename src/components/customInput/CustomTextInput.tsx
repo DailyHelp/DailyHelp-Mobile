@@ -20,6 +20,7 @@ const CustomTextInput: IInput = ({
   fontWeight,
   maxLength,
   error,
+  keyboardType = 'default',
 }) => {
   let fontFamily = fonts.GeistBold;
   if (fontWeight === 'regular') fontFamily = fonts.GeistRegular;
@@ -61,6 +62,7 @@ const CustomTextInput: IInput = ({
           onBlur={onBlur}
           multiline={multiline}
           numberOfLines={numberOfLines}
+          keyboardType={keyboardType}
           mode="outlined"
           outlineColor="transparent"
           activeOutlineColor="transparent"
