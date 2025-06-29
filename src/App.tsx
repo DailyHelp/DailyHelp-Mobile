@@ -15,7 +15,7 @@ import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import 'reflect-metadata';
 import utils from './shared/Utils';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
-import { SafeAreaView } from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
@@ -40,21 +40,19 @@ function App(): React.JSX.Element {
    */
 
   return (
-   
     <View style={backgroundStyle}>
       <StatusBar
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <SafeAreaView style={{flex: 1}}>
-      <GestureHandlerRootView >
-        <QueryClientProvider client={queryClient}>
-          <Routes />
-        </QueryClientProvider>
-      </GestureHandlerRootView>
+      <SafeAreaView edges={['top']} style={{flex: 1}}>
+        <GestureHandlerRootView>
+          <QueryClientProvider client={queryClient}>
+            <Routes />
+          </QueryClientProvider>
+        </GestureHandlerRootView>
       </SafeAreaView>
     </View>
-   
   );
 }
 
