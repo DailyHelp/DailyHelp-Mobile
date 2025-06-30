@@ -7,6 +7,7 @@ import utils from '../../../../shared/Utils';
 import ChatFooter from './components/ChatFooter';
 import Messages from './components/messages/Index';
 import Offer from '../../../../components/offers/Index';
+import Container from '../../../../components/container/Index';
 
 const ChatBox: IChatBox = ({navigation}) => {
   utils.useHideBottomTab(navigation);
@@ -38,12 +39,7 @@ const ChatBox: IChatBox = ({navigation}) => {
 
   const renderItem = React.useCallback(() => {
     return (
-      <Messages
-        accept={accept}
-        decline={decline}
-        cancel={cancel}
-        edit={edit}
-      />
+      <Messages accept={accept} decline={decline} cancel={cancel} edit={edit} />
     );
   }, []);
 
@@ -54,12 +50,7 @@ const ChatBox: IChatBox = ({navigation}) => {
         type="chat"
         navigation={navigation}
       />
-      <View
-        style={{
-          flex: 1,
-          flexDirection: 'column',
-          justifyContent: 'space-between',
-        }}>
+      <Container width={'full'} flex={1} justifyContent="space-between">
         <CustomFlatList
           data={['', '']}
           renderItem={renderItem}
@@ -68,7 +59,7 @@ const ChatBox: IChatBox = ({navigation}) => {
         <ChatFooter navigation={navigation} />
 
         <Offer type={offer.type} isVisible={offer.visible} onClose={close} />
-      </View>
+      </Container>
     </React.Fragment>
   );
 };

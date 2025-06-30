@@ -10,7 +10,7 @@ import React from 'react';
 
 const SetPrices: ISetPrices = ({navigation}) => {
   return (
-    <Container flex={1} gap={20}>
+    <Container width={'95'} flex={1} gap={20}>
       <ScreenHeader
         title="Set Your Prices"
         description="Let clients know what you charge. Be fair and realistic, you can always negotiate later."
@@ -18,7 +18,7 @@ const SetPrices: ISetPrices = ({navigation}) => {
 
       <Formik initialValues={{}} onSubmit={() => {}}>
         {({}) => (
-          <Container width={'full'} height={600} justifyContent='space-between'>
+          <Container width={'full'} height={600} justifyContent="space-between">
             <Container width={'full'} gap={30}>
               <Container width={'full'} gap={3}>
                 <CustomInput label="Starting price" placeholder="₦ 5,000" />

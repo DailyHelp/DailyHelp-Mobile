@@ -14,8 +14,9 @@ const FacialVerification: IFacialVerification = ({navigation, route}) => {
     <ScrollView>
       <Container
         flex={1}
+        width={'95'}
         justifyContent="space-between"
-        mainBackgroundColor='white'
+        backgroundColor='white'
         height={650}
         paddingTop={10}>
         <View

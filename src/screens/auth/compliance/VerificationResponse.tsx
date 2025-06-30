@@ -15,7 +15,8 @@ const VerificationResponse: IVerificationResponse = ({route, navigation}) => {
       gap={20}
       justifyContent="center"
       height={800}
-      mainBackgroundColor="white">
+      width={'95'}
+      backgroundColor="white">
       {route.params?.status == 'success' ? (
         <Assets.KycSuccess />
       ) : (

@@ -15,8 +15,9 @@ const Preview: ISelfieVerification = ({navigation, route}) => {
     <Container
       flex={1}
       justifyContent="center"
-      mainBackgroundColor="white"
+      backgroundColor="white"
       alignItems="center"
+      width={'95'}
       height={800}>
       <View style={{position: 'relative'}}>
         <Assets.CameraBorder width={scale(250)} style={{alignSelf: 'center'}} />

@@ -1,17 +1,17 @@
-import { createValidator } from 'class-validator-formik';
-import { Formik } from 'formik';
+import {createValidator} from 'class-validator-formik';
+import {Formik} from 'formik';
 import React from 'react';
-import { Text, View } from 'react-native';
-import { Button } from 'react-native-paper';
+import {Text, View} from 'react-native';
+import {Button} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Fontisto';
-import { IPersonalInformation } from '../../../@types/routes';
+import {IPersonalInformation} from '../../../@types/routes';
 import MainButton from '../../../components/button/MainButton';
 import Container from '../../../components/container/Index';
 import CustomInput from '../../../components/customInput/Index';
 import ScreenHeader from '../../../components/ScreenHeader';
 import AppStorage from '../../../shared/AppStorage';
-import { scale, verticalScale } from '../../../shared/Scaling';
-import { customFontSize, fonts } from '../../../shared/themes/Typography';
+import {scale, verticalScale} from '../../../shared/Scaling';
+import {customFontSize, fonts} from '../../../shared/themes/Typography';
 import utils from '../../../shared/Utils';
 import PersonalInformationDTO from '../dto/VerifyIdentityDto';
 
@@ -23,8 +23,9 @@ const PersonalInformation: IPersonalInformation = ({navigation, route}) => {
       type="scroll"
       flex={1}
       gap={20}
+      width={'95'}
       paddingTop={10}
-      mainBackgroundColor="white">
+      backgroundColor="white">
       <ScreenHeader
         title="Personal Information"
         description="Provide some information about yourself."

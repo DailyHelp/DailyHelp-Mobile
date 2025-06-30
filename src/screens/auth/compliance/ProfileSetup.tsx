@@ -9,7 +9,7 @@ import UploadContainer from '../../../components/UploadContainer';
 
 const ProfileSetup: IProfileSetup = ({navigation}) => {
   return (
-    <Container flex={1} gap={20}>
+    <Container width={'95'} flex={1} gap={20}>
       <ScreenHeader
         title="Profile set-up"
         description="Let clients know what you do and why you’re the right fit."

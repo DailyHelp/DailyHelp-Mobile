@@ -98,7 +98,7 @@ export class AuthService extends AuthApi {
             return;
           }
 
-          appStore.setIsAuthenticated(true, UserTypes.HELPERS);
+          appStore.setIsAuthenticated(true);
         }
       },
       onError: error => new CatchError(error, true),

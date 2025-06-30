@@ -44,6 +44,7 @@ const Verifying: IVerifying = ({route, navigation}) => {
       gap={20}
       justifyContent="center"
       alignItems="center"
+      width={'95'}
       height={600}>
       <Animated.View style={{transform: [{rotate: spin}]}}>
         <Assets.HourGlass />

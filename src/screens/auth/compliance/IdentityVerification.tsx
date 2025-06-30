@@ -1,15 +1,15 @@
-import { createValidator } from 'class-validator-formik';
-import { Formik } from 'formik';
-import { View } from 'react-native';
+import {createValidator} from 'class-validator-formik';
+import {Formik} from 'formik';
+import {View} from 'react-native';
 import Icon from 'react-native-vector-icons/Fontisto';
-import { IIdentityVerification } from '../../../@types/routes';
+import {IIdentityVerification} from '../../../@types/routes';
 import MainButton from '../../../components/button/MainButton';
 import Container from '../../../components/container/Index';
 import CustomInput from '../../../components/customInput/Index';
 import ScreenHeader from '../../../components/ScreenHeader';
-import { verticalScale } from '../../../shared/Scaling';
+import {verticalScale} from '../../../shared/Scaling';
 import utils from '../../../shared/Utils';
-import { NationalityDetailsDTO } from '../dto/VerifyIdentityDto';
+import {NationalityDetailsDTO} from '../dto/VerifyIdentityDto';
 
 const IdentityVerification: IIdentityVerification = ({navigation, route}) => {
   utils.useHideBottomTab(navigation);
@@ -17,7 +17,8 @@ const IdentityVerification: IIdentityVerification = ({navigation, route}) => {
   return (
     <Container
       type="scroll"
-      mainBackgroundColor="white"
+      backgroundColor="white"
+      width={'95'}
       flex={1}
       justifyContent="space-between"
       gap={30}

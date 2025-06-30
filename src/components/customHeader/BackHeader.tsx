@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import {customFontSize, fonts} from '../../shared/themes/Typography';
 import {scale} from '../../shared/Scaling';
 import {NativeStackHeaderProps} from '@react-navigation/native-stack';
+import Container from '../container/Index';
 
 const BackHeader: ICustomHeader<NativeStackHeaderProps> = ({
   title,
@@ -14,15 +15,11 @@ const BackHeader: ICustomHeader<NativeStackHeaderProps> = ({
   if (textMiddle) {
     // Centered title layout
     return (
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'center',
-          padding: scale(15),
-          position: 'relative',
-          backgroundColor: 'white',
-        }}>
+      <Container
+        flexDirection="row"
+        alignItems="center"
+        backgroundColor="white"
+        width={'full'}>
         {/* Back Icon on far left */}
         <TouchableOpacity
           onPress={goBack || navigation?.goBack}
@@ -39,21 +36,20 @@ const BackHeader: ICustomHeader<NativeStackHeaderProps> = ({
           }}>
           {title}
         </Text>
-      </View>
+      </Container>
     );
   }
 
   // Default layout: icon and title side-by-side
   return (
     <TouchableOpacity onPress={goBack || navigation?.goBack}>
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          gap: 3,
-          padding: scale(15),
-          backgroundColor: 'white',
-        }}>
+      <Container
+        flexDirection="row"
+        alignItems="center"
+        backgroundColor="white"
+        height={40}
+        gap={3}
+        width={'full'}>
         <Icon name="chevron-back" size={20} color={'#014C2B'} />
         <Text
           style={{
@@ -63,7 +59,7 @@ const BackHeader: ICustomHeader<NativeStackHeaderProps> = ({
           }}>
           {title}
         </Text>
-      </View>
+      </Container>
     </TouchableOpacity>
   );
 };

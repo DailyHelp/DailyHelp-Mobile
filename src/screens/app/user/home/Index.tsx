@@ -1,29 +1,22 @@
 import React from 'react';
 import {FlatList, View} from 'react-native';
 import {IHome} from '../../../../@types/routes';
+import Container from '../../../../components/container/Index';
 import CustomFlatList from '../../../../components/CustomFlatList';
 import Typography from '../../../../components/Typography';
 import {top_rated} from '../../../../mock_data';
+import AppStorage from '../../../../shared/AppStorage';
 import CategorySection from './components/CategorySection';
 import HelperCard from './components/HelperCard';
 import VerifyPhoneNumberContainer from './components/VerifyNumberContainer';
-import AppStorage from '../../../../shared/AppStorage';
-import homeService from './services/Home.service';
-
 
 const Home: IHome = () => {
-  
   return (
     <FlatList
       data={[]}
       ListHeaderComponent={
-        <View
-          style={{
-            flexDirection: 'column',
-            gap: 20,
-          }}>
-          <View
-            style={{flexDirection: 'column', gap: 9, backgroundColor: 'white'}}>
+        <Container width={'full'} gap={20}>
+          <Container backgroundColor="white" width={'full'} gap={9}>
             <CategorySection
               categories={[
                 {label: 'All categories', showIcon: true},
@@ -35,15 +28,9 @@ const Home: IHome = () => {
             {!AppStorage.find('isPhoneVerified') && (
               <VerifyPhoneNumberContainer />
             )}
-          </View>
+          </Container>
 
-          <View
-            style={{
-              width: '95%',
-              alignSelf: 'center',
-              flexDirection: 'column',
-              gap: 9,
-            }}>
+          <Container width={'95'} gap={9}>
             <Typography fontWeight="bold" size="m3d">
               Top rated
             </Typography>
@@ -56,15 +43,9 @@ const Home: IHome = () => {
                 <HelperCard mode="middle" data={item.item} horizontal />
               )}
             />
-          </View>
+          </Container>
 
-          <View
-            style={{
-              width: '95%',
-              alignSelf: 'center',
-              flexDirection: 'column',
-              gap: 9,
-            }}>
+          <Container width={'95'} gap={9}>
             <Typography fontWeight="bold" size="m3d">
               Recommended
             </Typography>
@@ -77,16 +58,9 @@ const Home: IHome = () => {
                 <HelperCard mode="row" data={item.item} horizontal />
               )}
             />
-          </View>
+          </Container>
 
-          <View
-            style={{
-              width: '95%',
-              alignSelf: 'center',
-              flexDirection: 'column',
-              gap: 9,
-              paddingBottom: 24,
-            }}>
+          <Container width={'95'} gap={9} paddingBottom={24}>
             <Typography fontWeight="bold" size="m3d">
               Explore
             </Typography>
@@ -98,8 +72,8 @@ const Home: IHome = () => {
                 <HelperCard mode="row" data={item.item} />
               )}
             />
-          </View>
-        </View>
+          </Container>
+        </Container>
       }
       showsVerticalScrollIndicator={false}
       keyExtractor={(_, index) => index.toString()}

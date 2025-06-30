@@ -75,7 +75,7 @@ const VerifyIdentity: IVerifyIdentity = ({route, navigation}) => {
             </MainButton>
             <OutlineButton
               onPress={() => {
-                appStore.setIsAuthenticated(true, UserTypes.HELPERS);
+                appStore.setIsAuthenticated(true);
               }}>
               Do this later
             </OutlineButton>

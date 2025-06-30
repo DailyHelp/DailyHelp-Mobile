@@ -8,7 +8,7 @@ import MainButton from '../../../components/button/MainButton';
 
 const VerifyAddress: IVerifyAddress = ({navigation}) => {
   return (
-    <Container flex={1} gap={20} paddingTop={16}>
+    <Container flex={1} gap={20} paddingTop={16} width={'95'}>
       <ScreenHeader
         title="Verify residential address"
         description="This address will be physically verified"

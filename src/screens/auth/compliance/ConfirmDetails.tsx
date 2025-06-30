@@ -33,7 +33,7 @@ const ConfirmDetails: IConfirmDetails = ({navigation, route}) => {
   ];
 
   return (
-    <Container flex={1} paddingTop={10} mainBackgroundColor='white'>
+    <Container width={'95'} flex={1} paddingTop={10} backgroundColor="white">
       <ScreenHeader
         title="Confirm details"
         description="Review your details before submitting for verification."
