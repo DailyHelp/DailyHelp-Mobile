@@ -1,4 +1,17 @@
-type Dimensions = 'full' | '90' | '80' | '70' | '60' | '50';
+type Dimensions =
+  | 'full'
+  | '90'
+  | '95'
+  | '85'
+  | '80'
+  | '70'
+  | '75'
+  | '60'
+  | '65'
+  | '50'
+  | '55'
+  | '40'
+  | '40';
 
 /**
  * P represent the Props of the component
@@ -20,10 +33,10 @@ type Props<P = {}, D = {}> = React.FC<
   } & P
 >;
 
-type IFindServiceAuthModal = Props<{
+type IFindServiceAuthModal<U> = Props<{
   isVisible: boolean;
   onClose: () => void;
-  onPress: () => void;
+  userType?: U;
 }>;
 
 type IWalletFunded = Props<{
@@ -48,6 +61,7 @@ type IInput = Props<{
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
   value?: string;
+  options?: {label?: string; value: string}[];
   onChangeText?: (text: string) => void;
   error?: string;
   type?:
@@ -57,7 +71,8 @@ type IInput = Props<{
     | 'phone'
     | 'date'
     | 'address'
-    | 'select';
+    | 'select'
+    | 'switch';
   autoCapitalize?: 'none' | 'sentences' | 'words' | 'characters';
   autoCompleteType?:
     | 'off'
@@ -91,6 +106,8 @@ type IInput = Props<{
     | 'number-pad'
     | 'decimal-pad'
     | 'url';
+  selectType?: 'CustomSelect' | 'AllCategory';
+  wordCount?: boolean;
 }>;
 
 type ICustomHeader<P> = Props<
@@ -121,19 +138,19 @@ type ITabs = Props<{
   onPress?: (string: string) => void;
 }>;
 
-type ICustomButton = Props<{
+type ICustomButton<C> = Props<{
   title?: string;
   onPress?: () => void;
   loading?: boolean;
   disabled?: boolean;
   icon?: any;
   moveIconRight?: boolean;
-  color?: string;
-  borderColor?: string;
-  disableColor?: string;
-  enableColor?: string;
-  enableButtonColor?: string;
-  disableButtonColor?: string;
+  color?: C;
+  borderColor?: C;
+  disableColor?: C;
+  enableColor?: C;
+  enableButtonColor?: C;
+  disableButtonColor?: C;
   borderStyle?: 'solid' | 'dotted' | 'dashed';
   borderRadius?: number;
 }>;
@@ -239,7 +256,7 @@ type ICustomAvatar = Props<
   {image?: any; badge?: string}
 >;
 
-type ITypography = Props<{
+type ITypography<C> = Props<{
   fontWeight?:
     | 'bold'
     | 'regular'
@@ -248,7 +265,7 @@ type ITypography = Props<{
     | 'extrabold'
     | 'italics';
   size?: 'sm' | 'xs' | 'md' | 'lg' | 'xxlg' | 'xlg' | 'm2d' | 'm3d';
-  color?: string;
+  color?: C;
   textAlign?: 'auto' | 'left' | 'right' | 'center' | 'justify';
   fontType?: 'Geist' | 'CabinetGrotesk' | 'Figtree';
   padding?: number;
@@ -270,7 +287,9 @@ type IChatFooter<N = any> = Props<{navigation: N}>;
 type IMessages = Props<
   {
     decline?: (value?: number | string) => void;
+    cancel?: (value?: number | string) => void;
     accept?: (value?: number | string) => void;
+    edit?: (value?: number | string) => void;
     backgroundColor?: string;
     position?: 'left' | 'right';
   },
@@ -338,10 +357,12 @@ type IDisputeCard = Props<
   }
 >;
 
-type IContainer = Props<{
+type IContainer<C> = Props<{
   flex?: number;
   type?: 'box' | 'scroll';
-  backgroundColor?: string;
+  backgroundColor?: C;
+  borderColor?: C;
+  mainBackgroundColor?: C;
   alignItems?: 'center' | 'flex-start' | 'flex-end' | 'stretch' | 'baseline';
   justifyContent?:
     | 'center'
@@ -353,5 +374,31 @@ type IContainer = Props<{
   flexDirection?: 'row' | 'column' | 'row-reverse' | 'column-reverse';
   gap?: number;
   alignSelf?: 'flex-start' | 'flex-end' | 'center' | 'stretch' | 'baseline';
+  borderRadius?: number;
+  borderTopLeftRadius?: number;
+  borderTopRightRadius?: number;
+  borderWidth?: number;
+  borderStyle?: 'solid' | 'dotted' | 'dashed';
+  position?: 'absolute' | 'relative' | 'static';
+  paddingHorizontal?: number;
+  paddingVertical?: number;
+  top?: number;
+  bottom?: number;
+  left?: number;
+  right?: number;
 }>;
-s;
+
+type IUploadContainer = Props<{
+  title: string;
+  description: string;
+  status?: 'failed' | 'upload' | 'success';
+}>;
+
+type IAttachmentContainer = Props<{
+  openGallery?: () => void;
+  allowUpload?: boolean;
+}>;
+
+type IBadgeContainer = Props<{}>;
+
+type IHelperDetails = Props<{}>;

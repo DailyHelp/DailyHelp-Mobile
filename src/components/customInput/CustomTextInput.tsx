@@ -5,6 +5,8 @@ import {verticalScale} from '../../shared/Scaling';
 import {customFontSize, fonts} from '../../shared/themes/Typography';
 import Typography from '../Typography';
 import utils from '../../shared/Utils';
+import {Colors} from '../../shared/themes/Index';
+import Container from '../container/Index';
 
 const CustomTextInput: IInput = ({
   label,
@@ -23,21 +25,33 @@ const CustomTextInput: IInput = ({
   maxLength,
   error,
   keyboardType = 'default',
+  wordCount,
 }) => {
   let fontFamily = fonts.GeistBold;
-  if (fontWeight === 'regular') fontFamily = fonts.GeistRegular;
+  if (fontWeight === 'regular' || multiline) fontFamily = fonts.GeistRegular;
 
   if (typeof height !== 'number') {
     height = utils.getDimensions(height as Dimensions);
   }
 
   const hasError = !!error;
+  const wordLength = value?.length! || 0;
 
   return (
     <View style={{flexDirection: 'column', gap: 9, ...containerStyle}}>
-      <Typography size="md" fontWeight="bold" color="#757C91">
-        {label}
-      </Typography>
+      <Container
+        width={'full'}
+        flexDirection="row"
+        justifyContent="space-between">
+        <Typography size="md" fontWeight="semibold" color="gray">
+          {label}
+        </Typography>
+        {wordCount && (
+          <Typography size="md" fontWeight="semibold" color="gray">
+            {maxLength! - wordLength} words
+          </Typography>
+        )}
+      </Container>
 
       <View
         style={{
@@ -68,7 +82,7 @@ const CustomTextInput: IInput = ({
           outlineColor="transparent"
           activeOutlineColor="transparent"
           placeholder={placeholder}
-          textColor="#3B4152"
+          textColor={multiline ? Colors.gray : '#3B4152'}
           placeholderTextColor={'#A9AFC2'}
           maxLength={maxLength}
           cursorColor="#A9AFC2"

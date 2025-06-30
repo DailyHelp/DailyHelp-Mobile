@@ -12,6 +12,7 @@ import CustomInput from '../../../../../components/customInput/Index';
 import Typography from '../../../../../components/Typography';
 import {verticalScale} from '../../../../../shared/Scaling';
 import homeService from '../services/Home.service';
+
 const savedLocations = [
   '88 Ilaje road, yaba, Lagos',
   '12 Adebayo street, Lekki-Ajah, Lagos',
@@ -56,7 +57,7 @@ const HomeAddress = React.forwardRef<
           <TouchableOpacity>
             <Icon2 color={'#757C91'} name={'close'} size={16} />
           </TouchableOpacity>
-          <Typography fontWeight="bold" size="md" color="#121921">
+          <Typography fontWeight="bold" size="md" color="gray">
             {props.payload?.label || 'Home Address'}
           </Typography>
         </View>

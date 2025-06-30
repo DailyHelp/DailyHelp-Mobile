@@ -1,4 +1,5 @@
 import {IsString} from 'class-validator';
+import {UserTypes} from '../../../shared/Constant';
 
 export default class PersonalInformationDTO {
   @IsString()
@@ -51,4 +52,5 @@ export class VerifyIdentityDTO {
   nin?: string;
   bvn?: string;
   photo?: string;
+  userType?: UserTypes;
 }

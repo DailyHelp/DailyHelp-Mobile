@@ -20,7 +20,7 @@ const ReviewsCard: IReviewCard = ({data}) => {
         <Typography fontWeight="bold" size="md">
           Funmi A
         </Typography>
-        <Typography fontWeight="regular" size="md" color="#757C91">
+        <Typography fontWeight="regular" size="md" color="gray">
           23, Mar
         </Typography>
         <Typography fontWeight="bold" size="md">

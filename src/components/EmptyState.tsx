@@ -30,11 +30,11 @@ const EmptyState: IEmptyState<Navigate<IChatRoute>> = ({
       </Typography>
 
       <View style={{flexDirection: 'column', gap: 7}}>
-        <Typography size="m2d" textAlign="center" color="#757C91">
+        <Typography size="m2d" textAlign="center" color="gray">
           {title}
         </Typography>
         {subTitle && (
-          <Typography size="m2d" textAlign="center" color="#757C91">
+          <Typography size="m2d" textAlign="center" color="gray">
             {subTitle}
           </Typography>
         )}

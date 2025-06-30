@@ -10,6 +10,7 @@ import {customFontSize, fonts} from '../../shared/themes/Typography';
 import {Text} from 'react-native-paper';
 import Typography from '../../components/Typography';
 import {appStore} from '../../shared/stores/appStore';
+import {UserTypes} from '../../shared/Constant';
 
 const VerifyIdentity: IVerifyIdentity = ({route, navigation}) => {
   React.useEffect(() => {
@@ -26,7 +27,7 @@ const VerifyIdentity: IVerifyIdentity = ({route, navigation}) => {
           flexDirection: 'column',
           gap: 10,
         }}>
-        <Typography fontWeight="bold" size="m2d" color='#017441'>
+        <Typography fontWeight="bold" size="m2d" color="secondary">
           Hello {route.params?.last_name}!
         </Typography>
 
@@ -56,7 +57,7 @@ const VerifyIdentity: IVerifyIdentity = ({route, navigation}) => {
           </View>
 
           <View style={{width: '93%'}}>
-            <Typography fontWeight="medium" size="sm" color='#757C91'>
+            <Typography fontWeight="medium" size="sm" color="gray">
               We verify identities to ensure a safe experience for you and
               service providers. This won’t take long.
             </Typography>
@@ -72,7 +73,10 @@ const VerifyIdentity: IVerifyIdentity = ({route, navigation}) => {
               onPress={() => navigation.navigate('PersonalInformation')}>
               Verify identity
             </MainButton>
-            <OutlineButton onPress={() => appStore.setIsAuthenticated(true)}>
+            <OutlineButton
+              onPress={() => {
+                appStore.setIsAuthenticated(true, UserTypes.HELPERS);
+              }}>
               Do this later
             </OutlineButton>
           </View>

@@ -1,4 +1,4 @@
-import React, { version } from 'react';
+import React, {version} from 'react';
 import {View} from 'react-native';
 import ActionSheet, {
   ActionSheetRef,
@@ -47,7 +47,7 @@ const WorkerSuggestions = React.forwardRef<ActionSheetRef, IWorkerSuggestion>(
                     <Icon name="star" size={15} color={'#FFD100'} />
                     <Typography
                       fontWeight="regular"
-                      color="#757C91"
+                      color="gray"
                       textAlign="center">
                       4.5
                     </Typography>
@@ -58,13 +58,13 @@ const WorkerSuggestions = React.forwardRef<ActionSheetRef, IWorkerSuggestion>(
                     flexDirection: 'row',
                     gap: 5,
                   }}>
-                  <Typography fontWeight="medium" color="#757C91">
+                  <Typography fontWeight="medium" color="gray">
                     Hair stylist
                   </Typography>
-                  <Typography fontWeight="bold" color="#757C91">
+                  <Typography fontWeight="bold" color="gray">
                     |
                   </Typography>
-                  <Typography fontWeight="regular" color="#757C91">
+                  <Typography fontWeight="regular" color="gray">
                     From
                   </Typography>
                   <Typography fontWeight="bold">₦45,000</Typography>
@@ -80,8 +80,8 @@ const WorkerSuggestions = React.forwardRef<ActionSheetRef, IWorkerSuggestion>(
 
           <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
             <MainButton
-              enableButtonColor="#F9F9FB"
-              enableColor="#121921"
+              enableButtonColor="lightGrey"
+              enableColor="black"
               width={'48%'}>
               View profile
             </MainButton>
@@ -114,7 +114,7 @@ const WorkerSuggestions = React.forwardRef<ActionSheetRef, IWorkerSuggestion>(
             <Typography fontWeight="bold" size="lg">
               Looking for someone else?
             </Typography>
-            <Typography color="#757C91" textAlign="center">
+            <Typography color="gray" textAlign="center">
               Here are a few other pros that can help.
             </Typography>
           </View>

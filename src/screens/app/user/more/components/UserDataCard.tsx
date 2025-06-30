@@ -44,7 +44,7 @@ const UserDataCard: IUserDataCard = ({isVerified}) => {
         ) : (
           <Icon name="alert-circle" color={'#F0443A'} />
         )}
-        <Typography color="#F0443A">
+        <Typography color="danger">
           {isVerified ? 'Verified' : 'Unverified'}
         </Typography>
       </View>
@@ -64,7 +64,7 @@ const UserDataCard: IUserDataCard = ({isVerified}) => {
           Service provider mode
         </Typography>
 
-        <MainButton enableButtonColor="#017441" enableColor="#FCFCFC">
+        <MainButton enableButtonColor="secondary" enableColor="deepGreen">
           Provide service
         </MainButton>
       </View>

@@ -7,8 +7,8 @@ import {UserJobsStackRoutes} from './UserRoutes';
 const JobsStack = createNativeStackNavigator<IJobsRoute>();
 
 const JobsRoute: Props = () => {
-  const user_type = AppStorage.find('user_type');
-  const isUser = user_type === UserTypes.USER;
+  const userType = AppStorage.find('userType');
+  const isUser = userType === UserTypes.USER;
 
   const route = isUser ? UserJobsStackRoutes : UserJobsStackRoutes;
 

@@ -3,12 +3,14 @@ import {customFontSize, fonts} from '../shared/themes/Typography';
 import utils from '../shared/Utils';
 import {TouchableOpacity, View} from 'react-native';
 import React from 'react';
+import {ColorKeys, Colors} from '../shared/themes/Index';
+import {scale} from '../shared/Scaling';
 
-const Typography: ITypography = ({
+const Typography: ITypography<ColorKeys> = ({
   children,
   size,
   fontWeight,
-  color,
+  color = 'black',
   textAlign,
   fontType = 'Geist',
   padding,
@@ -23,6 +25,7 @@ const Typography: ITypography = ({
   currency,
   backgroundColor,
   paddingBottom,
+  width,
 }) => {
   const [ellipse, setEllipse] = React.useState(limit);
   const [showMore, setShowMore] = React.useState(readMore);
@@ -36,6 +39,10 @@ const Typography: ITypography = ({
 
   let fontFamily = geist ? fonts.GeistRegular : fonts.regular;
   let fontSize = customFontSize.sm;
+
+  if (typeof width !== 'number') {
+    width = utils.getDimensions(width as Dimensions);
+  }
 
   // font-family
   if (fontWeight === 'bold' && geist) fontFamily = fonts.GeistBold;
@@ -71,7 +78,7 @@ const Typography: ITypography = ({
           style={{
             fontFamily,
             fontSize,
-            color,
+            color: Colors[color],
             textAlign,
             padding,
             paddingTop,
@@ -80,6 +87,7 @@ const Typography: ITypography = ({
             lineHeight,
             backgroundColor,
             paddingBottom,
+            width: typeof width === 'number' ? scale(width) : width,
           }}>
           {children}
         </Text>
@@ -109,7 +117,7 @@ const Typography: ITypography = ({
       style={{
         fontFamily,
         fontSize,
-        color,
+        color: Colors[color],
         textAlign,
         padding,
         paddingTop,
@@ -119,6 +127,7 @@ const Typography: ITypography = ({
         lineHeight,
         backgroundColor,
         paddingBottom,
+        width: typeof width === 'number' ? scale(width) : width,
       }}>
       {children}
     </Text>

@@ -37,7 +37,7 @@ const FundedWallet = React.forwardRef<ActionSheetRef, IFundWallet>(
               marginBottom: 12,
             }}>
             <TouchableOpacity onPress={() => SheetManager.hide('FundWallet')}>
-              <Typography fontWeight="bold" size="sm" color="#757C91">
+              <Typography fontWeight="bold" size="sm" color="gray">
                 Cancel
               </Typography>
             </TouchableOpacity>
@@ -51,7 +51,7 @@ const FundedWallet = React.forwardRef<ActionSheetRef, IFundWallet>(
                   payload: {amount: amount || 0},
                 });
               }}>
-              <Typography fontWeight="bold" size="sm" color="#017441">
+              <Typography fontWeight="bold" size="sm" color="secondary">
                 Fund
               </Typography>
             </TouchableOpacity>

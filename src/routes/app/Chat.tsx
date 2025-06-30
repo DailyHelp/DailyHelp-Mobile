@@ -7,8 +7,8 @@ import {UserChatStackRoutes} from './UserRoutes';
 const ChatStack = createNativeStackNavigator<IChatRoute>();
 
 const ChatRoute: Props = () => {
-  const user_type = AppStorage.find('user_type');
-  const isUser = user_type === UserTypes.USER;
+  const userType = AppStorage.find('userType');
+  const isUser = userType === UserTypes.USER;
 
   const route = isUser ? UserChatStackRoutes : UserChatStackRoutes;
 

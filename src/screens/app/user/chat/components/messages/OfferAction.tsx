@@ -36,7 +36,7 @@ const OfferAction: IMessages = props => {
           justifyContent: 'center',
         }}>
         {type === 'accepted' ? <Assets.GreenMark /> : <Assets.OfferLetter />}
-        <Typography color="#757C91" size="md">
+        <Typography color="gray" size="md">
           Offer {type === 'accepted' && 'Accepted'}
         </Typography>
       </View>
@@ -49,11 +49,17 @@ const OfferAction: IMessages = props => {
         <OutlineButton
           color="#F0443A"
           width={'45%'}
-          onPress={() => props?.decline?.()}>
-          Decline
+          onPress={() => {
+            type === 'offer' ? props?.cancel?.() : props?.decline?.();
+          }}>
+          {type === 'offer' ? 'Cancel offer' : 'Decline'}
         </OutlineButton>
-        <MainButton width={'45%'} onPress={() => props?.accept?.()}>
-          Accept & Pay
+        <MainButton
+          width={'45%'}
+          onPress={() => {
+            type === 'offer' ? props?.edit?.() : props?.accept?.();
+          }}>
+          {type === 'offer' ? 'Edit offer' : ' Accept & Pay'}
         </MainButton>
       </View>
     </View>

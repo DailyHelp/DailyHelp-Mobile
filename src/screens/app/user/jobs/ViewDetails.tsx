@@ -16,6 +16,7 @@ import {SheetManager} from 'react-native-actions-sheet';
 import JobTimeline from './components/JobTimeline';
 import CustomHeader from '../../../../components/customHeader/Index';
 import IconF from 'react-native-vector-icons/FontAwesome';
+import {ColorKeys} from '../../../../shared/themes/Index';
 
 const ViewDetails: IViewDetails = ({navigation, route}) => {
   const type = route.params?.type;
@@ -34,7 +35,7 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
   let railBackgroundColor = type === 'ongoing' ? '#FEF7F7' : '#DEF7E1';
   let railFillBackgroundColor = type === 'ongoing' ? '#F0443A' : '#2BBA3C';
   let title = type === 'ongoing' ? 'Slide to END job' : 'Slide to START job';
-  let headerColor = undefined;
+  let headerColor: ColorKeys = 'lightBlack';
 
   if (type === 'ongoing') headerBgColor = '#FF6B01';
   if (type === 'ongoing') headerText = 'Job in-Progress';
@@ -60,7 +61,7 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
           <Typography size="md" fontWeight="bold">
             Amarachi Eze
           </Typography>
-          <Typography size="md" color="#757C91">
+          <Typography size="md" color="gray">
             Hair stylist
           </Typography>
         </View>
@@ -103,7 +104,7 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
                 <Typography size="md" fontWeight="bold">
                   Amarachi Eze
                 </Typography>
-                <Typography size="md" color="#757C91">
+                <Typography size="md" color="gray">
                   Hair stylist
                 </Typography>
 
@@ -128,7 +129,7 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
               </Typography>
               <View style={{flexDirection: 'row', gap: 10}}>
                 <Assets.Accepted style={{marginTop: verticalScale(4)}} />
-                <Typography size="md" color="#757C91">
+                <Typography size="md" color="gray">
                   Accepted on 23 Mar, 2025, 09:30
                 </Typography>
               </View>
@@ -145,8 +146,8 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
                   }}>
                   <MainButton
                     width={'100%'}
-                    enableButtonColor="#F9F9FB"
-                    enableColor="#F0443A">
+                    enableButtonColor="lightGrey"
+                    enableColor="danger">
                     Dispute job
                   </MainButton>
                 </View>
@@ -162,8 +163,8 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
                   }}>
                   <MainButton
                     onPress={() => SheetManager.show('WorkerSuggestion')}
-                    enableButtonColor="#F9F9FB"
-                    enableColor="#121921"
+                    enableButtonColor="lightGrey"
+                    enableColor="black"
                     width={'45%'}
                     icon={() => (
                       <Icon
@@ -178,8 +179,8 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
                     Cancel job
                   </MainButton>
                   <MainButton
-                    enableButtonColor="#F9F9FB"
-                    enableColor="#121921"
+                    enableButtonColor="lightGrey"
+                    enableColor="black"
                     width={'45%'}
                     icon={() => <Assets.SendOffer />}>
                     Chat
@@ -187,7 +188,7 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
                 </View>
               )}
 
-              <Typography lineHeight={25} size="md" color="#3B4152">
+              <Typography lineHeight={25} size="md" color="lightBlack">
                 Hey! I need help cleaning my room. It’s mostly just sweeping,
                 mopping, wiping down surfaces, and helping me organize a few
                 things. Nothing too heavy, but I’d love it to look fresh and
@@ -210,7 +211,7 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
                 flexDirection: 'column',
                 gap: 10,
               }}>
-              <Typography fontWeight="bold" color="#3B4152">
+              <Typography fontWeight="bold" color="lightBlack">
                 Ready to start the job?
               </Typography>
 

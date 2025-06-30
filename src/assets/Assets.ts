@@ -85,12 +85,15 @@ import Bin from './svg/bin.svg';
 import Logout from './svg/logout.svg';
 import FundedWallet from './svg/fundedWallet.svg';
 import Location from './svg/location.svg';
-import Comb from './svg/comb.svg'
-import Transport from './svg/transport.svg'
-import Icon from './svg/icon.svg'
-
+import Comb from './svg/comb.svg';
+import Transport from './svg/transport.svg';
+import Icon from './svg/icon.svg';
+import Upload from './svg/upload.svg';
+import UploadFailed from './svg/uploadFailed.svg';
 
 export default {
+  UploadFailed,
+  Upload,
   DoubleGreenMark,
   Transport,
   Icon,

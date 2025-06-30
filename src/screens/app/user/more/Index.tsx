@@ -103,7 +103,7 @@ const More: IMore = ({navigation}) => {
                   style={{
                     flexDirection: 'column',
                   }}>
-                  <Typography fontWeight="semibold" color="#F0443A">
+                  <Typography fontWeight="semibold" color="danger">
                     Complete ID Verification
                   </Typography>
                   <Typography>Unlock more by completing your KYC.</Typography>
@@ -134,7 +134,7 @@ const More: IMore = ({navigation}) => {
             }}>
             {menus.map(({label, child}, key) => (
               <View key={key} style={{flexDirection: 'column', gap: 10}}>
-                <Typography color="#757C91" size="md">
+                <Typography color="gray" size="md">
                   {label}
                 </Typography>
 
@@ -166,7 +166,7 @@ const More: IMore = ({navigation}) => {
         </View>
 
         <View style={{padding: verticalScale(20)}}>
-          <Typography color="#757C91" size="md" textAlign="center">
+          <Typography color="gray" size="md" textAlign="center">
             App version 1.0
           </Typography>
         </View>

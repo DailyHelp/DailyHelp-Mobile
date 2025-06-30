@@ -6,6 +6,7 @@ import React from 'react';
 import chatStyle from '../../chatStyle';
 import CustomAvatar from '../../../../../../components/CustomAvatar';
 import Assets from '../../../../../../assets/Assets';
+import AttachmentContainer from '../../../../../../components/AttachmentContainer';
 
 const Messages: IMessages = props => {
   const {data} = props;
@@ -56,6 +57,10 @@ const Messages: IMessages = props => {
           </Typography>
         </View>
         {position === 'left' && <Typography color="gray">{time}</Typography>}
+
+        {data?.attachments?.length! > 0 && (
+          <AttachmentContainer allowUpload={false} />
+        )}
       </View>
     </View>
   );

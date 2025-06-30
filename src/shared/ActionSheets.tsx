@@ -10,6 +10,7 @@ import WorkerSuggestions from '../screens/app/user/jobs/components/WorkerSuggest
 import RateService from '../screens/app/user/jobs/components/RateService';
 import FundedWallet from '../screens/app/user/more/components/FundWallet';
 import AddressOptions from '../screens/app/user/more/components/AddressOptions';
+import CustomSelect from '../components/customInput/customSelectInput/CustomSelect';
 
 registerSheet('AllCategory', AllCategory);
 registerSheet('Rating', Rating);
@@ -22,6 +23,7 @@ registerSheet('WorkerSuggestion', WorkerSuggestions);
 registerSheet('RateService', RateService);
 registerSheet('FundWallet', FundedWallet);
 registerSheet('AddressOptions', AddressOptions);
+registerSheet('CustomSelect', CustomSelect);
 
 declare module 'react-native-actions-sheet' {
   interface Sheets {
@@ -30,7 +32,9 @@ declare module 'react-native-actions-sheet' {
         type: 'create' | 'login';
         subTitle?: string;
       };
-      returnValue: {};
+      returnValue: {
+        value: string;
+      };
     }>;
     Rating: SheetDefinition<{}>;
     FundWallet: SheetDefinition<{
@@ -56,5 +60,12 @@ declare module 'react-native-actions-sheet' {
     WorkerSuggestion: SheetDefinition<{}>;
     RateService: SheetDefinition<{}>;
     AddressOptions: SheetDefinition<{}>;
+    CustomSelect: SheetDefinition<{
+      payload: {
+        label?: string;
+        data?: {label?: string; value: string}[];
+      };
+      returnValue: {label?: string; value: string};
+    }>;
   }
 }

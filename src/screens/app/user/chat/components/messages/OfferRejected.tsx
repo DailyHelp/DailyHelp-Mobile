@@ -31,11 +31,11 @@ const OfferRejected: IMessages = ({data}) => {
           size={15}
           style={{marginTop: verticalScale(3)}}
         />
-        <Typography color="#F0443A">Offer {type}</Typography>
+        <Typography color="danger">Offer {type}</Typography>
       </View>
 
       <Typography
-        color="#A9AFC2"
+        color="lighterGreen"
         fontWeight="bold"
         size="lg"
         textAlign="center"

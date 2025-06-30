@@ -15,6 +15,7 @@ const Preview: ISelfieVerification = ({navigation, route}) => {
     <Container
       flex={1}
       justifyContent="center"
+      mainBackgroundColor="white"
       alignItems="center"
       height={800}>
       <View style={{position: 'relative'}}>

@@ -108,7 +108,7 @@ const VerifyAccount: IVerifyAccount = ({route, navigation}) => {
                 <View
                   style={{flexDirection: 'row', gap: 5, alignSelf: 'center'}}>
                   <ActivityIndicator color="#C1FF1D" size={15} />
-                  <Typography fontWeight="italics" color="#757C91">
+                  <Typography fontWeight="italics" color="gray">
                     Verifying
                   </Typography>
                 </View>
@@ -132,7 +132,7 @@ const VerifyAccount: IVerifyAccount = ({route, navigation}) => {
                 'Resend code'
               ) : (
                 <View style={{flexDirection: 'row', gap: 3}}>
-                  <Typography fontWeight="bold" color="#5A635E" size="md">
+                  <Typography fontWeight="bold" color="green" size="md">
                     Resend in
                   </Typography>
 

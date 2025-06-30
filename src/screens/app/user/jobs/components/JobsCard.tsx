@@ -29,18 +29,18 @@ const JobsCard: IJobsCard = ({type = 'pending', viewDetails}) => {
 
           <View style={{flexDirection: 'column', gap: 3}}>
             <Typography size="m2d">Amarachi Eze</Typography>
-            <Typography size="md" color="#757C91">
+            <Typography size="md" color="gray">
               Hair stylist
             </Typography>
           </View>
         </View>
 
-        <Typography color="#017441" fontWeight="bold">
+        <Typography color="secondary" fontWeight="bold">
           ₦32,000
         </Typography>
       </View>
 
-      <Typography color="#3B4152" lineHeight={20}>
+      <Typography color="lightBlack" lineHeight={20}>
         I'm looking to style my hair into Bantu knots. See a sample of the look
         I'm trying to replicate.
       </Typography>
@@ -62,15 +62,15 @@ const JobsCard: IJobsCard = ({type = 'pending', viewDetails}) => {
               flexDirection: 'row',
               justifyContent: 'space-between',
             }}>
-            <Typography color="#757C91">Started</Typography>
-            <Typography color="#757C91">Ended</Typography>
+            <Typography color="gray">Started</Typography>
+            <Typography color="gray">Ended</Typography>
           </View>
           <View
             style={{
               flexDirection: 'row',
               justifyContent: 'space-between',
             }}>
-            <Typography color="#757C91">23 Mar, 2025, 09:30</Typography>
+            <Typography color="gray">23 Mar, 2025, 09:30</Typography>
             <Assets.JobsHourGlass />
           </View>
         </View>
@@ -90,12 +90,12 @@ const JobsCard: IJobsCard = ({type = 'pending', viewDetails}) => {
           <MainButton
             onPress={viewDetails}
             width={'75%'}
-            enableButtonColor="#F9F9FB"
-            enableColor="#121921">
+            enableButtonColor="lightGrey"
+            enableColor="black">
             View details
           </MainButton>
 
-          <MainButton enableButtonColor="#F9F9FB">
+          <MainButton enableButtonColor="lightGrey">
             <Assets.SendOffer />
           </MainButton>
         </View>

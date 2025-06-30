@@ -127,7 +127,7 @@ const ServiceProfile: IServiceProfile = ({route, navigation}) => {
                       </Typography>
 
                       <View style={{flexDirection: 'row', gap: 5}}>
-                        <Typography fontWeight="bold" size="md" color="#757C91">
+                        <Typography fontWeight="bold" size="md" color="gray">
                           Hair stylist
                         </Typography>
 
@@ -135,15 +135,12 @@ const ServiceProfile: IServiceProfile = ({route, navigation}) => {
                           style={{
                             width: scale(6),
                             height: verticalScale(6),
-                            backgroundColor: '#757C91',
+                            backgroundColor: 'gray',
                             borderRadius: 100,
                             marginTop: verticalScale(7),
                           }}
                         />
-                        <Typography
-                          fontWeight="medium"
-                          size="md"
-                          color="#757C91">
+                        <Typography fontWeight="medium" size="md" color="gray">
                           Platinum rated
                         </Typography>
                       </View>
@@ -161,10 +158,7 @@ const ServiceProfile: IServiceProfile = ({route, navigation}) => {
 
                       <View style={{flexDirection: 'row', gap: 4}}>
                         <Assets.Dollar style={{marginTop: verticalScale(1)}} />
-                        <Typography
-                          fontWeight="regular"
-                          size="sm"
-                          color="#757C91">
+                        <Typography fontWeight="regular" size="sm" color="gray">
                           Starting fee
                         </Typography>
                       </View>
@@ -174,19 +168,13 @@ const ServiceProfile: IServiceProfile = ({route, navigation}) => {
                         <Typography fontWeight="bold" size="md">
                           4.5
                         </Typography>
-                        <Typography
-                          fontWeight="regular"
-                          size="md"
-                          color="#757C91">
+                        <Typography fontWeight="regular" size="md" color="gray">
                           (2.1k)
                         </Typography>
                       </View>
                       <View style={{flexDirection: 'row', gap: 4}}>
                         <Icon name="star" size={15} color={'#FFD100'} />
-                        <Typography
-                          fontWeight="regular"
-                          size="sm"
-                          color="#757C91">
+                        <Typography fontWeight="regular" size="sm" color="gray">
                           Ratings
                         </Typography>
                       </View>
@@ -197,10 +185,7 @@ const ServiceProfile: IServiceProfile = ({route, navigation}) => {
                       </Typography>
                       <View style={{flexDirection: 'row', gap: 3}}>
                         <Assets.SuitCase />
-                        <Typography
-                          fontWeight="regular"
-                          size="sm"
-                          color="#757C91">
+                        <Typography fontWeight="regular" size="sm" color="gray">
                           Jobs
                         </Typography>
                       </View>
@@ -215,7 +200,7 @@ const ServiceProfile: IServiceProfile = ({route, navigation}) => {
                     borderRadius: 20,
                   }}>
                   <View style={{flexDirection: 'column', gap: 8}}>
-                    <Typography fontWeight="semibold" size="md" color="#757C91">
+                    <Typography fontWeight="semibold" size="md" color="gray">
                       ABOUT
                     </Typography>
 
@@ -245,10 +230,7 @@ const ServiceProfile: IServiceProfile = ({route, navigation}) => {
                         flexDirection: 'row',
                         justifyContent: 'space-between',
                       }}>
-                      <Typography
-                        fontWeight="semibold"
-                        size="md"
-                        color="#757C91">
+                      <Typography fontWeight="semibold" size="md" color="gray">
                         REVIEWS
                       </Typography>
 
@@ -257,7 +239,7 @@ const ServiceProfile: IServiceProfile = ({route, navigation}) => {
                         <Typography size="md" fontWeight="bold">
                           4.5
                         </Typography>
-                        <Typography size="md" fontWeight="bold" color="#757C91">
+                        <Typography size="md" fontWeight="bold" color="gray">
                           (2000)
                         </Typography>
                       </View>
@@ -311,9 +293,7 @@ const ServiceProfile: IServiceProfile = ({route, navigation}) => {
           }}>
           <MainButton
             onPress={() => setSendOffer(true)}
-            icon={() => (
-              <Assets.SendOffer />
-            )}>
+            icon={() => <Assets.SendOffer />}>
             Send offer
           </MainButton>
         </View>

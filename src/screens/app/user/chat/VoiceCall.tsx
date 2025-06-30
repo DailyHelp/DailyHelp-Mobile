@@ -29,7 +29,7 @@ const VoiceCall: IVoiceCall = () => {
           fontWeight="italics"
           size="md"
           fontType="Figtree"
-          color="#27A535">
+          color="lightGreen">
           Ringing...
         </Typography>
       </View>

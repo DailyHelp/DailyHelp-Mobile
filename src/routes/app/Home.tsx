@@ -3,14 +3,15 @@ import {IHomeRoute} from '../../@types/routes';
 import AppStorage from '../../shared/AppStorage';
 import {UserTypes} from '../../shared/Constant';
 import {UserHomeStackRoutes} from './UserRoutes';
+import { HelperHomeStackRoutes } from './HelperRoutes';
 
 const HomeStack = createNativeStackNavigator<IHomeRoute>();
 
 const HomeRoute: Props = () => {
-  const user_type = AppStorage.find('user_type');
-  const isUser = user_type === UserTypes.USER;
+  const userType = AppStorage.find('userType');
+  const isUser = userType === UserTypes.USER;
 
-  const route = isUser ? UserHomeStackRoutes : UserHomeStackRoutes;
+  const route = isUser ? UserHomeStackRoutes : HelperHomeStackRoutes;
 
   return (
     <HomeStack.Navigator

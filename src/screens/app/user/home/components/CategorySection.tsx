@@ -43,7 +43,7 @@ const CategorySection: ICategorySection = ({categories: cat}) => {
               backgroundColor: '#F9F9FB',
               borderRadius: 100,
             }}>
-            <Typography fontWeight="medium" size="sm" color="#3B4152">
+            <Typography fontWeight="medium" size="sm" color="darkGray">
               {item.label}
             </Typography>
 

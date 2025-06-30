@@ -20,7 +20,7 @@ const CustomDateInput: IInput = ({label, placeholder, error, onChangeText}) => {
       <TouchableOpacity
         onPress={() => setOpen(true)}
         style={{flexDirection: 'column', gap: 9}}>
-        <Typography size="md" fontWeight="bold" color="#757C91">
+        <Typography size="md" fontWeight="semibold" color="gray">
           {label}
         </Typography>
 

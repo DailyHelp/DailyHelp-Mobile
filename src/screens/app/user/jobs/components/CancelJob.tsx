@@ -35,7 +35,7 @@ const CancelJob = React.forwardRef<ActionSheetRef, ICancelJob>((props, ref) => {
           textAlign="center"
           fontWeight="regular"
           size="md"
-          color="#3B4152">
+          color="lightBlack">
           Face Stay safe. Avoid letting unverified individuals into your space.
           You can cancel the job or report this incident to DailyHelp Support.
         </Typography>
@@ -54,19 +54,19 @@ const CancelJob = React.forwardRef<ActionSheetRef, ICancelJob>((props, ref) => {
             navigation.navigate('VerificationPin');
           }}
           icon={() => <IconF name="lock" color={'#014C2B'} size={15} />}
-          enableButtonColor="#C1FF1D">
+          enableButtonColor="primary">
           Verify with PIN
         </MainButton>
         <MainButton
           icon={() => <Icon name="close" color={'#F0443A'} size={15} />}
-          enableColor="#F0443A"
-          enableButtonColor="#FDE9E7">
+          enableColor="danger"
+          enableButtonColor="pink">
           Cancel job
         </MainButton>
         <MainButton
           icon={() => <Assets.ChatAnnouncement style={{marginTop: 5}} />}
-          enableColor="#121921"
-          enableButtonColor="#F9F9FB">
+          enableColor="black"
+          enableButtonColor="lightGrey">
           Report
         </MainButton>
       </View>

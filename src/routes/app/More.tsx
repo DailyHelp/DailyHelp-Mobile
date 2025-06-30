@@ -7,8 +7,8 @@ import {UserMoreStackRoutes} from './UserRoutes';
 const MoreStack = createNativeStackNavigator<IMoreRoute>();
 
 const MoreRoute: Props = () => {
-  const user_type = AppStorage.find('user_type');
-  const isUser = user_type === UserTypes.USER;
+  const userType = AppStorage.find('userType');
+  const isUser = userType === UserTypes.USER;
 
   const route = isUser ? UserMoreStackRoutes : UserMoreStackRoutes;
 

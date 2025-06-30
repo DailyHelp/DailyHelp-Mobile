@@ -16,6 +16,9 @@ import Verifying from '../../screens/auth/compliance/Verifying';
 import VerificationResponse from '../../screens/auth/compliance/VerificationResponse';
 import ResetPassword from '../../screens/auth/ResetPassword';
 import ForgotPassword from '../../screens/auth/ForgotPassword';
+import VerifyAddress from '../../screens/auth/compliance/VerifyAddress';
+import ProfileSetup from '../../screens/auth/compliance/ProfileSetup';
+import SetPrices from '../../screens/auth/compliance/SetPrices';
 
 const UserRoutes = [
   {
@@ -49,8 +52,35 @@ const UserRoutes = [
     },
   },
   {
+    name: 'ProfileSetup',
+    component: ProfileSetup,
+    options: {
+      headerShown: true,
+      header: (props: NativeStackHeaderProps) => (
+        <CustomHeader type="back" title="Go back" {...props} />
+      ),
+    },
+  },
+  {
+    name: 'SetPrices',
+    component: SetPrices,
+    options: {
+      headerShown: true,
+      header: (props: NativeStackHeaderProps) => (
+        <CustomHeader type="back" title="Go back" {...props} />
+      ),
+    },
+  },
+  {
     name: 'VerifyIdentity',
     component: VerifyIdentity,
+    options: {
+      gestureEnabled: false,
+    },
+  },
+  {
+    name: 'VerifyAddress',
+    component: VerifyAddress,
     options: {
       gestureEnabled: false,
     },

@@ -20,7 +20,7 @@ const CustomPhoneInput: IInput = ({
 
   return (
     <View style={{flexDirection: 'column', gap: 9}}>
-      <Typography size="md" fontWeight="bold" color="#757C91">
+      <Typography size="md" fontWeight="semibold" color="gray">
         {label}
       </Typography>
       <View style={{flexDirection: 'row', gap: 10}}>

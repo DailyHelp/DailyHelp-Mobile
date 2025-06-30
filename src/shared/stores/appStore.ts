@@ -75,10 +75,13 @@ class AppStore {
     this.currentLocation = {...this.currentLocation, ...location};
   }
 
-  setIsAuthenticated(dto: boolean, user_type: UserTypes = UserTypes.USER) {
+  setIsAuthenticated(dto: boolean, userType: UserTypes = UserTypes.USER) {
     this.isAuthenticated = dto;
     AppStorage.save('isAuthenticated', dto);
-    if (dto) AppStorage.save('user_type', user_type);
+    if (dto) {
+      this.user_types = userType;
+      AppStorage.save('userType', userType);
+    }
   }
 }
 

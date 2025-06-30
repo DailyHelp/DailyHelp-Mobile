@@ -43,7 +43,7 @@ const Chat: IChat = ({navigation}) => {
               </Typography>
               <View style={{flexDirection: 'row', gap: 9}}>
                 <Assets.DoubleGreenMark style={{marginTop: verticalScale(4)}} />
-                <Typography color="#757C91" limit={23}>
+                <Typography color="gray" limit={23}>
                   Hey! I need help cleaning my room. It’s mostly just sweeping,
                   mopping, wiping down surfaces, and helping me organize a few
                   things. Nothing too heavy, but I’d love it to look fresh and
@@ -58,7 +58,7 @@ const Chat: IChat = ({navigation}) => {
                     marginTop: verticalScale(7),
                   }}
                 />
-                <Typography color="#757C91" limit={23}>
+                <Typography color="gray" limit={23}>
                   8:45
                 </Typography>
               </View>
@@ -69,7 +69,7 @@ const Chat: IChat = ({navigation}) => {
             <Assets.GreenMark style={{marginTop: verticalScale(3)}} />
             <Typography
               currency
-              color="#27A535"
+              color="lightGreen"
               fontWeight="medium"
               fontType="CabinetGrotesk">
               15000

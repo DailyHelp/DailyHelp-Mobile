@@ -49,11 +49,11 @@ const WalletFunded: IWalletFunded = ({
               gap: 16,
             }}>
             <Assets.FundedWallet />
-            <Typography color="#27A535">{title}</Typography>
+            <Typography color="lightGreen">{title}</Typography>
             <Typography fontWeight="bold" size="lg">
               {header}
             </Typography>
-            <Typography color="#757C91" size="md" textAlign="center">
+            <Typography color="gray" size="md" textAlign="center">
               {description}
             </Typography>
             <MainButton width={'100%'}>Done</MainButton>

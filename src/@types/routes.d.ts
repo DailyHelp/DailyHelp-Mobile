@@ -4,13 +4,16 @@ import {
 } from '@react-navigation/native-stack';
 import {OtpActionType} from '../screens/auth/dto/VerifyOtpDto';
 import {VerifyIdentityDTO} from '../screens/auth/dto/VerifyIdentityDto';
+import {UserTypes} from '../shared/Constant';
 
 /**
  * Routes for `AuthStackRoute`
  */
 type IAuthRoute = {
   Onboarding?: undefined;
-  CreateAccount?: undefined;
+  CreateAccount?: {
+    userType: UserTypes;
+  };
   Login?: undefined;
   VerifyIdentity?: {
     first_name?: string;
@@ -24,10 +27,13 @@ type IAuthRoute = {
     pin: string;
     phone?: string;
     payload?: any;
+    userType?: UserTypes;
   };
+  VerifyAddress?: {};
   PersonalInformation?: {
     first_name?: string;
     last_name?: string;
+    userType: UserTypes;
   };
   IdentityVerification?: VerifyIdentityDTO;
   FacialVerification?: VerifyIdentityDTO;
@@ -39,6 +45,8 @@ type IAuthRoute = {
   };
   ForgotPassword?: undefined;
   ResetPassword?: undefined;
+  ProfileSetup?: undefined;
+  SetPrices?: undefined;
 };
 
 type Navigate<T> = NativeStackNavigationProp<T, keyof T, undefined>;
@@ -134,6 +142,23 @@ type IForgotPassword = Props<
 type IResetPassword = Props<
   NativeStackScreenProps<IAuthRoute, 'ResetPassword'>
 >;
+
+/**
+ * Typed interface for `IVerifyAddress` under  `IAuthRoute`
+ */
+type IVerifyAddress = Props<
+  NativeStackScreenProps<IAuthRoute, 'VerifyAddress'>
+>;
+
+/**
+ * Typed interface for `IProfileSetup` under  `IAuthRoute`
+ */
+type IProfileSetup = Props<NativeStackScreenProps<IAuthRoute, 'ProfileSetup'>>;
+
+/**
+ * Typed interface for `ISetPrices` under  `IAuthRoute`
+ */
+type ISetPrices = Props<NativeStackScreenProps<IAuthRoute, 'SetPrices'>>;
 
 /**
  * Routes for `AppStackRoute`

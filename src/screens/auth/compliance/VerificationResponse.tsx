@@ -10,7 +10,12 @@ import Container from '../../../components/container/Index';
 
 const VerificationResponse: IVerificationResponse = ({route, navigation}) => {
   return (
-    <Container flex={1} gap={20} justifyContent="center" height={800}>
+    <Container
+      flex={1}
+      gap={20}
+      justifyContent="center"
+      height={800}
+      mainBackgroundColor="white">
       {route.params?.status == 'success' ? (
         <Assets.KycSuccess />
       ) : (

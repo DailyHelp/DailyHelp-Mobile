@@ -3,18 +3,19 @@ import Assets from '../../../../../assets/Assets';
 import CustomAvatar from '../../../../../components/CustomAvatar';
 import Typography from '../../../../../components/Typography';
 import {scale, verticalScale} from '../../../../../shared/Scaling';
+import {ColorKeys} from '../../../../../shared/themes/Index';
 
 const DisputeCard: IDisputeCard = ({type, data}) => {
-  let color = '#757C91';
+  let color: ColorKeys = 'gray';
   let backgroundColor = '#F3F4F6';
 
   if (data?.status === 'full') {
-    color = '#27A535';
+    color = 'lightGreen';
     backgroundColor = '#E6FFF4';
   }
 
   if (data?.status === 'partial') {
-    color = '#FF6B01';
+    color = 'orange';
     backgroundColor = '#FFF3EB';
   }
 
@@ -39,7 +40,7 @@ const DisputeCard: IDisputeCard = ({type, data}) => {
           <View style={{flexDirection: 'column', gap: 3}}>
             <Typography size="m2d">Amarachi Eze</Typography>
             <View style={{flexDirection: 'row', alignItems: 'center', gap: 5}}>
-              <Typography size="xs" color="#757C91">
+              <Typography size="xs" color="gray">
                 23 Mar, 2025
               </Typography>
               <View
@@ -49,14 +50,14 @@ const DisputeCard: IDisputeCard = ({type, data}) => {
                   backgroundColor: '#757C91',
                 }}
               />
-              <Typography size="xs" color="#757C91">
+              <Typography size="xs" color="gray">
                 Dispute ID #DH0981
               </Typography>
             </View>
           </View>
         </View>
 
-        <Typography color="#017441" fontWeight="bold">
+        <Typography color="secondary" fontWeight="bold">
           ₦32,000
         </Typography>
       </View>
@@ -64,7 +65,7 @@ const DisputeCard: IDisputeCard = ({type, data}) => {
         <Typography fontWeight="bold">
           Provider didn’t complete the work
         </Typography>
-        <Typography color="#3B4152" lineHeight={20}>
+        <Typography color="darkGray" lineHeight={20}>
           I want to try making Bantu knots with my hair. Can you share a picture
           of what I'm hoping to create?
         </Typography>

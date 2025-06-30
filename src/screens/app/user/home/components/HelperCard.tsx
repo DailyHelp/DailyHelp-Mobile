@@ -72,21 +72,21 @@ const HelperCard: IHelperCard = ({data, mode, horizontal}) => {
                 <Typography
                   fontWeight="bold"
                   size="md"
-                  color="#757C91"
+                  color="gray"
                   textAlign="center">
                   {data?.skill}
                 </Typography>
                 <Typography
                   fontWeight="bold"
                   size="md"
-                  color="#757C91"
+                  color="gray"
                   textAlign="center">
                   |
                 </Typography>
                 <Typography
                   fontWeight="bold"
                   size="md"
-                  color="#757C91"
+                  color="gray"
                   textAlign="center">
                   From
                 </Typography>
@@ -94,14 +94,14 @@ const HelperCard: IHelperCard = ({data, mode, horizontal}) => {
                   currency
                   fontWeight="bold"
                   size="md"
-                  color="#757C91"
+                  color="gray"
                   textAlign="center">
                   {data?.price}
                 </Typography>
                 <Typography
                   fontWeight="bold"
                   size="md"
-                  color="#757C91"
+                  color="gray"
                   textAlign="center">
                   |
                 </Typography>
@@ -110,7 +110,7 @@ const HelperCard: IHelperCard = ({data, mode, horizontal}) => {
                   <Typography
                     fontWeight="regular"
                     size="md"
-                    color="#757C91"
+                    color="gray"
                     textAlign="center">
                     {data?.rating}
                   </Typography>
@@ -170,7 +170,7 @@ const HelperCard: IHelperCard = ({data, mode, horizontal}) => {
                       <Typography
                         fontWeight="regular"
                         size="md"
-                        color="#757C91"
+                        color="gray"
                         textAlign="center">
                         {data?.rating}
                       </Typography>
@@ -181,13 +181,13 @@ const HelperCard: IHelperCard = ({data, mode, horizontal}) => {
                       flexDirection: 'row',
                       gap: 5,
                     }}>
-                    <Typography fontWeight="medium" size="md" color="#757C91">
+                    <Typography fontWeight="medium" size="md" color="gray">
                       {data?.skill}
                     </Typography>
-                    <Typography fontWeight="bold" size="md" color="#757C91">
+                    <Typography fontWeight="bold" size="md" color="gray">
                       |
                     </Typography>
-                    <Typography fontWeight="regular" size="md" color="#757C91">
+                    <Typography fontWeight="regular" size="md" color="gray">
                       From
                     </Typography>
                     <Typography currency fontWeight="bold" size="md">

@@ -26,10 +26,25 @@ const ChatBox: IChatBox = ({navigation}) => {
     setOffer({...offer, visible: true});
   };
 
+  const edit = () => {
+    setOffer({...offer, visible: true, type: 'send'});
+  };
+
+  const cancel = () => {
+    setOffer({...offer, visible: true, type: 'cancel'});
+  };
+
   const close = () => setOffer({...offer, visible: false});
 
   const renderItem = React.useCallback(() => {
-    return <Messages accept={accept} decline={decline} />;
+    return (
+      <Messages
+        accept={accept}
+        decline={decline}
+        cancel={cancel}
+        edit={edit}
+      />
+    );
   }, []);
 
   return (

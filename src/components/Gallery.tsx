@@ -151,11 +151,11 @@ const Gallery = React.forwardRef<ActionSheetRef, IGallery>(
               alignItems: 'center',
             }}>
             <TouchableOpacity onPress={() => props?.close?.()}>
-              <Typography fontWeight="bold" size="md" color="#757C91">
+              <Typography fontWeight="bold" size="md" color="gray">
                 Cancel
               </Typography>
             </TouchableOpacity>
-            <Typography fontWeight="bold" size="md" color="#121921">
+            <Typography fontWeight="bold" size="md" color="primary">
               Image gallery
             </Typography>
 
@@ -163,7 +163,7 @@ const Gallery = React.forwardRef<ActionSheetRef, IGallery>(
               onPress={() => {
                 props?.close?.();
               }}>
-              <Typography fontWeight="bold" size="md" color="#757C91">
+              <Typography fontWeight="bold" size="md" color="gray">
                 Attach
               </Typography>
             </TouchableOpacity>

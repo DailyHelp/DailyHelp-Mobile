@@ -29,7 +29,7 @@ const AccountSettings: IAccountSettings = ({navigation}) => {
       value: '+2348154490890',
       end: () => (
         <TouchableOpacity>
-          <Typography fontWeight="bold" color="#017441">
+          <Typography fontWeight="bold" color="secondary">
             Verify
           </Typography>
         </TouchableOpacity>
@@ -51,7 +51,7 @@ const AccountSettings: IAccountSettings = ({navigation}) => {
               color="#017441"
               style={{marginTop: verticalScale(2)}}
             />
-            <Typography fontWeight="bold" color="#017441">
+            <Typography fontWeight="bold" color="secondary">
               Update
             </Typography>
           </View>
@@ -100,7 +100,7 @@ const AccountSettings: IAccountSettings = ({navigation}) => {
                 alignItems: 'center',
               }}>
               <View style={{flexDirection: 'column', gap: 5}}>
-                <Typography color="#757C91">{item.title}</Typography>
+                <Typography color="gray">{item.title}</Typography>
                 <Typography size="sm">{item.value}</Typography>
               </View>
 
@@ -123,8 +123,8 @@ const AccountSettings: IAccountSettings = ({navigation}) => {
           Logout
         </OutlineButton>
         <MainButton
-          enableButtonColor="#FEF6F6"
-          enableColor="#F0443A"
+          enableButtonColor="lightPink"
+          enableColor="danger"
           icon={() => <Assets.Bin style={{marginTop: verticalScale(4)}} />}>
           Delete Account
         </MainButton>

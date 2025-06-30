@@ -105,7 +105,7 @@ const DeclineOffer: IOffer = ({isVisible, onClose, type}) => {
                   textAlign="center"
                   fontWeight="medium"
                   size="md"
-                  color="#F0443A">
+                  color="danger">
                   {utils.capitalizeFirstLetter(type)} offer
                 </Typography>
               </View>

@@ -6,6 +6,9 @@ import HomeRoute from './Home';
 import ChatRoute from './Chat';
 import JobsRoute from './Jobs';
 import MoreRoute from './More';
+import Home from '../../screens/app/helpers/home/Index';
+import { NativeStackHeaderProps } from '@react-navigation/native-stack';
+import CustomHeader from '../../components/customHeader/Index';
 
 type LabelPosition = 'beside-icon' | 'below-icon';
 
@@ -149,6 +152,19 @@ export const HelperAppStackRoutes = [
             width={scale(28)}
           />
         ),
+    },
+  },
+];
+
+export const HelperHomeStackRoutes = [
+  {
+    name: 'Home',
+    component: Home,
+    options: {
+      headerShown: true,
+      header: (props: NativeStackHeaderProps) => (
+        <CustomHeader type="home" title="23 Adebayo street" {...props} />
+      ),
     },
   },
 ];

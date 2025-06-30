@@ -29,7 +29,7 @@ const VerificationPin: IVerificationPin = () => {
           <Typography fontWeight="bold" size="lg">
             Enter verification PIN
           </Typography>
-          <Typography color="#757C91" textAlign="center" size="md">
+          <Typography color="gray" textAlign="center" size="md">
             Enter the verification PIN sent to the service provider to confirm
             their identity
           </Typography>

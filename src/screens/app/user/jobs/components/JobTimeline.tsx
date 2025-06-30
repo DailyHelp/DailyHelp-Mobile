@@ -23,7 +23,7 @@ const JobTimeline: IJobTimeline = () => {
         borderRadius: 10,
         backgroundColor: 'white',
       }}>
-      <Typography fontWeight="bold" color="#3B4152">
+      <Typography fontWeight="bold" color="lightBlack">
         JOB TIMELINE
       </Typography>
 
@@ -70,7 +70,7 @@ const JobTimeline: IJobTimeline = () => {
                     />
                   )}
                 </View>
-                <Typography size="md" color="#757C91">
+                <Typography size="md" color="gray">
                   {item.action}
                 </Typography>
               </View>

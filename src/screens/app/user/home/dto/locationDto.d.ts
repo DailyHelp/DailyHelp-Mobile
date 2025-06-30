@@ -1,4 +1,4 @@
-type SaveLocationDto = {
+class SaveLocationDto  {
   lat: number;
   lng: number;
   address: string;

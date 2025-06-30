@@ -15,3 +15,9 @@ export enum UserTypes {
   USER = 'user',
   HELPERS = 'helpers',
 }
+
+export enum HelpersStatus {
+  ENGAGED = 'engaged',
+  UNAVAILABLE = 'unavailable',
+  AVAILABLE = 'available',
+}

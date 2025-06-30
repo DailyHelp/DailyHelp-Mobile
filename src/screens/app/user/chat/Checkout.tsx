@@ -3,7 +3,7 @@ import {ICheckout} from '../../../../@types/routes';
 import Typography from '../../../../components/Typography';
 import {verticalScale} from '../../../../shared/Scaling';
 import utils from '../../../../shared/Utils';
-import { useState } from 'react';
+import {useState} from 'react';
 import PaymentOption from './components/PaymentOption';
 import MainButton from '../../../../components/button/MainButton';
 
@@ -29,7 +29,7 @@ const Checkout: ICheckout = () => {
             borderRadius: 6,
             padding: 16,
           }}>
-          <Typography color="#757C91" fontWeight="bold">
+          <Typography color="gray" fontWeight="bold">
             DESCRIPTION
           </Typography>
 
@@ -50,7 +50,7 @@ const Checkout: ICheckout = () => {
             borderRadius: 6,
             padding: 16,
           }}>
-          <Typography color="#757C91" fontWeight="bold">
+          <Typography color="gray" fontWeight="bold">
             SUMMARY
           </Typography>
 
@@ -60,11 +60,11 @@ const Checkout: ICheckout = () => {
                 style={{flexDirection: 'row', justifyContent: 'space-between'}}
                 key={key}>
                 {title.toLowerCase() == 'total' ? (
-                  <Typography color="#757C91" fontWeight="bold">
+                  <Typography color="gray" fontWeight="bold">
                     {title}
                   </Typography>
                 ) : (
-                  <Typography color="#757C91">{title}</Typography>
+                  <Typography color="gray">{title}</Typography>
                 )}
 
                 {title.toLowerCase() == 'total' ? (
@@ -90,7 +90,7 @@ const Checkout: ICheckout = () => {
             borderRadius: 6,
             padding: 16,
           }}>
-          <Typography color="#757C91" fontWeight="bold">
+          <Typography color="gray" fontWeight="bold">
             PAYMENT OPTIONS
           </Typography>
           <PaymentOption
@@ -98,7 +98,7 @@ const Checkout: ICheckout = () => {
             icon="🌐"
             title="Pay online"
             selected={selectedPayment === 'online'}
-            onPress={(id) => setSelectedPayment(id.toString())}
+            onPress={id => setSelectedPayment(id.toString())}
           />
           <PaymentOption
             id="wallet"
@@ -106,18 +106,19 @@ const Checkout: ICheckout = () => {
             title="Pay with wallet balance"
             subtitle="₦40,000"
             selected={selectedPayment === 'wallet'}
-            onPress={(id) => setSelectedPayment(id.toString())}
+            onPress={id => setSelectedPayment(id.toString())}
           />
         </View>
       </View>
-      
-      <View style={{
-        position: 'absolute',
-        bottom: 50,
-        left: 0,
-        right: 0,
-        paddingHorizontal: 16,
-      }}>
+
+      <View
+        style={{
+          position: 'absolute',
+          bottom: 50,
+          left: 0,
+          right: 0,
+          paddingHorizontal: 16,
+        }}>
         <MainButton>Make payment</MainButton>
       </View>
     </View>

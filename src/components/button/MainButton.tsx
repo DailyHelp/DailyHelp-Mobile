@@ -1,8 +1,10 @@
 import {Button} from 'react-native-paper';
 import {customFontSize, fonts} from '../../shared/themes/Typography';
 import {verticalScale} from '../../shared/Scaling';
+import utils from '../../shared/Utils';
+import {ColorKeys, Colors} from '../../shared/themes/Index';
 
-const MainButton: ICustomButton = ({
+const MainButton: ICustomButton<ColorKeys> = ({
   children,
   title,
   icon,
@@ -10,26 +12,37 @@ const MainButton: ICustomButton = ({
   loading,
   disabled,
   moveIconRight,
-  disableColor = '#A9AFC2',
-  enableColor = 'white',
-  disableButtonColor = '#014C2B',
-  enableButtonColor = '#017441',
+  disableColor = 'lighterGray',
+  enableColor = 'secondary',
+  disableButtonColor = 'disabled',
+  enableButtonColor = 'primary',
   borderColor,
   borderRadius = 10,
   height = 45,
   paddingTop,
   paddingBottom,
   width,
+  marginTop,
 }) => {
+  if (typeof width !== 'number') {
+    width = utils.getDimensions(width as Dimensions);
+  }
+
+  if (typeof height !== 'number') {
+    height = utils.getDimensions(height as Dimensions);
+  }
+
   return (
     <Button
       mode={disableButtonColor === 'transparent' ? 'text' : 'contained'}
       icon={icon}
       loading={loading}
       onPress={onPress}
-      style={{borderRadius, borderColor, width}}
-      textColor={disabled ? disableColor : enableColor}
-      buttonColor={disabled ? disableButtonColor : enableButtonColor}
+      style={{borderRadius, borderColor, width, marginTop}}
+      textColor={disabled ? Colors[disableColor] : Colors[enableColor]}
+      buttonColor={
+        disabled ? Colors[disableButtonColor] : Colors[enableButtonColor]
+      }
       contentStyle={{
         flexDirection: moveIconRight ? 'row-reverse' : 'row',
         height,

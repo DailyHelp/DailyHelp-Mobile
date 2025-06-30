@@ -1,12 +1,11 @@
 import {observer} from 'mobx-react-lite';
 import React from 'react';
-import {TextInput, TouchableOpacity, View} from 'react-native';
+import {TextInput, View} from 'react-native';
 import {Modal} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/AntDesign';
 import Assets from '../../assets/Assets';
 import {scale, verticalScale} from '../../shared/Scaling';
-import {appStore} from '../../shared/stores/appStore';
-import Attachment from '../Attachments';
+import AttachmentContainer from '../AttachmentContainer';
 import MainButton from '../button/MainButton';
 import CustomInput from '../customInput/Index';
 import Typography from '../Typography';
@@ -73,7 +72,7 @@ const SendOffer: IOffer = ({isVisible, onClose, openGallery}) => {
             </View>
 
             <View style={offerStyle.amountContainer}>
-              <Typography fontWeight="bold" size="m2d" color="#A9AFC2">
+              <Typography fontWeight="bold" size="m2d" color="lighterGray">
                 NGN
               </Typography>
               <TextInput
@@ -93,31 +92,8 @@ const SendOffer: IOffer = ({isVisible, onClose, openGallery}) => {
                 placeholder="Describe what you need e.g I want a deep cleaning of my 2 bedroom apartment."
               />
             </View>
-
-            {appStore.selectedGalleryImages.length > 0 ? (
-              <View style={offerStyle.galleryContainer}>
-                {/* Plus Button */}
-                <TouchableOpacity onPress={() => openGallery?.()}>
-                  <View style={offerStyle.plusContainer}>
-                    <Icon name="plus" size={24} color="#757C91" />
-                  </View>
-                </TouchableOpacity>
-
-                <Attachment
-                  data={{attachment: appStore.selectedGalleryImages}}
-                />
-              </View>
-            ) : (
-              // Dashed upload box
-              <TouchableOpacity onPress={() => openGallery?.()}>
-                <View style={offerStyle.attachmentButton}>
-                  <Assets.Camera />
-                  <Typography fontWeight="medium" size="lg">
-                    Attachment
-                  </Typography>
-                </View>
-              </TouchableOpacity>
-            )}
+            
+            <AttachmentContainer openGallery={openGallery} />
           </View>
         </View>
 

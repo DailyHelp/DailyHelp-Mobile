@@ -23,7 +23,7 @@ const FaceMatch = React.forwardRef<ActionSheetRef, IFaceMatch>((props, ref) => {
           padding: 10,
           paddingBottom: 20,
         }}>
-        <Typography fontWeight="bold" color="#757C91" size="m2d">
+        <Typography fontWeight="bold" color="gray" size="m2d">
           Cancel
         </Typography>
 
@@ -51,7 +51,7 @@ const FaceMatch = React.forwardRef<ActionSheetRef, IFaceMatch>((props, ref) => {
         <Typography fontWeight="bold" size="m3d">
           Is this the same person standing at your door?
         </Typography>
-        <Typography fontWeight="regular" size="md" color="#757C91">
+        <Typography fontWeight="regular" size="md" color="gray">
           Make sure you're confident before confirming. Your safety is
           important.
         </Typography>
@@ -73,13 +73,13 @@ const FaceMatch = React.forwardRef<ActionSheetRef, IFaceMatch>((props, ref) => {
             }, 1000);
           }}
           icon={() => <IconI name="checkmark" color={'#27A535'} size={15} />}
-          enableButtonColor="#D6F5D9">
+          enableButtonColor="lightGreen">
           Yes, it is them
         </MainButton>
         <MainButton
           icon={() => <Icon name="close" color={'#F0443A'} size={15} />}
-          enableColor="#F0443A"
-          enableButtonColor="#FDE9E7">
+          enableColor="danger"
+          enableButtonColor="pink">
           No, it's not them
         </MainButton>
       </View>

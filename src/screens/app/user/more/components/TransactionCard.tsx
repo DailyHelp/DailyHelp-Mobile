@@ -17,7 +17,7 @@ const TransactionCard: ITransactionCard = ({data, type = 'credit'}) => {
         <Typography fontWeight="semibold" size="md" limit={50}>
           {data?.title}
         </Typography>
-        <Typography color="#757C91">{data?.date}</Typography>
+        <Typography color="gray">{data?.date}</Typography>
       </View>
 
       <View
@@ -27,13 +27,13 @@ const TransactionCard: ITransactionCard = ({data, type = 'credit'}) => {
           alignItems: 'center',
         }}>
         <Typography
-          color={type === 'credit' ? '#27A535' : '#F0443A'}
+          color={type === 'credit' ? 'lightGreen' : 'danger'}
           fontWeight="bold">
           {type === 'credit' ? '+' : '-'}
         </Typography>
         <Typography
           fontWeight="semibold"
-          color={type === 'credit' ? '#27A535' : '#F0443A'}
+          color={type === 'credit' ? 'lightGreen' : 'danger'}
           currency>
           {data?.amount}
         </Typography>

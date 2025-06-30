@@ -21,7 +21,7 @@ const WalletBalance: IWalletBalance = ({navigation}) => {
           marginTop: verticalScale(20),
           gap: 10,
         }}>
-        <Typography color="#757C91" size="md">
+        <Typography color="gray" size="md">
           Available balance
         </Typography>
         <Typography fontWeight="bold" size="m3d" currency>
@@ -40,7 +40,7 @@ const WalletBalance: IWalletBalance = ({navigation}) => {
           alignSelf: 'center',
           gap: 10,
         }}>
-        <Typography color="#757C91" size="md" fontWeight="semibold">
+        <Typography color="gray" size="md" fontWeight="semibold">
           Transaction history
         </Typography>
 

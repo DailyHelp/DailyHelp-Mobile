@@ -2,7 +2,7 @@ import AuthApi from '../../../shared/services/Auth';
 import {useMutation, useQuery} from '@tanstack/react-query';
 import RegisterDTO from '../dto/RegisterDto';
 import CatchError from '../../../shared/errors/catchError';
-import {useNavigation} from '@react-navigation/native';
+import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 import {IAuthRoute, Navigate} from '../../../@types/routes';
 import VerifyOtpDTO, {
   OtpActionType,
@@ -20,6 +20,7 @@ import {VerifyIdentityDTO} from '../dto/VerifyIdentityDto';
 import React from 'react';
 import {WEB_CLIENT_ID} from '@env';
 import messaging from '@react-native-firebase/messaging';
+import {UserTypes} from '../../../shared/Constant';
 
 export class AuthService extends AuthApi {
   private static instance: AuthService;
@@ -34,6 +35,7 @@ export class AuthService extends AuthApi {
 
   useCreateAccount() {
     const navigation = useNavigation<Navigate<IAuthRoute>>();
+    const routes = useRoute<RouteProp<IAuthRoute, 'CreateAccount'>>();
 
     const {mutateAsync, isPending, data} = useMutation({
       mutationKey: ['create-account'],
@@ -47,6 +49,7 @@ export class AuthService extends AuthApi {
             user_id: data.data.uuid!,
             phone: body.phone!,
             to: 'VerifyIdentity',
+            userType: routes.params?.userType!,
           });
         }
       },
@@ -95,7 +98,7 @@ export class AuthService extends AuthApi {
             return;
           }
 
-          appStore.setIsAuthenticated(true);
+          appStore.setIsAuthenticated(true, UserTypes.HELPERS);
         }
       },
       onError: error => new CatchError(error, true),
@@ -113,6 +116,7 @@ export class AuthService extends AuthApi {
 
   useVerifyOtp() {
     const navigation = useNavigation<Navigate<IAuthRoute>>();
+    const routes = useRoute<RouteProp<IAuthRoute, 'VerifyAccount'>>();
 
     const {mutateAsync, isPending} = useMutation({
       mutationKey: ['verify-otp'],

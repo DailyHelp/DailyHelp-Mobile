@@ -10,10 +10,12 @@ import FindServiceAuthModal from '../../components/FindServiceAuthModal';
 import {customFontSize, fonts} from '../../shared/themes/Typography';
 import utils from '../../shared/Utils';
 import {scale, verticalScale} from '../../shared/Scaling';
+import {UserTypes} from '../../shared/Constant';
 
 const Onboarding: IOnboarding = ({navigation}) => {
   const videoRef = React.useRef<VideoRef>(null);
   const [isModalVisible, setModalVisible] = React.useState(false);
+  const [userType, setUserType] = React.useState<UserTypes>(UserTypes.USER);
 
   React.useEffect(() => {
     videoRef.current?.resume();
@@ -76,7 +78,12 @@ const Onboarding: IOnboarding = ({navigation}) => {
               <Icon name="arrow-right-l" color={'#017441'} />
             </View>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.btn2}>
+          <TouchableOpacity
+            style={styles.btn2}
+            onPress={() => {
+              setModalVisible(true);
+              setUserType(UserTypes.HELPERS);
+            }}>
             <View
               style={{flexDirection: 'column', gap: 10, alignItems: 'center'}}>
               <Assets.OnboardingSuitCase />
@@ -121,7 +128,7 @@ const Onboarding: IOnboarding = ({navigation}) => {
       <FindServiceAuthModal
         isVisible={isModalVisible}
         onClose={() => setModalVisible(false)}
-        onPress={() => {}}
+        userType={userType}
       />
     </View>
   );

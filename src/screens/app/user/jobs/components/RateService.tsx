@@ -12,6 +12,7 @@ import Typography from '../../../../../components/Typography';
 import {scale, verticalScale} from '../../../../../shared/Scaling';
 import CustomInput from '../../../../../components/customInput/Index';
 import MainButton from '../../../../../components/button/MainButton';
+import { ColorKeys } from '../../../../../shared/themes/Index';
 
 const RateService = React.forwardRef<ActionSheetRef, IWorkerSuggestion>(
   (props, ref) => {
@@ -20,31 +21,31 @@ const RateService = React.forwardRef<ActionSheetRef, IWorkerSuggestion>(
         emoji: '😡',
         title: 'Terrible service',
         slug: 'terrible_service',
-        color: '#F0443A',
+        color: 'danger',
       },
       {
         emoji: '🤨',
         title: 'Not so great service',
         slug: 'not_so_great_service',
-        color: '#F0443A',
+        color: 'danger',
       },
       {
         emoji: '🙂',
         title: 'Okay service',
         slug: 'okay_service',
-        color: '#FF6B01',
+        color: 'orange',
       },
       {
         emoji: '😀',
         title: 'Good service',
         slug: 'good_service',
-        color: '#27A535',
+        color: 'lightGreen',
       },
       {
         emoji: '🤩',
         title: 'Excellent service',
         slug: 'excellent_service',
-        color: '#27A535',
+        color: 'lightGreen',
       },
     ];
 
@@ -90,7 +91,7 @@ const RateService = React.forwardRef<ActionSheetRef, IWorkerSuggestion>(
                 <Typography fontWeight="semibold" size="lg">
                   How did Amarachi perform?
                 </Typography>
-                <Typography color="#757C91" size="md">
+                <Typography color="gray" size="md">
                   Tell us about your experience working with them.
                 </Typography>
               </View>
@@ -145,7 +146,7 @@ const RateService = React.forwardRef<ActionSheetRef, IWorkerSuggestion>(
                         size="m3d"
                         fontWeight="semibold"
                         paddingBottom={verticalScale(15)}
-                        color={rating[+v.rate].color}>
+                        color={rating[+v.rate].color as ColorKeys}>
                         {rating[+v.rate].title}
                       </Typography>
                     )}
@@ -178,7 +179,7 @@ const RateService = React.forwardRef<ActionSheetRef, IWorkerSuggestion>(
                         <Typography fontWeight="semibold" size="md">
                           Tip them
                         </Typography>
-                        <Typography color="#757C91">
+                        <Typography color="gray">
                           They get 100% of every tip
                         </Typography>
                       </View>

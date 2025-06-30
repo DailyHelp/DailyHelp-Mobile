@@ -315,13 +315,20 @@ class Utils {
 
   getDimensions(value: Dimensions) {
     if (value === 'full') return `100%`;
+    if (value == '95') return `95%`;
     if (value == '90') return `90%`;
     if (value == '80') return `80%`;
+    if (value == '85') return `85%`;
     if (value == '70') return `70%`;
+    if (value == '75') return `75%`;
     if (value == '60') return `60%`;
+    if (value == '65') return `65%`;
+    if (value == '55') return `55%`;
     if (value == '50') return `50%`;
+    if (value == '40') return `40%`;
+    if (value == '45') return `45%`;
 
-    return value
+    return value;
   }
 }
 

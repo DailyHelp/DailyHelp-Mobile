@@ -83,7 +83,7 @@ const Reviews: IReviews = ({navigation}) => {
               fontWeight="medium"
               size="md"
               textAlign="center"
-              color="#757C91">
+              color="gray">
               2,000 reviews
             </Typography>
           </View>

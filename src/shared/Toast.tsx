@@ -1,6 +1,6 @@
-import { TouchableOpacity } from 'react-native';
-import { ToastConfig } from 'react-native-toast-message';
-import Icon from 'react-native-vector-icons/AntDesign';
+import {TouchableOpacity} from 'react-native';
+import {ToastConfig} from 'react-native-toast-message';
+import Icon from 'react-native-vector-icons/EvilIcons';
 import Container from '../components/container/Index';
 import Typography from '../components/Typography';
 /*
@@ -20,8 +20,8 @@ export const toastConfig: ToastConfig = {
       alignItems="center"
       backgroundColor="#008038"
       justifyContent="space-between">
-      <Container flexDirection="row" gap={1}>
-        <Icon name={'check-circle'} size={20} />
+      <Container flexDirection="row" gap={1} backgroundColor="transparent">
+        <Icon name={'check'} size={20} color={'white'} />
         <Typography fontWeight="bold" size="xs" color="white">
           {text2}
         </Typography>
@@ -44,8 +44,8 @@ export const toastConfig: ToastConfig = {
       flexDirection="row"
       alignItems="center"
       justifyContent="space-between">
-      <Container flexDirection="row" gap={1}>
-        <Icon name={'close-circle'} size={20} color="$white" />
+      <Container flexDirection="row" gap={1} backgroundColor="transparent">
+        <Icon name={'close-o'} size={20} color="white" />
         <Typography fontWeight="bold" size="xs">
           {text2}
         </Typography>

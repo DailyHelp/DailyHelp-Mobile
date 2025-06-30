@@ -14,8 +14,6 @@ import {verticalScale} from '../../../../../shared/Scaling';
 import {customFontSize, fonts} from '../../../../../shared/themes/Typography';
 import homeService from '../services/Home.service';
 
-
-
 const getCategoryImage = (categoryName: string) => {
   const imageMap = {
     'Home & Cleaning': Assets.CleaningBroom,
@@ -43,25 +41,19 @@ const CategoryActionSheet = React.forwardRef<
     'Home & Cleaning',
   ]);
 
-  
   const categories = React.useMemo(() => {
-   
-   
     let apiCategories: CategoryDto[] = [];
-    
+
     if (data?.data && Array.isArray(data.data)) {
       apiCategories = data.data;
     }
 
- 
-    
     const transformedCategories = apiCategories.map(
       (apiCategory: CategoryDto): InternalCategory => {
-       
         const subCategories = (apiCategory.categories || []).map(
-          (subCat: SubCategoryDto) => subCat.name
+          (subCat: SubCategoryDto) => subCat.name,
         );
-        
+
         const transformed = {
           name: apiCategory.name || 'Untitled Category',
           image: getCategoryImage(apiCategory.name || ''),
@@ -69,13 +61,12 @@ const CategoryActionSheet = React.forwardRef<
           uuid: apiCategory.uuid,
         };
         return transformed;
-      }
+      },
     );
 
     return transformedCategories;
   }, [data, isLoading]);
 
-  
   const filteredCategories = React.useMemo(() => {
     if (!search.trim()) return categories;
 
@@ -127,7 +118,6 @@ const CategoryActionSheet = React.forwardRef<
           padding: 16,
           height: verticalScale(750),
         }}>
-      
         <View
           style={{
             flexDirection: 'row',
@@ -135,7 +125,7 @@ const CategoryActionSheet = React.forwardRef<
             marginBottom: 12,
           }}>
           <TouchableOpacity onPress={() => SheetManager.hide('AllCategory')}>
-            <Typography fontWeight="bold" size="sm" color="#757C91">
+            <Typography fontWeight="bold" size="sm" color="gray">
               Cancel
             </Typography>
           </TouchableOpacity>
@@ -144,13 +134,12 @@ const CategoryActionSheet = React.forwardRef<
           </Typography>
 
           <TouchableOpacity onPress={handleApply}>
-            <Typography fontWeight="bold" size="sm" color="#757C91">
+            <Typography fontWeight="bold" size="sm" color="gray">
               Apply ({selected.length})
             </Typography>
           </TouchableOpacity>
         </View>
 
-        
         <CustomInput
           type="text"
           placeholder="Search category"
@@ -158,15 +147,11 @@ const CategoryActionSheet = React.forwardRef<
           onChangeText={setSearch}
         />
 
-       
-
         {isLoading && (
           <View style={{padding: 20, alignItems: 'center'}}>
             <Typography>Loading categories...</Typography>
           </View>
         )}
-
-        
 
         <ScrollView style={{maxHeight: 500}}>
           {(filteredCategories || []).map(
@@ -206,7 +191,7 @@ const CategoryActionSheet = React.forwardRef<
                         gap: 8,
                       }}>
                       {subCategories.length > 0 && (
-                        <Typography size="xs" color="#757C91">
+                        <Typography size="xs" color="gray">
                           {subCategories.length}
                         </Typography>
                       )}
@@ -266,9 +251,7 @@ const CategoryActionSheet = React.forwardRef<
                           );
                         })
                       ) : (
-                        <Typography
-                          size="xs"
-                          color="#757C91">
+                        <Typography size="xs" color="gray">
                           No subcategories available
                         </Typography>
                       )}
@@ -281,7 +264,7 @@ const CategoryActionSheet = React.forwardRef<
 
           {filteredCategories?.length === 0 && (
             <View style={{padding: 20, alignItems: 'center'}}>
-              <Typography color="#757C91">
+              <Typography color="gray">
                 No categories found matching "{search}"
               </Typography>
             </View>

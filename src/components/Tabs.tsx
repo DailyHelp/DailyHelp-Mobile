@@ -11,10 +11,6 @@ const Tabs: ITabs = ({onPress, tabs, initialTab}) => {
 
   const width = 100 / tabs?.length!;
   const borderRadius = 100;
-  const disableButtonColor = 'transparent';
-  const enabledButtonColor = '#121921';
-  const enableColor = '#FCFCFC';
-  const disableColor = '#757C91';
 
   return (
     <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
@@ -23,11 +19,11 @@ const Tabs: ITabs = ({onPress, tabs, initialTab}) => {
           onPress={() => setIndex(slug)}
           key={key}
           disabled={!(slug === index)}
-          enableButtonColor={enabledButtonColor}
-          disableButtonColor={disableButtonColor}
+          enableButtonColor={'black'}
+          disableButtonColor={'transparent'}
           borderRadius={borderRadius}
-          enableColor={enableColor}
-          disableColor={disableColor}
+          enableColor={'white'}
+          disableColor={'gray'}
           width={`${width}%`}>
           {title}
         </MainButton>

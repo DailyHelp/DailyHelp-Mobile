@@ -25,11 +25,11 @@ const AddressOptions = React.forwardRef<ActionSheetRef>((props, ref) => {
             gap: 90,
           }}>
           <TouchableOpacity>
-            <Typography fontWeight="semibold" size="md" color="#757C91">
+            <Typography fontWeight="semibold" size="md" color="gray">
               Cancel
             </Typography>
           </TouchableOpacity>
-          <Typography fontWeight="bold" size="md" color="#121921">
+          <Typography fontWeight="bold" size="md" color="black">
             Options
           </Typography>
         </View>

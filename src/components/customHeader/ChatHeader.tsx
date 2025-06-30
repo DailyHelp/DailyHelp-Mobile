@@ -1,10 +1,10 @@
-import {TouchableOpacity, View} from 'react-native';
+import { NativeStackHeaderProps } from '@react-navigation/native-stack';
+import { TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import CustomAvatar from '../CustomAvatar';
 import Assets from '../../assets/Assets';
-import {NativeStackHeaderProps} from '@react-navigation/native-stack';
+import Container from '../container/Index';
+import CustomAvatar from '../CustomAvatar';
 import Typography from '../Typography';
-import { scale } from '../../shared/Scaling';
 
 const ChatHeader: ICustomHeader<NativeStackHeaderProps> = ({
   title,
@@ -19,21 +19,23 @@ const ChatHeader: ICustomHeader<NativeStackHeaderProps> = ({
         alignItems: 'center',
         backgroundColor: 'white',
       }}>
-      <TouchableOpacity onPress={() => navigation?.goBack()}>
-        <Icon name="chevron-back" size={20} color={'#757C91'} />
-      </TouchableOpacity>
+      <Container width={'full'} flexDirection="row" gap={15} alignItems="center">
+        <TouchableOpacity onPress={() => navigation?.goBack()}>
+          <Icon name="chevron-back" size={20} color={'#757C91'} />
+        </TouchableOpacity>
 
-      <View style={{flexDirection: 'row', gap: 3}}>
-        <CustomAvatar avatarSize={40} data={{image: Assets.Worker1}} />
-        <View style={{flexDirection: 'column'}}>
-          <Typography fontWeight="bold" size="md" >
-            {title}
-          </Typography>
-          <Typography fontWeight="regular" size="md" color="#27A535">
-            Online
-          </Typography>
+        <View style={{flexDirection: 'row', gap: 3}}>
+          <CustomAvatar avatarSize={40} data={{image: Assets.Worker1}} />
+          <View style={{flexDirection: 'column'}}>
+            <Typography fontWeight="bold" size="md">
+              {title}
+            </Typography>
+            <Typography fontWeight="regular" size="md" color="lightBlack">
+              Online
+            </Typography>
+          </View>
         </View>
-      </View>
+      </Container>
 
       <View style={{flexDirection: 'row', gap: 16}}>
         <TouchableOpacity onPress={() => navigation?.navigate('VoiceCall')}>

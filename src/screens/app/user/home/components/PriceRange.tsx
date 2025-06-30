@@ -32,15 +32,15 @@ const PriceRange = React.forwardRef((props, ref) => {
             marginBottom: 12,
           }}>
           <TouchableOpacity>
-            <Typography fontWeight="bold" size="md" color="#757C91">
+            <Typography fontWeight="bold" size="md" color="gray">
               Cancel
             </Typography>
           </TouchableOpacity>
-          <Typography fontWeight="bold" size="md" color="#121921">
+          <Typography fontWeight="bold" size="md" color="primary">
             Price range
           </Typography>
           <TouchableOpacity>
-            <Typography fontWeight="bold" size="md" color="#017441">
+            <Typography fontWeight="bold" size="md" color="secondary">
               Apply
             </Typography>
           </TouchableOpacity>
