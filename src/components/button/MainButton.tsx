@@ -13,7 +13,7 @@ const MainButton: ICustomButton<ColorKeys> = ({
   disabled,
   moveIconRight,
   disableColor = 'lighterGray',
-  enableColor = 'secondary',
+  color = 'secondary',
   disableButtonColor = 'disabled',
   enableButtonColor = 'primary',
   borderColor,
@@ -32,6 +32,9 @@ const MainButton: ICustomButton<ColorKeys> = ({
     height = utils.getDimensions(height as Dimensions);
   }
 
+  color = color;
+  color = color;
+
   return (
     <Button
       mode={disableButtonColor === 'transparent' ? 'text' : 'contained'}
@@ -39,7 +42,7 @@ const MainButton: ICustomButton<ColorKeys> = ({
       loading={loading}
       onPress={onPress}
       style={{borderRadius, borderColor, width, marginTop}}
-      textColor={disabled ? Colors[disableColor] : Colors[enableColor]}
+      textColor={disabled ? Colors[disableColor] : Colors[color]}
       buttonColor={
         disabled ? Colors[disableButtonColor] : Colors[enableButtonColor]
       }

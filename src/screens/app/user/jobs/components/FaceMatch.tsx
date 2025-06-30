@@ -65,6 +65,7 @@ const FaceMatch = React.forwardRef<ActionSheetRef, IFaceMatch>((props, ref) => {
           paddingBottom: verticalScale(40),
         }}>
         <MainButton
+          color="white"
           onPress={() => {
             SheetManager.hide('FaceMatch');
             const timer = setTimeout(() => {
@@ -78,7 +79,7 @@ const FaceMatch = React.forwardRef<ActionSheetRef, IFaceMatch>((props, ref) => {
         </MainButton>
         <MainButton
           icon={() => <Icon name="close" color={'#F0443A'} size={15} />}
-          enableColor="danger"
+          color="danger"
           enableButtonColor="pink">
           No, it's not them
         </MainButton>

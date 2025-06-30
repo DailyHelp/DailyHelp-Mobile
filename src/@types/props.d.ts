@@ -10,8 +10,12 @@ type Dimensions =
   | '65'
   | '50'
   | '55'
-  | '40'
+  | '45'
+  | '46'
+  | '47'
+  | '48'
   | '40';
+undefined;
 
 /**
  * P represent the Props of the component
@@ -148,7 +152,6 @@ type ICustomButton<C> = Props<{
   color?: C;
   borderColor?: C;
   disableColor?: C;
-  enableColor?: C;
   enableButtonColor?: C;
   disableButtonColor?: C;
   borderStyle?: 'solid' | 'dotted' | 'dashed';
@@ -362,7 +365,6 @@ type IContainer<C> = Props<{
   type?: 'box' | 'scroll';
   backgroundColor?: C;
   borderColor?: C;
-  mainBackgroundColor?: C;
   alignItems?: 'center' | 'flex-start' | 'flex-end' | 'stretch' | 'baseline';
   justifyContent?:
     | 'center'
@@ -386,6 +388,11 @@ type IContainer<C> = Props<{
   bottom?: number;
   left?: number;
   right?: number;
+  flexWrap?: 'wrap' | 'nowrap' | 'wrap-reverse';
+  horizontal?: boolean;
+  showsHorizontalScrollIndicator?: boolean;
+  showsVerticalScrollIndicator?: boolean;
+  scrollsToTop?: boolean;
 }>;
 
 type IUploadContainer = Props<{
@@ -402,3 +409,11 @@ type IAttachmentContainer = Props<{
 type IBadgeContainer = Props<{}>;
 
 type IHelperDetails = Props<{}>;
+
+type IStatsCard = Props<{
+  title?: string;
+  stats?: string;
+  icon?: React.ReactElement;
+  goal?: string;
+  currency?: number;
+}>;

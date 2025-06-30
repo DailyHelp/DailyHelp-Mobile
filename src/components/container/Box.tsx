@@ -5,12 +5,11 @@ import {ColorKeys, Colors} from '../../shared/themes/Index';
 
 export const Box: IContainer<ColorKeys> = ({children, ...props}) => {
   let {
-    padding = 0,
-    margin = 0,
-    marginTop = 0,
-    paddingTop = 0,
-    paddingBottom = 0,
-    width = '90',
+    padding,
+    margin,
+    marginTop,
+    paddingTop,
+    paddingBottom,
     alignItems,
     backgroundColor = 'transparent',
     flexDirection = 'column',
@@ -22,7 +21,6 @@ export const Box: IContainer<ColorKeys> = ({children, ...props}) => {
     borderRadius,
     borderWidth,
     borderStyle,
-    mainBackgroundColor = 'transparent',
     borderColor = 'lightGrey',
     position,
     paddingHorizontal,
@@ -33,28 +31,36 @@ export const Box: IContainer<ColorKeys> = ({children, ...props}) => {
     right,
     borderTopLeftRadius,
     borderTopRightRadius,
+    width,
+    flexWrap,
   } = props;
-  const isNumber = (value: any) => Number.isNaN(value);
+
+  const isNumber = (value?: any) => typeof value === 'number';
 
   if (isNumber(width)) width = scale(width as number);
   if (isNumber(height)) height = verticalScale(height as number);
+  if (isNumber(padding)) padding = scale(padding);
+  if (isNumber(paddingTop)) paddingTop = scale(paddingTop);
+  if (isNumber(paddingBottom)) paddingBottom = scale(paddingBottom);
+  if (isNumber(paddingHorizontal)) paddingHorizontal = scale(paddingHorizontal);
+  if (isNumber(paddingVertical)) paddingVertical = scale(paddingVertical);
+  if (isNumber(margin)) margin = scale(margin);
+  if (isNumber(marginTop)) marginTop = scale(marginTop);
 
-  if (typeof width !== 'number') {
+  if (typeof width === 'string') {
     width = utils.getDimensions(width as Dimensions);
   }
 
-  if (typeof height !== 'number') {
+  if (typeof height === 'string') {
     height = utils.getDimensions(height as Dimensions);
   }
 
   const style: StyleProp<ViewStyle> = {
-    padding: scale(padding),
-    margin: scale(margin),
-    marginTop: scale(marginTop),
-    paddingTop: verticalScale(paddingTop),
-    paddingBottom: verticalScale(paddingBottom),
-    width,
-    height,
+    padding,
+    margin,
+    marginTop,
+    paddingTop,
+    paddingBottom,
     alignItems,
     justifyContent,
     flexDirection,
@@ -74,17 +80,11 @@ export const Box: IContainer<ColorKeys> = ({children, ...props}) => {
     right,
     borderTopLeftRadius,
     borderTopRightRadius,
+    flexWrap,
+    width,
+    height,
+    flex,
   };
 
-  return (
-    <View
-      style={{
-        flex,
-        backgroundColor: Colors[mainBackgroundColor],
-        borderRadius,
-        overflow: 'hidden',
-      }}>
-      <View style={style}>{children}</View>
-    </View>
-  );
+  return <View style={style}>{children}</View>;
 };

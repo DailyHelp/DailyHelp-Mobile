@@ -64,7 +64,7 @@ const UserDataCard: IUserDataCard = ({isVerified}) => {
           Service provider mode
         </Typography>
 
-        <MainButton enableButtonColor="secondary" enableColor="deepGreen">
+        <MainButton enableButtonColor="secondary" color="deepGreen">
           Provide service
         </MainButton>
       </View>

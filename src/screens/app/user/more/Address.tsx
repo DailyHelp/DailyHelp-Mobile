@@ -10,6 +10,7 @@ import utils from '../../../../shared/Utils';
 import Icon from 'react-native-vector-icons/Feather';
 import {SheetManager} from 'react-native-actions-sheet';
 import homeService from '../home/services/Home.service';
+import Container from '../../../../components/container/Index';
 
 const Address: IAddress = ({navigation, route}) => {
   utils.useHideBottomTab(navigation);
@@ -41,21 +42,20 @@ const Address: IAddress = ({navigation, route}) => {
   );
 
   return (
-    <View style={{flex: 1, backgroundColor: 'white'}}>
-      <View style={{padding: scale(16), flexDirection: 'column', gap: 10}}>
-        <CustomInput
-          type="address"
-          placeholder="Add new address"
-          leftIcon={<Assets.InputSearch />}
-        />
+    <Container flex={1}  width={'full'} backgroundColor='white'>
+      <CustomInput
+        type="address"
+        placeholder="Add new address"
+        leftIcon={<Assets.InputSearch />}
+        width={'95'}
+      />
 
-        <CustomFlatList<SaveLocationDto>
-          data={data}
-          renderItem={({item}) => <Results name={item.description} />}
-          keyExtractor={(item, ind) => ind.toString()}
-        />
-      </View>
-    </View>
+      <CustomFlatList<SaveLocationDto>
+        data={data}
+        renderItem={({item}) => <Results name={item.description} />}
+        keyExtractor={(item, ind) => ind.toString()}
+      />
+    </Container>
   );
 };
 export default Address;

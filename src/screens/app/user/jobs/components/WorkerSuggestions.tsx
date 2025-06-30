@@ -81,7 +81,7 @@ const WorkerSuggestions = React.forwardRef<ActionSheetRef, IWorkerSuggestion>(
           <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
             <MainButton
               enableButtonColor="lightGrey"
-              enableColor="black"
+              color="black"
               width={'48%'}>
               View profile
             </MainButton>

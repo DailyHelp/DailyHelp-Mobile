@@ -124,7 +124,7 @@ const AccountSettings: IAccountSettings = ({navigation}) => {
         </OutlineButton>
         <MainButton
           enableButtonColor="lightPink"
-          enableColor="danger"
+          color="danger"
           icon={() => <Assets.Bin style={{marginTop: verticalScale(4)}} />}>
           Delete Account
         </MainButton>

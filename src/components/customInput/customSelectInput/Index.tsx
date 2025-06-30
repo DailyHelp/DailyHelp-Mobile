@@ -12,7 +12,6 @@ const CustomSelectInput: IInput = ({
   placeholder,
   onChangeText,
   width,
-  selectType = 'CustomSelect',
 }) => {
   const [select, setSelect] = React.useState('');
 
@@ -28,17 +27,16 @@ const CustomSelectInput: IInput = ({
       </Typography>
       <TouchableOpacity
         onPress={() => {
-          SheetManager.show(selectType, {
+          SheetManager.show('CustomSelect', {
             payload: {label, data: options},
             onClose: onSelect,
           });
         }}>
         <Container
-          paddingHorizontal={5}
           height={50}
-          mainBackgroundColor="lightGrey"
+          backgroundColor="lightGrey"
           flexDirection="row"
-          justifyContent="space-between"
+          justifyContent='space-between'
           gap={5}
           borderRadius={10}
           alignItems="center">

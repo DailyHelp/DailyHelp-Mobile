@@ -327,6 +327,9 @@ class Utils {
     if (value == '50') return `50%`;
     if (value == '40') return `40%`;
     if (value == '45') return `45%`;
+    if (value == '46') return `46%`;
+    if (value == '47') return `47%`;
+    if (value == '48') return `48%`;
 
     return value;
   }

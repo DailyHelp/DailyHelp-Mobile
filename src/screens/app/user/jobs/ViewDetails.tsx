@@ -147,7 +147,7 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
                   <MainButton
                     width={'100%'}
                     enableButtonColor="lightGrey"
-                    enableColor="danger">
+                    color="danger">
                     Dispute job
                   </MainButton>
                 </View>
@@ -164,7 +164,7 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
                   <MainButton
                     onPress={() => SheetManager.show('WorkerSuggestion')}
                     enableButtonColor="lightGrey"
-                    enableColor="black"
+                    color="black"
                     width={'45%'}
                     icon={() => (
                       <Icon
@@ -180,7 +180,7 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
                   </MainButton>
                   <MainButton
                     enableButtonColor="lightGrey"
-                    enableColor="black"
+                    color="black"
                     width={'45%'}
                     icon={() => <Assets.SendOffer />}>
                     Chat

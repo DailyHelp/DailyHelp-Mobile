@@ -22,7 +22,7 @@ const Tabs: ITabs = ({onPress, tabs, initialTab}) => {
           enableButtonColor={'black'}
           disableButtonColor={'transparent'}
           borderRadius={borderRadius}
-          enableColor={'white'}
+          color={'white'}
           disableColor={'gray'}
           width={`${width}%`}>
           {title}

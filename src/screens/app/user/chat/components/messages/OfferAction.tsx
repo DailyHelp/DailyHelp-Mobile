@@ -55,6 +55,7 @@ const OfferAction: IMessages = props => {
           {type === 'offer' ? 'Cancel offer' : 'Decline'}
         </OutlineButton>
         <MainButton
+          color="secondary"
           width={'45%'}
           onPress={() => {
             type === 'offer' ? props?.edit?.() : props?.accept?.();

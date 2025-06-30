@@ -3,13 +3,11 @@ import {IHome} from '../../../../@types/routes';
 import Container from '../../../../components/container/Index';
 import CustomInput from '../../../../components/customInput/Index';
 import Typography from '../../../../components/Typography';
-import {ColorKeys} from '../../../../shared/themes/Index';
 import {HelpersStatus} from '../../../../shared/Constant';
-import CustomAvatar from '../../../../components/CustomAvatar';
-import Assets from '../../../../assets/Assets';
-import {View} from 'react-native';
+import {ColorKeys} from '../../../../shared/themes/Index';
 import BadgeContainer from './components/BadgeContainer';
 import HelperDetails from './components/HelperDetails';
+import StatsCard from './components/StatsCard';
 
 const Home: IHome = () => {
   const [isSwitch, setIsSwitch] = React.useState('false');
@@ -17,11 +15,35 @@ const Home: IHome = () => {
     HelpersStatus.UNAVAILABLE,
   );
 
+  React.useEffect(() => {
+    if (isSwitch === 'true') setHelpersStatus(HelpersStatus.AVAILABLE);
+    else setHelpersStatus(HelpersStatus.UNAVAILABLE);
+  }, [isSwitch]);
+
   const status = {
     [HelpersStatus.UNAVAILABLE]: 'lightDeepGrey',
     [HelpersStatus.AVAILABLE]: 'lemonGreen',
     [HelpersStatus.ENGAGED]: 'orange',
   };
+
+  const stats = [
+    {
+      title: 'Today’s earnings',
+      currency: 20000,
+    },
+    {
+      title: 'Acceptance rate',
+      stats: '67.5%',
+    },
+    {
+      title: 'Today’s earnings',
+      stats: '20000',
+    },
+    {
+      title: 'Today’s earnings',
+      stats: '20000',
+    },
+  ];
 
   return (
     <Container
@@ -33,6 +55,7 @@ const Home: IHome = () => {
       flex={1}>
       <Container
         flexDirection="row"
+        width={'90'}
         height={40}
         justifyContent="space-between"
         alignItems="center">
@@ -57,6 +80,18 @@ const Home: IHome = () => {
         <HelperDetails />
 
         <BadgeContainer />
+
+        <Container width={'95'} flexDirection="row" flexWrap="wrap" gap={10}>
+          {stats.map(({title, currency, stats}, key) => (
+            <StatsCard
+              key={key}
+              title={title}
+              currency={currency}
+              stats={stats}
+              width={'48'}
+            />
+          ))}
+        </Container>
       </Container>
     </Container>
   );

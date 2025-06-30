@@ -12,6 +12,7 @@ const CustomAddressInput: IInput = ({
   placeholder,
   value,
   error,
+  width,
   onAddressSelect,
 }) => {
   const [address, setAddress] = React.useState(value);
@@ -28,7 +29,7 @@ const CustomAddressInput: IInput = ({
   };
 
   return (
-    <Container width={'full'} gap={9}>
+    <Container width={width} gap={9}>
       <Typography size="md" fontWeight="semibold" color="gray">
         {label}
       </Typography>
@@ -40,6 +41,7 @@ const CustomAddressInput: IInput = ({
           });
         }}>
         <Container
+          width={width}
           height={50}
           backgroundColor="lightGrey"
           flexDirection="row"

@@ -59,13 +59,13 @@ const CancelJob = React.forwardRef<ActionSheetRef, ICancelJob>((props, ref) => {
         </MainButton>
         <MainButton
           icon={() => <Icon name="close" color={'#F0443A'} size={15} />}
-          enableColor="danger"
+          color="danger"
           enableButtonColor="pink">
           Cancel job
         </MainButton>
         <MainButton
           icon={() => <Assets.ChatAnnouncement style={{marginTop: 5}} />}
-          enableColor="black"
+          color="black"
           enableButtonColor="lightGrey">
           Report
         </MainButton>

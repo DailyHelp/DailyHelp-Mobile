@@ -91,7 +91,7 @@ const JobsCard: IJobsCard = ({type = 'pending', viewDetails}) => {
             onPress={viewDetails}
             width={'75%'}
             enableButtonColor="lightGrey"
-            enableColor="black">
+            color="black">
             View details
           </MainButton>
 

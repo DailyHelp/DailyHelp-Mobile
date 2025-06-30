@@ -17,12 +17,12 @@ const BadgeContainer: IBadgeContainer = ({marginTop}) => {
         marginTop,
       }}
       colors={['#EFFEC3', '#D5F96C', '#D5F96C']}>
-      <Container width={'full'} gap={15}>
+      <Container gap={15}>
         <Container
           flexDirection="row"
           justifyContent="space-between"
           width={'full'}>
-          <Container flexDirection="row" width={'full'}>
+          <Container flexDirection="row">
             <Typography size="sm" color="black" fontWeight="semibold">
               Become silver rated
             </Typography>

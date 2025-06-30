@@ -35,7 +35,7 @@ const ChatFooter: IChatFooter<Navigate<IChatRoute>> = ({navigation}) => {
         <MainButton
           height={40}
           paddingTop={3}
-          enableColor="#FCFCFC"
+          color="#FCFCFC"
           enableButtonColor="#121921"
           borderRadius={100}>
           Send
