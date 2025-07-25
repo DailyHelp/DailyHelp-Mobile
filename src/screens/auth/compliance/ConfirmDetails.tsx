@@ -7,8 +7,11 @@ import {appStore} from '../../../shared/stores/appStore';
 import {customFontSize, fonts} from '../../../shared/themes/Typography';
 import dayjs from 'dayjs';
 import Container from '../../../components/container/Index';
+import utils from '../../../shared/Utils';
 
 const ConfirmDetails: IConfirmDetails = ({navigation, route}) => {
+  const {isLoading, upload} = utils.useUploadImage();
+
   const user_data = [
     {
       title: 'Full name',
@@ -33,7 +36,7 @@ const ConfirmDetails: IConfirmDetails = ({navigation, route}) => {
   ];
 
   return (
-    <Container width={'95'} flex={1} paddingTop={10} backgroundColor="white">
+    <Container flex={1} padding={10} backgroundColor="white">
       <ScreenHeader
         title="Confirm details"
         description="Review your details before submitting for verification."
@@ -90,7 +93,13 @@ const ConfirmDetails: IConfirmDetails = ({navigation, route}) => {
 
         <View style={{marginTop: verticalScale(100)}}>
           <MainButton
-            onPress={() => navigation.navigate('Verifying', route.params)}>
+            loading={isLoading}
+            onPress={async () => {
+              const res = await upload(route.params?.photo!);
+              navigation.setParams({...route.params, photo: res});
+
+              if (res) navigation.navigate('Verifying', route.params);
+            }}>
             Verify Identity
           </MainButton>
         </View>

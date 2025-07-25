@@ -1,4 +1,4 @@
-import {BASE_URL} from '@env';
+import {BASE_URL, CLOUDINARY_URL} from '@env';
 import Toast from 'react-native-toast-message';
 import ThrowError from '../errors/throwError';
 import utils from '../Utils';
@@ -54,25 +54,29 @@ export default class Http {
     return resp;
   }
 
-  protected async imageUpload(image: any, path: string) {
-    const url = `${BASE_URL}${path}`;
-
+  public async imageUpload(uri: string, preset: string = 'dznfeps0z') {
     const body = new FormData();
-    body.append('file', image);
+
+    body.append('file', {
+      uri: uri,
+      type: 'image/jpeg',
+      name: uri.split('/').pop(),
+    } as any);
+
+    body.append('upload_preset', preset);
 
     const headers = {
       'Content-Type': 'multipart/form-data',
       Accept: 'application/json',
-      Authorization: `Bearer ${AppStorage.find('access_token')}`,
     };
 
-    const resp = await fetch(url, {
+    const resp = await fetch(CLOUDINARY_URL, {
       body,
       method: 'POST',
       headers,
     }).catch(Promise.reject);
 
-    return resp;
+    return resp.json();
   }
 
   /**

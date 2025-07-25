@@ -13,6 +13,7 @@ import VerifyOtpDTO, {
 } from '../../screens/auth/dto/VerifyOtpDto';
 import AppStorage from '../AppStorage';
 import ThrowError from '../errors/throwError';
+import utils from '../Utils';
 import Endpoints from './Endpoints';
 import Http from './Http';
 
@@ -24,9 +25,7 @@ export default class AuthApi extends Http {
     });
     const data = await this.handleResponse<RegisterResponseDTO>(res);
 
-    if (!data?.status) throw new ThrowError(data?.message!);
-
-    AppStorage.save('user_id', data.data.uuid!);
+    AppStorage.save('user_id', data?.data.uuid!);
 
     this.success(data?.message);
 
@@ -40,17 +39,18 @@ export default class AuthApi extends Http {
     });
     const data = await this.handleResponse<LoginResponse>(res);
 
-    if (!data?.status) throw new ThrowError(data?.message!);
+    if (!data?.data.pinId && !data?.data.uuid) {
+      const currentUser = utils.getUserType(data?.data.user?.userTypes)?.[0]!;
 
-    if (!data.data.pinId && !data.data.uuid) {
-      AppStorage.save('user_id', data.data.user?.uuid!);
-      AppStorage.save('email', data.data.user?.email!);
-      AppStorage.save('access_token', data.data.accessToken!);
-      AppStorage.save('phone', data.data.user?.phone!);
-      AppStorage.save('firstname', data.data.user?.firstname!);
-      AppStorage.save('lastname', data.data.user?.lastname!);
-      AppStorage.save('isPhoneVerified', data.data.user?.phoneVerified!);
-      AppStorage.save('isIdentityVerified', data.data.user?.identityVerified!);
+      AppStorage.save('user_id', data?.data.user?.uuid!);
+      AppStorage.save('email', data?.data.user?.email!);
+      AppStorage.save('access_token', data?.data.accessToken!);
+      AppStorage.save('phone', data?.data.user?.phone!);
+      AppStorage.save('firstname', data?.data.user?.firstname!);
+      AppStorage.save('lastname', data?.data.user?.lastname!);
+      AppStorage.save('isPhoneVerified', data?.data.user?.phoneVerified!);
+      AppStorage.save('isIdentityVerified', data?.data.user?.identityVerified!);
+      AppStorage.save('userType', currentUser);
     }
 
     this.success(data?.message);
@@ -87,8 +87,6 @@ export default class AuthApi extends Http {
     });
     const data = await this.handleResponse<any>(res);
 
-    if (!data?.status) throw new ThrowError(data?.message!);
-
     this.success(data?.message);
 
     return data;
@@ -101,11 +99,9 @@ export default class AuthApi extends Http {
     });
     const data = await this.handleResponse<VerifyOtpResponse>(res);
 
-    if (!data?.status) throw new ThrowError(data?.message!);
-
-    AppStorage.save('access_token', data.data.accessToken!);
-    AppStorage.save('firstname', data.data.user?.firstname!);
-    AppStorage.save('lastname', data.data.user?.lastname!);
+    AppStorage.save('access_token', data?.data.accessToken!);
+    AppStorage.save('firstname', data?.data.user?.firstname!);
+    AppStorage.save('lastname', data?.data.user?.lastname!);
 
     this.success(data?.message);
 
@@ -119,8 +115,6 @@ export default class AuthApi extends Http {
     });
     const data = await this.handleResponse<VerifyOtpResponse>(res);
 
-    if (!data?.status) throw new ThrowError(data?.message!);
-
     this.success(data?.message);
 
     return data;
@@ -132,8 +126,6 @@ export default class AuthApi extends Http {
       body,
     });
     const data = await this.handleResponse<ForgotPasswordResponse>(res);
-
-    if (!data?.status) throw new ThrowError(data?.message!);
 
     this.success(data?.message);
 
@@ -147,8 +139,6 @@ export default class AuthApi extends Http {
     });
     const data = await this.handleResponse<any>(res);
 
-    if (!data?.status) throw new ThrowError(data?.message!);
-
     this.success(data?.message);
 
     return data;
@@ -160,8 +150,6 @@ export default class AuthApi extends Http {
       body,
     });
     const data = await this.handleResponse<any>(res);
-
-    if (!data?.status) throw new ThrowError(data?.message!);
 
     this.success(data?.message);
 

@@ -21,6 +21,7 @@ import React from 'react';
 import {WEB_CLIENT_ID} from '@env';
 import messaging from '@react-native-firebase/messaging';
 import {UserTypes} from '../../../shared/Constant';
+import SavePriceDTO from '../../app/user/home/dto/SavePriceDto';
 
 export class AuthService extends AuthApi {
   private static instance: AuthService;
@@ -41,7 +42,7 @@ export class AuthService extends AuthApi {
       mutationKey: ['create-account'],
       mutationFn: async (body: RegisterDTO) => await this.createAccount(body),
       onSuccess: (data, body) => {
-        if (data.status) {
+        if (data?.status) {
           navigation.navigate('VerifyAccount', {
             email: body.email!,
             type: OtpActionType.VERIFY_ACCOUNT,
@@ -73,7 +74,9 @@ export class AuthService extends AuthApi {
       mutationKey: ['verify-otp'],
       mutationFn: async (body: LoginDto) => await this.login(body),
       onSuccess: (data, body) => {
-        if (data.status) {
+        console.log(data);
+        
+        if (data?.status) {
           if (data.data.pinId && data.data.uuid) {
             navigation.navigate('VerifyAccount', {
               email: body.email!,
@@ -122,7 +125,7 @@ export class AuthService extends AuthApi {
       mutationKey: ['verify-otp'],
       mutationFn: async (body: VerifyOtpDTO) => await this.verifyOtp(body),
       onSuccess: (data, body) => {
-        if (data.status) {
+        if (data?.status) {
           if (body.otpActionType === OtpActionType.VERIFY_ACCOUNT) {
             navigation.replace('Login');
           }
@@ -140,9 +143,9 @@ export class AuthService extends AuthApi {
     const onSubmit = async (
       body: VerifyOtpDTO,
       callback?: (
-        data: ApiResponse<VerifyOtpResponse>,
-        variables: VerifyOtpDTO,
-        context: any,
+        data?: ApiResponse<VerifyOtpResponse>,
+        variables?: VerifyOtpDTO,
+        context?: any,
       ) => void,
     ) => {
       if (!body.otpActionType) {
@@ -155,9 +158,9 @@ export class AuthService extends AuthApi {
     const onResendOtp = async (
       body: SendOtpDTO,
       callback?: (
-        data: ApiResponse<VerifyOtpResponse>,
-        variables: VerifyOtpDTO,
-        context: any,
+        data?: ApiResponse<VerifyOtpResponse>,
+        variables?: VerifyOtpDTO,
+        context?: any,
       ) => void,
     ) => {
       if (!body.otpActionType) {
@@ -247,7 +250,7 @@ export class AuthService extends AuthApi {
         return await this.initiateForgotPassword(body);
       },
       onSuccess: (data, body) => {
-        if (data.status) {
+        if (data?.status) {
           navigation.navigate('VerifyAccount', {
             email: body.email!,
             pin: data.data.pinId!,
@@ -266,7 +269,7 @@ export class AuthService extends AuthApi {
         return await this.resetPassword(body);
       },
       onSuccess: (data, body) => {
-        if (data.status) {
+        if (data?.status) {
           navigation.replace('Login');
         }
       },

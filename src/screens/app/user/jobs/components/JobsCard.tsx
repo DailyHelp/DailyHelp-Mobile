@@ -8,8 +8,13 @@ import OutlineButton from '../../../../../components/button/OutlineButton';
 import MainButton from '../../../../../components/button/MainButton';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {SheetManager} from 'react-native-actions-sheet';
+import {UserTypes} from '../../../../../shared/Constant';
 
-const JobsCard: IJobsCard = ({type = 'pending', viewDetails}) => {
+const JobsCard: IJobsCard<UserTypes> = ({
+  type = 'pending',
+  viewDetails,
+  userType,
+}) => {
   return (
     <View
       style={{
@@ -78,7 +83,7 @@ const JobsCard: IJobsCard = ({type = 'pending', viewDetails}) => {
 
       <Divider style={{backgroundColor: '#F1F2F4', height: verticalScale(2)}} />
 
-      {type === 'completed' ? (
+      {type === 'completed' && userType !== UserTypes.PROVIDER ? (
         <OutlineButton
           onPress={() => SheetManager.show('RateService')}
           icon={() => <Icon name="star" size={15} color={'#FFD100'} />}

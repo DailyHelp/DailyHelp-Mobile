@@ -23,8 +23,7 @@ const PersonalInformation: IPersonalInformation = ({navigation, route}) => {
       type="scroll"
       flex={1}
       gap={20}
-      width={'95'}
-      paddingTop={10}
+      padding={10}
       backgroundColor="white">
       <ScreenHeader
         title="Personal Information"

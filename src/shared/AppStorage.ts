@@ -8,7 +8,7 @@ const storage = new MMKV({
 });
 
 class AppStorageData {
-  userType: UserTypes = UserTypes.USER;
+  userType: UserTypes = UserTypes.CUSTOMER;
   routes: Route = 'authentication';
   access_token: string = '';
   user_id: string = '';

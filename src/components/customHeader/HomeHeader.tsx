@@ -9,6 +9,7 @@ import {SheetManager} from 'react-native-actions-sheet';
 import homeService from '../../screens/app/user/home/services/Home.service';
 import utils from '../../shared/Utils';
 import Container from '../container/Index';
+import Typography from '../Typography';
 
 const HomeHeader: ICustomHeader<NativeStackHeaderProps> = ({
   title,
@@ -21,32 +22,26 @@ const HomeHeader: ICustomHeader<NativeStackHeaderProps> = ({
   const trimmedLocation = utils.ellipseText(location);
 
   return (
-    <View
-      style={{
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        width: '100%',
-        paddingHorizontal: scale(10),
-        backgroundColor: 'white',
-        paddingBottom: verticalScale(10),
-      }}>
+    <Container
+      flexDirection="row"
+      justifyContent="space-between"
+      width={'full'}
+      backgroundColor="white"
+      alignItems="center"
+      paddingHorizontal={10}
+      height={50}>
       <TouchableOpacity
         onPress={() => {
           SheetManager.show('HomeAddress', {payload: {showCurrent: true}});
         }}>
-        <View style={{flexDirection: 'row', gap: 5}}>
+        <Container flexDirection="row" gap={5}>
           <Assets.HomeLocationPin style={{width: scale(30)}} />
-          <Text
-            style={{
-              fontFamily: fonts.GeistBold,
-              color: '#121921',
-              fontSize: customFontSize.sm,
-            }}>
+          <Typography color="black" size="sm">
             {trimmedLocation}
-          </Text>
+          </Typography>
+
           <Icon name="chevron-down" color={'#757C91'} size={16} />
-        </View>
+        </Container>
       </TouchableOpacity>
 
       <TouchableOpacity
@@ -61,7 +56,7 @@ const HomeHeader: ICustomHeader<NativeStackHeaderProps> = ({
         }}>
         <Assets.HomeBell />
       </TouchableOpacity>
-    </View>
+    </Container>
   );
 };
 export default HomeHeader;

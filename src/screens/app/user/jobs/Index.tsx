@@ -1,10 +1,9 @@
-import {View} from 'react-native';
-import {IJobs} from '../../../../@types/routes';
+import React from 'react';
+import { IJobs } from '../../../../@types/routes';
+import CustomFlatList from '../../../../components/CustomFlatList';
+import Container from '../../../../components/container/Index';
 import CustomHeader from '../../../../components/customHeader/Index';
 import JobsCard from './components/JobsCard';
-import React from 'react';
-import {scale} from '../../../../shared/Scaling';
-import CustomFlatList from '../../../../components/CustomFlatList';
 
 const Jobs: IJobs = props => {
   const [type, setType] = React.useState('pending');
@@ -17,19 +16,19 @@ const Jobs: IJobs = props => {
 
   const renderItem = React.useCallback(() => {
     return (
-      <View style={{marginBottom: scale(16)}}>
+      <Container marginBottom={16}>
         <JobsCard
           type={type as any}
           viewDetails={() => {
             props.navigation.navigate('ViewDetails', {type: type as any});
           }}
         />
-      </View>
+      </Container>
     );
   }, [type]);
 
   return (
-    <View style={{flex: 1}}>
+    <Container flex={1}>
       <CustomHeader
         type="tabs"
         {...props}
@@ -38,7 +37,7 @@ const Jobs: IJobs = props => {
         initialTab="pending"
         tabs={jobs}
       />
-      <View style={{padding: scale(15), height: '90%'}}>
+      <Container padding={15} width={'90'}>
         <CustomFlatList
           data={['1', '2', '3', '4', '5']}
           showsVerticalScrollIndicator={false}
@@ -46,8 +45,8 @@ const Jobs: IJobs = props => {
           renderItem={renderItem}
           keyExtractor={(item, index) => index.toString()}
         />
-      </View>
-    </View>
+      </Container>
+    </Container>
   );
 };
 export default Jobs;

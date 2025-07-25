@@ -10,9 +10,9 @@ const VerifyPhone: IVerifyPhone = ({navigation}) => {
   utils.useHideBottomTab(navigation);
   return (
     <Container
-      height={650}
+      backgroundColor="white"
       flex={1}
-      paddingTop={10}
+      padding={10}
       justifyContent="space-between">
       <Container width={'full'} gap={30}>
         <ScreenHeader

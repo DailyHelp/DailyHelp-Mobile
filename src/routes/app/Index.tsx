@@ -10,7 +10,7 @@ const AppStack = createBottomTabNavigator<IAppRoute>();
 
 const AppRouter: Props = () => {
   const userType = AppStorage.find('userType');
-  const isUser = userType === UserTypes.USER;
+  const isUser = userType === UserTypes.CUSTOMER;
 
   const route = isUser ? UserAppStackRoutes : HelperAppStackRoutes;
 

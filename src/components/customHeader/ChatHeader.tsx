@@ -1,5 +1,5 @@
-import { NativeStackHeaderProps } from '@react-navigation/native-stack';
-import { TouchableOpacity, View } from 'react-native';
+import {NativeStackHeaderProps} from '@react-navigation/native-stack';
+import {TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Assets from '../../assets/Assets';
 import Container from '../container/Index';
@@ -11,41 +11,40 @@ const ChatHeader: ICustomHeader<NativeStackHeaderProps> = ({
   navigation,
 }) => {
   return (
-    <View
-      style={{
-        flexDirection: 'row',
-        padding: 10,
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        backgroundColor: 'white',
-      }}>
-      <Container width={'full'} flexDirection="row" gap={15} alignItems="center">
+    <Container
+      flexDirection="row"
+      padding={10}
+      width={'full'}
+      backgroundColor="white"
+      justifyContent='space-between'
+      alignItems="center">
+      <Container flexDirection="row" gap={15} alignItems="center">
         <TouchableOpacity onPress={() => navigation?.goBack()}>
           <Icon name="chevron-back" size={20} color={'#757C91'} />
         </TouchableOpacity>
 
-        <View style={{flexDirection: 'row', gap: 3}}>
+        <Container flexDirection="row" gap={3}>
           <CustomAvatar avatarSize={40} data={{image: Assets.Worker1}} />
-          <View style={{flexDirection: 'column'}}>
+          <Container>
             <Typography fontWeight="bold" size="md">
               {title}
             </Typography>
             <Typography fontWeight="regular" size="md" color="lightBlack">
               Online
             </Typography>
-          </View>
-        </View>
+          </Container>
+        </Container>
       </Container>
 
-      <View style={{flexDirection: 'row', gap: 16}}>
+      <Container flexDirection="row" gap={16}>
         <TouchableOpacity onPress={() => navigation?.navigate('VoiceCall')}>
           <Assets.InActiveCallIcon />
         </TouchableOpacity>
         <TouchableOpacity>
           <Assets.InActiveVideoIcon />
         </TouchableOpacity>
-      </View>
-    </View>
+      </Container>
+    </Container>
   );
 };
 export default ChatHeader;

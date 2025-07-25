@@ -1,7 +1,7 @@
 import { NativeStackHeaderProps } from '@react-navigation/native-stack';
-import { View } from 'react-native';
 import Assets from '../../assets/Assets';
 import { scale, verticalScale } from '../../shared/Scaling';
+import Container from '../container/Index';
 import CustomInput from '../customInput/Index';
 import Typography from '../Typography';
 
@@ -10,13 +10,7 @@ const SearchHeader: ICustomHeader<NativeStackHeaderProps> = ({
   placeHolder,
 }) => {
   return (
-    <View
-      style={{
-        flexDirection: 'column',
-        marginTop: verticalScale(10),
-        backgroundColor: 'white',
-        padding: scale(10),
-      }}>
+    <Container marginTop={10} padding={10} backgroundColor="white">
       <Typography fontWeight="bold" size="lg">
         {title}
       </Typography>
@@ -31,7 +25,7 @@ const SearchHeader: ICustomHeader<NativeStackHeaderProps> = ({
           />
         }
       />
-    </View>
+    </Container>
   );
 };
 export default SearchHeader;

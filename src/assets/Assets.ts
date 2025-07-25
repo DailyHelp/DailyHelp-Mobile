@@ -90,8 +90,12 @@ import Transport from './svg/transport.svg';
 import Icon from './svg/icon.svg';
 import Upload from './svg/upload.svg';
 import UploadFailed from './svg/uploadFailed.svg';
+import GreenSuitCase from './svg/green_suitcase.svg';
+import Star from './svg/star.svg';
 
 export default {
+  GreenSuitCase,
+  Star,
   UploadFailed,
   Upload,
   DoubleGreenMark,

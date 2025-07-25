@@ -1,14 +1,12 @@
-import {Animated, View} from 'react-native';
-import {Text} from 'react-native-paper';
+import { observer } from 'mobx-react-lite';
 import React from 'react';
-import {IVerifying} from '../../../@types/routes';
+import { Animated } from 'react-native';
+import { Text } from 'react-native-paper';
+import { IVerifying } from '../../../@types/routes';
 import Assets from '../../../assets/Assets';
-import {verticalScale} from '../../../shared/Scaling';
-import {customFontSize, fonts} from '../../../shared/themes/Typography';
-import {observer} from 'mobx-react-lite';
-import authService from '../services/Auth.service';
-import {appStore} from '../../../shared/stores/appStore';
 import Container from '../../../components/container/Index';
+import { customFontSize, fonts } from '../../../shared/themes/Typography';
+import authService from '../services/Auth.service';
 
 const Verifying: IVerifying = ({route, navigation}) => {
   const rotateAnim = React.useRef(new Animated.Value(0)).current;

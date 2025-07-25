@@ -4,6 +4,7 @@ import {View} from 'react-native';
 import {scale, verticalScale} from '../../shared/Scaling';
 import Tabs from '../Tabs';
 import Typography from '../Typography';
+import Container from '../container/Index';
 
 const JobsHeader: ICustomHeader<NativeStackHeaderProps> = ({
   title,
@@ -18,20 +19,18 @@ const JobsHeader: ICustomHeader<NativeStackHeaderProps> = ({
   }, [index]);
 
   return (
-    <View
-      style={{
-        flexDirection: 'column',
-        marginTop: verticalScale(10),
-        padding: scale(10),
-        gap: 13,
-        backgroundColor: 'white',
-      }}>
+    <Container
+      width={'95'}
+      marginTop={10}
+      padding={10}
+      gap={13}
+      backgroundColor="white">
       <Typography fontWeight="bold" size="lg">
         {title}
       </Typography>
 
       <Tabs initialTab={initialTab!} tabs={tabs} onPress={setIndex} />
-    </View>
+    </Container>
   );
 };
 export default JobsHeader;

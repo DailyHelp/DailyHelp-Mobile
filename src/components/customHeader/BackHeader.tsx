@@ -19,11 +19,14 @@ const BackHeader: ICustomHeader<NativeStackHeaderProps> = ({
         flexDirection="row"
         alignItems="center"
         backgroundColor="white"
+        justifyContent="center"
+        position="relative"
+        height={50}
         width={'full'}>
         {/* Back Icon on far left */}
         <TouchableOpacity
           onPress={goBack || navigation?.goBack}
-          style={{position: 'absolute', left: scale(15), zIndex: 1}}>
+          style={{position: 'absolute', left: scale(5), zIndex: 1}}>
           <Icon name="chevron-back" size={20} color={'#014C2B'} />
         </TouchableOpacity>
 
@@ -47,7 +50,7 @@ const BackHeader: ICustomHeader<NativeStackHeaderProps> = ({
         flexDirection="row"
         alignItems="center"
         backgroundColor="white"
-        height={40}
+        height={50}
         gap={3}
         width={'full'}>
         <Icon name="chevron-back" size={20} color={'#014C2B'} />

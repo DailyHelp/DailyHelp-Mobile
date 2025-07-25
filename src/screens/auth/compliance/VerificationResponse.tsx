@@ -7,6 +7,7 @@ import MainButton from '../../../components/button/MainButton';
 import {verticalScale, scale} from '../../../shared/Scaling';
 import {customFontSize, fonts} from '../../../shared/themes/Typography';
 import Container from '../../../components/container/Index';
+import Typography from '../../../components/Typography';
 
 const VerificationResponse: IVerificationResponse = ({route, navigation}) => {
   return (
@@ -14,64 +15,49 @@ const VerificationResponse: IVerificationResponse = ({route, navigation}) => {
       flex={1}
       gap={20}
       justifyContent="center"
+      alignItems="center"
       height={800}
-      width={'95'}
+      padding={10}
       backgroundColor="white">
       {route.params?.status == 'success' ? (
         <Assets.KycSuccess />
       ) : (
         <Assets.KycFailed />
       )}
-      <Text
-        style={{
-          fontFamily: fonts.black,
-          fontSize: customFontSize.lg,
-          color: '#121921',
-        }}>
+      <Typography size="lg" color="black" fontWeight="bold">
         Verification{' '}
         {route.params?.status === 'success' ? 'successful' : 'failed'}
-      </Text>
-      <Text
-        style={{
-          fontFamily: fonts.medium,
-          fontSize: customFontSize.md,
-          color: '#757C91',
-          textAlign: 'center',
-        }}>
+      </Typography>
+
+      <Typography size="md" color="gray" fontWeight="medium">
         {route.params?.status === 'success'
           ? 'You’re verified! You can now explore and book service providers freely.'
           : 'We couldn’t verify your identity. Please check your details and try again.'}
-      </Text>
+      </Typography>
+
       {route.params?.status === 'failed' && (
-        <View
-          style={{
-            padding: scale(20),
-            backgroundColor: '#FEF6F6',
-            borderRadius: 10,
-            marginTop: verticalScale(10),
-          }}>
-          <Text
-            style={{
-              fontFamily: fonts.medium,
-              fontSize: customFontSize.md,
-              color: '#F0443A',
-            }}>
+        <Container
+          padding={20}
+          backgroundColor="pink"
+          marginTop={10}
+          borderRadius={10}>
+          <Typography size="md" color="danger" fontWeight="medium">
             The name on your NIN doesn't match the one you provided. Please
             review your details and try again.
-          </Text>
-        </View>
+          </Typography>
+        </Container>
       )}
 
       {route.params?.status === 'success' ? (
-        <View style={{marginTop: verticalScale(50), width: '100%', gap: 20}}>
+        <Container marginTop={50} gap={20}>
           <MainButton
             moveIconRight
             onPress={() => navigation.navigate('ConfirmDetails')}>
             Take me home
           </MainButton>
-        </View>
+        </Container>
       ) : (
-        <View style={{marginTop: verticalScale(50), width: '100%', gap: 20}}>
+        <Container marginTop={50} gap={20}>
           <MainButton
             icon={() => (
               <Icon
@@ -104,7 +90,7 @@ const VerificationResponse: IVerificationResponse = ({route, navigation}) => {
               Return home
             </Text>
           </TouchableOpacity>
-        </View>
+        </Container>
       )}
     </Container>
   );

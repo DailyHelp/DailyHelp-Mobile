@@ -21,7 +21,11 @@ const HelperDetails: IHelperDetails = () => {
         Okoye Amarachi
       </Typography>
 
-      <Container flexDirection="row" alignItems="center" gap={7}>
+      <Container
+        flexDirection="row"
+        alignItems="center"
+        justifyContent="center"
+        gap={7}>
         <Typography size="sm" color="gray" fontWeight="semibold">
           Hair stylist
         </Typography>

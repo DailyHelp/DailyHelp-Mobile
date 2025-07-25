@@ -20,6 +20,7 @@ import {scale, verticalScale} from './Scaling';
 import {PermissionsAndroid, Platform} from 'react-native';
 import {CameraRoll} from '@react-native-camera-roll/camera-roll';
 import {validate} from 'class-validator';
+import Http, {http} from './services/Http';
 
 class Utils {
   private static instance: Utils;
@@ -313,10 +314,40 @@ class Utils {
     }, []);
   }
 
+  useUploadImage() {
+    const [isLoading, setLoading] = React.useState(false);
+
+    const upload = async (image: string) => {
+      try {
+        setLoading(true);
+        const data = await http.imageUpload(image);
+        setLoading(false);
+        return data.secure_url;
+      } catch (error) {
+        new CatchError(error).handleLog();
+        setLoading(false);
+      }
+    };
+
+    return {
+      isLoading,
+      upload,
+    };
+  }
+
+  getUserType(userTypes?: string | string[]) {
+    if (Array.isArray(userTypes)) return userTypes;
+
+    return userTypes?.split(',');
+  }
+
   getDimensions(value: Dimensions) {
     if (value === 'full') return `100%`;
+    if (value == '97') return `97%`;
+    if (value == '96') return `96%`;
     if (value == '95') return `95%`;
     if (value == '90') return `90%`;
+    if (value == '93') return `93%`;
     if (value == '80') return `80%`;
     if (value == '85') return `85%`;
     if (value == '70') return `70%`;

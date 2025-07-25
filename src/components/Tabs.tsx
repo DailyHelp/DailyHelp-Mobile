@@ -1,6 +1,6 @@
 import React from 'react';
-import {View} from 'react-native';
 import MainButton from './button/MainButton';
+import Container from './container/Index';
 
 const Tabs: ITabs = ({onPress, tabs, initialTab}) => {
   const [index, setIndex] = React.useState(initialTab);
@@ -13,7 +13,10 @@ const Tabs: ITabs = ({onPress, tabs, initialTab}) => {
   const borderRadius = 100;
 
   return (
-    <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+    <Container
+      width={'full'}
+      flexDirection="row"
+      justifyContent="space-between">
       {tabs?.map(({title, slug}, key) => (
         <MainButton
           onPress={() => setIndex(slug)}
@@ -28,7 +31,7 @@ const Tabs: ITabs = ({onPress, tabs, initialTab}) => {
           {title}
         </MainButton>
       ))}
-    </View>
+    </Container>
   );
 };
 export default Tabs;

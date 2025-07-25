@@ -12,8 +12,8 @@ export enum ApiMethods {
 }
 
 export enum UserTypes {
-  USER = 'user',
-  HELPERS = 'helpers',
+  CUSTOMER = 'CUSTOMER',
+  PROVIDER = 'PROVIDER',
 }
 
 export enum HelpersStatus {

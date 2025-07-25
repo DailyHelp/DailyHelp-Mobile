@@ -19,35 +19,33 @@ const Address: IAddress = ({navigation, route}) => {
 
   const Results = React.useCallback(
     ({name}: {name: string}) => (
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          width: '100%',
-          marginTop: verticalScale(16),
-        }}>
-        <View style={{flexDirection: 'row', gap: 10}}>
+      <Container
+        flexDirection="row"
+        width={'97'}
+        justifyContent="space-between"
+        marginTop={16}>
+        <Container width={'95'} flexDirection="row" gap={10}>
           <Assets.SearchResult width={20} height={20} />
           <Typography size="sm">{utils.ellipseText(name, 50)}</Typography>
-        </View>
+        </Container>
 
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+        <Container flexDirection="row" alignItems="center">
           <TouchableOpacity onPress={() => SheetManager.show('AddressOptions')}>
             <Icon name="more-vertical" size={15} color={'#C0C5D6'} />
           </TouchableOpacity>
-        </View>
-      </View>
+        </Container>
+      </Container>
     ),
     [],
   );
 
   return (
-    <Container flex={1}  width={'full'} backgroundColor='white'>
+    <Container flex={1} width={'full'} backgroundColor="white">
       <CustomInput
         type="address"
         placeholder="Add new address"
         leftIcon={<Assets.InputSearch />}
-        width={'95'}
+        width={'97'}
       />
 
       <CustomFlatList<SaveLocationDto>

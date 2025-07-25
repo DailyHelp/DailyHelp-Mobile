@@ -1,22 +1,23 @@
 import React from 'react';
-import {IHome} from '../../../../@types/routes';
+import { IHome } from '../../../../@types/routes';
+import Assets from '../../../../assets/Assets';
 import Container from '../../../../components/container/Index';
-import CustomInput from '../../../../components/customInput/Index';
 import Typography from '../../../../components/Typography';
-import {HelpersStatus} from '../../../../shared/Constant';
-import {ColorKeys} from '../../../../shared/themes/Index';
+import { HelpersStatus } from '../../../../shared/Constant';
+import { ColorKeys } from '../../../../shared/themes/Index';
+import Availability from './components/Availability';
 import BadgeContainer from './components/BadgeContainer';
 import HelperDetails from './components/HelperDetails';
 import StatsCard from './components/StatsCard';
 
 const Home: IHome = () => {
-  const [isSwitch, setIsSwitch] = React.useState('false');
+  const [isSwitch, setIsSwitch] = React.useState(false);
   const [helpersStatus, setHelpersStatus] = React.useState<HelpersStatus>(
     HelpersStatus.UNAVAILABLE,
   );
 
   React.useEffect(() => {
-    if (isSwitch === 'true') setHelpersStatus(HelpersStatus.AVAILABLE);
+    if (isSwitch) setHelpersStatus(HelpersStatus.AVAILABLE);
     else setHelpersStatus(HelpersStatus.UNAVAILABLE);
   }, [isSwitch]);
 
@@ -36,12 +37,16 @@ const Home: IHome = () => {
       stats: '67.5%',
     },
     {
-      title: 'Today’s earnings',
-      stats: '20000',
+      title: 'Jobs',
+      stats: '5',
+      Icon: Assets.GreenSuitCase,
+      goal: '15 jobs',
     },
     {
-      title: 'Today’s earnings',
-      stats: '20000',
+      title: 'Ratings',
+      stats: '2.5',
+      Icon: Assets.Star,
+      goal: '4.5 rating',
     },
   ];
 
@@ -53,24 +58,8 @@ const Home: IHome = () => {
       borderTopLeftRadius={20}
       backgroundColor={status[helpersStatus] as ColorKeys}
       flex={1}>
-      <Container
-        flexDirection="row"
-        width={'90'}
-        height={40}
-        justifyContent="space-between"
-        alignItems="center">
-        <Typography
-          size="md"
-          color={helpersStatus === HelpersStatus.ENGAGED ? 'white' : 'black'}
-          fontWeight="bold">
-          Turn On Availability
-        </Typography>
-        <CustomInput
-          type="switch"
-          onChangeText={val => setIsSwitch(val)}
-          value={isSwitch}
-        />
-      </Container>
+      <Availability setAvailability={setIsSwitch} />
+
       <Container
         width={'full'}
         backgroundColor="offWhite"
@@ -82,15 +71,28 @@ const Home: IHome = () => {
         <BadgeContainer />
 
         <Container width={'95'} flexDirection="row" flexWrap="wrap" gap={10}>
-          {stats.map(({title, currency, stats}, key) => (
-            <StatsCard
-              key={key}
-              title={title}
-              currency={currency}
-              stats={stats}
-              width={'48'}
-            />
+          {stats.map((data, key) => (
+            <StatsCard key={key} data={data} width={'48'} />
           ))}
+        </Container>
+
+        <Container
+          borderWidth={0.5}
+          borderColor="lightDeepGrey"
+          padding={15}
+          width={'95'}
+          position="relative"
+          borderRadius={10}
+          gap={8}
+          backgroundColor="white">
+          <Typography color="black" size="md" fontWeight="semibold">
+            Complete more jobs
+          </Typography>
+          <Typography size="sm" color="gray">
+            The more jobs you finish, the more offers you’ll get.
+          </Typography>
+
+          <Assets.Star style={{position: 'absolute', right: 3, top: 3}} />
         </Container>
       </Container>
     </Container>

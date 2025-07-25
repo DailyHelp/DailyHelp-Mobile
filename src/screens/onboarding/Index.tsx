@@ -15,7 +15,7 @@ import {UserTypes} from '../../shared/Constant';
 const Onboarding: IOnboarding = ({navigation}) => {
   const videoRef = React.useRef<VideoRef>(null);
   const [isModalVisible, setModalVisible] = React.useState(false);
-  const [userType, setUserType] = React.useState<UserTypes>(UserTypes.USER);
+  const [userType, setUserType] = React.useState<UserTypes>(UserTypes.CUSTOMER);
 
   React.useEffect(() => {
     videoRef.current?.resume();
@@ -82,7 +82,7 @@ const Onboarding: IOnboarding = ({navigation}) => {
             style={styles.btn2}
             onPress={() => {
               setModalVisible(true);
-              setUserType(UserTypes.HELPERS);
+              setUserType(UserTypes.PROVIDER);
             }}>
             <View
               style={{flexDirection: 'column', gap: 10, alignItems: 'center'}}>

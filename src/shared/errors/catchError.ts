@@ -1,10 +1,9 @@
 import Toast from 'react-native-toast-message';
-import { extractErrorMessage } from './extractErrorMessage';
+import {extractErrorMessage} from './extractErrorMessage';
 
 export default class CatchError extends Error {
   constructor(public err: any, private toast: boolean = false) {
     super(err.message);
-console.log(err);
 
     this.message = err.message;
     this.cause = err?.cause || '';

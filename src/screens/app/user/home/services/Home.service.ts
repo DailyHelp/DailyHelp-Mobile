@@ -7,6 +7,8 @@ import HomeApi from '../../../../../shared/services/Home';
 import {appStore} from '../../../../../shared/stores/appStore';
 import utils from '../../../../../shared/Utils';
 import React from 'react';
+import SavePriceDTO from '../dto/SavePriceDto';
+import SaveHelpersDetailsDTO from '../dto/SaveHelpersDetailsDto';
 
 class HomeService extends HomeApi {
   private static instance: HomeService;
@@ -159,6 +161,36 @@ class HomeService extends HomeApi {
       currentLocation,
       searchLocation,
       locations,
+    };
+  }
+
+  useSavePrice() {
+    const {mutateAsync, isPending} = useMutation({
+      mutationKey: ['save-price'],
+      mutationFn: async (body: SavePriceDTO) => {
+        return await this.savePrice(body);
+      },
+      onError: error => new CatchError(error, true),
+    });
+
+    return {
+      savePrice: mutateAsync,
+      isPending,
+    };
+  }
+
+  useSaveHelpersDetails() {
+    const {mutateAsync, isPending} = useMutation({
+      mutationKey: ['helper-details'],
+      mutationFn: async (body: SaveHelpersDetailsDTO) => {
+        return await this.saveHelpersDetails(body);
+      },
+      onError: error => new CatchError(error, true),
+    });
+
+    return {
+      saveHelpersDetails: mutateAsync,
+      isPending,
     };
   }
 }

@@ -18,11 +18,10 @@ const IdentityVerification: IIdentityVerification = ({navigation, route}) => {
     <Container
       type="scroll"
       backgroundColor="white"
-      width={'95'}
       flex={1}
       justifyContent="space-between"
       gap={30}
-      paddingTop={10}>
+      padding={10}>
       <ScreenHeader
         title="Identity Verification"
         description="We use NIN and BVN together to confirm who you are and comply with

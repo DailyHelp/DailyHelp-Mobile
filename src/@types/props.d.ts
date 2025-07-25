@@ -1,7 +1,10 @@
 type Dimensions =
   | 'full'
   | '90'
+  | '93'
   | '95'
+  | '96'
+  | '97'
   | '85'
   | '80'
   | '70'
@@ -32,6 +35,7 @@ type Props<P = {}, D = {}> = React.FC<
     margin?: number;
     padding?: number;
     marginTop?: number;
+    marginBottom?: number;
     paddingTop?: number;
     paddingBottom?: number;
   } & P
@@ -314,11 +318,12 @@ type IEmptyState<N = any> = Props<{
   type?: 'chat' | 'jobs';
 }>;
 
-type IJobsCard = Props<{
+type IJobsCard<U> = Props<{
   type?: 'pending' | 'ongoing' | 'completed';
   viewDetails?: () => void;
   chat?: () => void;
   rate?: () => void;
+  userType?: U;
 }>;
 
 type IFaceMatch = {};
@@ -410,10 +415,23 @@ type IBadgeContainer = Props<{}>;
 
 type IHelperDetails = Props<{}>;
 
-type IStatsCard = Props<{
-  title?: string;
-  stats?: string;
-  icon?: React.ReactElement;
-  goal?: string;
-  currency?: number;
+type IStatsCard = Props<
+  {},
+  {
+    title?: string;
+    stats?: string;
+    Icon?: any;
+    goal?: string;
+    currency?: number;
+  }
+>;
+
+type IAvailability<S> = Props<{
+  status?: S;
+  setAvailability?: (val: boolean) => void;
+}>;
+
+type IJobPending<N = any, R = any> = Props<{
+  navigation?: N;
+  route?: R;
 }>;

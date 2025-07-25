@@ -2,6 +2,8 @@ import {GOOGLE_API_KEY} from '@env';
 import ThrowError from '../errors/throwError';
 import Endpoints from './Endpoints';
 import Http from './Http';
+import SavePriceDTO from '../../screens/app/user/home/dto/SavePriceDto';
+import SaveHelpersDetailsDTO from '../../screens/app/user/home/dto/SaveHelpersDetailsDto';
 
 export default class HomeApi extends Http {
   protected async getAllCategories() {
@@ -11,7 +13,6 @@ export default class HomeApi extends Http {
     });
 
     const data = await this.handleResponse<{categories: CategoryDto[]}>(res);
-    if (!data?.status) throw new ThrowError(data?.message!);
 
     return data;
   }
@@ -22,7 +23,6 @@ export default class HomeApi extends Http {
     });
 
     const data = await this.handleResponse<GetSavedLocationResponse>(res);
-    if (!data?.status) throw new ThrowError(data?.message!);
 
     return data?.data;
   }
@@ -35,9 +35,7 @@ export default class HomeApi extends Http {
 
     const data = await this.handleResponse(res);
 
-    if (!data?.status) throw new ThrowError(data?.message!);
-
-    this.success(data.message);
+    this.success(data?.message);
 
     return data;
   }
@@ -143,5 +141,29 @@ export default class HomeApi extends Http {
       console.error('Address search failed:', error);
       throw new Error(`Failed to search addresses: ${error.message}`);
     }
+  }
+
+  protected async savePrice(body: SavePriceDTO) {
+    const res = await this.fetchHandler({
+      path: Endpoints.savePrice,
+      body,
+    });
+    const data = await this.handleResponse<any>(res);
+
+    this.success(data?.message);
+
+    return data;
+  }
+
+  protected async saveHelpersDetails(body: SaveHelpersDetailsDTO) {
+    const res = await this.fetchHandler({
+      path: Endpoints.saveHelpersDetails,
+      body,
+    });
+    const data = await this.handleResponse<any>(res);
+
+    this.success(data?.message);
+
+    return data;
   }
 }

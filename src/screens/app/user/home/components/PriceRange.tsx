@@ -36,7 +36,7 @@ const PriceRange = React.forwardRef((props, ref) => {
               Cancel
             </Typography>
           </TouchableOpacity>
-          <Typography fontWeight="bold" size="md" color="primary">
+          <Typography fontWeight="bold" size="md" color="black">
             Price range
           </Typography>
           <TouchableOpacity>

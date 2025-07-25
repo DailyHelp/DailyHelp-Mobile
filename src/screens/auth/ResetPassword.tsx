@@ -1,19 +1,20 @@
-import {ScrollView, View} from 'react-native';
-import {IResetPassword} from '../../@types/routes';
+import { createValidator } from 'class-validator-formik';
+import { Formik } from 'formik';
+import { View } from 'react-native';
+import { IResetPassword } from '../../@types/routes';
 import MainButton from '../../components/button/MainButton';
+import Container from '../../components/container/Index';
 import CustomInput from '../../components/customInput/Index';
 import ScreenHeader from '../../components/ScreenHeader';
-import {verticalScale} from '../../shared/Scaling';
-import {Formik} from 'formik';
-import {ResetPasswordDTO} from './dto/ForgotPasswordDto';
+import { verticalScale } from '../../shared/Scaling';
+import { ResetPasswordDTO } from './dto/ForgotPasswordDto';
 import authService from './services/Auth.service';
-import {createValidator} from 'class-validator-formik';
 
 const ResetPassword: IResetPassword = ({navigation}) => {
   const {resetLoading, onResetPassword} = authService.useForgotPassword();
 
   return (
-    <ScrollView style={{width: '90%', alignSelf: 'center', paddingTop: 10}}>
+    <Container type="scroll" padding={5} gap={20}>
       <ScreenHeader
         title="Reset password"
         description="Secure your account with a strong password."
@@ -59,7 +60,7 @@ const ResetPassword: IResetPassword = ({navigation}) => {
           </View>
         )}
       </Formik>
-    </ScrollView>
+    </Container>
   );
 };
 export default ResetPassword;

@@ -1,16 +1,17 @@
-import {Formik} from 'formik';
+import { Formik } from 'formik';
 import React from 'react';
-import {ScrollView, View} from 'react-native';
-import {ActivityIndicator, Text} from 'react-native-paper';
-import {IVerifyAccount} from '../../@types/routes';
+import { View } from 'react-native';
+import { ActivityIndicator, Text } from 'react-native-paper';
+import { IVerifyAccount } from '../../@types/routes';
 import MainButton from '../../components/button/MainButton';
+import Container from '../../components/container/Index';
 import Otp from '../../components/Otp';
+import OtpCountDown from '../../components/OtpCountDown';
 import Typography from '../../components/Typography';
-import {scale, verticalScale} from '../../shared/Scaling';
-import {customFontSize, fonts} from '../../shared/themes/Typography';
+import { scale, verticalScale } from '../../shared/Scaling';
+import { customFontSize, fonts } from '../../shared/themes/Typography';
 import VerifyOtpDTO from './dto/VerifyOtpDto';
 import authService from './services/Auth.service';
-import OtpCountDown from '../../components/OtpCountDown';
 
 const VerifyAccount: IVerifyAccount = ({route, navigation}) => {
   const [code, setCode] = React.useState({
@@ -32,8 +33,8 @@ const VerifyAccount: IVerifyAccount = ({route, navigation}) => {
   };
 
   return (
-    <ScrollView style={{width: '90%', alignSelf: 'center', paddingTop: 10}}>
-      <View style={{flexDirection: 'column', gap: 6}}>
+    <Container type="scroll" padding={10}>
+      <Container gap={6}>
         <Text
           style={{
             fontFamily: fonts.black,
@@ -69,7 +70,7 @@ const VerifyAccount: IVerifyAccount = ({route, navigation}) => {
             to verify your account.
           </Text>
         </View>
-      </View>
+      </Container>
 
       <Formik initialValues={new VerifyOtpDTO()} onSubmit={() => {}}>
         {({values, errors, handleChange, handleSubmit}) => (
@@ -152,7 +153,7 @@ const VerifyAccount: IVerifyAccount = ({route, navigation}) => {
           </View>
         )}
       </Formik>
-    </ScrollView>
+    </Container>
   );
 };
 export default VerifyAccount;

@@ -10,7 +10,7 @@ import React from 'react';
 
 const SetPrices: ISetPrices = ({navigation}) => {
   return (
-    <Container width={'95'} flex={1} gap={20}>
+    <Container padding={10} flex={1} gap={20}>
       <ScreenHeader
         title="Set Your Prices"
         description="Let clients know what you charge. Be fair and realistic, you can always negotiate later."

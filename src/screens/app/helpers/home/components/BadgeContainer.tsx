@@ -19,9 +19,10 @@ const BadgeContainer: IBadgeContainer = ({marginTop}) => {
       colors={['#EFFEC3', '#D5F96C', '#D5F96C']}>
       <Container gap={15}>
         <Container
+          alignSelf="baseline"
           flexDirection="row"
           justifyContent="space-between"
-          width={'full'}>
+          width={'75'}>
           <Container flexDirection="row">
             <Typography size="sm" color="black" fontWeight="semibold">
               Become silver rated

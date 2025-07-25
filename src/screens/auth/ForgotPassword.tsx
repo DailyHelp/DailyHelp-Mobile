@@ -1,20 +1,21 @@
-import {ScrollView, View} from 'react-native';
+import {createValidator} from 'class-validator-formik';
+import {Formik} from 'formik';
+import {View} from 'react-native';
 import {IForgotPassword} from '../../@types/routes';
 import Assets from '../../assets/Assets';
 import MainButton from '../../components/button/MainButton';
+import Container from '../../components/container/Index';
 import CustomInput from '../../components/customInput/Index';
 import ScreenHeader from '../../components/ScreenHeader';
 import {verticalScale} from '../../shared/Scaling';
-import {Formik} from 'formik';
 import ForgotPasswordDTO from './dto/ForgotPasswordDto';
 import authService from './services/Auth.service';
-import {createValidator} from 'class-validator-formik';
 
 const ForgotPassword: IForgotPassword = ({navigation}) => {
   const {loading, onSubmit} = authService.useForgotPassword();
 
   return (
-    <ScrollView style={{width: '90%', alignSelf: 'center', paddingTop: 10}}>
+    <Container type="scroll" padding={5} gap={20}>
       <ScreenHeader
         title="Forgot password"
         description="Enter your email address, and a verification code will be sent to reset your password.."
@@ -49,7 +50,7 @@ const ForgotPassword: IForgotPassword = ({navigation}) => {
           </View>
         )}
       </Formik>
-    </ScrollView>
+    </Container>
   );
 };
 export default ForgotPassword;

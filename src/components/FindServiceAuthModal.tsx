@@ -14,7 +14,7 @@ import authService from '../screens/auth/services/Auth.service';
 const FindServiceAuthModal: IFindServiceAuthModal<UserTypes> = ({
   isVisible,
   onClose,
-  userType = UserTypes.USER,
+  userType = UserTypes.CUSTOMER,
 }) => {
   const navigation = useNavigation<Navigate<IAuthRoute>>();
   const {signIn, isGooglePending} = authService.useGoogleSignAuth();
@@ -61,7 +61,7 @@ const FindServiceAuthModal: IFindServiceAuthModal<UserTypes> = ({
               icon={() => <Assets.EmailOutlined />}
               onPress={() => {
                 onClose();
-                AppStorage.save('userType', UserTypes.USER);
+                AppStorage.save('userType', UserTypes.CUSTOMER);
                 navigation.navigate('CreateAccount', {userType});
               }}
               mode="outlined"

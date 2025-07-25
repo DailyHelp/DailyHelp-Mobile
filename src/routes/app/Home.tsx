@@ -9,7 +9,7 @@ const HomeStack = createNativeStackNavigator<IHomeRoute>();
 
 const HomeRoute: Props = () => {
   const userType = AppStorage.find('userType');
-  const isUser = userType === UserTypes.USER;
+  const isUser = userType === UserTypes.CUSTOMER;
 
   const route = isUser ? UserHomeStackRoutes : HelperHomeStackRoutes;
 

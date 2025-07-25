@@ -31,8 +31,9 @@ export const Box: IContainer<ColorKeys> = ({children, ...props}) => {
     right,
     borderTopLeftRadius,
     borderTopRightRadius,
-    width,
+    width = 'full',
     flexWrap,
+    marginBottom,
   } = props;
 
   const isNumber = (value?: any) => typeof value === 'number';
@@ -40,12 +41,13 @@ export const Box: IContainer<ColorKeys> = ({children, ...props}) => {
   if (isNumber(width)) width = scale(width as number);
   if (isNumber(height)) height = verticalScale(height as number);
   if (isNumber(padding)) padding = scale(padding);
-  if (isNumber(paddingTop)) paddingTop = scale(paddingTop);
-  if (isNumber(paddingBottom)) paddingBottom = scale(paddingBottom);
+  if (isNumber(paddingTop)) paddingTop = verticalScale(paddingTop);
+  if (isNumber(paddingBottom)) paddingBottom = verticalScale(paddingBottom);
   if (isNumber(paddingHorizontal)) paddingHorizontal = scale(paddingHorizontal);
   if (isNumber(paddingVertical)) paddingVertical = scale(paddingVertical);
   if (isNumber(margin)) margin = scale(margin);
-  if (isNumber(marginTop)) marginTop = scale(marginTop);
+  if (isNumber(marginTop)) marginTop = verticalScale(marginTop);
+  if (isNumber(marginBottom)) marginBottom = verticalScale(marginBottom);
 
   if (typeof width === 'string') {
     width = utils.getDimensions(width as Dimensions);
@@ -84,6 +86,7 @@ export const Box: IContainer<ColorKeys> = ({children, ...props}) => {
     width,
     height,
     flex,
+    marginBottom,
   };
 
   return <View style={style}>{children}</View>;
