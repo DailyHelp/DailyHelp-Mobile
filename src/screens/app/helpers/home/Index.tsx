@@ -1,10 +1,10 @@
 import React from 'react';
-import { IHome } from '../../../../@types/routes';
+import {IHome} from '../../../../@types/routes';
 import Assets from '../../../../assets/Assets';
 import Container from '../../../../components/container/Index';
 import Typography from '../../../../components/Typography';
-import { HelpersStatus } from '../../../../shared/Constant';
-import { ColorKeys } from '../../../../shared/themes/Index';
+import {HelpersStatus} from '../../../../shared/Constant';
+import {ColorKeys} from '../../../../shared/themes/Index';
 import Availability from './components/Availability';
 import BadgeContainer from './components/BadgeContainer';
 import HelperDetails from './components/HelperDetails';
@@ -70,7 +70,12 @@ const Home: IHome = () => {
 
         <BadgeContainer />
 
-        <Container width={'95'} flexDirection="row" flexWrap="wrap" gap={10}>
+        <Container
+          width={'95'}
+          flexDirection="row"
+          flexWrap="wrap"
+          gap={10}
+          alignSelf="center">
           {stats.map((data, key) => (
             <StatsCard key={key} data={data} width={'48'} />
           ))}
@@ -82,6 +87,7 @@ const Home: IHome = () => {
           padding={15}
           width={'95'}
           position="relative"
+          alignSelf='center'
           borderRadius={10}
           gap={8}
           backgroundColor="white">

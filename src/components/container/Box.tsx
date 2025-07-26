@@ -17,7 +17,7 @@ export const Box: IContainer<ColorKeys> = ({children, ...props}) => {
     justifyContent,
     flex,
     gap,
-    alignSelf = 'center',
+    alignSelf,
     borderRadius,
     borderWidth,
     borderStyle,
@@ -31,9 +31,10 @@ export const Box: IContainer<ColorKeys> = ({children, ...props}) => {
     right,
     borderTopLeftRadius,
     borderTopRightRadius,
-    width = 'full',
+    width = 'auto',
     flexWrap,
     marginBottom,
+    borderBottomWidth,
   } = props;
 
   const isNumber = (value?: any) => typeof value === 'number';
@@ -48,6 +49,7 @@ export const Box: IContainer<ColorKeys> = ({children, ...props}) => {
   if (isNumber(margin)) margin = scale(margin);
   if (isNumber(marginTop)) marginTop = verticalScale(marginTop);
   if (isNumber(marginBottom)) marginBottom = verticalScale(marginBottom);
+  if (isNumber(borderBottomWidth)) borderBottomWidth = verticalScale(borderBottomWidth);
 
   if (typeof width === 'string') {
     width = utils.getDimensions(width as Dimensions);
@@ -87,6 +89,7 @@ export const Box: IContainer<ColorKeys> = ({children, ...props}) => {
     height,
     flex,
     marginBottom,
+    borderBottomWidth,
   };
 
   return <View style={style}>{children}</View>;

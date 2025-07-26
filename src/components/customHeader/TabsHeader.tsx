@@ -11,6 +11,7 @@ const JobsHeader: ICustomHeader<NativeStackHeaderProps> = ({
   onPress,
   initialTab,
   tabs,
+  width,
 }) => {
   const [index, setIndex] = React.useState(initialTab);
 
@@ -20,7 +21,7 @@ const JobsHeader: ICustomHeader<NativeStackHeaderProps> = ({
 
   return (
     <Container
-      width={'95'}
+      width={width || '95'}
       marginTop={10}
       padding={10}
       gap={13}

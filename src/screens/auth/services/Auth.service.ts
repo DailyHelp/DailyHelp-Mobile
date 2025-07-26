@@ -1,27 +1,25 @@
-import AuthApi from '../../../shared/services/Auth';
-import {useMutation, useQuery} from '@tanstack/react-query';
-import RegisterDTO from '../dto/RegisterDto';
+import { WEB_CLIENT_ID } from '@env';
+import messaging from '@react-native-firebase/messaging';
+import {
+  GoogleSignin,
+  statusCodes,
+} from '@react-native-google-signin/google-signin';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { useMutation } from '@tanstack/react-query';
+import React from 'react';
+import { IAuthRoute, Navigate } from '../../../@types/routes';
 import CatchError from '../../../shared/errors/catchError';
-import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
-import {IAuthRoute, Navigate} from '../../../@types/routes';
+import AuthApi from '../../../shared/services/Auth';
+import { appStore } from '../../../shared/stores/appStore';
+import ForgotPasswordDTO, { ResetPasswordDTO } from '../dto/ForgotPasswordDto';
+import LoginDto from '../dto/LoginDto';
+import RegisterDTO from '../dto/RegisterDto';
+import { VerifyIdentityDTO } from '../dto/VerifyIdentityDto';
 import VerifyOtpDTO, {
   OtpActionType,
   SendOtpDTO,
   VerifyOtpResponse,
 } from '../dto/VerifyOtpDto';
-import LoginDto from '../dto/LoginDto';
-import {
-  GoogleSignin,
-  statusCodes,
-} from '@react-native-google-signin/google-signin';
-import {appStore} from '../../../shared/stores/appStore';
-import ForgotPasswordDTO, {ResetPasswordDTO} from '../dto/ForgotPasswordDto';
-import {VerifyIdentityDTO} from '../dto/VerifyIdentityDto';
-import React from 'react';
-import {WEB_CLIENT_ID} from '@env';
-import messaging from '@react-native-firebase/messaging';
-import {UserTypes} from '../../../shared/Constant';
-import SavePriceDTO from '../../app/user/home/dto/SavePriceDto';
 
 export class AuthService extends AuthApi {
   private static instance: AuthService;

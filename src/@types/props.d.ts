@@ -1,5 +1,6 @@
 type Dimensions =
   | 'full'
+  | 'auto'
   | '90'
   | '93'
   | '95'
@@ -55,6 +56,15 @@ type IWalletFunded = Props<{
   title?: string;
   description?: string;
 }>;
+
+type ICodeModal = Props<
+  {
+    isVisible: boolean;
+    onClose: () => void;
+    onPress: () => void;
+  },
+  {code: string}
+>;
 
 type ICategoryActionSheet = {
   onClose: () => void;
@@ -389,6 +399,7 @@ type IContainer<C> = Props<{
   position?: 'absolute' | 'relative' | 'static';
   paddingHorizontal?: number;
   paddingVertical?: number;
+  borderBottomWidth?: number;
   top?: number;
   bottom?: number;
   left?: number;

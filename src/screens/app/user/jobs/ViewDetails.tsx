@@ -17,6 +17,7 @@ import JobTimeline from './components/JobTimeline';
 import CustomHeader from '../../../../components/customHeader/Index';
 import IconF from 'react-native-vector-icons/FontAwesome';
 import {ColorKeys} from '../../../../shared/themes/Index';
+import Container from '../../../../components/container/Index';
 
 const ViewDetails: IViewDetails = ({navigation, route}) => {
   const type = route.params?.type;
@@ -152,15 +153,13 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
                   </MainButton>
                 </View>
               ) : (
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    gap: 10,
-                    borderBottomWidth: 1,
-                    borderStyle: 'dashed',
-                    borderColor: '#D6DBE7',
-                    paddingBottom: 20,
-                  }}>
+                <Container
+                  flexDirection="row"
+                  gap={10}
+                  borderBottomWidth={1}
+                  borderStyle="dashed"
+                  borderColor="lightDeepGrey"
+                  paddingBottom={20}>
                   <MainButton
                     onPress={() => SheetManager.show('WorkerSuggestion')}
                     enableButtonColor="lightGrey"
@@ -185,7 +184,7 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
                     icon={() => <Assets.SendOffer />}>
                     Chat
                   </MainButton>
-                </View>
+                </Container>
               )}
 
               <Typography lineHeight={25} size="md" color="lightBlack">

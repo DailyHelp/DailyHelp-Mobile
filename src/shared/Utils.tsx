@@ -191,7 +191,7 @@ class Utils {
     }, [navigation]);
 
     const showBottomTab = () => {
-      navigation.getParent()?.setOptions({
+      navigation?.getParent()?.setOptions({
         tabBarStyle: {
           height: verticalScale(64),
           backgroundColor: '#FFFFFF',
@@ -206,7 +206,7 @@ class Utils {
 
     const hideBottomTab = () => {
       navigation
-        .getParent()
+        ?.getParent()
         ?.setOptions({tabBarStyle: {display: 'none'}, tabBarVisible: false});
     };
 
@@ -343,6 +343,7 @@ class Utils {
 
   getDimensions(value: Dimensions) {
     if (value === 'full') return `100%`;
+    if (value === 'auto') return `auto`;
     if (value == '97') return `97%`;
     if (value == '96') return `96%`;
     if (value == '95') return `95%`;

@@ -31,7 +31,10 @@ const BadgeContainer: IBadgeContainer = ({marginTop}) => {
           <Typography>0% completed</Typography>
         </Container>
 
-        <ProgressBar style={{height: verticalScale(6)}} />
+        <ProgressBar
+          progress={0.1}
+          style={{height: verticalScale(6), borderRadius: 10}}
+        />
       </Container>
     </LinearGradient>
   );

@@ -15,7 +15,7 @@ class AppStore {
 
   isAuthenticated = AppStorage.find('isAuthenticated') || false;
 
-  user_types?: UserTypes;
+  user_types = (AppStorage.find('userType') as UserTypes) || UserTypes.CUSTOMER;
 
   hideSelfieVerificationHeader: boolean = true;
 
@@ -75,12 +75,10 @@ class AppStore {
     this.currentLocation = {...this.currentLocation, ...location};
   }
 
-  setIsAuthenticated(
-    dto: boolean,
-    userType = (AppStorage.find('userType') as UserTypes) || UserTypes.CUSTOMER,
-  ) {
+  setIsAuthenticated(dto: boolean, userType = this.user_types) {
     this.isAuthenticated = dto;
     AppStorage.save('isAuthenticated', dto);
+
     if (dto) {
       this.user_types = userType;
       AppStorage.save('userType', userType);

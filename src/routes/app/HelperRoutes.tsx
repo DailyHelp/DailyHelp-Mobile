@@ -7,8 +7,9 @@ import ChatRoute from './Chat';
 import JobsRoute from './Jobs';
 import MoreRoute from './More';
 import Home from '../../screens/app/helpers/home/Index';
-import { NativeStackHeaderProps } from '@react-navigation/native-stack';
+import {NativeStackHeaderProps} from '@react-navigation/native-stack';
 import CustomHeader from '../../components/customHeader/Index';
+import Jobs from '../../screens/app/helpers/jobs/Index';
 
 type LabelPosition = 'beside-icon' | 'below-icon';
 
@@ -152,6 +153,16 @@ export const HelperAppStackRoutes = [
             width={scale(28)}
           />
         ),
+    },
+  },
+];
+
+export const HelperJobStackRoutes = [
+  {
+    name: 'Jobs',
+    component: Jobs,
+    options: {
+      headerShown: false,
     },
   },
 ];

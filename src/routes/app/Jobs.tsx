@@ -3,6 +3,7 @@ import {IJobsRoute} from '../../@types/routes';
 import AppStorage from '../../shared/AppStorage';
 import {UserTypes} from '../../shared/Constant';
 import {UserJobsStackRoutes} from './UserRoutes';
+import {HelperJobStackRoutes} from './HelperRoutes';
 
 const JobsStack = createNativeStackNavigator<IJobsRoute>();
 
@@ -10,7 +11,7 @@ const JobsRoute: Props = () => {
   const userType = AppStorage.find('userType');
   const isUser = userType === UserTypes.CUSTOMER;
 
-  const route = isUser ? UserJobsStackRoutes : UserJobsStackRoutes;
+  const route = isUser ? UserJobsStackRoutes : HelperJobStackRoutes;
 
   return (
     <JobsStack.Navigator

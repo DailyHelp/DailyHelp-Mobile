@@ -22,7 +22,7 @@ const StatsCard: IStatsCard = ({data, width}) => {
       ) : (
         <Container flexDirection="row" alignItems="center" gap={4}>
           {Icon && <Icon />}
-          <Typography size="md" color="black" fontWeight="bold">
+          <Typography size="md" color="black" fontWeight="medium">
             {stats}
           </Typography>
         </Container>

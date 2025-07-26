@@ -1,221 +1,155 @@
 import React from 'react';
-import { ScrollView, View } from 'react-native';
-import { SheetManager } from 'react-native-actions-sheet';
 import Icon from 'react-native-vector-icons/AntDesign';
-import IconF from 'react-native-vector-icons/FontAwesome';
 import Assets from '../../../../../assets/Assets';
 import MainButton from '../../../../../components/button/MainButton';
-import OutlineButton from '../../../../../components/button/OutlineButton';
+import Container from '../../../../../components/container/Index';
 import CustomAvatar from '../../../../../components/CustomAvatar';
-import CustomHeader from '../../../../../components/customHeader/Index';
+import Offer from '../../../../../components/offers/Index';
 import Typography from '../../../../../components/Typography';
-import { scale, verticalScale } from '../../../../../shared/Scaling';
-import { ColorKeys } from '../../../../../shared/themes/Index';
+import { verticalScale } from '../../../../../shared/Scaling';
 import utils from '../../../../../shared/Utils';
-import JobTimeline from '../../../user/jobs/components/JobTimeline';
-import jobStyle from '../../../user/jobs/jobStyle';
 
 const JobPending: IJobPending = ({navigation, route}) => {
-  const type = route.params?.type;
-
+  const [visible, setVisible] = React.useState(false);
   utils.useHideBottomTab(navigation);
 
-  let headerText = 'Have they arrived? Tap “Confirm face” to verify.';
-  let headerBgColor = '#95D21A';
-  let headerColor: ColorKeys = 'lightBlack';
-
-  if (type === 'ongoing') headerBgColor = '#FF6B01';
-  if (type === 'ongoing') headerText = 'Job in-Progress';
-  if (type === 'ongoing') headerColor = 'white';
-
   return (
-    <View style={{flex: 1, backgroundColor: 'white'}}>
-      <CustomHeader
-        type="back"
-        title="Job Details"
-        navigation={navigation}
-        route={route}
-        textMiddle
-      />
-
-      {type === 'pending' && (
-        <View style={{...jobStyle.jobContainerCard}}>
-          <CustomAvatar
-            avatarSize={50}
-            badgeSize={20}
-            data={{image: Assets.Worker1}}
-          />
-          <Typography size="md" fontWeight="bold">
-            Amarachi Eze
+    <Container width={'full'}>
+      <Container
+        borderTopLeftRadius={10}
+        borderTopRightRadius={10}
+        flexDirection="column"
+        width={'full'}>
+        <Container
+          backgroundColor="orange"
+          borderTopLeftRadius={10}
+          borderTopRightRadius={10}
+          flexDirection="column"
+          paddingVertical={5}
+          width={'full'}>
+          <Typography color="white" textAlign="center" fontWeight="medium">
+            Waiting to start
           </Typography>
-        </View>
-      )}
+        </Container>
 
-      <View
-        style={{
-          backgroundColor: headerBgColor,
-          borderTopEndRadius: 20,
-          borderTopStartRadius: 20,
-          flex: 1,
-        }}>
-        <Typography
-          padding={10}
-          textAlign="center"
-          fontWeight="bold"
-          color={headerColor}>
-          {headerText}
-        </Typography>
+        <Container
+          height={'full'}
+          width={'full'}
+          type="scroll"
+          flexDirection="column"
+          gap={10}>
+          <Container
+            backgroundColor="white"
+            borderRadius={20}
+            alignItems="center"
+            flexDirection="column"
+            padding={25}
+            paddingBottom={15}
+            gap={9}>
+            <CustomAvatar
+              data={{image: Assets.WorkerAvatar1}}
+              avatarSize={50}
+              showBadge={false}
+            />
+            <Typography
+              color="black"
+              textAlign="center"
+              fontWeight="bold"
+              size="md">
+              Jane Doe
+            </Typography>
 
-        <View
-          style={{
-            flex: 1,
-            flexDirection: 'column',
-            backgroundColor: '#f9f9fb',
-            borderTopEndRadius: 20,
-            borderTopStartRadius: 20,
-          }}>
-          <ScrollView
-            showsVerticalScrollIndicator={false}
-            style={{flex: 1}}
-            contentContainerStyle={{paddingBottom: 20}}>
-            {type !== 'ongoing' && (
-              <View style={{...jobStyle.jobContainerCard}}>
-                <CustomAvatar
-                  avatarSize={50}
-                  badgeSize={20}
-                  data={{image: Assets.Worker1}}
-                />
-                <Typography size="md" fontWeight="bold">
-                  Amarachi Eze
-                </Typography>
-                <Typography size="md" color="gray">
-                  Hair stylist
-                </Typography>
-
-                <React.Fragment>
-                  <OutlineButton
-                    height={verticalScale(50)}
-                    onPress={() => SheetManager.show('FaceMatch')}
-                    icon={() => <Assets.ConfirmFace />}>
-                    Confirm face
-                  </OutlineButton>
-                </React.Fragment>
-              </View>
-            )}
-
-            <View
-              style={{
-                ...jobStyle.jobContainerCard,
-                marginTop: verticalScale(10),
-              }}>
-              <Typography size="lg" fontWeight="bold">
-                ₦32,000
+            <Container
+              padding={10}
+              borderRadius={30}
+              borderStyle="dotted"
+              borderWidth={1}
+              flexDirection="row"
+              gap={7}
+              borderColor="lighterGreen">
+              <Assets.Info />
+              <Typography color="green2">
+                Remind the client to start once you arrive.
               </Typography>
-              <View style={{flexDirection: 'row', gap: 10}}>
-                <Assets.Accepted style={{marginTop: verticalScale(4)}} />
-                <Typography size="md" color="gray">
+            </Container>
+          </Container>
+
+          <Container
+            backgroundColor="white"
+            borderRadius={20}
+            alignItems="center"
+            flexDirection="column"
+            padding={25}
+            paddingBottom={15}
+            gap={30}>
+            <Container gap={10}>
+              <Typography
+                fontWeight="bold"
+                size="lg"
+                textAlign="center"
+                currency>
+                32000
+              </Typography>
+
+              <Container flexDirection="row" gap={5} alignItems="center">
+                <Assets.Accepted />
+                <Typography color="lightBlack" fontWeight="regular" size="sm">
                   Accepted on 23 Mar, 2025, 09:30
                 </Typography>
-              </View>
+              </Container>
+            </Container>
 
-              {type === 'ongoing' ? (
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    gap: 10,
-                    borderBottomWidth: 1,
-                    borderStyle: 'dashed',
-                    borderColor: '#D6DBE7',
-                    paddingBottom: 20,
-                  }}>
-                  <MainButton
-                    width={'100%'}
-                    enableButtonColor="lightGrey"
-                    color="danger">
-                    Dispute job
-                  </MainButton>
-                </View>
-              ) : (
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    gap: 10,
-                    borderBottomWidth: 1,
-                    borderStyle: 'dashed',
-                    borderColor: '#D6DBE7',
-                    paddingBottom: 20,
-                  }}>
-                  <MainButton
-                    onPress={() => SheetManager.show('WorkerSuggestion')}
-                    enableButtonColor="lightGrey"
-                    color="black"
-                    width={'45%'}
-                    icon={() => (
-                      <Icon
-                        name="close"
-                        color={'#757C91'}
-                        size={20}
-                        style={{
-                          marginTop: verticalScale(5),
-                        }}
-                      />
-                    )}>
-                    Cancel job
-                  </MainButton>
-                  <MainButton
-                    enableButtonColor="lightGrey"
-                    color="black"
-                    width={'45%'}
-                    icon={() => <Assets.SendOffer />}>
-                    Chat
-                  </MainButton>
-                </View>
-              )}
+            <Container
+              flexDirection="row"
+              gap={10}
+              borderBottomWidth={1}
+              borderStyle="dashed"
+              borderColor="lightDeepGrey"
+              paddingBottom={20}>
+              <MainButton
+                onPress={() => setVisible(true)}
+                enableButtonColor="lightGrey"
+                color="black"
+                width={'45%'}
+                icon={() => (
+                  <Icon
+                    name="close"
+                    color={'#757C91'}
+                    size={20}
+                    style={{
+                      marginTop: verticalScale(5),
+                    }}
+                  />
+                )}>
+                Cancel job
+              </MainButton>
+              <MainButton
+                enableButtonColor="lightGrey"
+                color="black"
+                width={'45%'}
+                icon={() => <Assets.SendOffer />}>
+                Chat
+              </MainButton>
+            </Container>
 
+            <Container>
               <Typography lineHeight={25} size="md" color="lightBlack">
                 Hey! I need help cleaning my room. It’s mostly just sweeping,
                 mopping, wiping down surfaces, and helping me organize a few
                 things. Nothing too heavy, but I’d love it to look fresh and
                 neat again.
               </Typography>
-            </View>
+            </Container>
+          </Container>
+        </Container>
+      </Container>
 
-            <View style={{marginTop: verticalScale(10)}}>
-              <JobTimeline />
-            </View>
-          </ScrollView>
-
-          {type !== 'completed' ? (
-            <View
-              style={{
-                padding: scale(20),
-                paddingTop: 15,
-                paddingBottom: 35,
-                backgroundColor: 'white',
-                flexDirection: 'column',
-                gap: 10,
-              }}>
-              <Typography fontWeight="bold" color="lightBlack">
-                Ready to start the job?
-              </Typography>
-            </View>
-          ) : (
-            <OutlineButton
-              icon={() => (
-                <IconF
-                  name="star"
-                  size={15}
-                  color={'#FFD100'}
-                  style={{marginTop: verticalScale(5)}}
-                />
-              )}
-              color="black">
-              Rate service provider
-            </OutlineButton>
-          )}
-        </View>
-      </View>
-    </View>
+      <Offer
+        type="cancel"
+        isVisible={visible}
+        onClose={() => setVisible(false)}
+      />
+    </Container>
   );
 };
 export default JobPending;

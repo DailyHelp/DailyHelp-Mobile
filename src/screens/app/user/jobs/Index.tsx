@@ -1,5 +1,5 @@
 import React from 'react';
-import { IJobs } from '../../../../@types/routes';
+import {IJobs} from '../../../../@types/routes';
 import CustomFlatList from '../../../../components/CustomFlatList';
 import Container from '../../../../components/container/Index';
 import CustomHeader from '../../../../components/customHeader/Index';
@@ -28,7 +28,7 @@ const Jobs: IJobs = props => {
   }, [type]);
 
   return (
-    <Container flex={1}>
+    <Container flex={1} backgroundColor='white'>
       <CustomHeader
         type="tabs"
         {...props}
@@ -37,7 +37,7 @@ const Jobs: IJobs = props => {
         initialTab="pending"
         tabs={jobs}
       />
-      <Container padding={15} width={'90'}>
+      <Container padding={15} width={'full'}>
         <CustomFlatList
           data={['1', '2', '3', '4', '5']}
           showsVerticalScrollIndicator={false}

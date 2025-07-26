@@ -17,6 +17,7 @@ export const Colors = {
   lightGreen: '#27A535',
   green: '#014C2B',
   lighterGreen: '#95D21A',
+  green2: '#4A6600',
   white: 'white',
   black: '#121921',
   darkGray: '#3B4152',
@@ -37,4 +38,4 @@ export const Colors = {
 // Get the type of all keys in Colors
 export type ColorKeys = keyof typeof Colors;
 
-export const Dimensions = {}
+export const Dimensions = {};

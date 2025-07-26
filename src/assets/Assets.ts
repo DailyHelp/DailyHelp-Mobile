@@ -92,8 +92,16 @@ import Upload from './svg/upload.svg';
 import UploadFailed from './svg/uploadFailed.svg';
 import GreenSuitCase from './svg/green_suitcase.svg';
 import Star from './svg/star.svg';
+import Info from './svg/info.svg';
+import IdentityCode from './svg/identity_code.svg';
+import ServiceProfile from './svg/service_profile.svg';
+import Analytics from './svg/analytics.svg';
 
 export default {
+  Analytics,
+  ServiceProfile,
+  IdentityCode,
+  Info,
   GreenSuitCase,
   Star,
   UploadFailed,

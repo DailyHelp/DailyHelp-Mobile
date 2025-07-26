@@ -16,6 +16,7 @@ const Availability: IAvailability<HelpersStatus> = ({
       width={'90'}
       height={40}
       justifyContent="space-between"
+      alignSelf="center"
       alignItems="center">
       <Typography
         size="md"

@@ -15,24 +15,23 @@ const ChatHeader: ICustomHeader<NativeStackHeaderProps> = ({
       flexDirection="row"
       padding={10}
       width={'full'}
-      backgroundColor="white"
       justifyContent='space-between'
-      alignItems="center">
-      <Container flexDirection="row" gap={15} alignItems="center">
+      backgroundColor="white">
+      <Container flexDirection="row">
         <TouchableOpacity onPress={() => navigation?.goBack()}>
           <Icon name="chevron-back" size={20} color={'#757C91'} />
         </TouchableOpacity>
+      </Container>
 
-        <Container flexDirection="row" gap={3}>
-          <CustomAvatar avatarSize={40} data={{image: Assets.Worker1}} />
-          <Container>
-            <Typography fontWeight="bold" size="md">
-              {title}
-            </Typography>
-            <Typography fontWeight="regular" size="md" color="lightBlack">
-              Online
-            </Typography>
-          </Container>
+      <Container flexDirection="row" gap={5}>
+        <CustomAvatar avatarSize={40} data={{image: Assets.Worker1}} />
+        <Container>
+          <Typography fontWeight="bold" size="md">
+            {title}
+          </Typography>
+          <Typography fontWeight="medium" size="md" color="lightGreen">
+            Online
+          </Typography>
         </Container>
       </Container>
 

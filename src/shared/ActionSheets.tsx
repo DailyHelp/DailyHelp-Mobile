@@ -8,8 +8,8 @@ import FaceMatch from '../screens/app/user/jobs/components/FaceMatch';
 import CancelJob from '../screens/app/user/jobs/components/CancelJob';
 import WorkerSuggestions from '../screens/app/user/jobs/components/WorkerSuggestions';
 import RateService from '../screens/app/user/jobs/components/RateService';
-import FundedWallet from '../screens/app/user/more/components/FundWallet';
-import AddressOptions from '../screens/app/user/more/components/AddressOptions';
+import FundedWallet from '../screens/app/more/components/FundWallet';
+import AddressOptions from '../screens/app/more/components/AddressOptions';
 import CustomSelect from '../components/customInput/customSelectInput/CustomSelect';
 
 registerSheet('AllCategory', AllCategory);

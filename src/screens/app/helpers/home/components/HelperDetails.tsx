@@ -10,6 +10,7 @@ const HelperDetails: IHelperDetails = () => {
     <Container
       justifyContent="center"
       alignItems="center"
+      alignSelf='center'
       paddingTop={30}
       gap={6}>
       <CustomAvatar

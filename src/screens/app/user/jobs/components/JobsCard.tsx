@@ -75,22 +75,28 @@ const JobsCard: IJobsCard<UserTypes> = ({
               flexDirection: 'row',
               justifyContent: 'space-between',
             }}>
-            <Typography color="gray">23 Mar, 2025, 09:30</Typography>
-            <Assets.JobsHourGlass />
+            <Typography color="lightBlack">23 Mar, 2025, 09:30</Typography>
+            {type === 'completed' ? (
+              <Typography color="lightBlack">23 Mar, 2025, 10:30</Typography>
+            ) : (
+              <Assets.JobsHourGlass />
+            )}
           </View>
         </View>
       )}
 
       <Divider style={{backgroundColor: '#F1F2F4', height: verticalScale(2)}} />
 
-      {type === 'completed' && userType !== UserTypes.PROVIDER ? (
+      {type === 'completed' && userType !== UserTypes.PROVIDER && (
         <OutlineButton
           onPress={() => SheetManager.show('RateService')}
           icon={() => <Icon name="star" size={15} color={'#FFD100'} />}
           color="black">
           Rate service provider
         </OutlineButton>
-      ) : (
+      )}
+
+      {type === 'ongoing' && userType !== UserTypes.PROVIDER && (
         <View style={{flexDirection: 'row', gap: 6}}>
           <MainButton
             onPress={viewDetails}

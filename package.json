@@ -42,6 +42,7 @@
     "react-native": "0.79.1",
     "react-native-actions-sheet": "^0.9.7",
     "react-native-biometrics": "^3.0.1",
+    "react-native-circular-progress-indicator": "^4.4.2",
     "react-native-collapsible": "^1.6.2",
     "react-native-date-picker": "^5.0.12",
     "react-native-event-listeners": "^1.0.7",
