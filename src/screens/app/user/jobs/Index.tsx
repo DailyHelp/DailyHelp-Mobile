@@ -28,7 +28,7 @@ const Jobs: IJobs = props => {
   }, [type]);
 
   return (
-    <Container flex={1} backgroundColor='white'>
+    <Container flex={1}>
       <CustomHeader
         type="tabs"
         {...props}

@@ -11,6 +11,7 @@ import {
   Camera,
   CameraDevice,
   getCameraDevice,
+  useCameraDevice,
   useCameraPermission,
 } from 'react-native-vision-camera';
 import Assets from '../../../../assets/Assets';
@@ -24,26 +25,16 @@ const FRAME_SIZE = 300;
 
 const Selfie: ISelfie = ({}) => {
   const {hasPermission, requestPermission} = useCameraPermission();
-  const [device, setDevice] = useState<CameraDevice | undefined>();
-  const [loading, setLoading] = useState(true);
-  const camera = useRef<Camera>(null);
+  const camera = React.useRef<Camera>(null);
+  const device = useCameraDevice('front');
 
-  useEffect(() => {
+  React.useEffect(() => {
     let isMounted = true;
 
     const init = async () => {
-      const granted = await requestPermission();
-      if (!granted || !isMounted) return;
-
-      const devices = await Camera.getAvailableCameraDevices();
-      const front = getCameraDevice(devices, 'front');
-      if (!front) {
-        throw new ThrowError('No front camera device found');
-      }
-
-      if (isMounted) {
-        setDevice(front);
-        setLoading(false);
+      if (!hasPermission) {
+        const granted = await requestPermission();
+        if (!granted || !isMounted) return;
       }
     };
 
@@ -75,19 +66,12 @@ const Selfie: ISelfie = ({}) => {
         style={{position: 'absolute', zIndex: 999, right: 20, top: 20}}
       />
 
-      {/* Show loading indicator until camera is ready */}
-      {loading && (
-        <View style={[StyleSheet.absoluteFill, styles.center]}>
-          <ActivityIndicator size="large" color="#fff" />
-        </View>
-      )}
-
       {/* Render camera only when device is ready */}
-      {!loading && device && hasPermission && (
+      {device && (
         <Camera
           ref={camera}
           style={StyleSheet.absoluteFill}
-          device={device}
+          device={device!}
           isActive={true}
           photo={true}
         />

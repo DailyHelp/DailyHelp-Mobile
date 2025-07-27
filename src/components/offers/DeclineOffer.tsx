@@ -1,25 +1,25 @@
-import {observer} from 'mobx-react-lite';
+import { observer } from 'mobx-react-lite';
 import React from 'react';
-import {TouchableOpacity, View} from 'react-native';
-import {Modal, Portal} from 'react-native-paper';
+import { TouchableOpacity, View } from 'react-native';
+import { Modal, Portal } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/AntDesign';
-import {scale, verticalScale} from '../../shared/Scaling';
-import MainButton from '../button/MainButton';
-import CustomInput from '../customInput/Index';
-import Typography from '../Typography';
-import utils from '../../shared/Utils';
-import AppStorage from '../../shared/AppStorage';
-import {UserTypes} from '../../shared/Constant';
 import {
   decline_reasons,
   helper_cancel_reasons,
   user_cancel_reason,
 } from '../../mock_data';
+import { UserTypes } from '../../shared/Constant';
+import { scale, verticalScale } from '../../shared/Scaling';
+import { appStore } from '../../shared/stores/appStore';
+import utils from '../../shared/Utils';
+import MainButton from '../button/MainButton';
+import CustomInput from '../customInput/Index';
+import Typography from '../Typography';
 
 const DeclineOffer: IOffer = ({isVisible, onClose, type}) => {
   const [id, setId] = React.useState<number | undefined>();
 
-  const user_type = AppStorage.find('userType') as UserTypes;
+  const user_type = appStore.user_types;
 
   const isCustomer = user_type === UserTypes.CUSTOMER;
 

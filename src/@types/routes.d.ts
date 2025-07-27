@@ -170,6 +170,10 @@ type IAppRoute = {
   ChatIndex?: undefined;
 };
 
+/**
+ * Routes for `IHomeStackRoute`
+ */
+
 type IHomeRoute = {
   Home?: undefined;
   Search?: undefined;
@@ -223,7 +227,7 @@ type IChatRoute = {
   Checkout?: undefined;
   VoiceCall?: undefined;
   Report?: undefined;
-  ReportSumitted?: undefined;
+  ReportSubmitted?: undefined;
 };
 
 type IChat = Props<NativeStackScreenProps<IChatRoute, 'Chat'>>;
@@ -234,8 +238,8 @@ type ICheckout = Props<NativeStackScreenProps<IChatRoute, 'Checkout'>>;
 
 type IVoiceCall = Props<NativeStackScreenProps<IChatRoute, 'VoiceCall'>>;
 
-type IReportSumitted = Props<
-  NativeStackScreenProps<IChatRoute, 'ReportSumitted'>
+type IReportSubmitted = Props<
+  NativeStackScreenProps<IChatRoute, 'ReportSubmitted'>
 >;
 
 type IReport = Props<
@@ -279,6 +283,8 @@ type IMoreRoute = {
   Address?: undefined;
   Feedback?: undefined;
   VerifyPhone?: undefined;
+  ServiceProfile?: {};
+  Analytics?: {};
 };
 
 type IMore = Props<NativeStackScreenProps<IMoreRoute, 'More'>>;
@@ -304,3 +310,9 @@ type IFeedback = Props<NativeStackScreenProps<IMoreRoute, 'Feedback'>>;
 type IVerifyPhone = Props<
   NativeStackScreenProps<IMoreRoute | IHomeRoute, 'VerifyPhone'>
 >;
+
+type IServiceProfile = Props<
+  NativeStackScreenProps<IMoreRoute, 'ServiceProfile'>
+>;
+
+type IAnalytics = Props<NativeStackScreenProps<IMoreRoute, 'Analytics'>>;

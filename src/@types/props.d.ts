@@ -170,6 +170,8 @@ type ICustomButton<C> = Props<{
   disableButtonColor?: C;
   borderStyle?: 'solid' | 'dotted' | 'dashed';
   borderRadius?: number;
+  mode?: 'contained' | 'text' | 'outlined';
+  borderWidth?: number;
 }>;
 
 type IOtp = Props<{

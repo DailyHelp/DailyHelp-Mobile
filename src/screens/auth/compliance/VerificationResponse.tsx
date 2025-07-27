@@ -1,15 +1,19 @@
-import {TouchableOpacity, View} from 'react-native';
+import {observer} from 'mobx-react-lite';
+import {TouchableOpacity} from 'react-native';
 import {Text} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {IVerificationResponse} from '../../../@types/routes';
 import Assets from '../../../assets/Assets';
 import MainButton from '../../../components/button/MainButton';
-import {verticalScale, scale} from '../../../shared/Scaling';
-import {customFontSize, fonts} from '../../../shared/themes/Typography';
 import Container from '../../../components/container/Index';
 import Typography from '../../../components/Typography';
+import {appStore} from '../../../shared/stores/appStore';
+import {customFontSize, fonts} from '../../../shared/themes/Typography';
+import {UserTypes} from '../../../shared/Constant';
 
 const VerificationResponse: IVerificationResponse = ({route, navigation}) => {
+  const user_type = appStore.user_types;
+
   return (
     <Container
       flex={1}
@@ -52,7 +56,11 @@ const VerificationResponse: IVerificationResponse = ({route, navigation}) => {
         <Container marginTop={50} gap={20}>
           <MainButton
             moveIconRight
-            onPress={() => navigation.navigate('ConfirmDetails')}>
+            onPress={() => {
+              if (user_type === UserTypes.CUSTOMER) {
+                appStore.setIsAuthenticated(true);
+              } else navigation.navigate('VerifyAddress');
+            }}>
             Take me home
           </MainButton>
         </Container>
@@ -67,7 +75,12 @@ const VerificationResponse: IVerificationResponse = ({route, navigation}) => {
                 size={15}
               />
             )}
-            onPress={() => navigation.replace('IdentityVerification')}>
+            onPress={() => {
+              navigation.reset({
+                index: 0,
+                routes: [{name: 'PersonalInformation'}],
+              });
+            }}>
             Edit details
           </MainButton>
 
@@ -95,4 +108,5 @@ const VerificationResponse: IVerificationResponse = ({route, navigation}) => {
     </Container>
   );
 };
-export default VerificationResponse;
+
+export default observer(VerificationResponse);

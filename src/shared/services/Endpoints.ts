@@ -19,4 +19,7 @@ export default {
   getReviews: (uuid: string) => `/users/${uuid}/reviews`,
   savePrice: '/users/save-prices',
   saveHelpersDetails: '/users/save-provider-details',
+  setDefaultLocation: (uuid: string) => `/users/${uuid}/set-default-location`,
+  customerDashboard: '/users/customer/dashboard',
+  providerDashboard: '/providers/dashboard',
 };

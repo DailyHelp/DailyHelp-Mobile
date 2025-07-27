@@ -23,6 +23,8 @@ const MainButton: ICustomButton<ColorKeys> = ({
   paddingBottom,
   width,
   marginTop,
+  mode,
+  borderWidth = 0,
 }) => {
   if (typeof width !== 'number') {
     width = utils.getDimensions(width as Dimensions);
@@ -35,13 +37,24 @@ const MainButton: ICustomButton<ColorKeys> = ({
   color = color;
   color = color;
 
+  if (mode === 'outlined') {
+    enableButtonColor = 'transparent';
+    borderWidth = 0.5;
+  }
+
+  if (disableButtonColor === 'transparent') {
+    mode = 'text';
+  } else if (disableButtonColor === 'disabled') {
+    mode = 'contained';
+  }
+
   return (
     <Button
-      mode={disableButtonColor === 'transparent' ? 'text' : 'contained'}
+      mode={mode}
       icon={icon}
       loading={loading}
       onPress={onPress}
-      style={{borderRadius, borderColor, width, marginTop}}
+      style={{borderRadius, borderColor, width, marginTop, borderWidth}}
       textColor={disabled ? Colors[disableColor] : Colors[color]}
       buttonColor={
         disabled ? Colors[disableButtonColor] : Colors[enableButtonColor]

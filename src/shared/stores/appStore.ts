@@ -82,6 +82,13 @@ class AppStore {
     if (dto) {
       this.user_types = userType;
       AppStorage.save('userType', userType);
+    } else {
+      AppStorage.removeSelected([
+        'access_token',
+        'userType',
+        'routes',
+        'phone',
+      ]);
     }
   }
 }

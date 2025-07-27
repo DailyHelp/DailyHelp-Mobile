@@ -317,10 +317,20 @@ class Utils {
   useUploadImage() {
     const [isLoading, setLoading] = React.useState(false);
 
-    const upload = async (image: string) => {
+    const upload = async (
+      uri: string,
+      preset: 'compliance' | 'profile' = 'profile',
+    ) => {
       try {
         setLoading(true);
-        const data = await http.imageUpload(image);
+
+        if (Platform.OS === 'android' && !uri?.startsWith('file://')) {
+          uri = `file://${uri}`;
+        }
+        const data = await http.imageUpload(uri);
+
+        if (data.error) new ThrowError(data.error);
+
         setLoading(false);
         return data.secure_url;
       } catch (error) {

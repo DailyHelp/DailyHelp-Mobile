@@ -4,6 +4,7 @@ import ThrowError from '../errors/throwError';
 import utils from '../Utils';
 import AppStorage from '../AppStorage';
 import {customFontSize, fonts} from '../themes/Typography';
+import {Platform} from 'react-native';
 
 type Headers = {
   Authorization: string;
@@ -54,13 +55,16 @@ export default class Http {
     return resp;
   }
 
-  public async imageUpload(uri: string, preset: string = 'dznfeps0z') {
+  public async imageUpload(
+    uri: string,
+    preset: 'compliance' | 'profile' = 'profile',
+  ) {
     const body = new FormData();
 
     body.append('file', {
       uri: uri,
       type: 'image/jpeg',
-      name: uri.split('/').pop(),
+      name: `${preset}_photo_${Date.now()}.jpg`,
     } as any);
 
     body.append('upload_preset', preset);

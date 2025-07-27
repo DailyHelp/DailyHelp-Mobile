@@ -4,11 +4,10 @@ import { BackHandler } from 'react-native';
 import { IVerifyIdentity } from '../../@types/routes';
 import Assets from '../../assets/Assets';
 import MainButton from '../../components/button/MainButton';
-import OutlineButton from '../../components/button/OutlineButton';
 import Container from '../../components/container/Index';
 import Typography from '../../components/Typography';
-import { UserTypes } from '../../shared/Constant';
 import { appStore } from '../../shared/stores/appStore';
+import { UserTypes } from '../../shared/Constant';
 
 const VerifyIdentity: IVerifyIdentity = ({route, navigation}) => {
   React.useEffect(() => {
@@ -18,7 +17,7 @@ const VerifyIdentity: IVerifyIdentity = ({route, navigation}) => {
   return (
     <Container width={'full'} flex={1}>
       <Assets.Kyc />
-      <Container width={'95'} gap={10}>
+      <Container gap={10} padding={8}>
         <Typography fontWeight="bold" size="m2d" color="secondary">
           Hello {route.params?.last_name}!
         </Typography>
@@ -40,17 +39,22 @@ const VerifyIdentity: IVerifyIdentity = ({route, navigation}) => {
             </Typography>
           </Container>
 
-          <Container gap={20} marginTop={20}>
+          <Container gap={20} marginTop={20} alignItems="center">
             <MainButton
+              width={'95'}
               onPress={() => navigation.navigate('PersonalInformation')}>
               Verify identity
             </MainButton>
-            <OutlineButton
+            <MainButton
+              mode="text"
+              enableButtonColor='offWhite'
+              color='black'
+              width={'95'}
               onPress={() => {
-                appStore.setIsAuthenticated(true);
+                appStore.setIsAuthenticated(true, UserTypes.PROVIDER);
               }}>
               Do this later
-            </OutlineButton>
+            </MainButton>
           </Container>
         </Container>
       </Container>

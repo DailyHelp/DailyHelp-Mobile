@@ -1,16 +1,11 @@
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {IMoreRoute} from '../../@types/routes';
-import AppStorage from '../../shared/AppStorage';
-import {UserTypes} from '../../shared/Constant';
-import {UserMoreStackRoutes} from './UserRoutes';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { IMoreRoute } from '../../@types/routes';
+import { MoreStackRoutes } from './UserRoutes';
 
 const MoreStack = createNativeStackNavigator<IMoreRoute>();
 
 const MoreRoute: Props = () => {
-  const userType = AppStorage.find('userType');
-  const isUser = userType === UserTypes.CUSTOMER;
-
-  const route = isUser ? UserMoreStackRoutes : UserMoreStackRoutes;
+  const route = MoreStackRoutes;
 
   return (
     <MoreStack.Navigator

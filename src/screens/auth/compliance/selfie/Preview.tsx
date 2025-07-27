@@ -9,12 +9,16 @@ import {Text} from 'react-native-paper';
 import {customFontSize, fonts} from '../../../../shared/themes/Typography';
 import {ISelfieVerification} from '../../../../@types/routes';
 import Container from '../../../../components/container/Index';
+import utils from '../../../../shared/Utils';
 
 const Preview: ISelfieVerification = ({navigation, route}) => {
+  const {isLoading, upload} = utils.useUploadImage();
+
   return (
     <Container
       flex={1}
       justifyContent="center"
+      alignSelf="center"
       backgroundColor="white"
       alignItems="center"
       width={'95'}
@@ -35,8 +39,9 @@ const Preview: ISelfieVerification = ({navigation, route}) => {
         />
       </View>
 
-      <View style={{marginTop: verticalScale(150), width: '90%', gap: 20}}>
+      <View style={{marginTop: verticalScale(150), width: '95%', gap: 20}}>
         <MainButton
+          loading={isLoading}
           icon={() => (
             <Icon
               name="arrow-right-l"
@@ -45,12 +50,16 @@ const Preview: ISelfieVerification = ({navigation, route}) => {
             />
           )}
           moveIconRight
-          onPress={() =>
-            navigation.navigate('ConfirmDetails', {
-              ...route.params,
-              photo: appStore.selfiePhoto?.path,
-            })
-          }>
+          onPress={async () => {
+            const res = await upload(appStore.selfiePhoto?.path!, 'compliance');
+
+            if (res) {
+              navigation.navigate('ConfirmDetails', {
+                ...route.params,
+                photo: res,
+              });
+            }
+          }}>
           Looks good
         </MainButton>
 

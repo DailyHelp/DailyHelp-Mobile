@@ -1,17 +1,14 @@
+import dayjs from 'dayjs';
 import {Image, Text, View} from 'react-native';
 import {IConfirmDetails} from '../../../@types/routes';
 import MainButton from '../../../components/button/MainButton';
+import Container from '../../../components/container/Index';
 import ScreenHeader from '../../../components/ScreenHeader';
-import {verticalScale, scale} from '../../../shared/Scaling';
+import {scale, verticalScale} from '../../../shared/Scaling';
 import {appStore} from '../../../shared/stores/appStore';
 import {customFontSize, fonts} from '../../../shared/themes/Typography';
-import dayjs from 'dayjs';
-import Container from '../../../components/container/Index';
-import utils from '../../../shared/Utils';
 
 const ConfirmDetails: IConfirmDetails = ({navigation, route}) => {
-  const {isLoading, upload} = utils.useUploadImage();
-
   const user_data = [
     {
       title: 'Full name',
@@ -93,12 +90,8 @@ const ConfirmDetails: IConfirmDetails = ({navigation, route}) => {
 
         <View style={{marginTop: verticalScale(100)}}>
           <MainButton
-            loading={isLoading}
-            onPress={async () => {
-              const res = await upload(route.params?.photo!);
-              navigation.setParams({...route.params, photo: res});
-
-              if (res) navigation.navigate('Verifying', route.params);
+            onPress={() => {
+              navigation.navigate('Verifying', route.params);
             }}>
             Verify Identity
           </MainButton>

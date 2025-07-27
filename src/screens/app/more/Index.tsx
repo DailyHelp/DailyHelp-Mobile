@@ -26,7 +26,7 @@ const More: IMore = ({navigation}) => {
         {
           name: 'Service profile',
           Icon: Assets.ServiceProfile,
-          navigate: () => navigation.navigate('AccountSettings'),
+          navigate: () => navigation.navigate('ServiceProfile'),
           access: [UserTypes.PROVIDER],
         },
         {
@@ -44,7 +44,7 @@ const More: IMore = ({navigation}) => {
         {
           name: 'Analytics',
           Icon: Assets.Analytics,
-          navigate: () => navigation.navigate('Disputes'),
+          navigate: () => navigation.navigate('Analytics'),
           access: [UserTypes.PROVIDER],
         },
         {

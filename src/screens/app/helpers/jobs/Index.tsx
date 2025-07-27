@@ -1,9 +1,9 @@
 import React from 'react';
-import {IJobs} from '../../../../@types/routes';
+import { IJobs } from '../../../../@types/routes';
 import Container from '../../../../components/container/Index';
 import CustomFlatList from '../../../../components/CustomFlatList';
 import CustomHeader from '../../../../components/customHeader/Index';
-import {UserTypes} from '../../../../shared/Constant';
+import { UserTypes } from '../../../../shared/Constant';
 import JobsCard from '../../user/jobs/components/JobsCard';
 import JobPending from './components/JobPending';
 
@@ -38,9 +38,8 @@ const Jobs: IJobs = props => {
         onPress={setType}
         initialTab="pending"
         tabs={jobs}
-        width={'full'}
       />
-      <Container padding={type === 'pending' ? 0 : 15} width={'full'}>
+      <Container padding={15} width={'90'}>
         {type === 'pending' ? (
           <JobPending />
         ) : (

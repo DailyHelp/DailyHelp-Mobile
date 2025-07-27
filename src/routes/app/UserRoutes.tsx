@@ -40,6 +40,7 @@ import Address from '../../screens/app/more/Address';
 import Feedback from '../../screens/app/more/Feedback';
 import ReportSumitted from '../../screens/app/chat/report/ReportSumitted';
 import VerifyPhone from '../../screens/app/more/VerifyPhone';
+import Analytics from '../../screens/app/more/Analytics';
 
 type LabelPosition = 'beside-icon' | 'below-icon';
 
@@ -347,7 +348,7 @@ export const UserJobsStackRoutes = [
   },
 ];
 
-export const UserMoreStackRoutes = [
+export const MoreStackRoutes = [
   {
     name: 'More',
     component: More,
@@ -493,6 +494,26 @@ export const UserMoreStackRoutes = [
   {
     name: 'VerificationResponse',
     component: VerificationResponse,
+  },
+  {
+    name: 'ServiceProfile',
+    component: ServiceProfile,
+    options: {
+      headerShown: true,
+      header: (props: NativeStackHeaderProps) => (
+        <CustomHeader type="back" title="Service profile" {...props} textMiddle />
+      ),
+    },
+  },
+  {
+    name: 'Analytics',
+    component: Analytics,
+    options: {
+      headerShown: true,
+      header: (props: NativeStackHeaderProps) => (
+        <CustomHeader type="back" title="Analytics" {...props} textMiddle />
+      ),
+    },
   },
   {
     name: 'Address',
