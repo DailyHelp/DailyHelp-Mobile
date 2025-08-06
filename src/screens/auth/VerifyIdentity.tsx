@@ -51,7 +51,7 @@ const VerifyIdentity: IVerifyIdentity = ({route, navigation}) => {
               color='black'
               width={'95'}
               onPress={() => {
-                appStore.setIsAuthenticated(true, UserTypes.PROVIDER);
+                appStore.setIsAuthenticated(true, UserTypes.CUSTOMER);
               }}>
               Do this later
             </MainButton>

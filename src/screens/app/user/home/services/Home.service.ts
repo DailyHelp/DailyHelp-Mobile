@@ -1,4 +1,4 @@
-import {useMutation, useQuery} from '@tanstack/react-query';
+import {QueryClient, useMutation, useQuery} from '@tanstack/react-query';
 import Geolocation, {
   GeolocationResponse,
 } from '@react-native-community/geolocation';
@@ -33,7 +33,7 @@ class HomeService extends HomeApi {
 
   useSavedLocation() {
     const {data, isLoading, error} = useQuery({
-      queryKey: ['savedLocation'],
+      queryKey: ['saved-location'],
       queryFn: async () => await this.getSavedLocation(),
       enabled: Boolean(appStore.isAuthenticated),
     });
@@ -42,6 +42,8 @@ class HomeService extends HomeApi {
   }
 
   useLocation(search?: string) {
+    const query = new QueryClient();
+
     const [locations, setLocations] =
       React.useState<Partial<SaveLocationDto>[]>();
 
@@ -51,7 +53,9 @@ class HomeService extends HomeApi {
         return await this.saveLocation(body);
       },
       onError: error => new CatchError(error, true),
-      onSuccess: data => {},
+      onSuccess: data => {
+        query.invalidateQueries({queryKey: ['saved-location']});
+      },
     });
 
     React.useEffect(() => {
@@ -151,6 +155,7 @@ class HomeService extends HomeApi {
           description: item.description,
           lat: item.coordinates?.lat || 0,
           lng: item.coordinates?.lng || 0,
+          state: item.state,
         };
       });
     };
@@ -177,6 +182,16 @@ class HomeService extends HomeApi {
       savePrice: mutateAsync,
       isPending,
     };
+  }
+
+  useCustomerDashboard(query: ProvidersQuery) {
+    const {data, isLoading, error} = useQuery({
+      queryKey: ['customer-dashboard', query],
+      queryFn: async () => await this.getCustomerDashboard(query),
+      enabled: Boolean(appStore.isAuthenticated),
+    });
+
+    return {data, isLoading, error};
   }
 
   useSaveHelpersDetails() {

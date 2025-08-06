@@ -32,7 +32,7 @@ const HelperCard: IHelperCard = ({data, mode, horizontal}) => {
             }}>
             <Card.Cover
               style={{height: verticalScale(150)}}
-              source={data?.brandImage}
+              source={{uri: data?.brandImage?.[0]}}
             />
             <View
               style={{
@@ -120,8 +120,10 @@ const HelperCard: IHelperCard = ({data, mode, horizontal}) => {
 
             <View
               style={{flexDirection: 'row', justifyContent: 'center', gap: 20}}>
-              <StatusChip dotColor="#27A535" backgroundColor="#E6FFF4">
-                {data?.status}
+              <StatusChip
+                dotColor={data?.availability ? '#27A535' : '#F0443A'}
+                backgroundColor={data?.availability ? '#E6FFF4"' : '#FEF6F6'}>
+                {data?.availability ? 'Available' : 'Unavailable'}
               </StatusChip>
               <StatusChip backgroundColor="#F3F4F6">
                 {data?.jobsCompleted} jobs completed
@@ -143,7 +145,7 @@ const HelperCard: IHelperCard = ({data, mode, horizontal}) => {
             }}>
             <Card.Cover
               style={{height: verticalScale(150)}}
-              source={data?.brandImage}
+              source={{uri: data?.brandImage?.[0]}}
             />
 
             <View
@@ -204,8 +206,10 @@ const HelperCard: IHelperCard = ({data, mode, horizontal}) => {
                 gap: 20,
                 paddingLeft: verticalScale(20),
               }}>
-              <StatusChip dotColor="#27A535" backgroundColor="#E6FFF4">
-                {data?.status}
+              <StatusChip
+                dotColor={data?.availability ? '#27A535' : '#F0443A'}
+                backgroundColor={data?.availability ? '#E6FFF4"' : '#FEF6F6'}>
+                {data?.availability ? 'Available' : 'Unavailable'}
               </StatusChip>
               <StatusChip backgroundColor="#F3F4F6">
                 {data?.jobsCompleted} jobs completed

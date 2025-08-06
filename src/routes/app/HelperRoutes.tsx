@@ -10,6 +10,7 @@ import Home from '../../screens/app/helpers/home/Index';
 import {NativeStackHeaderProps} from '@react-navigation/native-stack';
 import CustomHeader from '../../components/customHeader/Index';
 import Jobs from '../../screens/app/helpers/jobs/Index';
+import JobDetails from '../../screens/app/helpers/jobs/JobDetails';
 
 type LabelPosition = 'beside-icon' | 'below-icon';
 
@@ -161,6 +162,13 @@ export const HelperJobStackRoutes = [
   {
     name: 'Jobs',
     component: Jobs,
+    options: {
+      headerShown: false,
+    },
+  },
+  {
+    name: 'ViewDetails',
+    component: JobDetails,
     options: {
       headerShown: false,
     },

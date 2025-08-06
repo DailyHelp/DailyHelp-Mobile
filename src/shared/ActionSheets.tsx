@@ -33,10 +33,15 @@ declare module 'react-native-actions-sheet' {
         subTitle?: string;
       };
       returnValue: {
-        value: string;
+        subCategory: string[];
+        mainCategory: string[];
       };
     }>;
-    Rating: SheetDefinition<{}>;
+    Rating: SheetDefinition<{
+      returnValue: {
+        minRating: string;
+      };
+    }>;
     FundWallet: SheetDefinition<{
       returnValue: {
         amount: number;
@@ -53,7 +58,12 @@ declare module 'react-native-actions-sheet' {
         address?: string;
       };
     }>;
-    PriceRange: SheetDefinition<{}>;
+    PriceRange: SheetDefinition<{
+      returnValue: {
+        minPrice: number;
+        maxPrice: number;
+      };
+    }>;
     Gallery: SheetDefinition<{}>;
     FaceMatch: SheetDefinition<{}>;
     CancelJob: SheetDefinition<{}>;

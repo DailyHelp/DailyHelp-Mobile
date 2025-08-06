@@ -1,14 +1,13 @@
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 import React, {useState} from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
-import ActionSheet from 'react-native-actions-sheet';
+import ActionSheet, {SheetManager} from 'react-native-actions-sheet';
 import Assets from '../../../../../assets/Assets';
-import {scale, verticalScale} from '../../../../../shared/Scaling';
-import {customFontSize, fonts} from '../../../../../shared/themes/Typography';
 import Typography from '../../../../../components/Typography';
+import {scale, verticalScale} from '../../../../../shared/Scaling';
+import {fonts} from '../../../../../shared/themes/Typography';
 
 const PriceRange = React.forwardRef((props, ref) => {
-  const [search, setSearch] = useState('');
   const [priceRange, setPriceRange] = useState([2000, 100000]);
 
   return (
@@ -31,7 +30,7 @@ const PriceRange = React.forwardRef((props, ref) => {
             justifyContent: 'space-between',
             marginBottom: 12,
           }}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => SheetManager.hide('PriceRange')}>
             <Typography fontWeight="bold" size="md" color="gray">
               Cancel
             </Typography>
@@ -39,7 +38,12 @@ const PriceRange = React.forwardRef((props, ref) => {
           <Typography fontWeight="bold" size="md" color="black">
             Price range
           </Typography>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              SheetManager.hide('PriceRange', {
+                payload: {maxPrice: priceRange[1], minPrice: priceRange[0]},
+              });
+            }}>
             <Typography fontWeight="bold" size="md" color="secondary">
               Apply
             </Typography>

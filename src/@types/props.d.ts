@@ -186,14 +186,17 @@ type IOtp = Props<{
 
 type ISelfie = Props<{}>;
 
-type ICategorySection = Props<{
-  categories: {
+type ICategorySection = Props<
+  {
+    onFilter?: (query: ProvidersQuery) => void;
+  },
+  {
     label: string;
     slug?: string;
     showIcon?: boolean;
     value?: string;
-  }[];
-}>;
+  }[]
+>;
 
 type IVerifyPhoneNumberContainer = Props<{}>;
 
@@ -209,11 +212,11 @@ type IHelperCard = Props<
   },
   {
     image?: any;
-    brandImage?: any;
+    brandImage?: string[];
     skill?: string;
     price?: string;
     rating?: number;
-    status?: string;
+    availability?: boolean;
     jobsCompleted?: number;
     name?: string;
     badge?: 'bronze' | 'gold' | 'silver' | 'diamond';

@@ -1,6 +1,6 @@
 import React from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
-import ActionSheet from 'react-native-actions-sheet';
+import ActionSheet, {SheetManager} from 'react-native-actions-sheet';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {verticalScale} from '../../../../../shared/Scaling';
 import {customFontSize, fonts} from '../../../../../shared/themes/Typography';
@@ -30,7 +30,7 @@ const Rating = React.forwardRef((props, ref) => {
             justifyContent: 'space-between',
             marginBottom: 12,
           }}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => SheetManager.hide('Rating')}>
             <Text
               style={{
                 fontFamily: fonts.GeistBold,
@@ -48,7 +48,14 @@ const Rating = React.forwardRef((props, ref) => {
             }}>
             Select category
           </Text>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              SheetManager.hide('Rating', {
+                payload: {
+                  minRating: rate,
+                },
+              });
+            }}>
             <Text
               style={{
                 fontFamily: fonts.GeistBold,

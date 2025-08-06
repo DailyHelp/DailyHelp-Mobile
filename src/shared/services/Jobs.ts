@@ -47,4 +47,52 @@ export default class JobsApi extends Http {
 
     return data;
   }
+
+  protected async getCustomerConversation(query: PaginationQuery) {
+    const res = await this.fetchHandler({
+      path: Endpoints.getCustomerConversations(query),
+      method: 'GET',
+    });
+    const data = await this.handleResponse<any>(res);
+
+    this.success(data?.message);
+
+    return data;
+  }
+
+  protected async sendCustomerMessage(uuid: string) {
+    const res = await this.fetchHandler({
+      path: Endpoints.sendCustomerMessage(uuid),
+      method: 'POST',
+    });
+    const data = await this.handleResponse<any>(res);
+
+    this.success(data?.message);
+
+    return data;
+  }
+
+  protected async customerReportConversation(uuid: string) {
+    const res = await this.fetchHandler({
+      path: Endpoints.customerReportConversation(uuid),
+      method: 'POST',
+    });
+    const data = await this.handleResponse<any>(res);
+
+    this.success(data?.message);
+
+    return data;
+  }
+
+  protected async getSimilarProviders(uuid: string) {
+    const res = await this.fetchHandler({
+      path: Endpoints.getSimilarProducts(uuid),
+      method: 'GET',
+    });
+    const data = await this.handleResponse<any>(res);
+
+    this.success(data?.message);
+
+    return data;
+  }
 }

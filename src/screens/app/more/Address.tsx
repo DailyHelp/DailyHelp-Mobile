@@ -1,16 +1,15 @@
 import React from 'react';
-import {TouchableOpacity, View} from 'react-native';
-import {IAddress} from '../../../@types/routes';
+import { TouchableOpacity } from 'react-native';
+import { SheetManager } from 'react-native-actions-sheet';
+import Icon from 'react-native-vector-icons/Feather';
+import { IAddress } from '../../../@types/routes';
 import Assets from '../../../assets/Assets';
+import Container from '../../../components/container/Index';
 import CustomFlatList from '../../../components/CustomFlatList';
 import CustomInput from '../../../components/customInput/Index';
 import Typography from '../../../components/Typography';
-import {scale, verticalScale} from '../../../shared/Scaling';
 import utils from '../../../shared/Utils';
-import Icon from 'react-native-vector-icons/Feather';
-import {SheetManager} from 'react-native-actions-sheet';
 import homeService from '../user/home/services/Home.service';
-import Container from '../../../components/container/Index';
 
 const Address: IAddress = ({navigation, route}) => {
   utils.useHideBottomTab(navigation);
@@ -38,6 +37,7 @@ const Address: IAddress = ({navigation, route}) => {
     ),
     [],
   );
+console.log(data);
 
   return (
     <Container flex={1} width={'full'} backgroundColor="white">

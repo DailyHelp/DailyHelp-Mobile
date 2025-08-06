@@ -9,16 +9,31 @@ import AppStorage from '../../../../shared/AppStorage';
 import CategorySection from './components/CategorySection';
 import HelperCard from './components/HelperCard';
 import VerifyPhoneNumberContainer from './components/VerifyNumberContainer';
+import homeService from './services/Home.service';
+import ProvidersDto from './dto/providersDto';
 
 const Home: IHome = () => {
+  const [query, setQuery] = React.useState<ProvidersQuery>({
+    page: '1',
+    limit: '10',
+  });
+
+  const {data} = homeService.useCustomerDashboard(query);
+  console.log(data);
+
   return (
     <FlatList
       data={[]}
       ListHeaderComponent={
         <Container width={'full'} gap={20}>
-          <Container backgroundColor="white" width={'full'} gap={9}>
+          <Container
+            backgroundColor="white"
+            width={'full'}
+            gap={9}
+            paddingTop={10}>
             <CategorySection
-              categories={[
+              onFilter={q => setQuery({...query, ...q})}
+              data={[
                 {label: 'All categories', showIcon: true},
                 {label: 'Available'},
                 {label: 'Price', showIcon: true},
@@ -31,31 +46,59 @@ const Home: IHome = () => {
           </Container>
 
           <Container width={'95'} gap={9}>
-            <Typography fontWeight="bold" size="m3d">
+            <Typography fontWeight="bold" size="m3d" padding={10}>
               Top rated
             </Typography>
 
-            <CustomFlatList
-              data={top_rated}
+            <CustomFlatList<ProvidersDto>
+              data={data?.data.topRatedProviders}
               horizontal
-              keyExtractor={(item: any, index) => item.name + index}
-              renderItem={(item: any) => (
-                <HelperCard mode="middle" data={item.item} horizontal />
+              keyExtractor={(item, index) => item.uuid + index}
+              renderItem={({item}) => (
+                <HelperCard
+                  mode="middle"
+                  data={{
+                    badge: item?.tier?.toLowerCase() as any,
+                    brandImage: item.serviceImages,
+                    image: item.picture,
+                    jobsCompleted: item.completedJobs,
+                    name: `${item.lastname} ${item.firstname}`,
+                    price: item.offerStartingPrice.toString(),
+                    rating: item.avgRating,
+                    skill: item.serviceDescription,
+                    availability: item.availability,
+                  }}
+                  horizontal
+                />
               )}
             />
           </Container>
 
           <Container width={'95'} gap={9}>
-            <Typography fontWeight="bold" size="m3d">
+            <Typography fontWeight="bold" size="m3d" padding={10}>
               Recommended
             </Typography>
 
-            <CustomFlatList
-              data={top_rated}
+            <CustomFlatList<ProvidersDto>
+              data={data?.data.recommendedProviders}
               horizontal
-              keyExtractor={(item: any, index) => item.name + index}
-              renderItem={(item: any) => (
-                <HelperCard mode="row" data={item.item} horizontal />
+              keyExtractor={(item, index) => item.uuid + index}
+              renderItem={({item}) => (
+                <HelperCard
+                  mode="row"
+                  data={{
+                    badge: item?.tier?.toLowerCase() as any,
+                    brandImage: item.serviceImages,
+                    image: item.picture,
+                    jobsCompleted: item.completedJobs,
+                    name: `${item.lastname} ${item.firstname}`,
+                    price: item.offerStartingPrice.toString(),
+                    rating: item.avgRating,
+                    skill: item.serviceDescription,
+                    availability: item.availability,
+                  }}
+                  horizontal
+                />
               )}
             />
           </Container>
@@ -65,11 +108,24 @@ const Home: IHome = () => {
               Explore
             </Typography>
 
-            <CustomFlatList
-              data={top_rated}
-              keyExtractor={(item: any, index) => item.name + index}
-              renderItem={(item: any) => (
-                <HelperCard mode="row" data={item.item} />
+            <CustomFlatList<ProvidersDto>
+              data={data?.data.allProviders}
+              keyExtractor={(item, index) => item.uuid + index}
+              renderItem={({item}) => (
+                <HelperCard
+                  mode="row"
+                  data={{
+                    badge: item?.tier?.toLowerCase() as any,
+                    brandImage: item.serviceImages,
+                    image: item.picture,
+                    jobsCompleted: item.completedJobs,
+                    name: `${item.lastname} ${item.firstname}`,
+                    price: item.offerStartingPrice.toString(),
+                    rating: item.avgRating,
+                    skill: item.serviceDescription,
+                    availability: item.availability,
+                  }}
+                />
               )}
             />
           </Container>

@@ -27,3 +27,10 @@ type ApiResponse<T> = {
 };
 
 type Route = 'authentication' | 'app';
+
+type PaginationQuery = {
+  limit?: string;
+  page?: string;
+  orderBy?: string;
+  orderDir?: 'ASC' | 'DESC';
+};

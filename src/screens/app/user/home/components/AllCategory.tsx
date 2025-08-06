@@ -21,10 +21,10 @@ const getCategoryImage = (categoryName: string) => {
     'Food & Kitchen': Assets.FoodKitchen,
     'Family & Personal Care': Assets.Comb,
     'Transport & Delivery': Assets.Transport,
-    'Automobile Services': Assets.Transport,
-    'Tech & Digital Help': Assets.Maintenance,
-    'Events & Setup': Assets.Maintenance,
-    'Skilled Labor': Assets.Maintenance,
+    'Automobile Services': Assets.AutomobileServices,
+    'Tech & Digital Help': Assets.TechDigitalSkills,
+    'Events & Setup': Assets.EventsSetup,
+    'Skilled Labor': Assets.SkilledLabour,
   };
 
   return imageMap[categoryName as keyof typeof imageMap] || Assets.Maintenance;
@@ -99,8 +99,12 @@ const CategoryActionSheet = React.forwardRef<
     if (props?.onCategoriesSelected) {
       props.onCategoriesSelected(selected);
     }
-    SheetManager.hide('AllCategory');
+    SheetManager.hide('AllCategory', {
+      payload: {subCategory: selected, mainCategory: openSections},
+    });
   };
+
+  console.log(openSections, selected);
 
   return (
     <ActionSheet

@@ -1,5 +1,5 @@
-import { SheetManager } from 'react-native-actions-sheet';
-import { Divider } from 'react-native-paper';
+import {SheetManager} from 'react-native-actions-sheet';
+import {Divider} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Assets from '../../../../../assets/Assets';
 import MainButton from '../../../../../components/button/MainButton';
@@ -7,8 +7,8 @@ import OutlineButton from '../../../../../components/button/OutlineButton';
 import Container from '../../../../../components/container/Index';
 import CustomAvatar from '../../../../../components/CustomAvatar';
 import Typography from '../../../../../components/Typography';
-import { UserTypes } from '../../../../../shared/Constant';
-import { verticalScale } from '../../../../../shared/Scaling';
+import {UserTypes} from '../../../../../shared/Constant';
+import {verticalScale} from '../../../../../shared/Scaling';
 
 const JobsCard: IJobsCard<UserTypes> = ({
   type = 'pending',
@@ -85,22 +85,21 @@ const JobsCard: IJobsCard<UserTypes> = ({
         </OutlineButton>
       )}
 
-      {(type === 'ongoing' || type === 'pending') &&
-        userType !== UserTypes.PROVIDER && (
-          <Container flexDirection="row" gap={6}>
-            <MainButton
-              onPress={viewDetails}
-              width={'75%'}
-              enableButtonColor="lightGrey"
-              color="black">
-              View details
-            </MainButton>
+      {(type === 'ongoing' || type === 'pending') && (
+        <Container flexDirection="row" gap={6}>
+          <MainButton
+            onPress={viewDetails}
+            width={'75%'}
+            enableButtonColor="lightGrey"
+            color="black">
+            View details
+          </MainButton>
 
-            <MainButton enableButtonColor="lightGrey">
-              <Assets.SendOffer />
-            </MainButton>
-          </Container>
-        )}
+          <MainButton enableButtonColor="lightGrey">
+            <Assets.SendOffer />
+          </MainButton>
+        </Container>
+      )}
     </Container>
   );
 };

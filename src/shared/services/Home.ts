@@ -4,6 +4,10 @@ import Endpoints from './Endpoints';
 import Http from './Http';
 import SavePriceDTO from '../../screens/app/user/home/dto/SavePriceDto';
 import SaveHelpersDetailsDTO from '../../screens/app/user/home/dto/SaveHelpersDetailsDto';
+import ProvidersDto from '../../screens/app/user/home/dto/providersDto';
+import {CustomerDashboardDto} from '../../screens/app/user/home/dto/customer-dahsboard.dto';
+import utils from '../Utils';
+import UserDTO from '../../screens/auth/dto/UserDto';
 
 export default class HomeApi extends Http {
   protected async getAllCategories() {
@@ -34,6 +38,18 @@ export default class HomeApi extends Http {
     });
 
     const data = await this.handleResponse(res);
+
+    this.success(data?.message);
+
+    return data;
+  }
+
+  protected async customerSetDefaultLocation(uuid: string) {
+    const res = await this.fetchHandler({
+      path: Endpoints.customerSetDefaultLocation(uuid),
+      method: 'GET',
+    });
+    const data = await this.handleResponse<any>(res);
 
     this.success(data?.message);
 
@@ -94,6 +110,7 @@ export default class HomeApi extends Http {
         return data.predictions.map(prediction => ({
           description: prediction.description,
           place_id: prediction.place_id,
+          state: prediction.terms[2].value,
         }));
       }
 
@@ -125,18 +142,25 @@ export default class HomeApi extends Http {
             return {
               ...prediction,
               coordinates: detailsData.result.geometry.location,
+              state: prediction.terms[2].value,
             };
           } catch (error) {
             console.error('Error fetching place details:', error);
             return {
               ...prediction,
               coordinates: undefined,
+              state: undefined,
             };
           }
         }),
       );
 
-      return predictionsWithCoords;
+      return predictionsWithCoords.map(d => ({
+        description: d.description,
+        place_id: d.place_id,
+        coordinates: d.coordinates,
+        state: d.terms[2].value,
+      }));
     } catch (error: any) {
       console.error('Address search failed:', error);
       throw new Error(`Failed to search addresses: ${error.message}`);
@@ -161,6 +185,42 @@ export default class HomeApi extends Http {
       body,
     });
     const data = await this.handleResponse<any>(res);
+
+    this.success(data?.message);
+
+    return data;
+  }
+
+  protected async getCustomerDashboard(query: ProvidersQuery) {
+    const res = await this.fetchHandler({
+      path: Endpoints.customersDashboard(query),
+      method: 'GET',
+    });
+    const data = await this.handleResponse<CustomerDashboardDto>(res);
+
+    this.success(data?.message);
+
+    return data;
+  }
+
+  protected async getCustomer() {
+    const res = await this.fetchHandler({
+      path: Endpoints.customer,
+      method: 'GET',
+    });
+    const data = await this.handleResponse<UserDTO>(res);
+
+    this.success(data?.message);
+
+    return data;
+  }
+
+  protected async getProvider() {
+    const res = await this.fetchHandler({
+      path: Endpoints.provider,
+      method: 'GET',
+    });
+    const data = await this.handleResponse<UserDTO>(res);
 
     this.success(data?.message);
 

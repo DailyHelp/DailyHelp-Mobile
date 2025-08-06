@@ -1,15 +1,16 @@
 import React from 'react';
 import Icon from 'react-native-vector-icons/AntDesign';
-import Assets from '../../../../../assets/Assets';
-import MainButton from '../../../../../components/button/MainButton';
-import Container from '../../../../../components/container/Index';
-import CustomAvatar from '../../../../../components/CustomAvatar';
-import Offer from '../../../../../components/offers/Index';
-import Typography from '../../../../../components/Typography';
-import { verticalScale } from '../../../../../shared/Scaling';
-import utils from '../../../../../shared/Utils';
+import Assets from '../../../../assets/Assets';
+import MainButton from '../../../../components/button/MainButton';
+import Container from '../../../../components/container/Index';
+import CustomAvatar from '../../../../components/CustomAvatar';
+import Offer from '../../../../components/offers/Index';
+import Typography from '../../../../components/Typography';
+import {verticalScale} from '../../../../shared/Scaling';
+import utils from '../../../../shared/Utils';
+import {IViewDetails} from '../../../../@types/routes';
 
-const JobPending: IJobPending = ({navigation, route}) => {
+const JobDetails: IViewDetails = ({navigation, route}) => {
   const [visible, setVisible] = React.useState(false);
   utils.useHideBottomTab(navigation);
 
@@ -152,4 +153,4 @@ const JobPending: IJobPending = ({navigation, route}) => {
     </Container>
   );
 };
-export default JobPending;
+export default JobDetails;

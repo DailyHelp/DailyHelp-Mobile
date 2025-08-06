@@ -1,12 +1,10 @@
-import {TouchableOpacity, View} from 'react-native';
-import {Text} from 'react-native-paper';
-import Icon from 'react-native-vector-icons/FontAwesome5';
-import {customFontSize, fonts} from '../../shared/themes/Typography';
-import {scale, verticalScale} from '../../shared/Scaling';
 import {NativeStackHeaderProps} from '@react-navigation/native-stack';
-import Assets from '../../assets/Assets';
+import {TouchableOpacity} from 'react-native';
 import {SheetManager} from 'react-native-actions-sheet';
+import Icon from 'react-native-vector-icons/FontAwesome5';
+import Assets from '../../assets/Assets';
 import homeService from '../../screens/app/user/home/services/Home.service';
+import {scale, verticalScale} from '../../shared/Scaling';
 import utils from '../../shared/Utils';
 import Container from '../container/Index';
 import Typography from '../Typography';
@@ -17,6 +15,7 @@ const HomeHeader: ICustomHeader<NativeStackHeaderProps> = ({
   goBack,
 }) => {
   const {data} = homeService.useSavedLocation();
+  const {onSubmit} = homeService.useLocation();
 
   const location = data?.[0]?.description || title;
   const trimmedLocation = utils.ellipseText(location);
@@ -32,7 +31,10 @@ const HomeHeader: ICustomHeader<NativeStackHeaderProps> = ({
       height={50}>
       <TouchableOpacity
         onPress={() => {
-          SheetManager.show('HomeAddress', {payload: {showCurrent: true}});
+          SheetManager.show('HomeAddress', {
+            payload: {showCurrent: true},
+            onClose: d => onSubmit({...d}),
+          });
         }}>
         <Container flexDirection="row" gap={5}>
           <Assets.HomeLocationPin style={{width: scale(30)}} />

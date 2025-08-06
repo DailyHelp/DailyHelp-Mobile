@@ -1,4 +1,4 @@
-class SaveLocationDto  {
+class SaveLocationDto {
   lat: number;
   lng: number;
   address: string;
@@ -6,7 +6,7 @@ class SaveLocationDto  {
   state: string;
   description: string;
   default?: boolean;
-};
+}
 
 type DataType = {
   locations: SaveLocationDto[];
@@ -49,7 +49,7 @@ type AddressPredictionsResponse = {
     secondary_text: string;
   };
   terms: {
-    value: number;
+    value: string;
     offset: number;
   }[];
   types: string[];
@@ -63,6 +63,7 @@ type GooglAutoCompleteResponse = {
 interface AddressPrediction {
   description: string;
   place_id: string;
+  state?: string;
   coordinates?: {
     lat: number;
     lng: number;
