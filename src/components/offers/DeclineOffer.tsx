@@ -1,22 +1,22 @@
-import { observer } from 'mobx-react-lite';
+import {observer} from 'mobx-react-lite';
 import React from 'react';
-import { TouchableOpacity, View } from 'react-native';
-import { Modal, Portal } from 'react-native-paper';
+import {TouchableOpacity, View} from 'react-native';
+import {Modal, Portal} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {
   decline_reasons,
   helper_cancel_reasons,
   user_cancel_reason,
 } from '../../mock_data';
-import { UserTypes } from '../../shared/Constant';
-import { scale, verticalScale } from '../../shared/Scaling';
-import { appStore } from '../../shared/stores/appStore';
+import {UserTypes} from '../../shared/Constant';
+import {scale, verticalScale} from '../../shared/Scaling';
+import {appStore} from '../../shared/stores/appStore';
 import utils from '../../shared/Utils';
 import MainButton from '../button/MainButton';
 import CustomInput from '../customInput/Index';
 import Typography from '../Typography';
 
-const DeclineOffer: IOffer = ({isVisible, onClose, type}) => {
+const DeclineOffer: IOffer = ({isVisible, onClose, type, onDeclineOffer}) => {
   const [id, setId] = React.useState<number | undefined>();
 
   const user_type = appStore.user_types;
@@ -127,7 +127,9 @@ const DeclineOffer: IOffer = ({isVisible, onClose, type}) => {
           </View>
 
           <View style={{padding: scale(10)}}>
-            <MainButton>{utils.capitalizeFirstLetter(type)} offer</MainButton>
+            <MainButton onPress={onDeclineOffer}>
+              {utils.capitalizeFirstLetter(type)} offer
+            </MainButton>
           </View>
         </View>
       </Modal>

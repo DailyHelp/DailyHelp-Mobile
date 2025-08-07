@@ -105,10 +105,11 @@ const HelperCard: IHelperCard = ({data, mode, horizontal}) => {
                   textAlign="center">
                   |
                 </Typography>
-                <View style={{flexDirection: 'row', gap: 3}}>
+                <View
+                  style={{flexDirection: 'row', gap: 3, alignItems: 'center'}}>
                   <Icon name="star" size={15} color={'#FFD100'} />
                   <Typography
-                    fontWeight="regular"
+                    fontWeight="medium"
                     size="md"
                     color="gray"
                     textAlign="center">
@@ -134,7 +135,10 @@ const HelperCard: IHelperCard = ({data, mode, horizontal}) => {
       )}
 
       {mode === 'row' && (
-        <TouchableOpacity onPress={() => navigation.navigate('ServiceProfile')}>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('ServiceProfile', {uuid: data?.uuid!});
+          }}>
           <View
             style={{
               backgroundColor: 'white',
@@ -167,10 +171,20 @@ const HelperCard: IHelperCard = ({data, mode, horizontal}) => {
                       {data?.name}
                     </Typography>
 
-                    <View style={{flexDirection: 'row', gap: 3}}>
-                      <Icon name="star" size={15} color={'#FFD100'} />
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        gap: 4,
+                        alignItems: 'center',
+                      }}>
+                      <Icon
+                        name="star"
+                        size={15}
+                        color={'#FFD100'}
+                        style={{marginTop: 3}}
+                      />
                       <Typography
-                        fontWeight="regular"
+                        fontWeight="medium"
                         size="md"
                         color="gray"
                         textAlign="center">

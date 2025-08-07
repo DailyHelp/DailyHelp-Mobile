@@ -1,10 +1,35 @@
 import React from 'react';
 import {TouchableOpacity, View} from 'react-native';
-import ActionSheet, {ActionSheetRef} from 'react-native-actions-sheet';
-import {verticalScale} from '../../../../shared/Scaling';
+import ActionSheet, {
+  ActionSheetRef,
+  SheetProps,
+} from 'react-native-actions-sheet';
+import Assets from '../../../../assets/Assets';
 import Typography from '../../../../components/Typography';
+import Container from '../../../../components/container/Index';
+import {ActivityIndicator} from 'react-native-paper';
+import {observer} from 'mobx-react-lite';
+import {appStore} from '../../../../shared/stores/appStore';
 
-const AddressOptions = React.forwardRef<ActionSheetRef>((props, ref) => {
+const AddressOptions = React.forwardRef<
+  ActionSheetRef,
+  SheetProps<'AddressOptions'>
+>((props, ref) => {
+  const selection = [
+    {
+      name: 'Set as default address',
+      Icon: Assets.PlainLocation,
+      navigate: () => props.payload?.onSetDefault(),
+      loading: appStore.actionSheetLoading.isDefaultLoading,
+    },
+    {
+      name: 'Delete address',
+      Icon: Assets.Trash,
+      navigate: () => props.payload?.onDelete(),
+      loading: appStore.actionSheetLoading.isDeletingAddress,
+    },
+  ];
+
   return (
     <ActionSheet
       ref={ref}
@@ -33,8 +58,23 @@ const AddressOptions = React.forwardRef<ActionSheetRef>((props, ref) => {
             Options
           </Typography>
         </View>
+
+        <Container padding={10} flexDirection="column" gap={30} marginTop={30}>
+          {selection.map(({name, Icon, navigate, loading}, key) => (
+            <TouchableOpacity key={name + key} onPress={navigate}>
+              <Container flexDirection="row" justifyContent="space-between">
+                <Container flexDirection="row" alignItems="center" gap={6}>
+                  <Icon />
+                  <Typography size="md">{name}</Typography>
+                </Container>
+
+                {loading && <ActivityIndicator size={20} />}
+              </Container>
+            </TouchableOpacity>
+          ))}
+        </Container>
       </View>
     </ActionSheet>
   );
 });
-export default AddressOptions;
+export default observer(AddressOptions);

@@ -8,6 +8,8 @@ import ProvidersDto from '../../screens/app/user/home/dto/providersDto';
 import {CustomerDashboardDto} from '../../screens/app/user/home/dto/customer-dahsboard.dto';
 import utils from '../Utils';
 import UserDTO from '../../screens/auth/dto/UserDto';
+import SendOfferDto from '../../screens/app/user/jobs/dto/SendOffer.dto';
+import DeclineOfferDto from '../../screens/app/user/jobs/dto/DeclineOffer.dto';
 
 export default class HomeApi extends Http {
   protected async getAllCategories() {
@@ -38,18 +40,6 @@ export default class HomeApi extends Http {
     });
 
     const data = await this.handleResponse(res);
-
-    this.success(data?.message);
-
-    return data;
-  }
-
-  protected async customerSetDefaultLocation(uuid: string) {
-    const res = await this.fetchHandler({
-      path: Endpoints.customerSetDefaultLocation(uuid),
-      method: 'GET',
-    });
-    const data = await this.handleResponse<any>(res);
 
     this.success(data?.message);
 
@@ -193,7 +183,7 @@ export default class HomeApi extends Http {
 
   protected async getCustomerDashboard(query: ProvidersQuery) {
     const res = await this.fetchHandler({
-      path: Endpoints.customersDashboard(query),
+      path: Endpoints.getDashboard(query),
       method: 'GET',
     });
     const data = await this.handleResponse<CustomerDashboardDto>(res);
@@ -221,6 +211,135 @@ export default class HomeApi extends Http {
       method: 'GET',
     });
     const data = await this.handleResponse<UserDTO>(res);
+
+    this.success(data?.message);
+
+    return data;
+  }
+
+  protected async sendOffer(uuid: string, body: SendOfferDto) {
+    delete body.uuid;
+
+    const res = await this.fetchHandler({
+      path: Endpoints.sendOffer(uuid),
+      body,
+      method: 'POST',
+    });
+    const data = await this.handleResponse<any>(res);
+
+    this.success(data?.message);
+
+    return data;
+  }
+
+  protected async updateOffer(uuid: string, body: SendOfferDto) {
+    delete body.uuid;
+
+    const res = await this.fetchHandler({
+      path: Endpoints.updateOffer(uuid),
+      body,
+      method: 'PATCH',
+    });
+    const data = await this.handleResponse<any>(res);
+
+    this.success(data?.message);
+
+    return data;
+  }
+
+  protected async declineOffer(uuid: string, body: DeclineOfferDto) {
+    const res = await this.fetchHandler({
+      path: Endpoints.updateOffer(uuid),
+      body,
+      method: 'PATCH',
+    });
+    const data = await this.handleResponse<any>(res);
+
+    this.success(data?.message);
+
+    return data;
+  }
+
+  protected async getCustomerConversation(query: PaginationQuery) {
+    const res = await this.fetchHandler({
+      path: Endpoints.getCustomerConversations(query),
+      method: 'GET',
+    });
+    const data = await this.handleResponse<any>(res);
+
+    this.success(data?.message);
+
+    return data;
+  }
+
+  protected async sendMessage(uuid: string) {
+    const res = await this.fetchHandler({
+      path: Endpoints.sendMessage(uuid),
+      method: 'POST',
+    });
+    const data = await this.handleResponse<any>(res);
+
+    this.success(data?.message);
+
+    return data;
+  }
+
+  protected async reportConversation(uuid: string) {
+    const res = await this.fetchHandler({
+      path: Endpoints.reportConversation(uuid),
+      method: 'POST',
+    });
+    const data = await this.handleResponse<any>(res);
+
+    this.success(data?.message);
+
+    return data;
+  }
+
+  protected async getSimilarProviders(uuid: string) {
+    const res = await this.fetchHandler({
+      path: Endpoints.getSimilarProducts(uuid),
+      method: 'GET',
+    });
+    const data = await this.handleResponse<any>(res);
+
+    this.success(data?.message);
+
+    return data;
+  }
+
+  protected async getReviews(uuid: string, query?: PaginationQuery) {
+    const res = await this.fetchHandler({
+      path: Endpoints.reviews(uuid, query),
+      method: 'GET',
+    });
+    const data = await this.handleResponse<Reviews[]>(res);
+
+    this.success(data?.message);
+
+    return data;
+  }
+
+  protected async setDefaultLocation(uuid: string) {
+    const res = await this.fetchHandler({
+      path: Endpoints.setDefaultLocation(uuid),
+      method: 'PATCH',
+    });
+    const data = await this.handleResponse<any>(res);
+
+    this.success(data?.message);
+    console.log(data);
+    
+
+    return data;
+  }
+
+  protected async onDelete(uuid: string) {
+    const res = await this.fetchHandler({
+      path: Endpoints.deleteLocation(uuid),
+      method: 'DELETE',
+    });
+    const data = await this.handleResponse<any>(res);
 
     this.success(data?.message);
 

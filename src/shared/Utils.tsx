@@ -319,7 +319,7 @@ class Utils {
 
     const upload = async (
       uri: string,
-      preset: 'compliance' | 'profile' = 'profile',
+      preset: 'compliance' | 'profile' | 'offer' = 'profile',
     ) => {
       try {
         setLoading(true);
@@ -374,6 +374,56 @@ class Utils {
     if (value == '48') return `48%`;
 
     return value;
+  }
+
+  flattenQuery(
+    obj: Record<string, any>,
+    parentKey = '',
+    result: Record<string, any> = {},
+  ) {
+    for (const key in obj) {
+      if (!obj.hasOwnProperty(key)) continue;
+
+      const propName = parentKey ? `${parentKey}[${key}]` : key;
+      const value = obj[key];
+
+      if (
+        value !== null &&
+        typeof value === 'object' &&
+        !Array.isArray(value)
+      ) {
+        this.flattenQuery(value, propName, result);
+      } else {
+        result[propName] = value;
+      }
+    }
+    return new URLSearchParams(result as any);
+  }
+
+  usePagination<T = PaginationQuery>(props?: T & PaginationQuery) {
+    const [query, setQuery] = React.useState<(T & PaginationQuery) | undefined>(
+      props,
+    );
+
+    //set default states
+    React.useEffect(() => {
+      let cache = query!;
+
+      if (!cache?.limit) cache = {...cache, limit: 10};
+      if (!cache?.page) cache = {...cache, page: 1};
+      if (!cache?.page) cache = {...cache, page: 1};
+
+      setQuery(cache);
+    }, []);
+
+    const fetchMore = () => {
+      setQuery(prev => ({
+        ...prev!,
+        page: (prev?.page ?? 1) + 1,
+      }));
+    };
+
+    return {query, setQuery, fetchMore};
   }
 }
 

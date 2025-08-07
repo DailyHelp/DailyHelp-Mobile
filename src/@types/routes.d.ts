@@ -177,7 +177,9 @@ type IAppRoute = {
 type IHomeRoute = {
   Home?: undefined;
   Search?: undefined;
-  Reviews?: undefined;
+  Reviews: {
+    uuid: string;
+  };
   VerifyPhone?: undefined;
   ServiceProfile?: {
     status?: string;
@@ -189,6 +191,7 @@ type IHomeRoute = {
     rating?: number;
     startingFee?: number;
     jobsCompleted?: number;
+    uuid: string;
   };
 };
 

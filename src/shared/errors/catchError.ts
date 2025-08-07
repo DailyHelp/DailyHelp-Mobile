@@ -23,7 +23,7 @@ export default class CatchError extends Error {
     Toast.show({
       type: 'error',
       text1: 'Error',
-      text2: extractErrorMessage(this.message),
+      text2: this.message,
       visibilityTime: 5000,
       topOffset: 0,
     });

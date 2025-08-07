@@ -3,15 +3,12 @@ import AppStorage from '../AppStorage';
 import {UserTypes} from '../Constant';
 import {makeAutoObservable} from 'mobx';
 import {PhotoIdentifier} from '@react-native-camera-roll/camera-roll';
+import {ActionSheetLoader} from '../ActionSheets';
 
 class AppStore {
   route?: Route = (AppStorage.find('routes') as Route) || 'authentication';
 
-  currentLocation: {
-    address?: string;
-    lng?: number;
-    lat?: number;
-  } = {};
+  currentLocation!: SaveLocationDto;
 
   isAuthenticated = AppStorage.find('isAuthenticated') || false;
 
@@ -22,6 +19,8 @@ class AppStore {
   selfiePhoto?: Partial<PhotoFile> = {};
 
   selectedGalleryImages: string[] = [];
+
+  actionSheetLoading!: ActionSheetLoader;
 
   constructor() {
     makeAutoObservable(this);
@@ -63,13 +62,9 @@ class AppStore {
     this.selectedGalleryImages = [];
   }
 
-  setCurrentLocation(location?: {
-    address?: string;
-    lng?: number;
-    lat?: number;
-  }) {
+  setCurrentLocation(location?: SaveLocationDto) {
     if (!location) {
-      this.currentLocation = {};
+      this.currentLocation = new SaveLocationDto();
       return;
     }
     this.currentLocation = {...this.currentLocation, ...location};
@@ -90,6 +85,10 @@ class AppStore {
         'phone',
       ]);
     }
+  }
+
+  setActionSheetLoaders(dto: ActionSheetLoader) {
+    this.actionSheetLoading = {...this.actionSheetLoading, ...dto};
   }
 }
 

@@ -1,20 +1,20 @@
-import { WEB_CLIENT_ID } from '@env';
+import {WEB_CLIENT_ID} from '@env';
 import messaging from '@react-native-firebase/messaging';
 import {
   GoogleSignin,
   statusCodes,
 } from '@react-native-google-signin/google-signin';
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { useMutation } from '@tanstack/react-query';
+import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
+import {useMutation} from '@tanstack/react-query';
 import React from 'react';
-import { IAuthRoute, Navigate } from '../../../@types/routes';
+import {IAuthRoute, Navigate} from '../../../@types/routes';
 import CatchError from '../../../shared/errors/catchError';
 import AuthApi from '../../../shared/services/Auth';
-import { appStore } from '../../../shared/stores/appStore';
-import ForgotPasswordDTO, { ResetPasswordDTO } from '../dto/ForgotPasswordDto';
+import {appStore} from '../../../shared/stores/appStore';
+import ForgotPasswordDTO, {ResetPasswordDTO} from '../dto/ForgotPasswordDto';
 import LoginDto from '../dto/LoginDto';
 import RegisterDTO from '../dto/RegisterDto';
-import { VerifyIdentityDTO } from '../dto/VerifyIdentityDto';
+import {VerifyIdentityDTO} from '../dto/VerifyIdentityDto';
 import VerifyOtpDTO, {
   OtpActionType,
   SendOtpDTO,
@@ -72,8 +72,6 @@ export class AuthService extends AuthApi {
       mutationKey: ['verify-otp'],
       mutationFn: async (body: LoginDto) => await this.login(body),
       onSuccess: (data, body) => {
-        console.log(data);
-        
         if (data?.status) {
           if (data.data.pinId && data.data.uuid) {
             navigation.navigate('VerifyAccount', {

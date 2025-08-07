@@ -11,29 +11,32 @@ import utils from '../../../shared/Utils';
 import {observer} from 'mobx-react-lite';
 import React from 'react';
 import {appStore} from '../../../shared/stores/appStore';
+import homeService from '../user/home/services/Home.service';
 
 const AccountSettings: IAccountSettings = ({navigation}) => {
   utils.useHideBottomTab(navigation);
+  const {data} = homeService.useCustomer();
 
   const details = [
     {
       title: 'Full name',
-      value: 'Adeoye Tobiloba James',
+      value: `${data?.firstname} ${data?.lastname}`,
     },
     {
       title: 'Email',
-      value: 'adebayojames@gmail.com',
+      value: data?.email,
     },
     {
       title: 'Phone number',
-      value: '+2348154490890',
-      end: () => (
-        <TouchableOpacity>
-          <Typography fontWeight="bold" color="secondary">
-            Verify
-          </Typography>
-        </TouchableOpacity>
-      ),
+      value: data?.phone,
+      end: () =>
+        !data?.phoneVerified && (
+          <TouchableOpacity>
+            <Typography fontWeight="bold" color="secondary">
+              Verify
+            </Typography>
+          </TouchableOpacity>
+        ),
     },
     {
       title: 'Date of birth',

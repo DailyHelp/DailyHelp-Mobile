@@ -27,8 +27,10 @@ const CategorySection: ICategorySection = ({data: cat, onFilter}) => {
       SheetManager.show('AllCategory', {
         onClose: q => {
           onFilter?.({
-            mainCategory: q?.mainCategory.join(','),
-            subCategory: q?.subCategory.join(','),
+            filter: {
+              mainCategory: q?.mainCategory.join(','),
+              subCategory: q?.subCategory.join(','),
+            },
           });
         },
       });
@@ -37,7 +39,9 @@ const CategorySection: ICategorySection = ({data: cat, onFilter}) => {
       SheetManager.show('Rating', {
         onClose: q => {
           onFilter?.({
-            minRating: q?.minRating.toString(),
+            filter: {
+              minRating: q?.minRating.toString(),
+            },
           });
         },
       });
@@ -46,9 +50,11 @@ const CategorySection: ICategorySection = ({data: cat, onFilter}) => {
       SheetManager.show('PriceRange', {
         onClose: q => {
           onFilter?.({
-            priceRange: {
-              maxPrice: q?.maxPrice.toString(),
-              minPrice: q?.minPrice.toString(),
+            filter: {
+              priceRange: {
+                maxPrice: q?.maxPrice!,
+                minPrice: q?.minPrice!,
+              },
             },
           });
         },

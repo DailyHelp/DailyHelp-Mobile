@@ -7,6 +7,7 @@ import UserDataCard from './components/UserDataCard';
 import AppStorage from '../../../shared/AppStorage';
 import React from 'react';
 import {UserTypes} from '../../../shared/Constant';
+import Container from '../../../components/container/Index';
 
 const More: IMore = ({navigation}) => {
   const isVerified = AppStorage.find('isIdentityVerified');
@@ -160,14 +161,12 @@ const More: IMore = ({navigation}) => {
                   {label}
                 </Typography>
 
-                <View
-                  style={{
-                    backgroundColor: 'white',
-                    padding: scale(10),
-                    borderRadius: 10,
-                    flexDirection: 'column',
-                    gap: 15,
-                  }}>
+                <Container
+                  backgroundColor="white"
+                  padding={10}
+                  flexDirection="column"
+                  gap={16}
+                  borderRadius={10}>
                   {child
                     .filter(({access}) => access.includes(user_type))
                     .map(({name, Icon, navigate}, key) => (
@@ -183,7 +182,7 @@ const More: IMore = ({navigation}) => {
                         </View>
                       </TouchableOpacity>
                     ))}
-                </View>
+                </Container>
               </View>
             ))}
           </View>

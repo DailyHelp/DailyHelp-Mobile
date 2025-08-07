@@ -8,16 +8,17 @@ import {scale, verticalScale} from '../../shared/Scaling';
 import utils from '../../shared/Utils';
 import Container from '../container/Index';
 import Typography from '../Typography';
+import {observer} from 'mobx-react-lite';
 
 const HomeHeader: ICustomHeader<NativeStackHeaderProps> = ({
   title,
   navigation,
   goBack,
 }) => {
-  const {data} = homeService.useSavedLocation();
+  const {data} = homeService.useCustomer();
   const {onSubmit} = homeService.useLocation();
 
-  const location = data?.[0]?.description || title;
+  const location = data?.defaultLocation?.address || title;
   const trimmedLocation = utils.ellipseText(location);
 
   return (
@@ -61,4 +62,4 @@ const HomeHeader: ICustomHeader<NativeStackHeaderProps> = ({
     </Container>
   );
 };
-export default HomeHeader;
+export default observer(HomeHeader);

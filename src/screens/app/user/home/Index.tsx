@@ -1,25 +1,42 @@
 import React from 'react';
-import {FlatList, View} from 'react-native';
-import {IHome} from '../../../../@types/routes';
+import { FlatList } from 'react-native';
+import { IHome } from '../../../../@types/routes';
 import Container from '../../../../components/container/Index';
 import CustomFlatList from '../../../../components/CustomFlatList';
+import EmptyState from '../../../../components/EmptyState';
 import Typography from '../../../../components/Typography';
-import {top_rated} from '../../../../mock_data';
 import AppStorage from '../../../../shared/AppStorage';
+import { scale } from '../../../../shared/Scaling';
 import CategorySection from './components/CategorySection';
 import HelperCard from './components/HelperCard';
 import VerifyPhoneNumberContainer from './components/VerifyNumberContainer';
-import homeService from './services/Home.service';
 import ProvidersDto from './dto/providersDto';
+import homeService from './services/Home.service';
 
 const Home: IHome = () => {
   const [query, setQuery] = React.useState<ProvidersQuery>({
-    page: '1',
-    limit: '10',
+    pagination: {
+      limit: 10,
+      orderBy: 'DESC',
+      page: 1,
+    },
   });
 
   const {data} = homeService.useCustomerDashboard(query);
-  console.log(data);
+
+  let isEmptyTopRated: number | undefined = scale(370);
+  let isEmptyRecommended: number | undefined = scale(370);
+  let isEmptyExplore: number | undefined = scale(370);
+
+  if (data?.recommendedProviders?.length! > 0) {
+    isEmptyRecommended = undefined;
+  }
+  if (data?.topRatedProviders?.length! > 0) {
+    isEmptyTopRated = undefined;
+  }
+  if (data?.allProviders?.length! > 0) {
+    isEmptyExplore = undefined;
+  }
 
   return (
     <FlatList
@@ -51,7 +68,8 @@ const Home: IHome = () => {
             </Typography>
 
             <CustomFlatList<ProvidersDto>
-              data={data?.data.topRatedProviders}
+              width={isEmptyTopRated}
+              data={data?.topRatedProviders}
               horizontal
               keyExtractor={(item, index) => item.uuid + index}
               renderItem={({item}) => (
@@ -64,11 +82,21 @@ const Home: IHome = () => {
                     jobsCompleted: item.completedJobs,
                     name: `${item.lastname} ${item.firstname}`,
                     price: item.offerStartingPrice.toString(),
-                    rating: item.avgRating,
+                    rating: item.avgRating ?? 0,
                     skill: item.serviceDescription,
                     availability: item.availability,
+                    uuid: item.uuid,
                   }}
                   horizontal
+                />
+              )}
+              ListEmptyComponent={() => (
+                <EmptyState
+                  showButton={false}
+                  type="jobs"
+                  header="No vendor found in your location"
+                  title="We are working hard to reach your area"
+                  height={250}
                 />
               )}
             />
@@ -80,7 +108,8 @@ const Home: IHome = () => {
             </Typography>
 
             <CustomFlatList<ProvidersDto>
-              data={data?.data.recommendedProviders}
+              width={isEmptyRecommended}
+              data={data?.recommendedProviders}
               horizontal
               keyExtractor={(item, index) => item.uuid + index}
               renderItem={({item}) => (
@@ -92,12 +121,22 @@ const Home: IHome = () => {
                     image: item.picture,
                     jobsCompleted: item.completedJobs,
                     name: `${item.lastname} ${item.firstname}`,
-                    price: item.offerStartingPrice.toString(),
-                    rating: item.avgRating,
+                    price: item.offerStartingPrice?.toString(),
+                    rating: item.avgRating ?? 0,
                     skill: item.serviceDescription,
                     availability: item.availability,
+                    uuid: item.uuid,
                   }}
                   horizontal
+                />
+              )}
+              ListEmptyComponent={() => (
+                <EmptyState
+                  showButton={false}
+                  type="jobs"
+                  header="No vendor found in your location"
+                  title="We are working hard to reach your area"
+                  height={250}
                 />
               )}
             />
@@ -109,7 +148,8 @@ const Home: IHome = () => {
             </Typography>
 
             <CustomFlatList<ProvidersDto>
-              data={data?.data.allProviders}
+              width={isEmptyExplore}
+              data={data?.allProviders}
               keyExtractor={(item, index) => item.uuid + index}
               renderItem={({item}) => (
                 <HelperCard
@@ -120,11 +160,21 @@ const Home: IHome = () => {
                     image: item.picture,
                     jobsCompleted: item.completedJobs,
                     name: `${item.lastname} ${item.firstname}`,
-                    price: item.offerStartingPrice.toString(),
-                    rating: item.avgRating,
+                    price: item.offerStartingPrice?.toString() || '0',
+                    rating: item.avgRating ?? 0,
                     skill: item.serviceDescription,
                     availability: item.availability,
+                    uuid: item.uuid,
                   }}
+                />
+              )}
+              ListEmptyComponent={() => (
+                <EmptyState
+                  showButton={false}
+                  type="jobs"
+                  header="No vendor found in your location"
+                  title="We are working hard to reach your area"
+                  height={250}
                 />
               )}
             />

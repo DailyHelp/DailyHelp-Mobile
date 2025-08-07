@@ -1,13 +1,14 @@
-type ProvidersQuery = PaginationQuery & {
-  subCategory?: string;
-  mainCategory?: string;
-  priceRange?: {
-    minPrice?: string;
-    maxPrice?: string;
+type ProvidersQuery = {
+  filter?: {
+    subCategory?: string;
+    mainCategory?: string;
+    minRating?: string;
+    priceRange?: {
+      minPrice: number;
+      maxPrice: number;
+    };
+    minRating?: number;
+    search?: string;
   };
-  minRating?: string;
-  address?: string;
-  search?: string;
-  latitude?: string;
-  longitude?: string;
+  pagination?: PaginationQuery;
 };

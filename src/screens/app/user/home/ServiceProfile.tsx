@@ -21,6 +21,8 @@ import Gallery from '../../../../components/Gallery';
 import ReviewsCard from './components/ReviewsCard';
 import SendOffer from '../../../../components/offers/SendOffer';
 import homeStyle from './homeStyle';
+import homeService from './services/Home.service';
+import SendOfferDto from '../jobs/dto/SendOffer.dto';
 
 const STATUS_MAP: any = {
   available: {
@@ -42,6 +44,8 @@ const STATUS_MAP: any = {
 
 const ServiceProfile: IServiceProfile = ({route, navigation}) => {
   utils.useHideBottomTab(navigation);
+
+  const {onSendOffer, sendingPending, declineOffer} = homeService.useOffer();
 
   const [sendOffer, setSendOffer] = React.useState(false);
 
@@ -256,7 +260,9 @@ const ServiceProfile: IServiceProfile = ({route, navigation}) => {
                   </View>
                 </View>
                 <TouchableOpacity
-                  onPress={() => navigation.navigate('Reviews')}
+                  onPress={() => {
+                    navigation.navigate('Reviews', {uuid: route.params?.uuid!});
+                  }}
                   style={{
                     padding: scale(20),
                     backgroundColor: '#F9F9FB',
@@ -301,6 +307,8 @@ const ServiceProfile: IServiceProfile = ({route, navigation}) => {
 
       <SendOffer
         isVisible={sendOffer}
+        isLoading={sendingPending}
+        isAvailable
         onClose={() => {
           setSendOffer(false);
           bottomSheetRef.current?.present();
@@ -311,6 +319,7 @@ const ServiceProfile: IServiceProfile = ({route, navigation}) => {
           setGallery(true);
           setTimeout(() => galleryBottomSheetRef.current?.show(), 1000);
         }}
+        onSendOffer={onSendOffer}
       />
     </React.Fragment>
   );

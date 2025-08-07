@@ -25,6 +25,11 @@ registerSheet('FundWallet', FundedWallet);
 registerSheet('AddressOptions', AddressOptions);
 registerSheet('CustomSelect', CustomSelect);
 
+export type ActionSheetLoader = {
+  isDefaultLoading?: boolean;
+  isDeletingAddress?: boolean;
+};
+
 declare module 'react-native-actions-sheet' {
   interface Sheets {
     AllCategory: SheetDefinition<{
@@ -69,7 +74,13 @@ declare module 'react-native-actions-sheet' {
     CancelJob: SheetDefinition<{}>;
     WorkerSuggestion: SheetDefinition<{}>;
     RateService: SheetDefinition<{}>;
-    AddressOptions: SheetDefinition<{}>;
+    AddressOptions: SheetDefinition<{
+      payload: {
+        uuid: string;
+        onDelete: () => void;
+        onSetDefault: () => void;
+      };
+    }>;
     CustomSelect: SheetDefinition<{
       payload: {
         label?: string;

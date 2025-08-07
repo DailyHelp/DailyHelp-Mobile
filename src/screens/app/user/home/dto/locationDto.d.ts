@@ -1,4 +1,7 @@
 class SaveLocationDto {
+  constructor(dat?: Partial<SaveLocationDto>) {
+    this.address = data.address || 'Set Location';
+  }
   lat: number;
   lng: number;
   address: string;
@@ -6,6 +9,7 @@ class SaveLocationDto {
   state: string;
   description: string;
   default?: boolean;
+  uuid: string;
 }
 
 type DataType = {

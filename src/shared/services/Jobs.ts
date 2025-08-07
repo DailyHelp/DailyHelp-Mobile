@@ -5,13 +5,10 @@ import Endpoints from './Endpoints';
 import Http from './Http';
 
 export default class JobsApi extends Http {
-  protected async sendOffer(uuid: string, body: SendOfferDto) {
-    delete body.uuid;
-
+  protected async customersJobs(query: PaginationQuery) {
     const res = await this.fetchHandler({
-      path: Endpoints.sendOffer(uuid),
-      body,
-      method: 'POST',
+      path: Endpoints.getCustomersJob(query),
+      method: 'GET',
     });
     const data = await this.handleResponse<any>(res);
 
@@ -20,13 +17,11 @@ export default class JobsApi extends Http {
     return data;
   }
 
-  protected async updateOffer(uuid: string, body: SendOfferDto) {
-    delete body.uuid;
-
+  protected async verifyJobPin(uuid: string, pin: string) {
     const res = await this.fetchHandler({
-      path: Endpoints.updateOffer(uuid),
-      body,
+      path: Endpoints.verifyJobPin(uuid),
       method: 'PATCH',
+      body: {pin},
     });
     const data = await this.handleResponse<any>(res);
 
@@ -35,11 +30,10 @@ export default class JobsApi extends Http {
     return data;
   }
 
-  protected async declineOffer(uuid: string, body: DeclineOfferDto) {
+  protected async customerJobTimeline(uuid: string) {
     const res = await this.fetchHandler({
-      path: Endpoints.updateOffer(uuid),
-      body,
-      method: 'PATCH',
+      path: Endpoints.customerJobTimeline(uuid),
+      method: 'GET',
     });
     const data = await this.handleResponse<any>(res);
 

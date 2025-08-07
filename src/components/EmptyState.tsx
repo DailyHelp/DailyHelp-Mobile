@@ -1,9 +1,9 @@
 import {View} from 'react-native';
-import Assets from '../assets/Assets';
-import Typography from './Typography';
-import {verticalScale} from '../shared/Scaling';
-import MainButton from './button/MainButton';
 import {IChatRoute, Navigate} from '../@types/routes';
+import Assets from '../assets/Assets';
+import MainButton from './button/MainButton';
+import Container from './container/Index';
+import Typography from './Typography';
 
 const EmptyState: IEmptyState<Navigate<IChatRoute>> = ({
   navigation,
@@ -11,17 +11,20 @@ const EmptyState: IEmptyState<Navigate<IChatRoute>> = ({
   title,
   subTitle,
   type = 'chat',
+  height = 600,
+  width = 'full',
+  showButton = true,
 }) => {
   return (
-    <View
-      style={{
-        flex: 1,
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        gap: 16,
-        height: verticalScale(600),
-      }}>
+    <Container
+      flex={1}
+      width={width}
+      flexDirection="column"
+      justifyContent="center"
+      alignItems="center"
+      alignSelf='center'
+      height={height}
+      gap={16}>
       {type === 'chat' && <Assets.EmptyChat />}
       {type === 'jobs' && <Assets.JobsEmpty />}
 
@@ -40,10 +43,12 @@ const EmptyState: IEmptyState<Navigate<IChatRoute>> = ({
         )}
       </View>
 
-      <MainButton onPress={() => navigation?.navigate('HomeIndex')}>
-        Find service providers
-      </MainButton>
-    </View>
+      {showButton && (
+        <MainButton onPress={() => navigation?.navigate('HomeIndex')}>
+          Find service providers
+        </MainButton>
+      )}
+    </Container>
   );
 };
 

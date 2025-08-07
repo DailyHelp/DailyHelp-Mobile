@@ -220,6 +220,7 @@ type IHelperCard = Props<
     jobsCompleted?: number;
     name?: string;
     badge?: 'bronze' | 'gold' | 'silver' | 'diamond';
+    uuid?: string;
   }
 >;
 
@@ -241,6 +242,7 @@ type ICustomFlatListProps<T> = {
   ListEmptyComponent?: Props;
   horizontal?: boolean;
   height?: `${number}%` | number;
+  width?: `${number}%` | number;
 };
 
 type IStatusChip = Props<{
@@ -255,6 +257,10 @@ type IOffer = Props<{
   type?: 'send' | 'cancel' | 'decline';
   onClose?: () => void;
   openGallery?: () => void;
+  onSendOffer?: (data: any) => void;
+  onDeclineOffer?: () => void;
+  isLoading?: boolean;
+  isAvailable?: boolean;
 }>;
 
 type IReviewCard = Props<{}, {rate: number}>;
@@ -331,6 +337,7 @@ type IEmptyState<N = any> = Props<{
   title: string;
   subTitle?: string;
   type?: 'chat' | 'jobs';
+  showButton?: boolean;
 }>;
 
 type IJobsCard<U> = Props<{

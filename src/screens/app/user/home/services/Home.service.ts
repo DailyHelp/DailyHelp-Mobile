@@ -1,14 +1,22 @@
-import {QueryClient, useMutation, useQuery} from '@tanstack/react-query';
 import Geolocation, {
   GeolocationResponse,
 } from '@react-native-community/geolocation';
+import {
+  QueryClient,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
+import React from 'react';
 import CatchError from '../../../../../shared/errors/catchError';
 import HomeApi from '../../../../../shared/services/Home';
 import {appStore} from '../../../../../shared/stores/appStore';
 import utils from '../../../../../shared/Utils';
-import React from 'react';
-import SavePriceDTO from '../dto/SavePriceDto';
+import DeclineOfferDto from '../../jobs/dto/DeclineOffer.dto';
+import SendOfferDto from '../../jobs/dto/SendOffer.dto';
 import SaveHelpersDetailsDTO from '../dto/SaveHelpersDetailsDto';
+import SavePriceDTO from '../dto/SavePriceDto';
+import {SheetManager} from 'react-native-actions-sheet';
 
 class HomeService extends HomeApi {
   private static instance: HomeService;
@@ -32,29 +40,62 @@ class HomeService extends HomeApi {
   }
 
   useSavedLocation() {
+    const query = useQueryClient();
+
     const {data, isLoading, error} = useQuery({
-      queryKey: ['saved-location'],
+      queryKey: ['get-saved-location'],
       queryFn: async () => await this.getSavedLocation(),
       enabled: Boolean(appStore.isAuthenticated),
     });
 
-    return {data, isLoading, error};
+    const {mutate: setDefault, isPending: defaultLoading} = useMutation({
+      mutationKey: ['default-location'],
+      mutationFn: async (uuid: string) => await this.setDefaultLocation(uuid),
+      onSuccess: data => {
+        query.invalidateQueries({queryKey: ['customer']});
+        SheetManager.hide('AddressOptions');
+      },
+      onError: err => new CatchError(err, true),
+    });
+
+    const {mutate: onDelete, isPending: deleteLoading} = useMutation({
+      mutationKey: ['delete-location'],
+      mutationFn: async (uuid: string) => await this.setDefaultLocation(uuid),
+      onSuccess: data => {
+        console.log(data);
+        
+        query.invalidateQueries({queryKey: ['customer']});
+        SheetManager.hide('AddressOptions');
+      },
+      onError: err => new CatchError(err, true),
+    });
+
+    return {
+      data,
+      isLoading,
+      error,
+      setAsDefault: setDefault,
+      defaultLoading,
+      onDelete,
+      deleteLoading,
+    };
   }
 
   useLocation(search?: string) {
-    const query = new QueryClient();
+    const query = useQueryClient();
 
     const [locations, setLocations] =
       React.useState<Partial<SaveLocationDto>[]>();
 
-    const {mutate: saveLocation, isPending} = useMutation({
+    const {mutateAsync: saveLocation, isPending} = useMutation({
       mutationKey: ['save-location'],
       mutationFn: async (body: Partial<SaveLocationDto>) => {
         return await this.saveLocation(body);
       },
       onError: error => new CatchError(error, true),
       onSuccess: data => {
-        query.invalidateQueries({queryKey: ['saved-location']});
+        query.invalidateQueries({queryKey: ['customer']});
+        SheetManager.hide('HomeAddress');
       },
     });
 
@@ -68,7 +109,10 @@ class HomeService extends HomeApi {
       }
     }, [search]);
 
-    const onSubmit = (values: Partial<SaveLocationDto>) => {
+    const onSubmit = async (
+      values: Partial<SaveLocationDto>,
+      callBack?: (data: Partial<SaveLocationDto>) => void,
+    ) => {
       const payload = {
         ...values,
         lat: values.lat || 0,
@@ -79,7 +123,8 @@ class HomeService extends HomeApi {
         default: true,
       };
 
-      saveLocation(payload);
+      const res = await saveLocation(payload);
+      if (res?.status) callBack?.(values);
     };
 
     const currentLocation = async (
@@ -191,7 +236,7 @@ class HomeService extends HomeApi {
       enabled: Boolean(appStore.isAuthenticated),
     });
 
-    return {data, isLoading, error};
+    return {data: data?.data, isLoading, error};
   }
 
   useSaveHelpersDetails() {
@@ -207,6 +252,100 @@ class HomeService extends HomeApi {
       saveHelpersDetails: mutateAsync,
       isPending,
     };
+  }
+
+  useOffer() {
+    const {upload, isLoading} = utils.useUploadImage();
+    const [sendOfferLoading, setOfferLoading] = React.useState(false);
+
+    const {
+      mutateAsync: sendOffer,
+      isPending: sendingPending,
+      data: sendOfferData,
+    } = useMutation({
+      mutationKey: ['send-offer'],
+      mutationFn: async (body: SendOfferDto) => {
+        return await this.sendOffer(body.uuid!, body);
+      },
+      onSuccess: (data, body) => {},
+      onError: error => new CatchError(error, true),
+    });
+
+    const {
+      mutateAsync: updateOffer,
+      isPending: updatePending,
+      data: updateOfferData,
+    } = useMutation({
+      mutationKey: ['send-offer'],
+      mutationFn: async (body: SendOfferDto) => {
+        return await this.updateOffer(body.uuid!, body);
+      },
+      onSuccess: (data, body) => {},
+      onError: error => new CatchError(error, true),
+    });
+
+    const {mutateAsync: declineOffer, isPending: declinePending} = useMutation({
+      mutationKey: ['send-offer'],
+      mutationFn: async (body: DeclineOfferDto) => {
+        return await this.declineOffer(body.uuid!, body);
+      },
+      onSuccess: (data, body) => {},
+      onError: error => new CatchError(error, true),
+    });
+
+    const {mutateAsync: cancelOffer, isPending: cancelPending} = useMutation({
+      mutationKey: ['send-offer'],
+      mutationFn: async (body: DeclineOfferDto) => {
+        return await this.declineOffer(body.uuid!, body);
+      },
+      onSuccess: (data, body) => {},
+      onError: error => new CatchError(error, true),
+    });
+
+    const onSendOffer = async (body: SendOfferDto) => {
+      const attachments = [];
+
+      for (const att of body.attachments!) {
+        attachments.push(await upload(att, 'offer'));
+      }
+
+      body.attachments = attachments;
+
+      sendOffer(body);
+    };
+
+    return {
+      onSendOffer: onSendOffer,
+      sendOfferData,
+      sendingPending: isLoading || sendingPending,
+      declineOffer,
+      declinePending,
+      updateOffer,
+      updateOfferData,
+      cancelOffer,
+      cancelPending,
+      updatePending,
+    };
+  }
+
+  useCustomerReviews(uuid: string, query?: PaginationQuery) {
+    const {data, isLoading, error} = useQuery({
+      queryKey: ['customer-dashboard', query, uuid],
+      queryFn: async () => await this.getReviews(uuid, query),
+      enabled: Boolean(appStore.isAuthenticated),
+    });
+
+    return {data: data?.data, isLoading, error};
+  }
+
+  useCustomer() {
+    const {data, isLoading, error} = useQuery({
+      queryKey: ['customer'],
+      queryFn: async () => await this.getCustomer(),
+      enabled: Boolean(appStore.isAuthenticated),
+    });
+
+    return {data: data?.data, isLoading, error};
   }
 }
 

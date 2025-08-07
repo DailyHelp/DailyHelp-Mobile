@@ -96,9 +96,15 @@ import Info from './svg/info.svg';
 import IdentityCode from './svg/identity_code.svg';
 import ServiceProfile from './svg/service_profile.svg';
 import Analytics from './svg/analytics.svg';
+import EngageTime from './svg/engage_time.svg';
+import Trash from './svg/trash.svg';
+import PlainLocation from './svg/plain_location.svg';
 
 export default {
+  EngageTime,
   Analytics,
+  Trash,
+  PlainLocation,
   ServiceProfile,
   IdentityCode,
   Info,

@@ -1,0 +1,19 @@
+interface Conversation {
+  conversationId: string;
+  serviceProviderId: string;
+  spFirstname: string;
+  spLastname: string;
+  spMiddlename: string;
+  rqFirstname: string;
+  rqLastname: string;
+  rqMiddlename: string;
+  lastMessageId: string;
+  lastMessage: string;
+  offerDescription: string;
+  status: string;
+  lastLockedAt: string;
+  locked: boolean;
+  restricted: boolean;
+  cancellationChances: number;
+  createdAt: string;
+}

@@ -7,9 +7,13 @@ import {scale, verticalScale} from '../../../../shared/Scaling';
 import utils from '../../../../shared/Utils';
 import ReviewsCard from './components/ReviewsCard';
 import React from 'react';
+import homeService from './services/Home.service';
 
-const Reviews: IReviews = ({navigation}) => {
+const Reviews: IReviews = ({navigation, route}) => {
   const rate = 5;
+  const {query} = utils.usePagination();
+
+  const {data} = homeService.useCustomerReviews(route.params.uuid, query);
 
   const rating_categories = [
     {

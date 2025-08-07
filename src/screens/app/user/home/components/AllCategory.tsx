@@ -104,8 +104,6 @@ const CategoryActionSheet = React.forwardRef<
     });
   };
 
-  console.log(openSections, selected);
-
   return (
     <ActionSheet
       ref={ref}
