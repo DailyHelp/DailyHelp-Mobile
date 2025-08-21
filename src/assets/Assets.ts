@@ -99,10 +99,18 @@ import Analytics from './svg/analytics.svg';
 import EngageTime from './svg/engage_time.svg';
 import Trash from './svg/trash.svg';
 import PlainLocation from './svg/plain_location.svg';
+import Delete from './svg/delete.svg';
+import Refresh from './svg/refresh.svg';
+import Support from './svg/support.svg';
+import Time from './svg/time.svg';
 
 export default {
   EngageTime,
+  Time,
+  Delete,
+  Support,
   Analytics,
+  Refresh,
   Trash,
   PlainLocation,
   ServiceProfile,

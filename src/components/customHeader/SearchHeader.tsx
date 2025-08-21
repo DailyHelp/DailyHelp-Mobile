@@ -8,6 +8,10 @@ import Typography from '../Typography';
 const SearchHeader: ICustomHeader<NativeStackHeaderProps> = ({
   title,
   placeHolder,
+  onSearch,
+  value,
+  onFocus,
+  onBlur
 }) => {
   return (
     <Container
@@ -22,6 +26,10 @@ const SearchHeader: ICustomHeader<NativeStackHeaderProps> = ({
       <CustomInput
         type="text"
         placeholder={placeHolder}
+        onChangeText={onSearch}
+        value={value}
+        onFocus={onFocus}
+        onBlur={onBlur}
         leftIcon={
           <Assets.InActiveSearch
             width={scale(20)}

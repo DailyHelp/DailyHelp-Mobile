@@ -20,6 +20,12 @@ class AppStore {
 
   selectedGalleryImages: string[] = [];
 
+  offerDto?: {
+    amount?: string;
+    description?: string;
+    attachments?: string;
+  };
+
   actionSheetLoading!: ActionSheetLoader;
 
   constructor() {
@@ -89,6 +95,15 @@ class AppStore {
 
   setActionSheetLoaders(dto: ActionSheetLoader) {
     this.actionSheetLoading = {...this.actionSheetLoading, ...dto};
+  }
+
+  setOffer(dto: {amount?: string; description?: string; attachments?: string}) {
+    this.offerDto = {...this.offerDto, ...dto};
+  }
+
+  clearOffer() {
+    this.offerDto = {};
+    this.selectedGalleryImages = [];
   }
 }
 

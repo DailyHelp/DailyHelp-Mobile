@@ -11,6 +11,7 @@ import RateService from '../screens/app/user/jobs/components/RateService';
 import FundedWallet from '../screens/app/more/components/FundWallet';
 import AddressOptions from '../screens/app/more/components/AddressOptions';
 import CustomSelect from '../components/customInput/customSelectInput/CustomSelect';
+import ConfirmDeleteActionSheet from '../screens/app/more/deleteAccount/ConfirmDeleteAccount';
 
 registerSheet('AllCategory', AllCategory);
 registerSheet('Rating', Rating);
@@ -24,6 +25,7 @@ registerSheet('RateService', RateService);
 registerSheet('FundWallet', FundedWallet);
 registerSheet('AddressOptions', AddressOptions);
 registerSheet('CustomSelect', CustomSelect);
+registerSheet('ConfirmDelete', ConfirmDeleteActionSheet);
 
 export type ActionSheetLoader = {
   isDefaultLoading?: boolean;
@@ -87,6 +89,11 @@ declare module 'react-native-actions-sheet' {
         data?: {label?: string; value: string}[];
       };
       returnValue: {label?: string; value: string};
+    }>;
+    ConfirmDelete: SheetDefinition<{
+      payload: {
+        onDelete: (password: string) => void;
+      };
     }>;
   }
 }

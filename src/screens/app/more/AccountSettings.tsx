@@ -15,7 +15,7 @@ import homeService from '../user/home/services/Home.service';
 
 const AccountSettings: IAccountSettings = ({navigation}) => {
   utils.useHideBottomTab(navigation);
-  const {data} = homeService.useCustomer();
+  const {data} = homeService.useUser();
 
   const details = [
     {
@@ -126,6 +126,7 @@ const AccountSettings: IAccountSettings = ({navigation}) => {
           Logout
         </OutlineButton>
         <MainButton
+          onPress={() => navigation.navigate('DeleteAccount')}
           enableButtonColor="lightPink"
           color="danger"
           icon={() => <Assets.Bin style={{marginTop: verticalScale(4)}} />}>

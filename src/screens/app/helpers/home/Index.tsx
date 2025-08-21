@@ -9,12 +9,15 @@ import Availability from './components/Availability';
 import BadgeContainer from './components/BadgeContainer';
 import HelperDetails from './components/HelperDetails';
 import StatsCard from './components/StatsCard';
+import homeService from '../../user/home/services/Home.service';
 
 const Home: IHome = () => {
   const [isSwitch, setIsSwitch] = React.useState(false);
   const [helpersStatus, setHelpersStatus] = React.useState<HelpersStatus>(
     HelpersStatus.UNAVAILABLE,
   );
+
+  const {data} = homeService.useUser();
 
   React.useEffect(() => {
     if (isSwitch) setHelpersStatus(HelpersStatus.AVAILABLE);
@@ -66,7 +69,7 @@ const Home: IHome = () => {
         borderTopLeftRadius={20}
         gap={20}
         borderTopRightRadius={20}>
-        <HelperDetails />
+        <HelperDetails data={data} />
 
         <BadgeContainer />
 
@@ -87,7 +90,7 @@ const Home: IHome = () => {
           padding={15}
           width={'95'}
           position="relative"
-          alignSelf='center'
+          alignSelf="center"
           borderRadius={10}
           gap={8}
           backgroundColor="white">

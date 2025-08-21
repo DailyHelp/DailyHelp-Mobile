@@ -15,7 +15,7 @@ const HomeHeader: ICustomHeader<NativeStackHeaderProps> = ({
   navigation,
   goBack,
 }) => {
-  const {data} = homeService.useCustomer();
+  const {data} = homeService.useUser();
   const {onSubmit} = homeService.useLocation();
 
   const location = data?.defaultLocation?.address || title;
@@ -34,7 +34,7 @@ const HomeHeader: ICustomHeader<NativeStackHeaderProps> = ({
         onPress={() => {
           SheetManager.show('HomeAddress', {
             payload: {showCurrent: true},
-            onClose: d => onSubmit({...d}),
+            onClose: d => d && onSubmit({...d}),
           });
         }}>
         <Container flexDirection="row" gap={5}>

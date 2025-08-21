@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import React from 'react';
 import {TouchableOpacity, View} from 'react-native';
 import {Divider} from 'react-native-paper';
@@ -9,8 +10,12 @@ import CustomHeader from '../../../components/customHeader/Index';
 import EmptyState from '../../../components/EmptyState';
 import Typography from '../../../components/Typography';
 import {scale, verticalScale} from '../../../shared/Scaling';
+import chatService from './services/Chat.service';
 
 const Chat: IChat = ({navigation}) => {
+  const {data, setQuery, isLoading, fetchMore, refetch} =
+    chatService.useGetConversations();
+
   const empty = () => (
     <EmptyState
       navigation={navigation}
@@ -19,10 +24,17 @@ const Chat: IChat = ({navigation}) => {
       subTitle=" service providers"
     />
   );
+  console.log(data);
 
   const renderItem = React.useCallback(
-    ({item, index}: any) => (
-      <TouchableOpacity onPress={() => navigation.navigate('ChatBox')}>
+    ({item, index}: {item: Conversation; index: number}) => (
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate('ChatBox', {
+            uuid: item.conversationId!,
+            title: `${item.spFirstname} ${item.spLastname}`,
+          });
+        }}>
         <View
           style={{
             flexDirection: 'row',
@@ -39,15 +51,12 @@ const Chat: IChat = ({navigation}) => {
 
             <View style={{flexDirection: 'column', gap: 5}}>
               <Typography fontWeight="bold" size="md">
-                Amarachi Efe
+                {item.spFirstname} {item.spLastname}
               </Typography>
               <View style={{flexDirection: 'row', gap: 9}}>
                 <Assets.DoubleGreenMark style={{marginTop: verticalScale(4)}} />
-                <Typography color="gray" limit={23}>
-                  Hey! I need help cleaning my room. It’s mostly just sweeping,
-                  mopping, wiping down surfaces, and helping me organize a few
-                  things. Nothing too heavy, but I’d love it to look fresh and
-                  neat again.
+                <Typography color="gray" limit={20}>
+                  {item.offerDescription}
                 </Typography>
                 <View
                   style={{
@@ -59,20 +68,26 @@ const Chat: IChat = ({navigation}) => {
                   }}
                 />
                 <Typography color="gray" limit={23}>
-                  8:45
+                  {dayjs(item.createdAt).format('h:mm')}
                 </Typography>
               </View>
             </View>
           </View>
 
-          <View style={{flexDirection: 'row', gap: 7, alignItems: 'center'}}>
+          <View
+            style={{
+              flexDirection: 'row',
+              gap: 3,
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}>
             <Assets.GreenMark style={{marginTop: verticalScale(3)}} />
             <Typography
               currency
               color="lightGreen"
               fontWeight="medium"
               fontType="CabinetGrotesk">
-              15000
+              {item.offerPrice}
             </Typography>
           </View>
         </View>
@@ -82,23 +97,31 @@ const Chat: IChat = ({navigation}) => {
     [],
   );
 
-  const header = () => (
-    <CustomHeader
-      navigation={navigation}
-      title="Chat"
-      placeHolder="Search chat"
-      type="search"
-    />
+  const header = React.useMemo(
+    () => (
+      <CustomHeader
+        navigation={navigation}
+        title="Chat"
+        placeHolder="Search chat"
+        type="search"
+        onSearch={search => setQuery({search})}
+      />
+    ),
+    [],
   );
 
   return (
-    <View style={{flex: 1,}}>
-      <CustomFlatList
-        data={['a', 'b', 'e', 'd']}
+    <View style={{flex: 1}}>
+      <CustomFlatList<Conversation>
+        data={data}
         ListEmptyComponent={empty}
         renderItem={renderItem}
         ListHeaderComponent={header}
-        keyExtractor={(item: any, index) => item + index}
+        refreshing={isLoading}
+        onRefresh={refetch}
+        onEndReached={fetchMore}
+        onEndReachedThreshold={1}
+        keyExtractor={(item, index) => item.conversationId + index}
       />
     </View>
   );

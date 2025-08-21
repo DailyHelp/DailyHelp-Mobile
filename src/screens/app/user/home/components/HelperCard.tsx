@@ -7,9 +7,12 @@ import CustomAvatar from '../../../../../components/CustomAvatar';
 import StatusChip from '../../../../../components/StatusChip';
 import Typography from '../../../../../components/Typography';
 import {scale, verticalScale} from '../../../../../shared/Scaling';
+import ProvidersDto from '../dto/providersDto';
 
-const HelperCard: IHelperCard = ({data, mode, horizontal}) => {
+const HelperCard: IHelperCard<ProvidersDto> = ({data, mode, horizontal}) => {
   const navigation = useNavigation<Navigate<IHomeRoute>>();
+
+  let serviceImages = (data?.serviceImages as string).split(',');
 
   return (
     <Card
@@ -20,7 +23,13 @@ const HelperCard: IHelperCard = ({data, mode, horizontal}) => {
         backgroundColor: 'white',
       }}>
       {mode === 'middle' && (
-        <TouchableOpacity onPress={() => navigation.navigate('ServiceProfile')}>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('ServiceProfile', {
+              ...data!,
+              serviceImages: serviceImages!,
+            });
+          }}>
           <View
             style={{
               backgroundColor: 'white',
@@ -32,7 +41,7 @@ const HelperCard: IHelperCard = ({data, mode, horizontal}) => {
             }}>
             <Card.Cover
               style={{height: verticalScale(150)}}
-              source={{uri: data?.brandImage?.[0]}}
+              source={{uri: serviceImages?.[0]}}
             />
             <View
               style={{
@@ -48,7 +57,7 @@ const HelperCard: IHelperCard = ({data, mode, horizontal}) => {
                 avatarSize={70}
                 bottom={-10}
                 right={15}
-                data={{image: data?.image, badge: data?.badge}}
+                data={{image: data?.picture, badge: data?.tier.toLowerCase()}}
               />
             </View>
 
@@ -59,7 +68,7 @@ const HelperCard: IHelperCard = ({data, mode, horizontal}) => {
                 gap: 10,
               }}>
               <Typography fontWeight="bold" size="md" textAlign="center">
-                {data?.name}
+                {data?.firstname} {data?.lastname}
               </Typography>
 
               <View
@@ -70,11 +79,12 @@ const HelperCard: IHelperCard = ({data, mode, horizontal}) => {
                   alignItems: 'center',
                 }}>
                 <Typography
+                  limit={15}
                   fontWeight="bold"
                   size="md"
                   color="gray"
                   textAlign="center">
-                  {data?.skill}
+                  {data?.primaryJobRole}
                 </Typography>
                 <Typography
                   fontWeight="bold"
@@ -96,7 +106,7 @@ const HelperCard: IHelperCard = ({data, mode, horizontal}) => {
                   size="md"
                   color="gray"
                   textAlign="center">
-                  {data?.price}
+                  {data?.offerStartingPrice}
                 </Typography>
                 <Typography
                   fontWeight="bold"
@@ -113,7 +123,7 @@ const HelperCard: IHelperCard = ({data, mode, horizontal}) => {
                     size="md"
                     color="gray"
                     textAlign="center">
-                    {data?.rating}
+                    {data?.avgRating}
                   </Typography>
                 </View>
               </View>
@@ -127,7 +137,7 @@ const HelperCard: IHelperCard = ({data, mode, horizontal}) => {
                 {data?.availability ? 'Available' : 'Unavailable'}
               </StatusChip>
               <StatusChip backgroundColor="#F3F4F6">
-                {data?.jobsCompleted} jobs completed
+                {data?.completedJobs} jobs completed
               </StatusChip>
             </View>
           </View>
@@ -137,7 +147,10 @@ const HelperCard: IHelperCard = ({data, mode, horizontal}) => {
       {mode === 'row' && (
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate('ServiceProfile', {uuid: data?.uuid!});
+            navigation.navigate('ServiceProfile', {
+              ...data!,
+              serviceImages: serviceImages!,
+            });
           }}>
           <View
             style={{
@@ -149,7 +162,7 @@ const HelperCard: IHelperCard = ({data, mode, horizontal}) => {
             }}>
             <Card.Cover
               style={{height: verticalScale(150)}}
-              source={{uri: data?.brandImage?.[0]}}
+              source={{uri: serviceImages?.[0]}}
             />
 
             <View
@@ -160,7 +173,9 @@ const HelperCard: IHelperCard = ({data, mode, horizontal}) => {
                 alignSelf: 'center',
               }}>
               <View style={{flexDirection: 'row', gap: 10}}>
-                <CustomAvatar data={{image: data?.image, badge: data?.badge}} />
+                <CustomAvatar
+                  data={{image: data?.picture, badge: data?.tier.toLowerCase()}}
+                />
                 <View style={{flexDirection: 'column', gap: 5, width: '80%'}}>
                   <View
                     style={{
@@ -168,7 +183,7 @@ const HelperCard: IHelperCard = ({data, mode, horizontal}) => {
                       justifyContent: 'space-between',
                     }}>
                     <Typography fontWeight="bold" size="m2d">
-                      {data?.name}
+                      {data?.firstname} {data?.lastname}
                     </Typography>
 
                     <View
@@ -188,7 +203,7 @@ const HelperCard: IHelperCard = ({data, mode, horizontal}) => {
                         size="md"
                         color="gray"
                         textAlign="center">
-                        {data?.rating}
+                        {data?.avgRating}
                       </Typography>
                     </View>
                   </View>
@@ -197,8 +212,12 @@ const HelperCard: IHelperCard = ({data, mode, horizontal}) => {
                       flexDirection: 'row',
                       gap: 5,
                     }}>
-                    <Typography fontWeight="medium" size="md" color="gray">
-                      {data?.skill}
+                    <Typography
+                      fontWeight="medium"
+                      size="md"
+                      color="gray"
+                      limit={12}>
+                      {data?.primaryJobRole}
                     </Typography>
                     <Typography fontWeight="bold" size="md" color="gray">
                       |
@@ -207,7 +226,7 @@ const HelperCard: IHelperCard = ({data, mode, horizontal}) => {
                       From
                     </Typography>
                     <Typography currency fontWeight="bold" size="md">
-                      {data?.price}
+                      {data?.offerStartingPrice}
                     </Typography>
                   </View>
                 </View>
@@ -226,7 +245,7 @@ const HelperCard: IHelperCard = ({data, mode, horizontal}) => {
                 {data?.availability ? 'Available' : 'Unavailable'}
               </StatusChip>
               <StatusChip backgroundColor="#F3F4F6">
-                {data?.jobsCompleted} jobs completed
+                {data?.completedJobs} jobs completed
               </StatusChip>
             </View>
           </View>

@@ -15,7 +15,7 @@ const ForgotPassword: IForgotPassword = ({navigation}) => {
   const {loading, onSubmit} = authService.useForgotPassword();
 
   return (
-    <Container type="scroll" padding={5} gap={20}>
+    <Container type="scroll" padding={10} gap={20}>
       <ScreenHeader
         title="Forgot password"
         description="Enter your email address, and a verification code will be sent to reset your password.."

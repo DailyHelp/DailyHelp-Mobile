@@ -61,7 +61,6 @@ const FindServiceAuthModal: IFindServiceAuthModal<UserTypes> = ({
               icon={() => <Assets.EmailOutlined />}
               onPress={() => {
                 onClose();
-                AppStorage.save('userType', UserTypes.CUSTOMER);
                 navigation.navigate('CreateAccount', {userType});
               }}
               mode="outlined"

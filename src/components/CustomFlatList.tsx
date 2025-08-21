@@ -21,6 +21,7 @@ const CustomFlatList = <T extends unknown>({
   numColumns,
   height,
   width,
+  inverted = false,
 }: ICustomFlatListProps<T>) => {
   return (
     <FlatList
@@ -39,6 +40,7 @@ const CustomFlatList = <T extends unknown>({
       onRefresh={onRefresh}
       ListEmptyComponent={ListEmptyComponent}
       style={{height}}
+      inverted={inverted}
       contentContainerStyle={{
         paddingBottom: verticalScale(20),
         width,

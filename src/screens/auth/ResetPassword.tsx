@@ -14,7 +14,7 @@ const ResetPassword: IResetPassword = ({navigation}) => {
   const {resetLoading, onResetPassword} = authService.useForgotPassword();
 
   return (
-    <Container type="scroll" padding={5} gap={20}>
+    <Container type="scroll" padding={10} gap={20}>
       <ScreenHeader
         title="Reset password"
         description="Secure your account with a strong password."

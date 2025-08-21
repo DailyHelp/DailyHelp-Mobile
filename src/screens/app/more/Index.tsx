@@ -8,9 +8,12 @@ import AppStorage from '../../../shared/AppStorage';
 import React from 'react';
 import {UserTypes} from '../../../shared/Constant';
 import Container from '../../../components/container/Index';
+import moreService from './services/More.service';
 
 const More: IMore = ({navigation}) => {
   const isVerified = AppStorage.find('isIdentityVerified');
+
+  const {onSwitch, isLoading} = moreService.useSwitchUser();
 
   const user_type = AppStorage.find('userType') as UserTypes;
 
@@ -101,7 +104,11 @@ const More: IMore = ({navigation}) => {
         }}>
         <View
           style={{flexDirection: 'column', gap: 20, justifyContent: 'center'}}>
-          <UserDataCard isVerified={isVerified as boolean} />
+          <UserDataCard
+            isVerified={isVerified as boolean}
+            onSwitch={user => onSwitch(user!)}
+            isLoading={isLoading}
+          />
 
           {!isVerified && (
             <View

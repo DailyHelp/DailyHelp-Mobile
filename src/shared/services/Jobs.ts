@@ -1,18 +1,17 @@
 import DeclineOfferDto from '../../screens/app/user/jobs/dto/DeclineOffer.dto';
+import Jobs from '../../screens/app/user/jobs/dto/job.dto';
 import SendOfferDto from '../../screens/app/user/jobs/dto/SendOffer.dto';
 import ThrowError from '../errors/throwError';
 import Endpoints from './Endpoints';
 import Http from './Http';
 
 export default class JobsApi extends Http {
-  protected async customersJobs(query: PaginationQuery) {
+  protected async getsJobs(query: PaginationQuery) {
     const res = await this.fetchHandler({
-      path: Endpoints.getCustomersJob(query),
+      path: Endpoints.getJob(query),
       method: 'GET',
     });
-    const data = await this.handleResponse<any>(res);
-
-    this.success(data?.message);
+    const data = await this.handleResponse<Jobs[]>(res);
 
     return data;
   }
@@ -32,7 +31,7 @@ export default class JobsApi extends Http {
 
   protected async customerJobTimeline(uuid: string) {
     const res = await this.fetchHandler({
-      path: Endpoints.customerJobTimeline(uuid),
+      path: Endpoints.jobTimeline(uuid),
       method: 'GET',
     });
     const data = await this.handleResponse<any>(res);
@@ -44,7 +43,7 @@ export default class JobsApi extends Http {
 
   protected async getCustomerConversation(query: PaginationQuery) {
     const res = await this.fetchHandler({
-      path: Endpoints.getCustomerConversations(query),
+      path: Endpoints.getConversations(query),
       method: 'GET',
     });
     const data = await this.handleResponse<any>(res);
@@ -56,7 +55,7 @@ export default class JobsApi extends Http {
 
   protected async sendCustomerMessage(uuid: string) {
     const res = await this.fetchHandler({
-      path: Endpoints.sendCustomerMessage(uuid),
+      path: Endpoints.sendMessage(uuid),
       method: 'POST',
     });
     const data = await this.handleResponse<any>(res);
@@ -68,7 +67,7 @@ export default class JobsApi extends Http {
 
   protected async customerReportConversation(uuid: string) {
     const res = await this.fetchHandler({
-      path: Endpoints.customerReportConversation(uuid),
+      path: Endpoints.reportConversation(uuid),
       method: 'POST',
     });
     const data = await this.handleResponse<any>(res);

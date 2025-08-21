@@ -1,4 +1,5 @@
 import {IsEmail, IsString, IsStrongPassword} from 'class-validator';
+import {UserTypes} from '../../../shared/Constant';
 
 export default class RegisterDTO {
   @IsEmail(undefined, {message: 'Email is required'})
@@ -21,7 +22,10 @@ export default class RegisterDTO {
     minLowercase: 1,
   })
   password?: string;
+
   deviceToken: string = 'string';
+
+  type?: UserTypes;
 
   constructor(dto?: RegisterDTO) {
     this.email = dto?.email;
@@ -29,7 +33,8 @@ export default class RegisterDTO {
     this.lastname = dto?.lastname;
     this.password = dto?.password;
     this.phone = dto?.phone;
-    this.deviceToken =  'string';
+    this.deviceToken = 'string';
+    this.type = dto?.type
   }
 }
 

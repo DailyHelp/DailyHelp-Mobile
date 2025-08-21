@@ -21,6 +21,7 @@ import {PermissionsAndroid, Platform} from 'react-native';
 import {CameraRoll} from '@react-native-camera-roll/camera-roll';
 import {validate} from 'class-validator';
 import Http, {http} from './services/Http';
+import AppStorage from './AppStorage';
 
 class Utils {
   private static instance: Utils;
@@ -324,7 +325,7 @@ class Utils {
       try {
         setLoading(true);
 
-        if (Platform.OS === 'android' && !uri?.startsWith('file://')) {
+        if (Platform.OS === 'android' && !uri?.includes('://')) {
           uri = `file://${uri}`;
         }
         const data = await http.imageUpload(uri);
@@ -400,30 +401,76 @@ class Utils {
     return new URLSearchParams(result as any);
   }
 
-  usePagination<T = PaginationQuery>(props?: T & PaginationQuery) {
-    const [query, setQuery] = React.useState<(T & PaginationQuery) | undefined>(
+  usePagination<F = PaginationQuery, D = any>(props?: PaginationQuery<F>) {
+    const [query, setQuery] = React.useState<PaginationQuery<F> | undefined>(
       props,
     );
+    const [data, setData] = React.useState<D[]>([]);
 
-    //set default states
+    // Set default states
     React.useEffect(() => {
       let cache = query!;
-
-      if (!cache?.limit) cache = {...cache, limit: 10};
-      if (!cache?.page) cache = {...cache, page: 1};
-      if (!cache?.page) cache = {...cache, page: 1};
-
+      if (!cache?.pagination?.limit) {
+        cache = {...cache, pagination: {...cache.pagination, limit: 10}};
+      }
+      if (!cache?.pagination?.page) {
+        cache = {...cache, pagination: {...cache.pagination, page: 1}};
+      }
       setQuery(cache);
     }, []);
+
+    // Call this after fetching new data for a page
+    const appendPageData = (newData: D[]) => {
+      setData(prev => [...prev!, ...newData]);
+    };
+
+    const resetHistory = () => {
+      setData([]);
+    };
 
     const fetchMore = () => {
       setQuery(prev => ({
         ...prev!,
-        page: (prev?.page ?? 1) + 1,
+        pagination: {
+          ...prev!.pagination,
+          page: (prev?.pagination?.page ?? 1) + 1,
+        },
       }));
     };
 
-    return {query, setQuery, fetchMore};
+    return {
+      query,
+      setQuery,
+      fetchMore,
+      data,
+      appendPageData,
+      resetHistory,
+    };
+  }
+
+  saveRecentSearch(query: string, max = 10) {
+    if (!query.trim()) return;
+
+    const stored = AppStorage.find('recent_search');
+    let searches: string[] = stored ? JSON.parse(stored as string) : [];
+
+    // remove duplicates
+    searches = searches.filter(s => s.toLowerCase() !== query.toLowerCase());
+
+    // add new search at the top
+    searches.unshift(query);
+
+    // enforce max limit
+    if (searches.length > max) {
+      searches = searches.slice(0, max);
+    }
+
+    AppStorage.save('recent_search', JSON.stringify(searches));
+  }
+
+  getRecentSearches(): string[] {
+    const stored = AppStorage.find('recent_search');
+    return stored ? JSON.parse(stored as string) : [];
   }
 }
 

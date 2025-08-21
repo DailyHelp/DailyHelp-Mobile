@@ -12,10 +12,13 @@ const AttachmentContainer: IAttachmentContainer = ({
   openGallery,
   allowUpload = true,
   children,
+  data,
 }) => {
+  const attachment = data || appStore.selectedGalleryImages;
+
   return (
     <React.Fragment>
-      {appStore.selectedGalleryImages.length > 0 ? (
+      {attachment.length > 0 ? (
         <View style={offerStyle.galleryContainer}>
           {/* Plus Button */}
           {allowUpload && (
@@ -26,7 +29,7 @@ const AttachmentContainer: IAttachmentContainer = ({
             </TouchableOpacity>
           )}
 
-          <Attachment data={{attachment: appStore.selectedGalleryImages}} />
+          <Attachment data={{attachment}} canClose={false} />
         </View>
       ) : (
         // Dashed upload box

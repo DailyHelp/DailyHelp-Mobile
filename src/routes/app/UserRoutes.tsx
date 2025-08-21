@@ -3,44 +3,38 @@ import React from 'react';
 import {Text} from 'react-native-paper';
 import Assets from '../../assets/Assets';
 import CustomHeader from '../../components/customHeader/Index';
-import Home from '../../screens/app/user/home/Index';
-import {scale, verticalScale} from '../../shared/Scaling';
-import {customFontSize, fonts} from '../../shared/themes/Typography';
-import HomeRoute from './Home';
-import Search from '../../screens/app/user/search/Index';
-import SearchRoute from './Search';
-import ServiceProfile from '../../screens/app/user/home/ServiceProfile';
-import Reviews from '../../screens/app/user/home/Reviews';
-import ChatRoute from './Chat';
-import Chat from '../../screens/app/chat/Index';
 import ChatBox from '../../screens/app/chat/ChatBox';
 import Checkout from '../../screens/app/chat/Checkout';
+import Chat from '../../screens/app/chat/Index';
 import VoiceCall from '../../screens/app/chat/VoiceCall';
 import Report from '../../screens/app/chat/report/Index';
-import Jobs from '../../screens/app/user/jobs/Index';
-import JobsRoute from './Jobs';
-import ViewDetails from '../../screens/app/user/jobs/ViewDetails';
-import VerificationPin from '../../screens/app/user/jobs/VerificationPin';
-import More from '../../screens/app/more/Index';
-import MoreRoute from './More';
+import ReportSubmitted from '../../screens/app/chat/report/ReportSubmitted';
 import AccountSettings from '../../screens/app/more/AccountSettings';
-import UpdatePassword from '../../screens/app/more/UpdatePassword';
-import WalletBalance from '../../screens/app/more/WalletBallance';
-import Disputes from '../../screens/app/more/Disputes';
-import IdentityVerification from '../../screens/auth/compliance/IdentityVerification';
-import {Observer} from 'mobx-react-lite';
-import ConfirmDetails from '../../screens/auth/compliance/ConfirmDetails';
-import FacialVerification from '../../screens/auth/compliance/FacialVerification';
-import PersonalInformation from '../../screens/auth/compliance/PersonalInformation';
-import SelfieVerification from '../../screens/auth//compliance/selfie/Index';
-import {appStore} from '../../shared/stores/appStore';
-import Verifying from '../../screens/auth/compliance/Verifying';
-import VerificationResponse from '../../screens/auth/compliance/VerificationResponse';
 import Address from '../../screens/app/more/Address';
-import Feedback from '../../screens/app/more/Feedback';
-import ReportSumitted from '../../screens/app/chat/report/ReportSumitted';
-import VerifyPhone from '../../screens/app/more/VerifyPhone';
 import Analytics from '../../screens/app/more/Analytics';
+import Disputes from '../../screens/app/more/Disputes';
+import Feedback from '../../screens/app/more/Feedback';
+import More from '../../screens/app/more/Index';
+import UpdatePassword from '../../screens/app/more/UpdatePassword';
+import VerifyPhone from '../../screens/app/more/VerifyPhone';
+import WalletBalance from '../../screens/app/more/WalletBallance';
+import DeleteReason from '../../screens/app/more/deleteAccount/DeleteReason';
+import DeleteAccount from '../../screens/app/more/deleteAccount/Index';
+import Home from '../../screens/app/user/home/Index';
+import Reviews from '../../screens/app/user/home/Reviews';
+import ServiceProfile from '../../screens/app/user/home/ServiceProfile';
+import Jobs from '../../screens/app/user/jobs/Index';
+import VerificationPin from '../../screens/app/user/jobs/VerificationPin';
+import ViewDetails from '../../screens/app/user/jobs/ViewDetails';
+import Search from '../../screens/app/user/search/Index';
+import {scale, verticalScale} from '../../shared/Scaling';
+import {customFontSize, fonts} from '../../shared/themes/Typography';
+import IdentityVerificationRoute from '../auth/IdentityVerificationRoute';
+import ChatRoute from './Chat';
+import HomeRoute from './Home';
+import JobsRoute from './Jobs';
+import MoreRoute from './More';
+import SearchRoute from './Search';
 
 type LabelPosition = 'beside-icon' | 'below-icon';
 
@@ -255,12 +249,20 @@ export const UserHomeStackRoutes = [
       ),
     },
   },
+  ...IdentityVerificationRoute,
 ];
 
 export const SearchStackRoutes = [
   {
     name: 'Search',
     component: Search,
+    options: {
+      headerShown: false,
+    },
+  },
+  {
+    name: 'ServiceProfile',
+    component: ServiceProfile,
     options: {
       headerShown: false,
     },
@@ -290,8 +292,8 @@ export const UserChatStackRoutes = [
     },
   },
   {
-    name: 'ReportSumitted',
-    component: ReportSumitted,
+    name: 'ReportSubmitted',
+    component: ReportSubmitted,
     options: {
       headerShown: true,
       header: (props: NativeStackHeaderProps) => (
@@ -422,86 +424,12 @@ export const MoreStackRoutes = [
     },
   },
   {
-    name: 'PersonalInformation',
-    component: PersonalInformation,
-    options: {
-      headerShown: true,
-      header: (props: NativeStackHeaderProps) => (
-        <CustomHeader type="back" title="Go back" {...props} />
-      ),
-    },
-  },
-  {
     name: 'Feedback',
     component: Feedback,
     options: {
       headerShown: true,
       header: (props: NativeStackHeaderProps) => (
         <CustomHeader type="back" title="Feedback" {...props} textMiddle />
-      ),
-    },
-  },
-  {
-    name: 'IdentityVerification',
-    component: IdentityVerification,
-    options: {
-      headerShown: true,
-      header: (props: NativeStackHeaderProps) => (
-        <CustomHeader type="back" title="Go back" {...props} />
-      ),
-    },
-  },
-  {
-    name: 'FacialVerification',
-    component: FacialVerification,
-    options: {
-      headerShown: true,
-      header: (props: NativeStackHeaderProps) => (
-        <CustomHeader type="back" title="Go back" {...props} />
-      ),
-    },
-  },
-  {
-    name: 'SelfieVerification',
-    component: SelfieVerification,
-    options: {
-      headerShown: true,
-      header: (props: NativeStackHeaderProps) => (
-        <Observer>
-          {() =>
-            !appStore.hideSelfieVerificationHeader ? (
-              <CustomHeader type="back" title="Go back" {...props} />
-            ) : null
-          }
-        </Observer>
-      ),
-    },
-  },
-  {
-    name: 'ConfirmDetails',
-    component: ConfirmDetails,
-    options: {
-      headerShown: true,
-      header: (props: NativeStackHeaderProps) => (
-        <CustomHeader type="back" title="Go back" {...props} />
-      ),
-    },
-  },
-  {
-    name: 'Verifying',
-    component: Verifying,
-  },
-  {
-    name: 'VerificationResponse',
-    component: VerificationResponse,
-  },
-  {
-    name: 'ServiceProfile',
-    component: ServiceProfile,
-    options: {
-      headerShown: true,
-      header: (props: NativeStackHeaderProps) => (
-        <CustomHeader type="back" title="Service profile" {...props} textMiddle />
       ),
     },
   },
@@ -525,4 +453,35 @@ export const MoreStackRoutes = [
       ),
     },
   },
+  {
+    name: 'DeleteAccount',
+    component: DeleteAccount,
+    options: {
+      headerShown: true,
+      header: (props: NativeStackHeaderProps) => (
+        <CustomHeader
+          type="back"
+          title="Delete account"
+          {...props}
+          textMiddle
+        />
+      ),
+    },
+  },
+  {
+    name: 'DeleteReason',
+    component: DeleteReason,
+    options: {
+      headerShown: true,
+      header: (props: NativeStackHeaderProps) => (
+        <CustomHeader
+          type="back"
+          title="Delete account"
+          {...props}
+          textMiddle
+        />
+      ),
+    },
+  },
+  ...IdentityVerificationRoute,
 ];

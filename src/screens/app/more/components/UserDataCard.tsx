@@ -10,8 +10,14 @@ import AppStorage from '../../../../shared/AppStorage';
 import {UserTypes} from '../../../../shared/Constant';
 import {scale, verticalScale} from '../../../../shared/Scaling';
 import Container from '../../../../components/container/Index';
+import UserDTO from '../../../auth/dto/UserDto';
 
-const UserDataCard: IUserDataCard = ({isVerified}) => {
+const UserDataCard: IUserDataCard<UserDTO, UserTypes> = ({
+  isVerified,
+  data,
+  onSwitch,
+  isLoading,
+}) => {
   const user_type = AppStorage.find('userType') as UserTypes;
 
   const isCustomer = user_type === UserTypes.CUSTOMER;
@@ -32,7 +38,10 @@ const UserDataCard: IUserDataCard = ({isVerified}) => {
         gap: 7,
       }}>
       {user_type === UserTypes.PROVIDER && (
-        <CircularProgressBase value={20} radius={40} activeStrokeColor="#C1FF1D">
+        <CircularProgressBase
+          value={20}
+          radius={40}
+          activeStrokeColor="#C1FF1D">
           <CustomAvatar
             showBadge={false}
             avatarSize={60}
@@ -45,7 +54,7 @@ const UserDataCard: IUserDataCard = ({isVerified}) => {
         <CustomAvatar
           showBadge={false}
           avatarSize={60}
-          data={{image: Assets.Worker1}}
+          data={{image: data?.picture}}
         />
       )}
 
@@ -69,7 +78,7 @@ const UserDataCard: IUserDataCard = ({isVerified}) => {
           ) : (
             <Icon name="alert-circle" color={'#F0443A'} />
           )}
-          <Typography color="danger">
+          <Typography color={isVerified ? 'green' : 'danger'}>
             {isVerified ? 'Verified' : 'Unverified'}
           </Typography>
         </View>
@@ -91,6 +100,10 @@ const UserDataCard: IUserDataCard = ({isVerified}) => {
         </Typography>
 
         <MainButton
+          loading={isLoading}
+          onPress={() => {
+            onSwitch?.(isCustomer ? UserTypes.PROVIDER : UserTypes.CUSTOMER);
+          }}
           enableButtonColor={isCustomer ? 'secondary' : 'primary'}
           color={isCustomer ? 'white' : 'secondary'}>
           {isCustomer ? 'Provide service' : 'Find service'}

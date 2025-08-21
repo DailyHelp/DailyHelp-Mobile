@@ -33,6 +33,7 @@ export const Colors = {
   lighterGray: '#A9AFC2',
   lemonGreen: '#02CA71',
   offWhite: '#F9F9FB',
+  lemonDanger: '',
 };
 
 // Get the type of all keys in Colors

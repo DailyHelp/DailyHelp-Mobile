@@ -7,15 +7,14 @@ export default class SendOfferDto {
   @IsString()
   description?: string;
 
-  @IsArray({each: true})
-  attachments?: string[];
+  attachments: string[] | string;
 
   uuid?: string;
 
   constructor(dto?: SendOfferDto) {
     this.amount = dto?.amount;
     this.description = dto?.description;
-    this.attachments = dto?.attachments;
+    this.attachments = dto?.attachments!;
     this.uuid = dto?.uuid;
   }
 }

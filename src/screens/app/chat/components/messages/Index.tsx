@@ -7,13 +7,16 @@ import chatStyle from '../../chatStyle';
 import CustomAvatar from '../../../../../components/CustomAvatar';
 import Assets from '../../../../../assets/Assets';
 import AttachmentContainer from '../../../../../components/AttachmentContainer';
+import dayjs from 'dayjs';
 
 const Messages: IMessages = props => {
   const {data} = props;
 
   const position = props.position || 'left';
-  const status = data?.status || 'accepted';
-  const time = data?.time || '8:45 am'; // fallback time
+  const status = data?.type.toLowerCase() || 'accepted';
+  const time = dayjs(data?.createdAt).format('h:mm A'); // fallback time
+
+  let attachment = data?.offer?.pictures.split(',');
 
   let backgroundColor = props.backgroundColor;
   if (!backgroundColor) {
@@ -44,23 +47,23 @@ const Messages: IMessages = props => {
           {status && (
             <React.Fragment>
               {status !== 'offer' && status !== 'accepted' ? (
-                <OfferRejected {...props} />
+                <OfferRejected {...props} data={data} />
               ) : (
-                <OfferAction {...props} />
+                <OfferAction {...props} data={data} />
               )}
             </React.Fragment>
           )}
 
           <Typography size="md">
-            I want to make a brazzilian twisting for my wedding, see the
-            attachment for sample
+            {data?.message || data?.offer.description}
           </Typography>
-        </View>
-        {position === 'left' && <Typography color="gray">{time}</Typography>}
 
-        {data?.attachments?.length! > 0 && (
-          <AttachmentContainer allowUpload={false} />
-        )}
+          {attachment?.length! > 0 && (
+            <AttachmentContainer allowUpload={false} data={attachment} />
+          )}
+        </View>
+
+        {position === 'left' && <Typography color="gray">{time}</Typography>}
       </View>
     </View>
   );

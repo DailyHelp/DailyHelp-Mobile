@@ -11,6 +11,8 @@ export default class ProvidersDto {
   'completedJobs': number;
   'tier': string;
   'picture': string;
-  'serviceImages': string[];
+  'serviceImages': string[] | string;
   'distance': string;
+  'status': string;
+  'totalRatings': string;
 }

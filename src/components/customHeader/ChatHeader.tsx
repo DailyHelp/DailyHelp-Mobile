@@ -16,6 +16,7 @@ const ChatHeader: ICustomHeader<NativeStackHeaderProps> = ({
       padding={10}
       width={'full'}
       justifyContent='space-between'
+      alignItems='center'
       backgroundColor="white">
       <Container flexDirection="row">
         <TouchableOpacity onPress={() => navigation?.goBack()}>
@@ -23,7 +24,7 @@ const ChatHeader: ICustomHeader<NativeStackHeaderProps> = ({
         </TouchableOpacity>
       </Container>
 
-      <Container flexDirection="row" gap={5}>
+      <Container flexDirection="row" gap={7}>
         <CustomAvatar avatarSize={40} data={{image: Assets.Worker1}} />
         <Container>
           <Typography fontWeight="bold" size="md">

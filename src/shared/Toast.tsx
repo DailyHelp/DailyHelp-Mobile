@@ -13,12 +13,11 @@ export const toastConfig: ToastConfig = {
   */
   success: ({text2, ...props}) => (
     <Container
+      backgroundColor="green"
       padding={20}
-      height={50}
       width={'100%'}
       flexDirection="row"
       alignItems="center"
-      backgroundColor="#008038"
       justifyContent="space-between">
       <Container flexDirection="row" gap={1} backgroundColor="transparent">
         <Icon name={'check'} size={20} color={'white'} />
@@ -37,8 +36,7 @@ export const toastConfig: ToastConfig = {
   */
   error: ({text2, ...props}) => (
     <Container
-      backgroundColor="#FF3333"
-      height={50}
+      backgroundColor="danger"
       padding={30}
       width={'100%'}
       flexDirection="row"
@@ -46,7 +44,7 @@ export const toastConfig: ToastConfig = {
       justifyContent="space-between">
       <Container flexDirection="row" gap={1} backgroundColor="transparent">
         <Icon name={'close-o'} size={20} color="white" />
-        <Typography fontWeight="bold" size="xs">
+        <Typography fontWeight="bold" size="xs" color="white">
           {text2}
         </Typography>
       </Container>

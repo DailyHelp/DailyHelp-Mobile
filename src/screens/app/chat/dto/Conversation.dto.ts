@@ -10,6 +10,7 @@ interface Conversation {
   lastMessageId: string;
   lastMessage: string;
   offerDescription: string;
+  offerPrice: number;
   status: string;
   lastLockedAt: string;
   locked: boolean;

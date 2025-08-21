@@ -12,26 +12,26 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {IServiceProfile} from '../../../../@types/routes';
 import Assets from '../../../../assets/Assets';
 import MainButton from '../../../../components/button/MainButton';
+import Container from '../../../../components/container/Index';
 import CustomAvatar from '../../../../components/CustomAvatar';
+import Gallery from '../../../../components/Gallery';
+import Offer from '../../../../components/offers/Index';
 import Typography from '../../../../components/Typography';
 import {scale, verticalScale} from '../../../../shared/Scaling';
 import {appStore} from '../../../../shared/stores/appStore';
 import utils from '../../../../shared/Utils';
-import Gallery from '../../../../components/Gallery';
 import ReviewsCard from './components/ReviewsCard';
-import SendOffer from '../../../../components/offers/SendOffer';
 import homeStyle from './homeStyle';
 import homeService from './services/Home.service';
-import SendOfferDto from '../jobs/dto/SendOffer.dto';
 
 const STATUS_MAP: any = {
   available: {
-    color: '#007A5E',
+    color: 'lemonGreen',
     text: 'Currently Available at Imaduwa, Lagos',
     bg: '#121921',
   },
   unavailable: {
-    color: '#02CA71',
+    color: 'lemonGreen',
     bg: '#F0443A',
     text: 'Currently Unavailable at Okomaiko, Lagos',
   },
@@ -44,6 +44,12 @@ const STATUS_MAP: any = {
 
 const ServiceProfile: IServiceProfile = ({route, navigation}) => {
   utils.useHideBottomTab(navigation);
+
+  const {data: reviews} = homeService.useCustomerReviews(route.params?.uuid!, {
+    pagination: {limit: 3},
+  });
+
+  const {data: customer} = homeService.useUser();
 
   const {onSendOffer, sendingPending, declineOffer} = homeService.useOffer();
 
@@ -62,6 +68,19 @@ const ServiceProfile: IServiceProfile = ({route, navigation}) => {
     bottomSheetRef.current?.present();
   }, [bottomSheetRef]);
 
+  const sendOfferOnClick = async () => {
+    if (!customer?.identityVerified) {
+      navigation.navigate('VerifyIdentity', {
+        first_name: customer?.firstname,
+        last_name: customer?.lastname,
+      });
+
+      return;
+    }
+
+    setSendOffer(true);
+  };
+
   return (
     <React.Fragment>
       <TouchableOpacity
@@ -70,18 +89,13 @@ const ServiceProfile: IServiceProfile = ({route, navigation}) => {
         <Icon2 name="left" size={20} />
       </TouchableOpacity>
       <ScrollView horizontal>
-        <Image
-          source={Assets.Worker1}
-          style={homeStyle.serviceProfileScrollImage}
-        />
-        <Image
-          source={Assets.Worker1}
-          style={homeStyle.serviceProfileScrollImage}
-        />
-        <Image
-          source={Assets.Worker1}
-          style={homeStyle.serviceProfileScrollImage}
-        />
+        {(route.params?.serviceImages as string[])?.map((uri, key) => (
+          <Image
+            source={{uri}}
+            style={homeStyle.serviceProfileScrollImage}
+            key={key}
+          />
+        ))}
       </ScrollView>
 
       {!gallery ? (
@@ -122,17 +136,24 @@ const ServiceProfile: IServiceProfile = ({route, navigation}) => {
                   <View style={{flexDirection: 'row', gap: 8}}>
                     <CustomAvatar
                       avatarSize={50}
-                      data={{image: Assets.Worker1}}
+                      data={{
+                        image: route.params?.picture,
+                        badge: route.params?.tier.toLowerCase(),
+                      }}
                     />
 
                     <View style={{flexDirection: 'column', gap: 5}}>
                       <Typography fontWeight="bold" size="md">
-                        Okoye Amarachis
+                        {route?.params?.firstname} {route?.params?.firstname}
                       </Typography>
 
                       <View style={{flexDirection: 'row', gap: 5}}>
-                        <Typography fontWeight="bold" size="md" color="gray">
-                          Hair stylist
+                        <Typography
+                          fontWeight="bold"
+                          size="md"
+                          color="gray"
+                          limit={20}>
+                          {route.params?.primaryJobRole}
                         </Typography>
 
                         <View
@@ -145,7 +166,10 @@ const ServiceProfile: IServiceProfile = ({route, navigation}) => {
                           }}
                         />
                         <Typography fontWeight="medium" size="md" color="gray">
-                          Platinum rated
+                          {utils.capitalizeFirstLetter(
+                            route.params?.tier.toLowerCase(),
+                          )}{' '}
+                          rated
                         </Typography>
                       </View>
                     </View>
@@ -157,7 +181,7 @@ const ServiceProfile: IServiceProfile = ({route, navigation}) => {
                     }}>
                     <View style={{flexDirection: 'column', gap: 5}}>
                       <Typography fontWeight="bold" size="md" currency>
-                        20000
+                        {route.params?.offerStartingPrice}
                       </Typography>
 
                       <View style={{flexDirection: 'row', gap: 4}}>
@@ -170,10 +194,10 @@ const ServiceProfile: IServiceProfile = ({route, navigation}) => {
                     <View style={{flexDirection: 'column', gap: 5}}>
                       <View style={{flexDirection: 'row', gap: 2}}>
                         <Typography fontWeight="bold" size="md">
-                          4.5
+                          {route.params?.avgRating}
                         </Typography>
                         <Typography fontWeight="regular" size="md" color="gray">
-                          (2.1k)
+                          ({route.params?.totalRatings ?? 0})
                         </Typography>
                       </View>
                       <View style={{flexDirection: 'row', gap: 4}}>
@@ -185,7 +209,7 @@ const ServiceProfile: IServiceProfile = ({route, navigation}) => {
                     </View>
                     <View style={{flexDirection: 'column', gap: 5}}>
                       <Typography fontWeight="bold" size="md">
-                        24
+                        {route.params?.completedJobs}
                       </Typography>
                       <View style={{flexDirection: 'row', gap: 3}}>
                         <Assets.SuitCase />
@@ -210,24 +234,18 @@ const ServiceProfile: IServiceProfile = ({route, navigation}) => {
 
                     <View>
                       <Typography limit={100} readMore readMoreConstant>
-                        Flawless styles, every time. I specialize in knotless
-                        braids, cornrows, lace installs, silk press, twists, and
-                        more — starting from ₦5,000. Available Mon–Sat (9 AM – 6
-                        PM).Home service in Surulere & nearby (extra fee). Your
-                        hair, done right.
+                        {route.params?.serviceDescription}
                       </Typography>
                     </View>
                   </View>
                 </View>
 
-                <View
-                  style={{
-                    backgroundColor: 'white',
-                    padding: scale(20),
-                    borderRadius: 20,
-                    flexDirection: 'column',
-                    gap: 15,
-                  }}>
+                <Container
+                  backgroundColor="white"
+                  padding={20}
+                  borderRadius={20}
+                  flexDirection="column"
+                  gap={15}>
                   <View style={{flexDirection: 'column', gap: 8}}>
                     <View
                       style={{
@@ -241,10 +259,10 @@ const ServiceProfile: IServiceProfile = ({route, navigation}) => {
                       <View style={{flexDirection: 'row', gap: 3}}>
                         <Icon name="star" size={15} color={'#FFD100'} />
                         <Typography size="md" fontWeight="bold">
-                          4.5
+                          {route.params?.avgRating}
                         </Typography>
                         <Typography size="md" fontWeight="bold" color="gray">
-                          (2000)
+                          ({route.params?.totalRatings ?? 0})
                         </Typography>
                       </View>
                     </View>
@@ -255,25 +273,43 @@ const ServiceProfile: IServiceProfile = ({route, navigation}) => {
                       flexDirection: 'column',
                       gap: 10,
                     }}>
-                    <ReviewsCard data={{rate: 5}} />
-                    <ReviewsCard data={{rate: 2}} />
+                    {reviews && reviews.length == 0 ? (
+                      <Typography
+                        padding={9}
+                        textAlign="center"
+                        fontWeight="medium"
+                        size="md">
+                        No reviews
+                      </Typography>
+                    ) : (
+                      reviews?.map(({}) => <ReviewsCard data={{rate: 5}} />)
+                    )}
                   </View>
-                </View>
-                <TouchableOpacity
-                  onPress={() => {
-                    navigation.navigate('Reviews', {uuid: route.params?.uuid!});
-                  }}
-                  style={{
-                    padding: scale(20),
-                    backgroundColor: '#F9F9FB',
-                    borderRadius: 10,
-                    width: '95%',
-                    alignSelf: 'center',
-                  }}>
-                  <Typography textAlign="center" fontWeight="bold">
-                    View all
-                  </Typography>
-                </TouchableOpacity>
+                </Container>
+                <Container
+                  backgroundColor="white"
+                  padding={20}
+                  borderRadius={20}
+                  flexDirection="column"
+                  gap={15}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      navigation.navigate('Reviews', {
+                        uuid: route.params?.uuid!,
+                      });
+                    }}
+                    style={{
+                      padding: scale(20),
+                      backgroundColor: '#F9F9FB',
+                      borderRadius: 10,
+                      width: '95%',
+                      alignSelf: 'center',
+                    }}>
+                    <Typography textAlign="center" fontWeight="bold">
+                      View all
+                    </Typography>
+                  </TouchableOpacity>
+                </Container>
               </View>
             </BottomSheetView>
           </BottomSheetModal>
@@ -298,14 +334,14 @@ const ServiceProfile: IServiceProfile = ({route, navigation}) => {
             borderColor: '#F1F2F4',
           }}>
           <MainButton
-            onPress={() => setSendOffer(true)}
+            onPress={sendOfferOnClick}
             icon={() => <Assets.SendOffer />}>
             Send offer
           </MainButton>
         </View>
       )}
 
-      <SendOffer
+      <Offer
         isVisible={sendOffer}
         isLoading={sendingPending}
         isAvailable
@@ -319,7 +355,13 @@ const ServiceProfile: IServiceProfile = ({route, navigation}) => {
           setGallery(true);
           setTimeout(() => galleryBottomSheetRef.current?.show(), 1000);
         }}
-        onSendOffer={onSendOffer}
+        onSendOffer={dto => {
+          onSendOffer(dto, () => {
+            setSendOffer(false);
+            bottomSheetRef.current?.present();
+            appStore.clearOffer();
+          });
+        }}
       />
     </React.Fragment>
   );

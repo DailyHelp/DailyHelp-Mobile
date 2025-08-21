@@ -18,19 +18,23 @@ declare module '@env' {
   export const CLOUDINARY_URL: string;
 }
 
-type ApiResponse<T> = {
+type ApiResponse<T, P extends boolean = false> = {
   status: boolean;
   statusCode: number;
   data: T;
   message: string;
   error: boolean;
-};
+} & (P extends true ? {pagination: Pagination} : {});
 
 type Route = 'authentication' | 'app';
 
-type PaginationQuery = {
-  limit?: number;
-  page?: number;
-  orderBy?:  'ASC' | 'DESC';
-  orderDir?: 'ASC' | 'DESC';
+type PaginationQuery<F = any> = {
+  pagination?: {
+    limit?: number;
+    page?: number;
+    orderBy?: 'ASC' | 'DESC';
+    orderDir?: 'ASC' | 'DESC';
+  };
+  filter?: F;
+  search?: string;
 };

@@ -71,6 +71,11 @@ type ICategoryActionSheet = {
   onCategoriesSelected?: (categories: string[]) => void;
 };
 
+type IConfirmDeleteActionSheet = {
+  onClose: () => void;
+  onCategoriesSelected?: (categories: string[]) => void;
+};
+
 type IFundWallet = {};
 
 type IInput = Props<{
@@ -138,6 +143,10 @@ type ICustomHeader<P> = Props<
     textMiddle?: boolean;
     tabs?: {title: string; slug: string}[];
     initialTab?: string;
+    onSearch?: (search: string) => void;
+    value?: string;
+    onFocus?: () => void;
+    onBlur?: () => void;
   }
 >;
 
@@ -205,23 +214,12 @@ type IScreenHeader = Props<{
   description: string;
 }>;
 
-type IHelperCard = Props<
+type IHelperCard<D = any> = Props<
   {
     mode: 'middle' | 'row';
     horizontal?: boolean;
   },
-  {
-    image?: any;
-    brandImage?: string[];
-    skill?: string;
-    price?: string;
-    rating?: number;
-    availability?: boolean;
-    jobsCompleted?: number;
-    name?: string;
-    badge?: 'bronze' | 'gold' | 'silver' | 'diamond';
-    uuid?: string;
-  }
+  D
 >;
 
 type ICustomFlatListProps<T> = {
@@ -243,6 +241,7 @@ type ICustomFlatListProps<T> = {
   horizontal?: boolean;
   height?: `${number}%` | number;
   width?: `${number}%` | number;
+  inverted?: boolean;
 };
 
 type IStatusChip = Props<{
@@ -252,26 +251,38 @@ type IStatusChip = Props<{
 
 type IAllCategory = Props<{}>;
 
-type IOffer = Props<{
-  isVisible: boolean;
-  type?: 'send' | 'cancel' | 'decline';
-  onClose?: () => void;
-  openGallery?: () => void;
-  onSendOffer?: (data: any) => void;
-  onDeclineOffer?: () => void;
-  isLoading?: boolean;
-  isAvailable?: boolean;
-}>;
+type IOffer<D = any> = Props<
+  {
+    isVisible: boolean;
+    type?: 'send' | 'cancel' | 'decline';
+    onClose?: () => void;
+    openGallery?: () => void;
+    onSendOffer?: (data: any) => void;
+    onDeclineOffer?: (
+      reason: string,
+      reasonCategory: string,
+      uuid: string,
+    ) => void;
+    isLoading?: boolean;
+    isAvailable?: boolean;
+  },
+  D
+>;
 
 type IReviewCard = Props<{}, {rate: number}>;
 
-type IRecentSearches = Props<{}>;
+type IRecentSearches = Props<{onPress?: (search?: string) => void}>;
 
 type IGallery = {
   close?: () => void;
 };
 
-type ICategoryCard = Props<{}, {title: string; slug: string; img: any}>;
+type ICategoryCard<D = any> = Props<
+  {
+    onPress?: (data?: D) => void;
+  },
+  D
+>;
 
 type ICustomAvatar = Props<
   {
@@ -314,19 +325,14 @@ type IChatFooter<N = any> = Props<{navigation: N}>;
 
 type IMessages = Props<
   {
-    decline?: (value?: number | string) => void;
-    cancel?: (value?: number | string) => void;
-    accept?: (value?: number | string) => void;
-    edit?: (value?: number | string) => void;
+    decline?: (value?: Message) => void;
+    cancel?: (value?: Message) => void;
+    accept?: (value?: Message) => void;
+    edit?: (value?: Message) => void;
     backgroundColor?: string;
     position?: 'left' | 'right';
   },
-  {
-    status: 'rejected' | 'canceled' | 'offer' | 'accepted';
-    time?: string;
-    attachments: [];
-    message?: string;
-  }
+  Message
 >;
 
 type IAttachment = Props<{canClose?: boolean}, {attachment: string[]}>;
@@ -340,13 +346,16 @@ type IEmptyState<N = any> = Props<{
   showButton?: boolean;
 }>;
 
-type IJobsCard<U> = Props<{
-  type?: 'pending' | 'ongoing' | 'completed';
-  viewDetails?: () => void;
-  chat?: () => void;
-  rate?: () => void;
-  userType?: U;
-}>;
+type IJobsCard<U, D> = Props<
+  {
+    type?: 'pending' | 'ongoing' | 'completed';
+    viewDetails?: () => void;
+    chat?: () => void;
+    rate?: () => void;
+    userType?: U;
+  },
+  D
+>;
 
 type IFaceMatch = {};
 
@@ -363,9 +372,14 @@ type ICustomKeyPad = Props<{
   showDelete?: boolean;
 }>;
 
-type IUserDataCard = Props<{
-  isVerified?: boolean;
-}>;
+type IUserDataCard<D = any, U = any> = Props<
+  {
+    isVerified?: boolean;
+    onSwitch?: (user?: U) => void;
+    isLoading?: boolean;
+  },
+  D
+>;
 
 type ITransactionCard = Props<
   {
@@ -412,6 +426,7 @@ type IContainer<C> = Props<{
   paddingHorizontal?: number;
   paddingVertical?: number;
   borderBottomWidth?: number;
+  marginVertical?: number;
   top?: number;
   bottom?: number;
   left?: number;
@@ -429,14 +444,17 @@ type IUploadContainer = Props<{
   status?: 'failed' | 'upload' | 'success';
 }>;
 
-type IAttachmentContainer = Props<{
-  openGallery?: () => void;
-  allowUpload?: boolean;
-}>;
+type IAttachmentContainer = Props<
+  {
+    openGallery?: () => void;
+    allowUpload?: boolean;
+  },
+  string[]
+>;
 
 type IBadgeContainer = Props<{}>;
 
-type IHelperDetails = Props<{}>;
+type IHelperDetails<D = any> = Props<{}, D>;
 
 type IStatsCard = Props<
   {},
@@ -458,3 +476,11 @@ type IJobPending<N = any, R = any> = Props<{
   navigation?: N;
   route?: R;
 }>;
+
+type IHelperCardSkeleton = Props<{
+  count?: number;
+  direction?: 'vertical' | 'horizontal';
+  cardHeight?: number;
+}>;
+
+type ISearchResult<D = any> = Props<{fetchMore?: () => void}, D>;

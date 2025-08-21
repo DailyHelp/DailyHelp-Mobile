@@ -7,7 +7,6 @@ import MainButton from '../../components/button/MainButton';
 import Container from '../../components/container/Index';
 import Typography from '../../components/Typography';
 import { appStore } from '../../shared/stores/appStore';
-import { UserTypes } from '../../shared/Constant';
 
 const VerifyIdentity: IVerifyIdentity = ({route, navigation}) => {
   React.useEffect(() => {
@@ -47,11 +46,11 @@ const VerifyIdentity: IVerifyIdentity = ({route, navigation}) => {
             </MainButton>
             <MainButton
               mode="text"
-              enableButtonColor='offWhite'
-              color='black'
+              enableButtonColor="offWhite"
+              color="black"
               width={'95'}
               onPress={() => {
-                appStore.setIsAuthenticated(true, UserTypes.CUSTOMER);
+                appStore.setIsAuthenticated(true, route.params?.userType);
               }}>
               Do this later
             </MainButton>

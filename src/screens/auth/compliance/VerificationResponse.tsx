@@ -33,7 +33,7 @@ const VerificationResponse: IVerificationResponse = ({route, navigation}) => {
         {route.params?.status === 'success' ? 'successful' : 'failed'}
       </Typography>
 
-      <Typography size="md" color="gray" fontWeight="medium">
+      <Typography size="md" color="gray" fontWeight="medium" textAlign="center">
         {route.params?.status === 'success'
           ? 'You’re verified! You can now explore and book service providers freely.'
           : 'We couldn’t verify your identity. Please check your details and try again.'}
@@ -53,8 +53,9 @@ const VerificationResponse: IVerificationResponse = ({route, navigation}) => {
       )}
 
       {route.params?.status === 'success' ? (
-        <Container marginTop={50} gap={20}>
+        <Container marginTop={50} gap={20} width={'full'}>
           <MainButton
+            width={'full'}
             moveIconRight
             onPress={() => {
               if (user_type === UserTypes.CUSTOMER) {
@@ -65,8 +66,9 @@ const VerificationResponse: IVerificationResponse = ({route, navigation}) => {
           </MainButton>
         </Container>
       ) : (
-        <Container marginTop={50} gap={20}>
+        <Container marginTop={50} gap={20} width={'full'}>
           <MainButton
+            width={'full'}
             icon={() => (
               <Icon
                 name="pencil"

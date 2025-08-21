@@ -20,6 +20,7 @@ class AppStorageData {
   isAuthenticated: boolean = false;
   isPhoneVerified: boolean = false;
   isIdentityVerified: boolean = false;
+  recent_search: string = '[]';
 }
 
 export default class AppStorage {

@@ -8,24 +8,40 @@ import {
   helper_cancel_reasons,
   user_cancel_reason,
 } from '../../mock_data';
-import {UserTypes} from '../../shared/Constant';
+import {ReasonType, UserTypes} from '../../shared/Constant';
 import {scale, verticalScale} from '../../shared/Scaling';
 import {appStore} from '../../shared/stores/appStore';
 import utils from '../../shared/Utils';
 import MainButton from '../button/MainButton';
 import CustomInput from '../customInput/Index';
 import Typography from '../Typography';
+import homeService from '../../screens/app/user/home/services/Home.service';
 
-const DeclineOffer: IOffer = ({isVisible, onClose, type, onDeclineOffer}) => {
+const DeclineOffer: IOffer<Message> = ({
+  isVisible,
+  onClose,
+  type,
+  onDeclineOffer,
+  isLoading,
+  data
+}) => {
   const [id, setId] = React.useState<number | undefined>();
-
+  const [reason, setReason] = React.useState('');
   const user_type = appStore.user_types;
 
   const isCustomer = user_type === UserTypes.CUSTOMER;
 
-  const cancel_reason = isCustomer ? user_cancel_reason : helper_cancel_reasons;
+  const cancel_type = isCustomer
+    ? ReasonType.CANCEL_OFFER_CLIENT
+    : ReasonType.CANCEL_OFFER_PROVIDER;
 
-  const reason = type === 'cancel' ? cancel_reason : decline_reasons;
+  const decline_type = isCustomer
+    ? ReasonType.DECLINE_OFFER_CLIENT
+    : ReasonType.DECLINE_OFFER_PROVIDER;
+
+  const {data: reasons} = homeService.useListCategory(
+    type === 'cancel' ? cancel_type : decline_type,
+  );
 
   return (
     <Portal>
@@ -98,6 +114,8 @@ const DeclineOffer: IOffer = ({isVisible, onClose, type, onDeclineOffer}) => {
                   numberOfLines={3}
                   height={80}
                   placeholder="Explain briefly why you're canceling this offer"
+                  value={reason}
+                  onChangeText={setReason}
                 />
               </View>
 
@@ -108,7 +126,7 @@ const DeclineOffer: IOffer = ({isVisible, onClose, type, onDeclineOffer}) => {
                   flexWrap: 'wrap',
                   padding: 10,
                 }}>
-                {reason.map(({title}, key) => (
+                {reasons?.map(({name}, key) => (
                   <TouchableOpacity
                     onPress={() => setId(key)}
                     key={key}
@@ -119,7 +137,7 @@ const DeclineOffer: IOffer = ({isVisible, onClose, type, onDeclineOffer}) => {
                       borderWidth: id === key ? 1 : 0,
                       borderColor: id === key ? '#95D21A' : '',
                     }}>
-                    <Typography>{title}</Typography>
+                    <Typography>{name}</Typography>
                   </TouchableOpacity>
                 ))}
               </View>
@@ -127,7 +145,13 @@ const DeclineOffer: IOffer = ({isVisible, onClose, type, onDeclineOffer}) => {
           </View>
 
           <View style={{padding: scale(10)}}>
-            <MainButton onPress={onDeclineOffer}>
+            <MainButton
+              loading={isLoading}
+              onPress={() => {
+                console.log(data);
+                
+                onDeclineOffer?.(reason, reasons?.[id!].name!, data?.offer.uuid!);
+              }}>
               {utils.capitalizeFirstLetter(type)} offer
             </MainButton>
           </View>

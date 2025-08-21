@@ -1,65 +1,83 @@
-import {ScrollView, View} from 'react-native';
-import {ISearch} from '../../../../@types/routes';
-import {Text} from 'react-native-paper';
-import {customFontSize, fonts} from '../../../../shared/themes/Typography';
-import {scale, verticalScale} from '../../../../shared/Scaling';
-import CustomInput from '../../../../components/customInput/Index';
-import Assets from '../../../../assets/Assets';
-import CategoryCard from './components/CaterogyCard';
 import React from 'react';
-import RecentSearches from './components/RecentSearches';
+import {ScrollView, View} from 'react-native';
+import {ActivityIndicator, Text} from 'react-native-paper';
+import {ISearch} from '../../../../@types/routes';
+import Assets from '../../../../assets/Assets';
 import CustomHeader from '../../../../components/customHeader/Index';
+import {verticalScale} from '../../../../shared/Scaling';
+import {customFontSize, fonts} from '../../../../shared/themes/Typography';
+import homeService from '../home/services/Home.service';
+import CategoryCard from './components/CategoryCard';
+import RecentSearches from './components/RecentSearches';
+import SearchResults from './components/SearchResults';
+import Container from '../../../../components/container/Index';
+import Typography from '../../../../components/Typography';
+import utils from '../../../../shared/Utils';
+
+const getCategoryImage = (categoryName: string) => {
+  const imageMap = {
+    'Home & Cleaning': Assets.CleaningBroom,
+    'Repairs & Maintenance': Assets.Maintenance,
+    'Food & Kitchen': Assets.FoodKitchen,
+    'Family & Personal Care': Assets.Comb,
+    'Transport & Delivery': Assets.Transport,
+    'Automobile Services': Assets.AutomobileServices,
+    'Tech & Digital Help': Assets.TechDigitalSkills,
+    'Events & Setup': Assets.EventsSetup,
+    'Skilled Labor': Assets.SkilledLabour,
+  };
+
+  return imageMap[categoryName as keyof typeof imageMap] || Assets.Maintenance;
+};
 
 const Search: ISearch = ({navigation}) => {
   const [isFocused, setIsFocused] = React.useState(false);
 
-  const category = [
-    {
-      title: 'Home & Cleaning',
-      slug: 'home_cleaning',
-      img: Assets.CleaningBroom,
-    },
-    {
-      title: 'Repairs & Maintenance',
-      slug: 'repairs_maintenance',
-      img: Assets.Maintenance,
-    },
-    {
-      title: 'Food & Kitchen',
-      slug: 'food_kitchen',
-      img: Assets.FoodKitchen,
-    },
-    {
-      title: 'Family & Personal Care',
-      slug: 'family_personal_care',
-      img: Assets.FamilyPersonalCare,
-    },
-    {
-      title: 'Transport & Delivery',
-      slug: 'transport_delivery',
-      img: Assets.TransportDelivery,
-    },
-    {
-      title: 'Tech & Digital Help',
-      slug: 'home_cleaning',
-      img: Assets.CleaningBroom,
-    },
-    {
-      title: 'Skilled Labor',
-      slug: 'skilled_labor',
-      img: Assets.SkilledLabour,
-    },
-    {
-      title: 'Events & Setup',
-      slug: 'events_setup',
-      img: Assets.EventsSetup,
-    },
-    {
-      title: 'Automobile Services',
-      slug: 'automobile_services',
-      img: Assets.AutomobileServices,
-    },
-  ];
+  const {
+    allProviders,
+    fetchMore,
+    isLoading: providerLoading,
+    setQuery,
+    query,
+  } = homeService.useCustomerDashboard();
+
+  // React.useEffect(() => {
+  //   setQuery(q => ({
+  //     ...q,
+  //     filter: {...q?.filter, isSearchPage: true},
+  //   }));
+  // }, []);
+
+  const {data, isLoading, error} = homeService.useAllCategories();
+
+  const categories = React.useMemo(() => {
+    let apiCategories: CategoryDto[] = [];
+
+    if (data?.data && Array.isArray(data.data)) {
+      apiCategories = data.data;
+    }
+
+    const transformedCategories = apiCategories.map(
+      (apiCategory: CategoryDto): InternalCategory => {
+        const subCategories = (apiCategory.categories || []).map(
+          (subCat: SubCategoryDto) => subCat.name,
+        );
+
+        const transformed = {
+          name: apiCategory.name || 'Untitled Category',
+          image: getCategoryImage(apiCategory.name || ''),
+          subCategories: subCategories,
+          uuid: apiCategory.uuid,
+        };
+        return transformed;
+      },
+    );
+
+    return transformedCategories;
+  }, [data, isLoading]);
+
+  const prdLen = allProviders.length;
+  const search = query?.filter?.search;
 
   return (
     <View>
@@ -68,37 +86,75 @@ const Search: ISearch = ({navigation}) => {
         title="Search"
         placeHolder="Search user, category, etc"
         type="search"
+        onFocus={() => setIsFocused(true)}
+        onBlur={() => setIsFocused(false)}
+        value={search}
+        onSearch={search => {
+          setQuery(q => ({...q, filter: {...q?.filter, search}}));
+        }}
       />
 
-      {isFocused && <RecentSearches />}
+      {isFocused && (
+        <RecentSearches
+          onPress={search => {
+            setQuery(q => ({
+              ...q,
+              filter: {...q?.filter, search},
+            }));
+          }}
+        />
+      )}
 
-      <View
-        style={{
-          marginVertical: verticalScale(20),
-          width: '95%',
-          alignSelf: 'center',
-        }}>
-        <Text
-          style={{
-            fontFamily: fonts.GeistBold,
-            fontSize: customFontSize.m3d,
-          }}>
-          Categories
-        </Text>
-      </View>
-
-      <ScrollView style={{width: '95%', alignSelf: 'center'}}>
+      {!providerLoading ? (
         <View
           style={{
-            flexDirection: 'row',
-            flexWrap: 'wrap',
-            gap: 10,
+            marginVertical: verticalScale(20),
+            width: '95%',
+            alignSelf: 'center',
           }}>
-          {category.map((data, key) => (
-            <CategoryCard data={data} key={key} />
-          ))}
+          <Text
+            style={{
+              fontFamily: fonts.GeistBold,
+              fontSize: customFontSize.m3d,
+            }}>
+            {prdLen > 0 && search ? `${prdLen} for ${search}` : 'Categories'}
+          </Text>
         </View>
-      </ScrollView>
+      ) : (
+        <Container flexDirection="row" alignSelf="center" gap={10} padding={20}>
+          <ActivityIndicator color="#02CA71" size={13} />
+          <Typography>Searching...</Typography>
+        </Container>
+      )}
+
+      {search && prdLen > 0 ? (
+        <SearchResults data={allProviders} fetchMore={fetchMore} />
+      ) : (
+        !providerLoading && (
+          <ScrollView style={{width: '95%', alignSelf: 'center'}}>
+            <View
+              style={{
+                flexDirection: 'row',
+                flexWrap: 'wrap',
+                gap: 10,
+              }}>
+              {categories.map((data, key) => (
+                <CategoryCard
+                  data={data}
+                  key={key}
+                  onPress={cat => {
+                    setQuery(q => ({
+                      ...q,
+                      filter: {...q?.filter, search: cat?.name},
+                    }));
+                    utils.saveRecentSearch(cat?.name!);
+                  }}
+                />
+              ))}
+            </View>
+          </ScrollView>
+        )
+      )}
     </View>
   );
 };

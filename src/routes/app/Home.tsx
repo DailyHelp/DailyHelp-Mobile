@@ -3,7 +3,7 @@ import {IHomeRoute} from '../../@types/routes';
 import AppStorage from '../../shared/AppStorage';
 import {UserTypes} from '../../shared/Constant';
 import {UserHomeStackRoutes} from './UserRoutes';
-import { HelperHomeStackRoutes } from './HelperRoutes';
+import {HelperHomeStackRoutes} from './HelperRoutes';
 
 const HomeStack = createNativeStackNavigator<IHomeRoute>();
 

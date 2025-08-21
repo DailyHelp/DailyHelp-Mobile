@@ -54,7 +54,10 @@ const Onboarding: IOnboarding = ({navigation}) => {
 
         <View style={{flexDirection: 'row', alignSelf: 'center', gap: 10}}>
           <TouchableOpacity
-            onPress={() => setModalVisible(true)}
+            onPress={() => {
+              setModalVisible(true);
+              setUserType(UserTypes.CUSTOMER);
+            }}
             style={styles.btn1}>
             <View
               style={{flexDirection: 'column', gap: 10, alignItems: 'center'}}>

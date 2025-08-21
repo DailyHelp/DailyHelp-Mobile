@@ -9,11 +9,13 @@ import CustomAvatar from '../../../../../components/CustomAvatar';
 import Typography from '../../../../../components/Typography';
 import {UserTypes} from '../../../../../shared/Constant';
 import {verticalScale} from '../../../../../shared/Scaling';
+import JobsDto from '../dto/job.dto';
 
-const JobsCard: IJobsCard<UserTypes> = ({
+const JobsCard: IJobsCard<UserTypes, JobsDto> = ({
   type = 'pending',
   viewDetails,
   userType,
+  data,
 }) => {
   return (
     <Container
@@ -39,14 +41,13 @@ const JobsCard: IJobsCard<UserTypes> = ({
           </Container>
         </Container>
 
-        <Typography color="secondary" fontWeight="bold">
-          ₦32,000
+        <Typography color="secondary" fontWeight="bold" currency>
+          {data?.price}
         </Typography>
       </Container>
 
       <Typography color="lightBlack" lineHeight={20}>
-        I'm looking to style my hair into Bantu knots. See a sample of the look
-        I'm trying to replicate.
+        {data?.description}
       </Typography>
 
       {type !== 'pending' && (

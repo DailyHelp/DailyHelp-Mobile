@@ -7,7 +7,7 @@ import Typography from '../../../../../components/Typography';
 const OfferAction: IMessages = props => {
   const {data} = props;
 
-  const type = data?.status;
+  const type = data?.type.toLowerCase();
   let backgroundColor = props.backgroundColor || 'white';
   let borderColor = '#FDE9E7';
 
@@ -41,8 +41,8 @@ const OfferAction: IMessages = props => {
         </Typography>
       </View>
 
-      <Typography fontWeight="bold" size="lg" textAlign="center">
-        NGN 5,000
+      <Typography fontWeight="bold" size="lg" textAlign="center" currency>
+        {data?.offer.price}
       </Typography>
 
       <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
@@ -50,7 +50,7 @@ const OfferAction: IMessages = props => {
           color="#F0443A"
           width={'45%'}
           onPress={() => {
-            type === 'offer' ? props?.cancel?.() : props?.decline?.();
+            type === 'offer' ? props?.cancel?.(data) : props?.decline?.(data);
           }}>
           {type === 'offer' ? 'Cancel offer' : 'Decline'}
         </OutlineButton>
@@ -58,7 +58,7 @@ const OfferAction: IMessages = props => {
           color="secondary"
           width={'45%'}
           onPress={() => {
-            type === 'offer' ? props?.edit?.() : props?.accept?.();
+            type === 'offer' ? props?.edit?.(data) : props?.accept?.(data);
           }}>
           {type === 'offer' ? 'Edit offer' : ' Accept & Pay'}
         </MainButton>

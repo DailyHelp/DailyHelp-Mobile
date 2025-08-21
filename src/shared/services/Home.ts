@@ -1,15 +1,14 @@
 import {GOOGLE_API_KEY} from '@env';
+import SaveHelpersDetailsDTO from '../../screens/app/user/home/dto/SaveHelpersDetailsDto';
+import SavePriceDTO from '../../screens/app/user/home/dto/SavePriceDto';
+import DeclineOfferDto from '../../screens/app/user/jobs/dto/DeclineOffer.dto';
+import SendOfferDto from '../../screens/app/user/jobs/dto/SendOffer.dto';
+import UserDTO from '../../screens/auth/dto/UserDto';
 import ThrowError from '../errors/throwError';
 import Endpoints from './Endpoints';
 import Http from './Http';
-import SavePriceDTO from '../../screens/app/user/home/dto/SavePriceDto';
-import SaveHelpersDetailsDTO from '../../screens/app/user/home/dto/SaveHelpersDetailsDto';
-import ProvidersDto from '../../screens/app/user/home/dto/providersDto';
-import {CustomerDashboardDto} from '../../screens/app/user/home/dto/customer-dahsboard.dto';
-import utils from '../Utils';
-import UserDTO from '../../screens/auth/dto/UserDto';
-import SendOfferDto from '../../screens/app/user/jobs/dto/SendOffer.dto';
-import DeclineOfferDto from '../../screens/app/user/jobs/dto/DeclineOffer.dto';
+import {CustomerDashboardDto} from '../../screens/app/user/home/dto/customer-dashboard.dto';
+import {ReasonType} from '../Constant';
 
 export default class HomeApi extends Http {
   protected async getAllCategories() {
@@ -181,38 +180,22 @@ export default class HomeApi extends Http {
     return data;
   }
 
-  protected async getCustomerDashboard(query: ProvidersQuery) {
+  protected async getCustomerDashboard(query: PaginationQuery<ProvidersQuery>) {
     const res = await this.fetchHandler({
       path: Endpoints.getDashboard(query),
       method: 'GET',
     });
     const data = await this.handleResponse<CustomerDashboardDto>(res);
 
-    this.success(data?.message);
-
     return data;
   }
 
-  protected async getCustomer() {
+  protected async getUser() {
     const res = await this.fetchHandler({
-      path: Endpoints.customer,
+      path: Endpoints.user,
       method: 'GET',
     });
     const data = await this.handleResponse<UserDTO>(res);
-
-    this.success(data?.message);
-
-    return data;
-  }
-
-  protected async getProvider() {
-    const res = await this.fetchHandler({
-      path: Endpoints.provider,
-      method: 'GET',
-    });
-    const data = await this.handleResponse<UserDTO>(res);
-
-    this.success(data?.message);
 
     return data;
   }
@@ -249,45 +232,22 @@ export default class HomeApi extends Http {
 
   protected async declineOffer(uuid: string, body: DeclineOfferDto) {
     const res = await this.fetchHandler({
-      path: Endpoints.updateOffer(uuid),
+      path: Endpoints.declineOffer(uuid),
+      body,
+      method: 'POST',
+    });
+    const data = await this.handleResponse<any>(res);
+
+    this.success(data?.message);
+
+    return data;
+  }
+
+  protected async cancelOffer(uuid: string, body: DeclineOfferDto) {
+    const res = await this.fetchHandler({
+      path: Endpoints.cancelOffer(uuid),
       body,
       method: 'PATCH',
-    });
-    const data = await this.handleResponse<any>(res);
-
-    this.success(data?.message);
-
-    return data;
-  }
-
-  protected async getCustomerConversation(query: PaginationQuery) {
-    const res = await this.fetchHandler({
-      path: Endpoints.getCustomerConversations(query),
-      method: 'GET',
-    });
-    const data = await this.handleResponse<any>(res);
-
-    this.success(data?.message);
-
-    return data;
-  }
-
-  protected async sendMessage(uuid: string) {
-    const res = await this.fetchHandler({
-      path: Endpoints.sendMessage(uuid),
-      method: 'POST',
-    });
-    const data = await this.handleResponse<any>(res);
-
-    this.success(data?.message);
-
-    return data;
-  }
-
-  protected async reportConversation(uuid: string) {
-    const res = await this.fetchHandler({
-      path: Endpoints.reportConversation(uuid),
-      method: 'POST',
     });
     const data = await this.handleResponse<any>(res);
 
@@ -303,8 +263,6 @@ export default class HomeApi extends Http {
     });
     const data = await this.handleResponse<any>(res);
 
-    this.success(data?.message);
-
     return data;
   }
 
@@ -314,8 +272,6 @@ export default class HomeApi extends Http {
       method: 'GET',
     });
     const data = await this.handleResponse<Reviews[]>(res);
-
-    this.success(data?.message);
 
     return data;
   }
@@ -328,8 +284,6 @@ export default class HomeApi extends Http {
     const data = await this.handleResponse<any>(res);
 
     this.success(data?.message);
-    console.log(data);
-    
 
     return data;
   }
@@ -342,6 +296,16 @@ export default class HomeApi extends Http {
     const data = await this.handleResponse<any>(res);
 
     this.success(data?.message);
+
+    return data;
+  }
+
+  protected async getReason(type: ReasonType) {
+    const res = await this.fetchHandler({
+      path: Endpoints.reasons(type),
+      method: 'GET',
+    });
+    const data = await this.handleResponse<Reason[]>(res);
 
     return data;
   }

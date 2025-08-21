@@ -52,6 +52,7 @@ export default class UserDTO {
     createdAt: string;
     updatedAt: string;
     deletedAt: string;
+    name?: string;
   };
   serviceDescription?: string;
   serviceImages?: string;
@@ -71,11 +72,5 @@ export default class UserDTO {
   updatedAt?: string;
   deletedAt?: string;
 
-  userTypes?: string | string[];
-
-  userType() {
-    if (Array.isArray(this.userTypes)) return this.userTypes;
-
-    return this.userTypes?.split(',');
-  }
+  userTypes?: string;
 }

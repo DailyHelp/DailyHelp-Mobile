@@ -5,6 +5,7 @@ import {
 import {OtpActionType} from '../screens/auth/dto/VerifyOtpDto';
 import {VerifyIdentityDTO} from '../screens/auth/dto/VerifyIdentityDto';
 import {UserTypes} from '../shared/Constant';
+import ProvidersDto from '../screens/app/user/home/dto/providersDto';
 
 /**
  * Routes for `AuthStackRoute`
@@ -18,6 +19,7 @@ type IAuthRoute = {
   VerifyIdentity?: {
     first_name?: string;
     last_name?: string;
+    userType: any;
   };
   VerifyAccount?: {
     email: string;
@@ -181,17 +183,10 @@ type IHomeRoute = {
     uuid: string;
   };
   VerifyPhone?: undefined;
-  ServiceProfile?: {
-    status?: string;
-    badge?: string;
-    name?: string;
-    skill?: string;
-    about?: string;
-    reviews?: {name: string; remark?: string; rate: number; date: string}[];
-    rating?: number;
-    startingFee?: number;
-    jobsCompleted?: number;
-    uuid: string;
+  ServiceProfile?: ProvidersDto;
+  VerifyIdentity?: {
+    first_name?: string;
+    last_name?: string;
   };
 };
 
@@ -226,7 +221,7 @@ type IChatRoute = {
   Chat?: undefined;
   HomeIndex?: undefined;
   SearchIndex?: undefined;
-  ChatBox?: undefined;
+  ChatBox?: {uuid: string; title: string};
   Checkout?: undefined;
   VoiceCall?: undefined;
   Report?: undefined;
@@ -286,8 +281,10 @@ type IMoreRoute = {
   Address?: undefined;
   Feedback?: undefined;
   VerifyPhone?: undefined;
-  ServiceProfile?: {};
+  ServiceProfile?: ProvidersDto;
   Analytics?: {};
+  DeleteAccount?: any;
+  DeleteReason?: any;
 };
 
 type IMore = Props<NativeStackScreenProps<IMoreRoute, 'More'>>;
@@ -319,3 +316,9 @@ type IServiceProfile = Props<
 >;
 
 type IAnalytics = Props<NativeStackScreenProps<IMoreRoute, 'Analytics'>>;
+
+type IDeleteAccount = Props<
+  NativeStackScreenProps<IMoreRoute, 'DeleteAccount'>
+>;
+
+type IDeleteReason = Props<NativeStackScreenProps<IMoreRoute, 'DeleteReason'>>;

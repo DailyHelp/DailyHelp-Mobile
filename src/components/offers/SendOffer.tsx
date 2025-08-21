@@ -22,15 +22,19 @@ const SendOffer: IOffer = ({
   isLoading,
   isAvailable,
 }) => {
+  React.useEffect(() => {
+    appStore.setOffer({
+      attachments: JSON.stringify(appStore.selectedGalleryImages),
+    });
+  }, [appStore.selectedGalleryImages]);
+
   return (
     <Portal>
       <Modal visible={isVisible}>
         <Formik
           enableReinitialize
           initialValues={{
-            amount: '',
-            attachments: appStore.selectedGalleryImages,
-            description: '',
+            ...appStore.offerDto,
           }}
           onSubmit={data => onSendOffer?.(data)}>
           {({values, handleChange, handleSubmit}) => (
@@ -119,7 +123,10 @@ const SendOffer: IOffer = ({
                         maxLength={10}
                         style={offerStyle.amountInput}
                         value={values.amount}
-                        onChangeText={handleChange('amount')}
+                        onChangeText={amount => {
+                          handleChange('amount')(amount);
+                          appStore.setOffer({amount});
+                        }}
                       />
                     </View>
                     <View style={{width: '90%', alignSelf: 'center'}}>
@@ -131,7 +138,10 @@ const SendOffer: IOffer = ({
                         height={80}
                         placeholder="Describe what you need e.g I want a deep cleaning of my 2 bedroom apartment."
                         value={values.description}
-                        onChangeText={handleChange('description')}
+                        onChangeText={description => {
+                          handleChange('description')(description);
+                          appStore.setOffer({description});
+                        }}
                       />
                     </View>
                     <AttachmentContainer openGallery={openGallery} />

@@ -39,8 +39,9 @@ const OfferRejected: IMessages = ({data}) => {
         fontWeight="bold"
         size="lg"
         textAlign="center"
+        currency
         textDecorationLine="line-through">
-        NGN 5,000
+        {data?.offer.price}
       </Typography>
     </View>
   );

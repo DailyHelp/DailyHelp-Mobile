@@ -2,7 +2,7 @@ import {IsArray, IsNumber, IsString} from 'class-validator';
 
 export default class DeclineOfferDto {
   @IsString()
-  reasonCategory?: number;
+  reasonCategory?: string;
 
   @IsString()
   reason?: string;

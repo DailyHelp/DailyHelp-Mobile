@@ -36,7 +36,7 @@ export class AuthService extends AuthApi {
     const navigation = useNavigation<Navigate<IAuthRoute>>();
     const routes = useRoute<RouteProp<IAuthRoute, 'CreateAccount'>>();
 
-    const {mutateAsync, isPending, data} = useMutation({
+    const {mutate, isPending, data} = useMutation({
       mutationKey: ['create-account'],
       mutationFn: async (body: RegisterDTO) => await this.createAccount(body),
       onSuccess: (data, body) => {
@@ -52,11 +52,11 @@ export class AuthService extends AuthApi {
           });
         }
       },
-      onError: error => new CatchError(error, true),
     });
 
     const onSubmit = async (body: RegisterDTO) => {
-      return await mutateAsync(body);
+      body.type = routes.params?.userType;
+      mutate(body);
     };
 
     return {
@@ -83,6 +83,7 @@ export class AuthService extends AuthApi {
               payload: {
                 first_name: data.data.user?.firstname,
                 last_name: data.data.user?.lastname,
+                userType: data.data.user?.userTypes?.split(',')[0],
               },
             });
 
@@ -93,11 +94,15 @@ export class AuthService extends AuthApi {
             navigation.navigate('VerifyIdentity', {
               first_name: data.data.user?.firstname,
               last_name: data.data.user?.lastname,
+              userType: data.data.user?.userTypes?.split(',')[0],
             });
             return;
           }
 
-          appStore.setIsAuthenticated(true);
+          appStore.setIsAuthenticated(
+            true,
+            data.data.user?.userTypes?.split(',')[0] as any,
+          );
         }
       },
       onError: error => new CatchError(error, true),

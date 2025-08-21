@@ -4,22 +4,24 @@ import CustomAvatar from '../../../../../components/CustomAvatar';
 import Typography from '../../../../../components/Typography';
 import Assets from '../../../../../assets/Assets';
 import React from 'react';
+import UserDTO from '../../../../auth/dto/UserDto';
+import utils from '../../../../../shared/Utils';
 
-const HelperDetails: IHelperDetails = () => {
+const HelperDetails: IHelperDetails<UserDTO> = ({data}) => {
   return (
     <Container
       justifyContent="center"
       alignItems="center"
-      alignSelf='center'
+      alignSelf="center"
       paddingTop={30}
       gap={6}>
       <CustomAvatar
         avatarSize={70}
         badgeSize={30}
-        data={{image: Assets.WorkerAvatar1}}
+        data={{image: data?.picture, badge: data?.tier?.toLowerCase()}}
       />
       <Typography size="lg" fontWeight="semibold">
-        Okoye Amarachi
+        {data?.firstname} {data?.lastname}
       </Typography>
 
       <Container
@@ -28,7 +30,7 @@ const HelperDetails: IHelperDetails = () => {
         justifyContent="center"
         gap={7}>
         <Typography size="sm" color="gray" fontWeight="semibold">
-          Hair stylist
+          {data?.primaryJobRole?.name || '-'}
         </Typography>
         <View
           style={{
@@ -39,7 +41,7 @@ const HelperDetails: IHelperDetails = () => {
           }}
         />
         <Typography size="sm" color="gray" fontWeight="semibold">
-          Bronze rated
+          {utils.capitalizeFirstLetter(data?.tier?.toLowerCase())} rated
         </Typography>
       </Container>
     </Container>

@@ -2,34 +2,38 @@ import ForgotPasswordDTO, {
   ForgotPasswordResponse,
   ResetPasswordDTO,
 } from '../../screens/auth/dto/ForgotPasswordDto';
-import LoginDto, {LoginResponse} from '../../screens/auth/dto/LoginDto';
+import LoginDto, { LoginResponse } from '../../screens/auth/dto/LoginDto';
 import RegisterDTO, {
   RegisterResponseDTO,
 } from '../../screens/auth/dto/RegisterDto';
-import {VerifyIdentityDTO} from '../../screens/auth/dto/VerifyIdentityDto';
+import { VerifyIdentityDTO } from '../../screens/auth/dto/VerifyIdentityDto';
 import VerifyOtpDTO, {
   SendOtpDTO,
   VerifyOtpResponse,
 } from '../../screens/auth/dto/VerifyOtpDto';
 import AppStorage from '../AppStorage';
+import CatchError from '../errors/catchError';
 import ThrowError from '../errors/throwError';
-import utils from '../Utils';
 import Endpoints from './Endpoints';
 import Http from './Http';
 
 export default class AuthApi extends Http {
   protected async createAccount(body: RegisterDTO) {
-    const res = await this.fetchHandler({
-      path: Endpoints.signUp,
-      body,
-    });
-    const data = await this.handleResponse<RegisterResponseDTO>(res);
+    try {
+      const res = await this.fetchHandler({
+        path: Endpoints.signUp,
+        body,
+      });
+      const data = await this.handleResponse<RegisterResponseDTO>(res);
 
-    AppStorage.save('user_id', data?.data.uuid!);
+      AppStorage.save('user_id', data?.data.uuid!);
 
-    this.success(data?.message);
+      this.success(data?.message);
 
-    return data;
+      return data;
+    } catch (error) {
+      throw new CatchError(error, true);
+    }
   }
 
   protected async login(body: LoginDto) {
@@ -40,7 +44,7 @@ export default class AuthApi extends Http {
     const data = await this.handleResponse<LoginResponse>(res);
 
     if (!data?.data.pinId && !data?.data.uuid) {
-      const currentUser = utils.getUserType(data?.data.user?.userTypes)?.[0]!;
+      const currentUser = data?.data.user?.userTypes?.split(',')[0];
 
       AppStorage.save('user_id', data?.data.user?.uuid!);
       AppStorage.save('email', data?.data.user?.email!);
@@ -50,7 +54,7 @@ export default class AuthApi extends Http {
       AppStorage.save('lastname', data?.data.user?.lastname!);
       AppStorage.save('isPhoneVerified', data?.data.user?.phoneVerified!);
       AppStorage.save('isIdentityVerified', data?.data.user?.identityVerified!);
-      AppStorage.save('userType', currentUser);
+      AppStorage.save('userType', currentUser!);
     }
 
     this.success(data?.message);

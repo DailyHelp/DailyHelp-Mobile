@@ -19,7 +19,11 @@ const CustomAvatar: ICustomAvatar = ({
 
   return (
     <View style={{position: 'relative'}}>
-      <Avatar.Image size={avatarSize} source={data?.image} />
+      {typeof data?.image === 'string' ? (
+        <Avatar.Image size={avatarSize} source={{uri: data?.image}} />
+      ) : (
+        <Avatar.Image size={avatarSize} source={data?.image} />
+      )}
       {showBadge && (
         <Badge
           width={scale(badgeSize)}

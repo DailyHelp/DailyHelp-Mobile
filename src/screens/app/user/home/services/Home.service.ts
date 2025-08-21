@@ -1,22 +1,21 @@
 import Geolocation, {
   GeolocationResponse,
 } from '@react-native-community/geolocation';
-import {
-  QueryClient,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from '@tanstack/react-query';
+import {RouteProp, useRoute} from '@react-navigation/native';
+import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 import React from 'react';
+import {SheetManager} from 'react-native-actions-sheet';
+import {IHomeRoute} from '../../../../../@types/routes';
+import AppStorage from '../../../../../shared/AppStorage';
 import CatchError from '../../../../../shared/errors/catchError';
 import HomeApi from '../../../../../shared/services/Home';
-import {appStore} from '../../../../../shared/stores/appStore';
 import utils from '../../../../../shared/Utils';
 import DeclineOfferDto from '../../jobs/dto/DeclineOffer.dto';
 import SendOfferDto from '../../jobs/dto/SendOffer.dto';
+import ProvidersDto from '../dto/providersDto';
 import SaveHelpersDetailsDTO from '../dto/SaveHelpersDetailsDto';
 import SavePriceDTO from '../dto/SavePriceDto';
-import {SheetManager} from 'react-native-actions-sheet';
+import {ReasonType} from '../../../../../shared/Constant';
 
 class HomeService extends HomeApi {
   private static instance: HomeService;
@@ -33,7 +32,7 @@ class HomeService extends HomeApi {
     const {data, isLoading, error} = useQuery({
       queryKey: ['allCategories'],
       queryFn: async () => await this.getAllCategories(),
-      enabled: Boolean(appStore.isAuthenticated),
+      enabled: Boolean(AppStorage.find('isAuthenticated')),
     });
 
     return {data, isLoading, error};
@@ -45,7 +44,7 @@ class HomeService extends HomeApi {
     const {data, isLoading, error} = useQuery({
       queryKey: ['get-saved-location'],
       queryFn: async () => await this.getSavedLocation(),
-      enabled: Boolean(appStore.isAuthenticated),
+      enabled: Boolean(AppStorage.find('isAuthenticated')),
     });
 
     const {mutate: setDefault, isPending: defaultLoading} = useMutation({
@@ -61,9 +60,7 @@ class HomeService extends HomeApi {
     const {mutate: onDelete, isPending: deleteLoading} = useMutation({
       mutationKey: ['delete-location'],
       mutationFn: async (uuid: string) => await this.setDefaultLocation(uuid),
-      onSuccess: data => {
-        console.log(data);
-        
+      onSuccess: () => {
         query.invalidateQueries({queryKey: ['customer']});
         SheetManager.hide('AddressOptions');
       },
@@ -229,14 +226,40 @@ class HomeService extends HomeApi {
     };
   }
 
-  useCustomerDashboard(query: ProvidersQuery) {
-    const {data, isLoading, error} = useQuery({
+  useCustomerDashboard() {
+    const {query, setQuery, appendPageData, data, fetchMore} =
+      utils.usePagination<ProvidersQuery, ProvidersDto>({
+        pagination: {
+          limit: 10,
+          orderBy: 'DESC',
+        },
+      });
+
+    const {
+      data: dashboard,
+      isLoading,
+      error,
+    } = useQuery({
       queryKey: ['customer-dashboard', query],
-      queryFn: async () => await this.getCustomerDashboard(query),
-      enabled: Boolean(appStore.isAuthenticated),
+      queryFn: async () => await this.getCustomerDashboard(query!),
+      enabled: Boolean(AppStorage.find('isAuthenticated')),
     });
 
-    return {data: data?.data, isLoading, error};
+    React.useEffect(() => {
+      if (dashboard?.data) {
+        appendPageData(dashboard?.data?.allProviders?.data!);
+      }
+    }, [dashboard?.data]);
+
+    return {
+      data: dashboard?.data,
+      isLoading,
+      error,
+      query,
+      setQuery,
+      fetchMore,
+      allProviders: data,
+    };
   }
 
   useSaveHelpersDetails() {
@@ -256,7 +279,8 @@ class HomeService extends HomeApi {
 
   useOffer() {
     const {upload, isLoading} = utils.useUploadImage();
-    const [sendOfferLoading, setOfferLoading] = React.useState(false);
+    const router = useRoute<RouteProp<IHomeRoute, 'ServiceProfile'>>();
+    const client = useQueryClient();
 
     const {
       mutateAsync: sendOffer,
@@ -265,9 +289,11 @@ class HomeService extends HomeApi {
     } = useMutation({
       mutationKey: ['send-offer'],
       mutationFn: async (body: SendOfferDto) => {
-        return await this.sendOffer(body.uuid!, body);
+        return await this.sendOffer(router.params?.uuid!, body);
       },
-      onSuccess: (data, body) => {},
+      onSuccess: (data, body) => {
+        client.invalidateQueries({queryKey: ['conversations']});
+      },
       onError: error => new CatchError(error, true),
     });
 
@@ -278,14 +304,14 @@ class HomeService extends HomeApi {
     } = useMutation({
       mutationKey: ['send-offer'],
       mutationFn: async (body: SendOfferDto) => {
-        return await this.updateOffer(body.uuid!, body);
+        return await this.updateOffer(router.params?.uuid!!, body);
       },
       onSuccess: (data, body) => {},
       onError: error => new CatchError(error, true),
     });
 
     const {mutateAsync: declineOffer, isPending: declinePending} = useMutation({
-      mutationKey: ['send-offer'],
+      mutationKey: ['decline-offer'],
       mutationFn: async (body: DeclineOfferDto) => {
         return await this.declineOffer(body.uuid!, body);
       },
@@ -294,28 +320,36 @@ class HomeService extends HomeApi {
     });
 
     const {mutateAsync: cancelOffer, isPending: cancelPending} = useMutation({
-      mutationKey: ['send-offer'],
+      mutationKey: ['cancel-offer'],
       mutationFn: async (body: DeclineOfferDto) => {
-        return await this.declineOffer(body.uuid!, body);
+        return await this.cancelOffer(body.uuid!, body);
       },
       onSuccess: (data, body) => {},
       onError: error => new CatchError(error, true),
     });
 
-    const onSendOffer = async (body: SendOfferDto) => {
-      const attachments = [];
+    const onSendOffer = async (body: SendOfferDto, callBack?: () => void) => {
+      try {
+        const attachments = [];
 
-      for (const att of body.attachments!) {
-        attachments.push(await upload(att, 'offer'));
+        if (typeof body.attachments === 'string') {
+          for (const att of JSON.parse(body.attachments! as string)) {
+            attachments.push(await upload(att, 'offer'));
+          }
+        }
+
+        body.attachments = attachments;
+        body.uuid = router.params?.uuid;
+        body.amount = +body.amount!;
+
+        sendOffer(body, {onSuccess: callBack});
+      } catch (error) {
+        new CatchError(error, true);
       }
-
-      body.attachments = attachments;
-
-      sendOffer(body);
     };
 
     return {
-      onSendOffer: onSendOffer,
+      onSendOffer,
       sendOfferData,
       sendingPending: isLoading || sendingPending,
       declineOffer,
@@ -329,20 +363,40 @@ class HomeService extends HomeApi {
   }
 
   useCustomerReviews(uuid: string, query?: PaginationQuery) {
-    const {data, isLoading, error} = useQuery({
-      queryKey: ['customer-dashboard', query, uuid],
+    const {appendPageData, data, fetchMore} = utils.usePagination(query);
+
+    const {
+      data: reviews,
+      isLoading,
+      error,
+    } = useQuery({
+      queryKey: ['reviews', query, uuid],
       queryFn: async () => await this.getReviews(uuid, query),
-      enabled: Boolean(appStore.isAuthenticated),
+      enabled: Boolean(AppStorage.find('isAuthenticated')),
+    });
+
+    React.useEffect(() => {
+      if (reviews?.data) appendPageData(reviews?.data!);
+    }, [reviews?.data]);
+
+    return {data: data, isLoading, error, fetchMore};
+  }
+
+  useUser() {
+    const {data, isLoading, error} = useQuery({
+      queryKey: ['user'],
+      queryFn: async () => await this.getUser(),
+      enabled: Boolean(AppStorage.find('isAuthenticated')),
     });
 
     return {data: data?.data, isLoading, error};
   }
 
-  useCustomer() {
+  useListCategory(type: ReasonType) {
     const {data, isLoading, error} = useQuery({
-      queryKey: ['customer'],
-      queryFn: async () => await this.getCustomer(),
-      enabled: Boolean(appStore.isAuthenticated),
+      queryKey: ['customer', type],
+      queryFn: async () => await this.getReason(type),
+      enabled: Boolean(AppStorage.find('isAuthenticated')),
     });
 
     return {data: data?.data, isLoading, error};
