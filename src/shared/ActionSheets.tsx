@@ -12,6 +12,7 @@ import FundedWallet from '../screens/app/more/components/FundWallet';
 import AddressOptions from '../screens/app/more/components/AddressOptions';
 import CustomSelect from '../components/customInput/customSelectInput/CustomSelect';
 import ConfirmDeleteActionSheet from '../screens/app/more/deleteAccount/ConfirmDeleteAccount';
+import DeleteAddress from '../screens/app/more/components/DeleteAddress';
 
 registerSheet('AllCategory', AllCategory);
 registerSheet('Rating', Rating);
@@ -26,6 +27,7 @@ registerSheet('FundWallet', FundedWallet);
 registerSheet('AddressOptions', AddressOptions);
 registerSheet('CustomSelect', CustomSelect);
 registerSheet('ConfirmDelete', ConfirmDeleteActionSheet);
+registerSheet('DeleteAddress', DeleteAddress);
 
 export type ActionSheetLoader = {
   isDefaultLoading?: boolean;
@@ -93,6 +95,11 @@ declare module 'react-native-actions-sheet' {
     ConfirmDelete: SheetDefinition<{
       payload: {
         onDelete: (password: string) => void;
+      };
+    }>;
+    DeleteAddress: SheetDefinition<{
+      payload: {
+        onDelete: () => void;
       };
     }>;
   }

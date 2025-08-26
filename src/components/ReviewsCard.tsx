@@ -1,6 +1,6 @@
 import { View } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import Typography from '../../../../../components/Typography';
+import Typography from './Typography';
 
 const ReviewsCard: IReviewCard = ({data}) => {
   return (
@@ -23,7 +23,7 @@ const ReviewsCard: IReviewCard = ({data}) => {
         <Typography fontWeight="regular" size="md" color="gray">
           23, Mar
         </Typography>
-        <Typography fontWeight="bold" size="md">
+        <Typography fontWeight="medium" size="md" color='lightBlack'>
           She did amazing well when she came
         </Typography>
       </View>

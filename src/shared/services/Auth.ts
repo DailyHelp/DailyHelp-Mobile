@@ -150,7 +150,7 @@ export default class AuthApi extends Http {
 
   protected async verifyIdentity(body: VerifyIdentityDTO) {
     const res = await this.fetchHandler({
-      path: Endpoints.verifyIdentity,
+      path: Endpoints.verifyIdentity(),
       body,
     });
     const data = await this.handleResponse<any>(res);

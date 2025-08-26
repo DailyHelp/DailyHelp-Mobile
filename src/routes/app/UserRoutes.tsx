@@ -35,6 +35,8 @@ import HomeRoute from './Home';
 import JobsRoute from './Jobs';
 import MoreRoute from './More';
 import SearchRoute from './Search';
+import ProviderProfile from '../../screens/app/more/providerProfile/Index';
+import ProviderTiers from '../../screens/app/more/providerProfile/ProviderTiers';
 
 type LabelPosition = 'beside-icon' | 'below-icon';
 
@@ -481,6 +483,20 @@ export const MoreStackRoutes = [
           textMiddle
         />
       ),
+    },
+  },
+  {
+    name: 'ProviderProfile',
+    component: ProviderProfile,
+    options: {
+      headerShown: false,
+    },
+  },
+  {
+    name: 'ProviderTiers',
+    component: ProviderTiers,
+    options: {
+      headerShown: false,
     },
   },
   ...IdentityVerificationRoute,

@@ -1,12 +1,13 @@
-import { NativeStackHeaderProps } from '@react-navigation/native-stack';
+import {NativeStackHeaderProps} from '@react-navigation/native-stack';
 import React from 'react';
 import BackHeader from './BackHeader';
 import ChatHeader from './ChatHeader';
 import HomeHeader from './HomeHeader';
 import SearchHeader from './SearchHeader';
 import TabsHeader from './TabsHeader';
+import {ColorKeys} from '../../shared/themes/Index';
 
-const CustomHeader: ICustomHeader<NativeStackHeaderProps> = ({
+const CustomHeader: ICustomHeader<NativeStackHeaderProps, ColorKeys> = ({
   type = 'back',
   ...props
 }) => {

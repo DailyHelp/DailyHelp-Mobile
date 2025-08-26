@@ -30,7 +30,7 @@ const More: IMore = ({navigation}) => {
         {
           name: 'Service profile',
           Icon: Assets.ServiceProfile,
-          navigate: () => navigation.navigate('ServiceProfile'),
+          navigate: () => navigation.navigate('ProviderProfile'),
           access: [UserTypes.PROVIDER],
         },
         {
@@ -100,7 +100,7 @@ const More: IMore = ({navigation}) => {
       <ScrollView
         style={{
           padding: scale(10),
-          marginTop: verticalScale(20),
+          marginTop: verticalScale(10),
         }}>
         <View
           style={{flexDirection: 'column', gap: 20, justifyContent: 'center'}}>

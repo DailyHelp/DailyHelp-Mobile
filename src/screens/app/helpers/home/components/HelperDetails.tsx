@@ -1,11 +1,10 @@
-import {View} from 'react-native';
+import React from 'react';
+import { View } from 'react-native';
 import Container from '../../../../../components/container/Index';
 import CustomAvatar from '../../../../../components/CustomAvatar';
 import Typography from '../../../../../components/Typography';
-import Assets from '../../../../../assets/Assets';
-import React from 'react';
-import UserDTO from '../../../../auth/dto/UserDto';
 import utils from '../../../../../shared/Utils';
+import UserDTO from '../../../../auth/dto/UserDto';
 
 const HelperDetails: IHelperDetails<UserDTO> = ({data}) => {
   return (

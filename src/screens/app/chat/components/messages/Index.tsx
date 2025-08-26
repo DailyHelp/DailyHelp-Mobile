@@ -13,7 +13,8 @@ const Messages: IMessages = props => {
   const {data} = props;
 
   const position = props.position || 'left';
-  const status = data?.type.toLowerCase() || 'accepted';
+  const type = data?.type?.toLowerCase();
+  const status = data?.offer.status.toLowerCase() || 'accepted';
   const time = dayjs(data?.createdAt).format('h:mm A'); // fallback time
 
   let attachment = data?.offer?.pictures.split(',');
@@ -22,6 +23,8 @@ const Messages: IMessages = props => {
   if (!backgroundColor) {
     backgroundColor = position === 'left' ? '#CCFFE8' : 'white';
   }
+
+  console.log(type, status);
 
   return (
     <View style={{flexDirection: 'row', alignItems: 'flex-end'}}>
@@ -35,7 +38,12 @@ const Messages: IMessages = props => {
           />
         </View>
       )}
-      <View style={{flexShrink: 1}}>
+      <View
+        style={{
+          flexShrink: 1,
+          width: position === 'right' ? '97%' : undefined,
+          alignItems: position === 'right' ? 'flex-start' : undefined,
+        }}>
         <View
           style={{
             ...chatStyle.chatMessageContainer,
@@ -46,7 +54,7 @@ const Messages: IMessages = props => {
           }}>
           {status && (
             <React.Fragment>
-              {status !== 'offer' && status !== 'accepted' ? (
+              {status == 'accepted' ? (
                 <OfferRejected {...props} data={data} />
               ) : (
                 <OfferAction {...props} data={data} />

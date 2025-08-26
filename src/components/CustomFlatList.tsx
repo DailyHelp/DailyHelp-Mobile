@@ -22,6 +22,9 @@ const CustomFlatList = <T extends unknown>({
   height,
   width,
   inverted = false,
+  stickyHeaderHiddenOnScroll,
+  StickyHeaderComponent,
+  stickyHeaderIndices,
 }: ICustomFlatListProps<T>) => {
   return (
     <FlatList
@@ -41,6 +44,9 @@ const CustomFlatList = <T extends unknown>({
       ListEmptyComponent={ListEmptyComponent}
       style={{height}}
       inverted={inverted}
+      stickyHeaderHiddenOnScroll={stickyHeaderHiddenOnScroll}
+      stickyHeaderIndices={stickyHeaderIndices}
+      StickyHeaderComponent={StickyHeaderComponent}
       contentContainerStyle={{
         paddingBottom: verticalScale(20),
         width,

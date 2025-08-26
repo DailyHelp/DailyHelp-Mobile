@@ -22,7 +22,7 @@ const CategorySection: ICategorySection = ({data: cat, onFilter}) => {
   };
 
   const onClick = (action: string) => {
-    action = action.toLowerCase();
+    action = action?.toLowerCase();
     if (action === 'all categories') {
       SheetManager.show('AllCategory', {
         onClose: q => {

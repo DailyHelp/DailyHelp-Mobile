@@ -7,8 +7,19 @@ import {HelpersStatus} from '../../../../../shared/Constant';
 const Availability: IAvailability<HelpersStatus> = ({
   status,
   setAvailability,
+  isAvailable,
 }) => {
   const [isSwitch, setIsSwitch] = React.useState('false');
+
+  React.useEffect(() => {
+    if (isAvailable) {
+      setIsSwitch('true');
+      setAvailability?.(true);
+    } else {
+      setIsSwitch('false');
+      setAvailability?.(false);
+    }
+  }, [isAvailable]);
 
   return (
     <Container
@@ -20,9 +31,9 @@ const Availability: IAvailability<HelpersStatus> = ({
       alignItems="center">
       <Typography
         size="md"
-        color={status === HelpersStatus.ENGAGED ? 'white' : 'black'}
+        color={!isAvailable ? 'white' : 'black'}
         fontWeight="bold">
-        Turn On Availability
+        Turn {isSwitch === 'true' ? 'off' : 'on'} Availability
       </Typography>
       <CustomInput
         type="switch"

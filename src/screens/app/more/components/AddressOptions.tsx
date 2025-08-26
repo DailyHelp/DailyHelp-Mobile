@@ -2,6 +2,7 @@ import React from 'react';
 import {TouchableOpacity, View} from 'react-native';
 import ActionSheet, {
   ActionSheetRef,
+  SheetManager,
   SheetProps,
 } from 'react-native-actions-sheet';
 import Assets from '../../../../assets/Assets';
@@ -25,14 +26,21 @@ const AddressOptions = React.forwardRef<
     {
       name: 'Delete address',
       Icon: Assets.Trash,
-      navigate: () => props.payload?.onDelete(),
-      loading: appStore.actionSheetLoading.isDeletingAddress,
+      navigate: () => {
+        SheetManager.show('DeleteAddress', {
+          payload: {
+            onDelete: () => props.payload?.onDelete(),
+          },
+        });
+      },
+      loading: false,
     },
   ];
 
   return (
     <ActionSheet
       ref={ref}
+      id="AddressOptions"
       closeOnPressBack={false}
       gestureEnabled={true}
       containerStyle={{

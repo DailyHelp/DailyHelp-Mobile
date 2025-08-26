@@ -1,12 +1,11 @@
 import React from 'react';
-import {TouchableOpacity, View} from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import ActionSheet, {
   ActionSheetRef,
   SheetManager,
 } from 'react-native-actions-sheet';
-import Typography from '../../../../components/Typography';
-import {verticalScale} from '../../../../shared/Scaling';
 import CustomInput from '../../../../components/customInput/Index';
+import Typography from '../../../../components/Typography';
 
 const FundedWallet = React.forwardRef<ActionSheetRef, IFundWallet>(
   (props, ref) => {

@@ -59,7 +59,7 @@ class HomeService extends HomeApi {
 
     const {mutate: onDelete, isPending: deleteLoading} = useMutation({
       mutationKey: ['delete-location'],
-      mutationFn: async (uuid: string) => await this.setDefaultLocation(uuid),
+      mutationFn: async (uuid: string) => await this.deleteLocation(uuid),
       onSuccess: () => {
         query.invalidateQueries({queryKey: ['customer']});
         SheetManager.hide('AddressOptions');
@@ -262,6 +262,24 @@ class HomeService extends HomeApi {
     };
   }
 
+  useProviderDashboard() {
+    const {
+      data: dashboard,
+      isLoading,
+      error,
+    } = useQuery({
+      queryKey: ['provider-dashboard'],
+      queryFn: async () => await this.getProviderDashboard(),
+      enabled: Boolean(AppStorage.find('isAuthenticated')),
+    });
+
+    return {
+      data: dashboard?.data,
+      isLoading,
+      error,
+    };
+  }
+
   useSaveHelpersDetails() {
     const {mutateAsync, isPending} = useMutation({
       mutationKey: ['helper-details'],
@@ -292,7 +310,7 @@ class HomeService extends HomeApi {
         return await this.sendOffer(router.params?.uuid!, body);
       },
       onSuccess: (data, body) => {
-        client.invalidateQueries({queryKey: ['conversations']});
+        client.invalidateQueries({queryKey: ['conversation']});
       },
       onError: error => new CatchError(error, true),
     });
@@ -302,11 +320,13 @@ class HomeService extends HomeApi {
       isPending: updatePending,
       data: updateOfferData,
     } = useMutation({
-      mutationKey: ['send-offer'],
+      mutationKey: ['update-offer'],
       mutationFn: async (body: SendOfferDto) => {
         return await this.updateOffer(router.params?.uuid!!, body);
       },
-      onSuccess: (data, body) => {},
+      onSuccess: (data, body) => {
+        client.invalidateQueries({queryKey: ['conversation']});
+      },
       onError: error => new CatchError(error, true),
     });
 
@@ -315,7 +335,9 @@ class HomeService extends HomeApi {
       mutationFn: async (body: DeclineOfferDto) => {
         return await this.declineOffer(body.uuid!, body);
       },
-      onSuccess: (data, body) => {},
+      onSuccess: (data, body) => {
+        client.invalidateQueries({queryKey: ['conversation']});
+      },
       onError: error => new CatchError(error, true),
     });
 
@@ -324,7 +346,9 @@ class HomeService extends HomeApi {
       mutationFn: async (body: DeclineOfferDto) => {
         return await this.cancelOffer(body.uuid!, body);
       },
-      onSuccess: (data, body) => {},
+      onSuccess: (data, body) => {
+        client.invalidateQueries({queryKey: ['conversation']});
+      },
       onError: error => new CatchError(error, true),
     });
 

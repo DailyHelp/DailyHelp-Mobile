@@ -3,11 +3,6 @@ import React from 'react';
 import {TouchableOpacity, View} from 'react-native';
 import {Modal, Portal} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/AntDesign';
-import {
-  decline_reasons,
-  helper_cancel_reasons,
-  user_cancel_reason,
-} from '../../mock_data';
 import {ReasonType, UserTypes} from '../../shared/Constant';
 import {scale, verticalScale} from '../../shared/Scaling';
 import {appStore} from '../../shared/stores/appStore';
@@ -23,7 +18,7 @@ const DeclineOffer: IOffer<Message> = ({
   type,
   onDeclineOffer,
   isLoading,
-  data
+  data,
 }) => {
   const [id, setId] = React.useState<number | undefined>();
   const [reason, setReason] = React.useState('');
@@ -149,8 +144,12 @@ const DeclineOffer: IOffer<Message> = ({
               loading={isLoading}
               onPress={() => {
                 console.log(data);
-                
-                onDeclineOffer?.(reason, reasons?.[id!].name!, data?.offer.uuid!);
+
+                onDeclineOffer?.(
+                  reason,
+                  reasons?.[id!].name!,
+                  data?.offer.uuid!,
+                );
               }}>
               {utils.capitalizeFirstLetter(type)} offer
             </MainButton>

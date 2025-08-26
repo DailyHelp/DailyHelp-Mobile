@@ -9,8 +9,9 @@ import utils from '../../shared/Utils';
 import Container from '../container/Index';
 import Typography from '../Typography';
 import {observer} from 'mobx-react-lite';
+import {ColorKeys} from '../../shared/themes/Index';
 
-const HomeHeader: ICustomHeader<NativeStackHeaderProps> = ({
+const HomeHeader: ICustomHeader<NativeStackHeaderProps, ColorKeys> = ({
   title,
   navigation,
   goBack,

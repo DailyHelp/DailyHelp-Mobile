@@ -1,4 +1,4 @@
-import {useQuery} from '@tanstack/react-query';
+import {useQuery, useQueryClient} from '@tanstack/react-query';
 import ChatApi from '../../../../shared/services/Chat';
 import utils from '../../../../shared/Utils';
 import {appStore} from '../../../../shared/stores/appStore';

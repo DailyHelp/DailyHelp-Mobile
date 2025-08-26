@@ -5,7 +5,7 @@ import {IReviews} from '../../../../@types/routes';
 import Typography from '../../../../components/Typography';
 import {scale, verticalScale} from '../../../../shared/Scaling';
 import utils from '../../../../shared/Utils';
-import ReviewsCard from './components/ReviewsCard';
+import ReviewsCard from '../../../../components/ReviewsCard';
 import React from 'react';
 import homeService from './services/Home.service';
 

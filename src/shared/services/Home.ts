@@ -9,8 +9,11 @@ import Endpoints from './Endpoints';
 import Http from './Http';
 import {CustomerDashboardDto} from '../../screens/app/user/home/dto/customer-dashboard.dto';
 import {ReasonType} from '../Constant';
+import AppStorage from '../AppStorage';
 
 export default class HomeApi extends Http {
+  userType = () => AppStorage.find('userType');
+
   protected async getAllCategories() {
     const res = await this.fetchHandler({
       path: Endpoints.listCategories,
@@ -23,7 +26,7 @@ export default class HomeApi extends Http {
   }
   protected async getSavedLocation() {
     const res = await this.fetchHandler({
-      path: Endpoints.getSavedLocation,
+      path: Endpoints.getSavedLocation(),
       method: 'GET',
     });
 
@@ -34,7 +37,7 @@ export default class HomeApi extends Http {
 
   protected async saveLocation(body: Partial<SaveLocationDto>) {
     const res = await this.fetchHandler({
-      path: Endpoints.saveLocation,
+      path: Endpoints.saveLocation(),
       body,
     });
 
@@ -158,7 +161,7 @@ export default class HomeApi extends Http {
 
   protected async savePrice(body: SavePriceDTO) {
     const res = await this.fetchHandler({
-      path: Endpoints.savePrice,
+      path: Endpoints.savePrice(),
       body,
     });
     const data = await this.handleResponse<any>(res);
@@ -170,7 +173,7 @@ export default class HomeApi extends Http {
 
   protected async saveHelpersDetails(body: SaveHelpersDetailsDTO) {
     const res = await this.fetchHandler({
-      path: Endpoints.saveHelpersDetails,
+      path: Endpoints.saveHelpersDetails(),
       body,
     });
     const data = await this.handleResponse<any>(res);
@@ -190,9 +193,26 @@ export default class HomeApi extends Http {
     return data;
   }
 
+  protected async getProviderDashboard() {
+    const res = await this.fetchHandler({
+      path: Endpoints.getDashboard(),
+      method: 'GET',
+    });
+    const data = await this.handleResponse<{
+      acceptanceRate?: number;
+      acceptedOffers?: number;
+      jobGoal?: number;
+      todaysEarnings?: number;
+      totalDecisions?: number;
+      user: UserDTO;
+    }>(res);
+
+    return data;
+  }
+
   protected async getUser() {
     const res = await this.fetchHandler({
-      path: Endpoints.user,
+      path: Endpoints.user(),
       method: 'GET',
     });
     const data = await this.handleResponse<UserDTO>(res);
@@ -288,7 +308,7 @@ export default class HomeApi extends Http {
     return data;
   }
 
-  protected async onDelete(uuid: string) {
+  protected async deleteLocation(uuid: string) {
     const res = await this.fetchHandler({
       path: Endpoints.deleteLocation(uuid),
       method: 'DELETE',

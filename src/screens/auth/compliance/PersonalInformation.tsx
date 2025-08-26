@@ -1,7 +1,7 @@
 import {createValidator} from 'class-validator-formik';
 import {Formik} from 'formik';
 import React from 'react';
-import {Text, View} from 'react-native';
+import {Dimensions, Text, View} from 'react-native';
 import {Button} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Fontisto';
 import {IPersonalInformation} from '../../../@types/routes';
@@ -22,6 +22,7 @@ const PersonalInformation: IPersonalInformation = ({navigation, route}) => {
     <Container
       type="scroll"
       flex={1}
+      height={Dimensions.get('screen').height}
       gap={20}
       padding={10}
       backgroundColor="white">
@@ -109,7 +110,7 @@ const PersonalInformation: IPersonalInformation = ({navigation, route}) => {
                       fontSize: customFontSize.md,
                       padding: verticalScale(5),
                     }}
-                    key={item.toLowerCase()}>
+                    key={item?.toLowerCase()}>
                     {item}
                   </Button>
                 ))}

@@ -4,14 +4,15 @@ import {scale, verticalScale} from '../../shared/Scaling';
 import Container from '../container/Index';
 import CustomInput from '../customInput/Index';
 import Typography from '../Typography';
+import {ColorKeys} from '../../shared/themes/Index';
 
-const SearchHeader: ICustomHeader<NativeStackHeaderProps> = ({
+const SearchHeader: ICustomHeader<NativeStackHeaderProps, ColorKeys> = ({
   title,
   placeHolder,
   onSearch,
   value,
   onFocus,
-  onBlur
+  onBlur,
 }) => {
   return (
     <Container

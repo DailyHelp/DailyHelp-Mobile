@@ -20,7 +20,7 @@ import Typography from '../../../../components/Typography';
 import {scale, verticalScale} from '../../../../shared/Scaling';
 import {appStore} from '../../../../shared/stores/appStore';
 import utils from '../../../../shared/Utils';
-import ReviewsCard from './components/ReviewsCard';
+import ReviewsCard from '../../../../components/ReviewsCard';
 import homeStyle from './homeStyle';
 import homeService from './services/Home.service';
 

@@ -174,7 +174,7 @@ const HelperCard: IHelperCard<ProvidersDto> = ({data, mode, horizontal}) => {
               }}>
               <View style={{flexDirection: 'row', gap: 10}}>
                 <CustomAvatar
-                  data={{image: data?.picture, badge: data?.tier.toLowerCase()}}
+                  data={{image: data?.picture, badge: data?.tier?.toLowerCase()}}
                 />
                 <View style={{flexDirection: 'column', gap: 5, width: '80%'}}>
                   <View

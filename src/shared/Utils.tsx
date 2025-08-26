@@ -22,6 +22,7 @@ import {CameraRoll} from '@react-native-camera-roll/camera-roll';
 import {validate} from 'class-validator';
 import Http, {http} from './services/Http';
 import AppStorage from './AppStorage';
+import {UserTypes} from './Constant';
 
 class Utils {
   private static instance: Utils;
@@ -378,7 +379,7 @@ class Utils {
   }
 
   flattenQuery(
-    obj: Record<string, any>,
+    obj?: Record<string, any>,
     parentKey = '',
     result: Record<string, any> = {},
   ) {
@@ -455,7 +456,7 @@ class Utils {
     let searches: string[] = stored ? JSON.parse(stored as string) : [];
 
     // remove duplicates
-    searches = searches.filter(s => s.toLowerCase() !== query.toLowerCase());
+    searches = searches.filter(s => s?.toLowerCase() !== query?.toLowerCase());
 
     // add new search at the top
     searches.unshift(query);
@@ -471,6 +472,16 @@ class Utils {
   getRecentSearches(): string[] {
     const stored = AppStorage.find('recent_search');
     return stored ? JSON.parse(stored as string) : [];
+  }
+
+  getBaseUrl() {
+    const base = AppStorage.find('userType') as UserTypes;
+    const bases = base?.toLowerCase() + 's';
+
+    return {
+      base,
+      bases,
+    };
   }
 }
 

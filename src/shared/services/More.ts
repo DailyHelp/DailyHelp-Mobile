@@ -6,7 +6,7 @@ import Http from './Http';
 export default class MoreApi extends Http {
   protected async switchUser(userType: UserTypes) {
     const res = await this.fetchHandler({
-      path: Endpoints.switchUser,
+      path: Endpoints.switchUser(),
       method: 'PATCH',
       body: {userType},
     });

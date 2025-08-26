@@ -103,9 +103,17 @@ import Delete from './svg/delete.svg';
 import Refresh from './svg/refresh.svg';
 import Support from './svg/support.svg';
 import Time from './svg/time.svg';
+import BronzeRatings from './svg/bronzeRating.svg';
+import SilverRatings from './svg/silverRating.svg';
+import GoldRatings from './svg/goldRating.svg';
+import PlatinumRatings from './svg/platinumRating.svg';
 
 export default {
   EngageTime,
+  BronzeRatings,
+  SilverRatings,
+  GoldRatings,
+  PlatinumRatings,  
   Time,
   Delete,
   Support,

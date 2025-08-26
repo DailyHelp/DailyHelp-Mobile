@@ -5,8 +5,9 @@ import Assets from '../../assets/Assets';
 import Container from '../container/Index';
 import CustomAvatar from '../CustomAvatar';
 import Typography from '../Typography';
+import {ColorKeys} from '../../shared/themes/Index';
 
-const ChatHeader: ICustomHeader<NativeStackHeaderProps> = ({
+const ChatHeader: ICustomHeader<NativeStackHeaderProps, ColorKeys> = ({
   title,
   navigation,
 }) => {
@@ -15,8 +16,8 @@ const ChatHeader: ICustomHeader<NativeStackHeaderProps> = ({
       flexDirection="row"
       padding={10}
       width={'full'}
-      justifyContent='space-between'
-      alignItems='center'
+      justifyContent="space-between"
+      alignItems="center"
       backgroundColor="white">
       <Container flexDirection="row">
         <TouchableOpacity onPress={() => navigation?.goBack()}>

@@ -41,12 +41,12 @@ const Search: ISearch = ({navigation}) => {
     query,
   } = homeService.useCustomerDashboard();
 
-  // React.useEffect(() => {
-  //   setQuery(q => ({
-  //     ...q,
-  //     filter: {...q?.filter, isSearchPage: true},
-  //   }));
-  // }, []);
+  React.useEffect(() => {
+    setQuery(q => ({
+      ...q,
+      filter: {...q?.filter, isSearchPage: true},
+    }));
+  }, []);
 
   const {data, isLoading, error} = homeService.useAllCategories();
 
@@ -94,7 +94,7 @@ const Search: ISearch = ({navigation}) => {
         }}
       />
 
-      {isFocused && (
+      {isFocused && prdLen < 0 && (
         <RecentSearches
           onPress={search => {
             setQuery(q => ({

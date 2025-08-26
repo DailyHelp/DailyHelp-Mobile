@@ -78,6 +78,8 @@ type IConfirmDeleteActionSheet = {
 
 type IFundWallet = {};
 
+type IDeleteAddress = {};
+
 type IInput = Props<{
   label?: string;
   placeholder?: string;
@@ -133,7 +135,7 @@ type IInput = Props<{
   wordCount?: boolean;
 }>;
 
-type ICustomHeader<P> = Props<
+type ICustomHeader<P, C> = Props<
   Partial<P> & {
     title?: string;
     placeHolder?: string;
@@ -147,6 +149,7 @@ type ICustomHeader<P> = Props<
     value?: string;
     onFocus?: () => void;
     onBlur?: () => void;
+    backgroundColor?: C;
   }
 >;
 
@@ -242,6 +245,9 @@ type ICustomFlatListProps<T> = {
   height?: `${number}%` | number;
   width?: `${number}%` | number;
   inverted?: boolean;
+  stickyHeaderHiddenOnScroll?: boolean;
+  stickyHeaderIndices?: number[];
+  StickyHeaderComponent?: React.ComponentType<any>;
 };
 
 type IStatusChip = Props<{
@@ -403,7 +409,7 @@ type IDisputeCard = Props<
 
 type IContainer<C> = Props<{
   flex?: number;
-  type?: 'box' | 'scroll';
+  type?: 'box' | 'scroll' | 'gradient';
   backgroundColor?: C;
   borderColor?: C;
   alignItems?: 'center' | 'flex-start' | 'flex-end' | 'stretch' | 'baseline';
@@ -436,6 +442,7 @@ type IContainer<C> = Props<{
   showsHorizontalScrollIndicator?: boolean;
   showsVerticalScrollIndicator?: boolean;
   scrollsToTop?: boolean;
+  gradientColors?: (string | number)[];
 }>;
 
 type IUploadContainer = Props<{
@@ -448,6 +455,7 @@ type IAttachmentContainer = Props<
   {
     openGallery?: () => void;
     allowUpload?: boolean;
+    Icon?: React.FunctionComponent<React.SVGAttributes<SVGElement>>;
   },
   string[]
 >;
@@ -470,6 +478,8 @@ type IStatsCard = Props<
 type IAvailability<S> = Props<{
   status?: S;
   setAvailability?: (val: boolean) => void;
+  isAvailable?: boolean;
+  color?: string;
 }>;
 
 type IJobPending<N = any, R = any> = Props<{

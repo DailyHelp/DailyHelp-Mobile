@@ -63,7 +63,7 @@ const Address: IAddress = ({navigation, route}) => {
         type="address"
         placeholder="Add new address"
         leftIcon={<Assets.InputSearch />}
-        width={'97'}
+        width={'full'}
       />
 
       <CustomFlatList<SaveLocationDto>

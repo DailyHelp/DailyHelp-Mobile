@@ -281,10 +281,11 @@ type IMoreRoute = {
   Address?: undefined;
   Feedback?: undefined;
   VerifyPhone?: undefined;
-  ServiceProfile?: ProvidersDto;
   Analytics?: {};
   DeleteAccount?: any;
   DeleteReason?: any;
+  ProviderProfile?: ProvidersDto;
+  ProviderTiers?: ProvidersDto;
 };
 
 type IMore = Props<NativeStackScreenProps<IMoreRoute, 'More'>>;
@@ -322,3 +323,11 @@ type IDeleteAccount = Props<
 >;
 
 type IDeleteReason = Props<NativeStackScreenProps<IMoreRoute, 'DeleteReason'>>;
+
+type IProviderProfile = Props<
+  NativeStackScreenProps<IMoreRoute, 'ProviderProfile'>
+>;
+
+type IProviderTiers = Props<
+  NativeStackScreenProps<IMoreRoute, 'ProviderTiers'>
+>;

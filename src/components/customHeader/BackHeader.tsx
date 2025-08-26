@@ -5,12 +5,14 @@ import {customFontSize, fonts} from '../../shared/themes/Typography';
 import {scale} from '../../shared/Scaling';
 import {NativeStackHeaderProps} from '@react-navigation/native-stack';
 import Container from '../container/Index';
+import {ColorKeys} from '../../shared/themes/Index';
 
-const BackHeader: ICustomHeader<NativeStackHeaderProps> = ({
+const BackHeader: ICustomHeader<NativeStackHeaderProps, ColorKeys> = ({
   title,
   navigation,
   goBack,
   textMiddle,
+  backgroundColor,
 }) => {
   if (textMiddle) {
     // Centered title layout
@@ -18,7 +20,7 @@ const BackHeader: ICustomHeader<NativeStackHeaderProps> = ({
       <Container
         flexDirection="row"
         alignItems="center"
-        backgroundColor="white"
+        backgroundColor={backgroundColor || 'white'}
         justifyContent="center"
         position="relative"
         height={50}
@@ -49,7 +51,7 @@ const BackHeader: ICustomHeader<NativeStackHeaderProps> = ({
       <Container
         flexDirection="row"
         alignItems="center"
-        backgroundColor="white"
+        backgroundColor={backgroundColor || 'white'}
         height={50}
         gap={3}
         width={'full'}>

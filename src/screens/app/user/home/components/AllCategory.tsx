@@ -72,9 +72,9 @@ const CategoryActionSheet = React.forwardRef<
 
     return (categories || []).filter(
       (category: InternalCategory) =>
-        category.name.toLowerCase().includes(search.toLowerCase()) ||
+        category.name?.toLowerCase().includes(search?.toLowerCase()) ||
         category.subCategories.some(sub =>
-          sub.toLowerCase().includes(search.toLowerCase()),
+          sub.toLowerCase().includes(search?.toLowerCase()),
         ),
     );
   }, [categories, search]);

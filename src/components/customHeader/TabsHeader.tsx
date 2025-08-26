@@ -1,12 +1,11 @@
-import {NativeStackHeaderProps} from '@react-navigation/native-stack';
+import { NativeStackHeaderProps } from '@react-navigation/native-stack';
 import React from 'react';
-import {View} from 'react-native';
-import {scale, verticalScale} from '../../shared/Scaling';
+import { ColorKeys } from '../../shared/themes/Index';
 import Tabs from '../Tabs';
 import Typography from '../Typography';
 import Container from '../container/Index';
 
-const JobsHeader: ICustomHeader<NativeStackHeaderProps> = ({
+const JobsHeader: ICustomHeader<NativeStackHeaderProps, ColorKeys> = ({
   title,
   onPress,
   initialTab,

@@ -24,7 +24,6 @@ const Chat: IChat = ({navigation}) => {
       subTitle=" service providers"
     />
   );
-  console.log(data);
 
   const renderItem = React.useCallback(
     ({item, index}: {item: Conversation; index: number}) => (

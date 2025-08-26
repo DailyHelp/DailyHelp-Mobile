@@ -17,12 +17,19 @@ const Home: IHome = () => {
     HelpersStatus.UNAVAILABLE,
   );
 
-  const {data} = homeService.useUser();
+  const {data} = homeService.useProviderDashboard();
 
   React.useEffect(() => {
-    if (isSwitch) setHelpersStatus(HelpersStatus.AVAILABLE);
-    else setHelpersStatus(HelpersStatus.UNAVAILABLE);
+    if (isSwitch) {
+      setHelpersStatus(HelpersStatus.AVAILABLE);
+    } else setHelpersStatus(HelpersStatus.UNAVAILABLE);
   }, [isSwitch]);
+
+  React.useEffect(() => {
+    if (data?.user.availability) {
+      setHelpersStatus(HelpersStatus.AVAILABLE);
+    } else setHelpersStatus(HelpersStatus.UNAVAILABLE);
+  }, [data]);
 
   const status = {
     [HelpersStatus.UNAVAILABLE]: 'lightDeepGrey',
@@ -33,21 +40,21 @@ const Home: IHome = () => {
   const stats = [
     {
       title: 'Today’s earnings',
-      currency: 20000,
+      currency: data?.todaysEarnings ?? 0,
     },
     {
       title: 'Acceptance rate',
-      stats: '67.5%',
+      stats: (data?.acceptanceRate ?? 0).toString() + '%',
     },
     {
       title: 'Jobs',
-      stats: '5',
+      stats: (data?.acceptedOffers ?? 0).toString(),
       Icon: Assets.GreenSuitCase,
-      goal: '15 jobs',
+      goal: `${data?.jobGoal} jobs`,
     },
     {
       title: 'Ratings',
-      stats: '2.5',
+      stats: (data?.user.avgRating ?? 0).toString(),
       Icon: Assets.Star,
       goal: '4.5 rating',
     },
@@ -61,7 +68,11 @@ const Home: IHome = () => {
       borderTopLeftRadius={20}
       backgroundColor={status[helpersStatus] as ColorKeys}
       flex={1}>
-      <Availability setAvailability={setIsSwitch} />
+      <Availability
+        setAvailability={setIsSwitch}
+        isAvailable={data?.user.availability}
+        status={helpersStatus}
+      />
 
       <Container
         width={'full'}
@@ -69,7 +80,7 @@ const Home: IHome = () => {
         borderTopLeftRadius={20}
         gap={20}
         borderTopRightRadius={20}>
-        <HelperDetails data={data} />
+        <HelperDetails data={data?.user} />
 
         <BadgeContainer />
 
