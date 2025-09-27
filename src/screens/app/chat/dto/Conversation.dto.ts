@@ -17,4 +17,8 @@ interface Conversation {
   restricted: boolean;
   cancellationChances: number;
   createdAt: string;
+  iReadLastMessage?: boolean;
+  spOnline?: boolean;
+  spTier?: string;
+  srOnline?: boolean;
 }

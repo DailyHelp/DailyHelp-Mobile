@@ -6,6 +6,7 @@ import {OtpActionType} from '../screens/auth/dto/VerifyOtpDto';
 import {VerifyIdentityDTO} from '../screens/auth/dto/VerifyIdentityDto';
 import {UserTypes} from '../shared/Constant';
 import ProvidersDto from '../screens/app/user/home/dto/providersDto';
+import ReportConversationDto from '../screens/app/chat/dto/report-conversation.dto';
 
 /**
  * Routes for `AuthStackRoute`
@@ -44,6 +45,7 @@ type IAuthRoute = {
   Verifying?: VerifyIdentityDTO;
   VerificationResponse?: {
     status: 'success' | 'failed';
+    userType: UserTypes;
   };
   ForgotPassword?: undefined;
   ResetPassword?: undefined;
@@ -221,10 +223,22 @@ type IChatRoute = {
   Chat?: undefined;
   HomeIndex?: undefined;
   SearchIndex?: undefined;
-  ChatBox?: {uuid: string; title: string};
-  Checkout?: undefined;
+  ChatBox?: {
+    uuid: string;
+    title: string;
+    cancellationChances?: number;
+    badge?: string;
+  };
+  Checkout?: {
+    offerUuid: string;
+    conversationUuid: string;
+    purpose: string;
+    price: number;
+  };
   VoiceCall?: undefined;
-  Report?: undefined;
+  Report?: {
+    uuid: string;
+  };
   ReportSubmitted?: undefined;
 };
 
@@ -241,10 +255,14 @@ type IReportSubmitted = Props<
 >;
 
 type IReport = Props<
-  {scroll?: (title: string) => void} & NativeStackScreenProps<
-    IChatRoute,
-    'Report'
-  >
+  {
+    scroll?: (title: string) => void;
+    onChangeDescription?: (dto: string) => void;
+    onAttachment?: (dto: string) => void;
+    handleSubmit?: () => void;
+    values?: ReportConversationDto;
+    isPending?: boolean;
+  } & NativeStackScreenProps<IChatRoute, 'Report'>
 >;
 
 type IJobsRoute = {

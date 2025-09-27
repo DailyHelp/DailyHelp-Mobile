@@ -59,6 +59,7 @@ export default class UserDTO {
   offerStartingPrice?: number;
   minimumOfferPrice?: number;
   availability?: boolean;
+  onboardingCompleted?: boolean;
   engaged?: boolean;
   tier?: string;
   nextTier?: string;

@@ -31,6 +31,7 @@ class JobService extends JobsApi {
       data: jobs,
       isLoading,
       error,
+      refetch,
     } = useQuery({
       queryKey: ['jobs', query],
       queryFn: async () => await this.getsJobs(query!),
@@ -41,7 +42,35 @@ class JobService extends JobsApi {
       if (jobs?.data) appendPageData(jobs?.data!);
     }, [jobs?.data]);
 
-    return {fetchMore, isLoading, data, setQuery, query};
+    return {fetchMore, isLoading, data, setQuery, query, refetch};
+  }
+
+  useGetSimilarProvider(uuid: string) {
+    const {query, fetchMore, setQuery, appendPageData, data} =
+      utils.usePagination({
+        pagination: {
+          limit: 10,
+          orderBy: 'DESC',
+          page: 1,
+        },
+      });
+
+    const {
+      data: similarJobs,
+      isLoading,
+      error,
+      refetch,
+    } = useQuery({
+      queryKey: ['similar-provider', uuid],
+      queryFn: async () => await this.getSimilarProvider(uuid!),
+      enabled: Boolean(AppStorage.find('isAuthenticated')),
+    });
+
+    React.useEffect(() => {
+      if (similarJobs?.data) appendPageData(similarJobs?.data!);
+    }, [similarJobs?.data]);
+
+    return {fetchMore, isLoading, similarJobs, setQuery, query, refetch};
   }
 }
 

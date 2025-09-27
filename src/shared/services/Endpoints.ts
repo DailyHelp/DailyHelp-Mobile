@@ -11,7 +11,7 @@ export default {
   verifyOtp: '/auth/verify-otp',
   sendOtp: '/auth/send-otp',
   initiateResetPassword: '/auth/initiate-reset-password',
-  changePassword: ' /auth/change-password',
+  changePassword: '/auth/change-password',
   resetPassword: '/auth/reset-password',
   verifyIdentity: () => `/${bases()}/verify-identity`,
   listCategories: '/lists/categories',
@@ -41,12 +41,18 @@ export default {
   getDashboard: (query?: PaginationQuery<ProvidersQuery>) =>
     `/${bases()}/dashboard?${utils.flattenQuery(query)}`,
   getSimilarProducts: (uuid: string) => `/${bases()}/${uuid}/similar-providers`,
-  dispute: () => `/${bases()}/disputes`,
+  disputes: (query: PaginationQuery) =>
+    `/${bases()}/disputes?${utils.flattenQuery(query!)}`,
   feedback: () => `/${bases()}/feedback`,
   getJob: (query: PaginationQuery) =>
     `/${base()}/jobs?${utils.flattenQuery(query)}`,
   verifyJobPin: (uuid: string) => `/${base()}/jobs/${uuid}/verify-pin`,
   jobTimeline: (uuid: string) => `/${base()}/jobs/${uuid}/timelines`,
+  cancelJob: (uuid: string) => `/${base()}/jobs/${uuid}/cancel`,
+  startJob: (uuid: string) => `/${base()}/jobs/${uuid}/start`,
+  endJob: (uuid: string) => `/${base()}/jobs/${uuid}/end`,
+  disputeJob: (uuid: string) => `/${base()}/jobs/${uuid}/dispute`,
+  rateProvider: (uuid: string) => `/${base()}/jobs/${uuid}/rate-service-provider`,
   reviews: (uuid: string, query?: PaginationQuery) =>
     `/${bases()}/${uuid}/reviews?${utils.flattenQuery(query!)}`,
   deleteLocation: (uuid: string) => `/${bases()}/location/${uuid}/delete`,
@@ -55,4 +61,7 @@ export default {
   deletionRequest: (uuid: string) =>
     `/${bases()}/deletion-request/${uuid}/confirm-deletion`,
   switchUser: () => `/${bases()}/switch-user-type`,
+  initializePayment: () => `/${bases()}/initialize-paystack-payment`,
+  walletTransactions: (query: PaginationQuery) =>
+    `/wallets/transactions?${utils.flattenQuery(query)}`,
 };

@@ -4,8 +4,10 @@ import CustomAvatar from '../../../../components/CustomAvatar';
 import Typography from '../../../../components/Typography';
 import {scale, verticalScale} from '../../../../shared/Scaling';
 import {ColorKeys} from '../../../../shared/themes/Index';
+import DisputesDto from '../dto/Disputes.dto';
+import dayjs from 'dayjs';
 
-const DisputeCard: IDisputeCard = ({type, data}) => {
+const DisputeCard: IDisputeCard<DisputesDto> = ({type, data}) => {
   let color: ColorKeys = 'gray';
   let backgroundColor = '#F3F4F6';
 
@@ -38,10 +40,13 @@ const DisputeCard: IDisputeCard = ({type, data}) => {
           />
 
           <View style={{flexDirection: 'column', gap: 3}}>
-            <Typography size="m2d">Amarachi Eze</Typography>
+            <Typography size="m2d">
+              {data?.disputes?.submittedBy.lastname}{' '}
+              {data?.disputes?.submittedBy.firstname}
+            </Typography>
             <View style={{flexDirection: 'row', alignItems: 'center', gap: 5}}>
               <Typography size="xs" color="gray">
-                23 Mar, 2025
+                {dayjs(data?.disputes?.createdAt).format('DD, MMM, YYYY')}
               </Typography>
               <View
                 style={{
@@ -51,7 +56,7 @@ const DisputeCard: IDisputeCard = ({type, data}) => {
                 }}
               />
               <Typography size="xs" color="gray">
-                Dispute ID #DH0981
+                Dispute ID #{data?.disputes?.uuid}
               </Typography>
             </View>
           </View>

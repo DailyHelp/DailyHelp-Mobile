@@ -40,6 +40,7 @@ declare module 'react-native-actions-sheet' {
       payload: {
         type: 'create' | 'login';
         subTitle?: string;
+        selectMultiple?: boolean;
       };
       returnValue: {
         subCategory: string[];
@@ -65,6 +66,10 @@ declare module 'react-native-actions-sheet' {
         lat?: number;
         lng?: number;
         address?: string;
+        state?: string;
+        lga?: string;
+        city?: string;
+        formatted_address?: string;
       };
     }>;
     PriceRange: SheetDefinition<{
@@ -90,7 +95,7 @@ declare module 'react-native-actions-sheet' {
         label?: string;
         data?: {label?: string; value: string}[];
       };
-      returnValue: {label?: string; value: string};
+      returnValue: {label?: string; value: string; data?: any};
     }>;
     ConfirmDelete: SheetDefinition<{
       payload: {

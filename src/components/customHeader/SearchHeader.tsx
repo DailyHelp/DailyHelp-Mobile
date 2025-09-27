@@ -13,6 +13,8 @@ const SearchHeader: ICustomHeader<NativeStackHeaderProps, ColorKeys> = ({
   value,
   onFocus,
   onBlur,
+  onRightIconPress,
+  onLeftIconPress,
 }) => {
   return (
     <Container
@@ -28,9 +30,12 @@ const SearchHeader: ICustomHeader<NativeStackHeaderProps, ColorKeys> = ({
         type="text"
         placeholder={placeHolder}
         onChangeText={onSearch}
+        onLeftIconPress={onLeftIconPress}
+        onRightIconPress={onRightIconPress}
         value={value}
         onFocus={onFocus}
         onBlur={onBlur}
+        rightIcon={value && <Assets.SearchClose width={scale(20)} />}
         leftIcon={
           <Assets.InActiveSearch
             width={scale(20)}

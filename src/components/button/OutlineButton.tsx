@@ -1,40 +1,11 @@
-import {Button} from 'react-native-paper';
-import {customFontSize, fonts} from '../../shared/themes/Typography';
-import {verticalScale} from '../../shared/Scaling';
+import { ColorKeys } from '../../shared/themes/Index';
+import MainButton from './MainButton';
 
-const OutlineButton: ICustomButton = ({
-  children,
-  title,
-  icon,
-  onPress,
-  loading,
-  disabled,
-  color = '#017441',
-  width,
-  borderColor = '#D6DBE7',
-  borderStyle,
-  moveIconRight,
-  height = 45,
-}) => {
+const OutlineButton: ICustomButton<ColorKeys> = props => {
   return (
-    <Button
-      mode="outlined"
-      icon={icon}
-      loading={loading}
-      disabled={disabled}
-      onPress={onPress}
-      style={{borderRadius: 10, borderColor, width, borderStyle}}
-      textColor={color}
-      contentStyle={{
-        flexDirection: moveIconRight ? 'row-reverse' : 'row',
-        height,
-      }}
-      labelStyle={{
-        fontSize: customFontSize.sm,
-        fontFamily: fonts.GeistBold,
-      }}>
-      {children || title}
-    </Button>
+    <MainButton mode="outlined" {...props}>
+      {props.children}
+    </MainButton>
   );
 };
 export default OutlineButton;

@@ -4,11 +4,16 @@ import {UserTypes} from '../Constant';
 import {makeAutoObservable} from 'mobx';
 import {PhotoIdentifier} from '@react-native-camera-roll/camera-roll';
 import {ActionSheetLoader} from '../ActionSheets';
+import {SaveLocationDto} from '../../screens/app/user/home/dto/savedLocationDto';
 
 class AppStore {
   route?: Route = (AppStorage.find('routes') as Route) || 'authentication';
 
-  currentLocation!: SaveLocationDto;
+  currentLocation: SaveLocationDto = new SaveLocationDto();
+
+  isIdentityVerified?: boolean = AppStorage.find(
+    'isIdentityVerified',
+  ) as boolean;
 
   isAuthenticated = AppStorage.find('isAuthenticated') || false;
 
@@ -44,8 +49,10 @@ class AppStore {
     this.selfiePhoto = selfie;
   }
 
-  setSelectedGalleryImages(item: PhotoIdentifier) {
-    this.selectedGalleryImages.push(item.node.image.uri);
+  setSelectedGalleryImages(item: PhotoIdentifier | string) {
+    if (typeof item === 'string') {
+      this.selectedGalleryImages.push(item);
+    } else this.selectedGalleryImages.push(item.node.image.uri);
   }
 
   setUnselectGalleryImages(uri: string) {
@@ -73,7 +80,7 @@ class AppStore {
       this.currentLocation = new SaveLocationDto();
       return;
     }
-    this.currentLocation = {...this.currentLocation, ...location};
+    this.currentLocation = {...(this.currentLocation || new SaveLocationDto()), ...location};
   }
 
   setIsAuthenticated(dto: boolean, userType = this.user_types) {
@@ -84,17 +91,17 @@ class AppStore {
       this.user_types = userType;
       AppStorage.save('userType', userType);
     } else {
-      AppStorage.removeSelected([
-        'access_token',
-        'userType',
-        'routes',
-        'phone',
-      ]);
+      AppStorage.removeAll()
     }
   }
 
   setActionSheetLoaders(dto: ActionSheetLoader) {
     this.actionSheetLoading = {...this.actionSheetLoading, ...dto};
+  }
+
+  setIsIdentityVerified(dto: boolean) {
+    AppStorage.save('isIdentityVerified', dto);
+    this.isIdentityVerified = dto;
   }
 
   setOffer(dto: {amount?: string; description?: string; attachments?: string}) {

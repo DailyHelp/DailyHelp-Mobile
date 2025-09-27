@@ -12,11 +12,12 @@ import utils from '../../../shared/Utils';
 import homeService from '../user/home/services/Home.service';
 import {observer} from 'mobx-react-lite';
 import {appStore} from '../../../shared/stores/appStore';
+import {SaveLocationDto} from '../user/home/dto/savedLocationDto';
 
 const Address: IAddress = ({navigation, route}) => {
   utils.useHideBottomTab(navigation);
 
-  const {data, defaultLoading, setAsDefault, deleteLoading, onDelete} =
+  const {data, defaultLoading, setAsDefault, deleteLoading, onDelete, refetch} =
     homeService.useSavedLocation();
 
   React.useEffect(() => {
@@ -68,8 +69,10 @@ const Address: IAddress = ({navigation, route}) => {
 
       <CustomFlatList<SaveLocationDto>
         data={data}
+        refreshing={defaultLoading || deleteLoading}
+        onRefresh={refetch}
         renderItem={({item}) => (
-          <Results name={item.description} uuid={item.uuid} />
+          <Results name={item.description!} uuid={item.uuid!} />
         )}
         keyExtractor={(item, ind) => ind.toString()}
       />

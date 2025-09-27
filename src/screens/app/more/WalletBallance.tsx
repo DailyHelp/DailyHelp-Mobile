@@ -7,9 +7,12 @@ import utils from '../../../shared/Utils';
 import CustomFlatList from '../../../components/CustomFlatList';
 import TransactionCard from './components/TransactionCard';
 import {SheetManager} from 'react-native-actions-sheet';
+import moreService from './services/More.service';
 
 const WalletBalance: IWalletBalance = ({navigation}) => {
   utils.useHideBottomTab(navigation);
+
+  const {wallet} = moreService.useWalletBalance();
 
   return (
     <View style={{flex: 1}}>
@@ -25,9 +28,12 @@ const WalletBalance: IWalletBalance = ({navigation}) => {
           Available balance
         </Typography>
         <Typography fontWeight="bold" size="m3d" currency>
-          32000
+          {wallet?.data[0].availableBalance || 0}
         </Typography>
-        <MainButton onPress={() => SheetManager.show('FundWallet')}>
+        <MainButton
+          onPress={() => {
+            SheetManager.show('FundWallet');
+          }}>
           Fund wallet
         </MainButton>
       </View>

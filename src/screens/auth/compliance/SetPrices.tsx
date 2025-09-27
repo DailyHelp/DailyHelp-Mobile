@@ -1,14 +1,18 @@
 import {Formik} from 'formik';
+import React from 'react';
 import {ISetPrices} from '../../../@types/routes';
-import AttachmentContainer from '../../../components/AttachmentContainer';
 import MainButton from '../../../components/button/MainButton';
 import Container from '../../../components/container/Index';
 import CustomInput from '../../../components/customInput/Index';
 import ScreenHeader from '../../../components/ScreenHeader';
 import Typography from '../../../components/Typography';
-import React from 'react';
+import homeService from '../../app/user/home/services/Home.service';
+import SavePriceDTO from '../../app/user/home/dto/SavePriceDto';
+import createValidator from 'class-validator-formik';
 
 const SetPrices: ISetPrices = ({navigation}) => {
+  const {savePrice, isPending} = homeService.useSavePrice();
+
   return (
     <Container padding={10} flex={1} gap={20}>
       <ScreenHeader
@@ -16,12 +20,22 @@ const SetPrices: ISetPrices = ({navigation}) => {
         description="Let clients know what you charge. Be fair and realistic, you can always negotiate later."
       />
 
-      <Formik initialValues={{}} onSubmit={() => {}}>
-        {({}) => (
+      <Formik
+        initialValues={new SavePriceDTO()}
+        validate={createValidator(SavePriceDTO)}
+        onSubmit={data =>
+          savePrice(data, {onSuccess: () => navigation.navigate('SetPrices')})
+        }>
+        {({values, handleChange, handleSubmit}) => (
           <Container width={'full'} height={600} justifyContent="space-between">
             <Container width={'full'} gap={30}>
               <Container width={'full'} gap={3}>
-                <CustomInput label="Starting price" placeholder="₦ 5,000" />
+                <CustomInput
+                  label="Starting price"
+                  placeholder="₦ 5,000"
+                  value={values.offerStartingPrice?.toString() || '0'}
+                  onChangeText={handleChange('offerStartingPrice')}
+                />
 
                 <Typography color="gray" size="sm">
                   This is your starting rate for all offers.
@@ -32,6 +46,8 @@ const SetPrices: ISetPrices = ({navigation}) => {
                 <CustomInput
                   label="Minimum Acceptable Offer"
                   placeholder="₦ 0.00"
+                  value={values.minimumOfferPrice?.toString() || '0'}
+                  onChangeText={handleChange('minimumOfferPrice')}
                 />
                 <Typography color="gray" size="sm">
                   This is the lowest amount you can accept for a job.
@@ -39,7 +55,11 @@ const SetPrices: ISetPrices = ({navigation}) => {
               </Container>
             </Container>
 
-            <MainButton onPress={() => navigation.navigate('SetPrices')}>
+            <MainButton
+              loading={isPending}
+              onPress={() => {
+                console.log(values);
+              }}>
               Save
             </MainButton>
           </Container>

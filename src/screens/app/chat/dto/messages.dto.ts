@@ -1,11 +1,11 @@
-interface Message {
+interface Message<U = any> {
   uuid: string;
   createdAt: string;
   updatedAt: string;
   deletedAt: null;
   conversation: string;
-  from: string;
-  to: string;
+  from: U;
+  to: U;
   message: string;
   type: string;
   status: string;
@@ -14,7 +14,7 @@ interface Message {
     createdAt: string;
     updatedAt: string;
     deletedAt: null;
-    price: string;
+    price: number;
     description: string;
     pictures: string;
     status: string;

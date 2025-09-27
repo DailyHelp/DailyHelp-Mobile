@@ -1,14 +1,15 @@
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {IHomeRoute} from '../../@types/routes';
-import AppStorage from '../../shared/AppStorage';
-import {UserTypes} from '../../shared/Constant';
-import {UserHomeStackRoutes} from './UserRoutes';
-import {HelperHomeStackRoutes} from './HelperRoutes';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { observer } from 'mobx-react-lite';
+import { IHomeRoute } from '../../@types/routes';
+import { UserTypes } from '../../shared/Constant';
+import { appStore } from '../../shared/stores/appStore';
+import { HelperHomeStackRoutes } from './HelperRoutes';
+import { UserHomeStackRoutes } from './UserRoutes';
 
 const HomeStack = createNativeStackNavigator<IHomeRoute>();
 
 const HomeRoute: Props = () => {
-  const userType = AppStorage.find('userType');
+  const userType = appStore.user_types;
   const isUser = userType === UserTypes.CUSTOMER;
 
   const route = isUser ? UserHomeStackRoutes : HelperHomeStackRoutes;
@@ -36,4 +37,4 @@ const HomeRoute: Props = () => {
   );
 };
 
-export default HomeRoute;
+export default observer(HomeRoute);

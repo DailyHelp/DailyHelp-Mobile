@@ -3,6 +3,10 @@ export enum ERRORS {
   UNAUTHENTICATED = 'unauthenticated',
 }
 
+export enum EVENTS {
+  SWITCH_USER = 'SWITCH_USER',
+}
+
 export enum ApiMethods {
   POST = 'POST',
   GET = 'GET',

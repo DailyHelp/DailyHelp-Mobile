@@ -1,11 +1,11 @@
-import { observer } from 'mobx-react-lite';
+import {observer} from 'mobx-react-lite';
 import React from 'react';
-import { Animated } from 'react-native';
-import { Text } from 'react-native-paper';
-import { IVerifying } from '../../../@types/routes';
+import {Animated} from 'react-native';
+import {Text} from 'react-native-paper';
+import {IVerifying} from '../../../@types/routes';
 import Assets from '../../../assets/Assets';
 import Container from '../../../components/container/Index';
-import { customFontSize, fonts } from '../../../shared/themes/Typography';
+import {customFontSize, fonts} from '../../../shared/themes/Typography';
 import authService from '../services/Auth.service';
 
 const Verifying: IVerifying = ({route, navigation}) => {
@@ -14,10 +14,16 @@ const Verifying: IVerifying = ({route, navigation}) => {
   authService.useVerifyIdentity(
     route.params!,
     () => {
-      navigation.navigate('VerificationResponse', {status: 'success'});
+      navigation.navigate('VerificationResponse', {
+        status: 'success',
+        userType: route.params?.userType!,
+      });
     },
     () => {
-      navigation.navigate('VerificationResponse', {status: 'failed'});
+      navigation.navigate('VerificationResponse', {
+        status: 'failed',
+        userType: route.params?.userType!,
+      });
     },
   );
 
@@ -42,7 +48,7 @@ const Verifying: IVerifying = ({route, navigation}) => {
       gap={20}
       justifyContent="center"
       alignItems="center"
-      width={'95'}
+      width={'full'}
       height={600}>
       <Animated.View style={{transform: [{rotate: spin}]}}>
         <Assets.HourGlass />

@@ -39,14 +39,7 @@ const Search: ISearch = ({navigation}) => {
     isLoading: providerLoading,
     setQuery,
     query,
-  } = homeService.useCustomerDashboard();
-
-  React.useEffect(() => {
-    setQuery(q => ({
-      ...q,
-      filter: {...q?.filter, isSearchPage: true},
-    }));
-  }, []);
+  } = homeService.useCustomerDashboard(true);
 
   const {data, isLoading, error} = homeService.useAllCategories();
 
@@ -89,6 +82,9 @@ const Search: ISearch = ({navigation}) => {
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
         value={search}
+        onRightIconPress={() => {
+          setQuery(q => ({...q, filter: {...q?.filter, search: ''}}));
+        }}
         onSearch={search => {
           setQuery(q => ({...q, filter: {...q?.filter, search}}));
         }}
@@ -123,7 +119,7 @@ const Search: ISearch = ({navigation}) => {
       ) : (
         <Container flexDirection="row" alignSelf="center" gap={10} padding={20}>
           <ActivityIndicator color="#02CA71" size={13} />
-          <Typography>Searching...</Typography>
+          <Typography fontWeight="italics">Searching...</Typography>
         </Container>
       )}
 

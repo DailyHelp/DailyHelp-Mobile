@@ -7,6 +7,7 @@ import React from 'react';
 import {SheetManager} from 'react-native-actions-sheet';
 import {IHomeRoute} from '../../../../../@types/routes';
 import AppStorage from '../../../../../shared/AppStorage';
+import {ReasonType} from '../../../../../shared/Constant';
 import CatchError from '../../../../../shared/errors/catchError';
 import HomeApi from '../../../../../shared/services/Home';
 import utils from '../../../../../shared/Utils';
@@ -15,7 +16,6 @@ import SendOfferDto from '../../jobs/dto/SendOffer.dto';
 import ProvidersDto from '../dto/providersDto';
 import SaveHelpersDetailsDTO from '../dto/SaveHelpersDetailsDto';
 import SavePriceDTO from '../dto/SavePriceDto';
-import {ReasonType} from '../../../../../shared/Constant';
 
 class HomeService extends HomeApi {
   private static instance: HomeService;
@@ -41,7 +41,7 @@ class HomeService extends HomeApi {
   useSavedLocation() {
     const query = useQueryClient();
 
-    const {data, isLoading, error} = useQuery({
+    const {data, isLoading, error, refetch} = useQuery({
       queryKey: ['get-saved-location'],
       queryFn: async () => await this.getSavedLocation(),
       enabled: Boolean(AppStorage.find('isAuthenticated')),
@@ -51,7 +51,7 @@ class HomeService extends HomeApi {
       mutationKey: ['default-location'],
       mutationFn: async (uuid: string) => await this.setDefaultLocation(uuid),
       onSuccess: data => {
-        query.invalidateQueries({queryKey: ['customer']});
+        query.invalidateQueries({queryKey: ['user']});
         SheetManager.hide('AddressOptions');
       },
       onError: err => new CatchError(err, true),
@@ -61,7 +61,7 @@ class HomeService extends HomeApi {
       mutationKey: ['delete-location'],
       mutationFn: async (uuid: string) => await this.deleteLocation(uuid),
       onSuccess: () => {
-        query.invalidateQueries({queryKey: ['customer']});
+        query.invalidateQueries({queryKey: ['user', 'get-saved-location']});
         SheetManager.hide('AddressOptions');
       },
       onError: err => new CatchError(err, true),
@@ -75,23 +75,23 @@ class HomeService extends HomeApi {
       defaultLoading,
       onDelete,
       deleteLoading,
+      refetch,
     };
   }
 
   useLocation(search?: string) {
     const query = useQueryClient();
 
-    const [locations, setLocations] =
-      React.useState<Partial<SaveLocationDto>[]>();
+    const [locations, setLocations] = React.useState<Partial<SaveLocation>[]>();
 
     const {mutateAsync: saveLocation, isPending} = useMutation({
       mutationKey: ['save-location'],
-      mutationFn: async (body: Partial<SaveLocationDto>) => {
+      mutationFn: async (body: Partial<SaveLocation>) => {
         return await this.saveLocation(body);
       },
       onError: error => new CatchError(error, true),
       onSuccess: data => {
-        query.invalidateQueries({queryKey: ['customer']});
+        query.invalidateQueries({queryKey: ['user']});
         SheetManager.hide('HomeAddress');
       },
     });
@@ -107,8 +107,8 @@ class HomeService extends HomeApi {
     }, [search]);
 
     const onSubmit = async (
-      values: Partial<SaveLocationDto>,
-      callBack?: (data: Partial<SaveLocationDto>) => void,
+      values: Partial<SaveLocation>,
+      callBack?: (data: Partial<SaveLocation>) => void,
     ) => {
       const payload = {
         ...values,
@@ -125,7 +125,17 @@ class HomeService extends HomeApi {
     };
 
     const currentLocation = async (
-      onSuccess?: (formattedAddress: string) => void,
+      onSuccess?: (
+        formattedAddress: string,
+        metadata?: {
+          address: string;
+          state?: string;
+          lga?: string;
+          lat: number;
+          lng: number;
+          description?: string;
+        },
+      ) => void,
     ) => {
       try {
         const hasPermission = await utils.requestLocationPermission();
@@ -153,6 +163,8 @@ class HomeService extends HomeApi {
         const {latitude, longitude} = position.coords;
 
         let formattedAddress = '';
+        let metadata;
+
         try {
           const data = await this.getAddressFromLatLng(latitude, longitude);
 
@@ -161,14 +173,16 @@ class HomeService extends HomeApi {
           const components = data?.address_components || [];
           const {address, state, lga} = utils.extractAddressParts(components);
 
-          onSubmit({
+          metadata = {
             address,
             state,
             lga,
             lat: latitude,
             lng: longitude,
             description: data.formatted_address,
-          });
+          };
+
+          onSubmit(metadata);
 
           formattedAddress = data.formatted_address;
         } catch (geocodeError) {
@@ -180,7 +194,7 @@ class HomeService extends HomeApi {
         }
 
         // 4. Success callback
-        if (onSuccess) onSuccess(formattedAddress);
+        if (onSuccess) onSuccess(formattedAddress, metadata);
       } catch (error) {
         console.error('Location process failed:', error);
       }
@@ -188,7 +202,7 @@ class HomeService extends HomeApi {
 
     const searchLocation = async (
       addressQuery: string,
-    ): Promise<Partial<SaveLocationDto>[]> => {
+    ): Promise<Partial<SaveLocation>[]> => {
       const res = await this.getAddressFromSearch(addressQuery, 'ng', true);
 
       return res.map((item: AddressPrediction) => {
@@ -226,14 +240,29 @@ class HomeService extends HomeApi {
     };
   }
 
-  useCustomerDashboard() {
+  useCustomerDashboard(isSearchPage = false) {
     const {query, setQuery, appendPageData, data, fetchMore} =
       utils.usePagination<ProvidersQuery, ProvidersDto>({
         pagination: {
           limit: 10,
           orderBy: 'DESC',
         },
+        filter: {
+          isSearchPage,
+        },
       });
+
+    React.useEffect(() => {
+      setQuery({
+        pagination: {
+          limit: 10,
+          orderBy: 'DESC',
+        },
+        filter: {
+          isSearchPage,
+        },
+      });
+    }, []);
 
     const {
       data: dashboard,
@@ -243,6 +272,8 @@ class HomeService extends HomeApi {
       queryKey: ['customer-dashboard', query],
       queryFn: async () => await this.getCustomerDashboard(query!),
       enabled: Boolean(AppStorage.find('isAuthenticated')),
+      refetchOnMount: true,
+      retryOnMount: true,
     });
 
     React.useEffect(() => {
@@ -310,7 +341,7 @@ class HomeService extends HomeApi {
         return await this.sendOffer(router.params?.uuid!, body);
       },
       onSuccess: (data, body) => {
-        client.invalidateQueries({queryKey: ['conversation']});
+        client.invalidateQueries({queryKey: ['conversation', 'conversations']});
       },
       onError: error => new CatchError(error, true),
     });
@@ -386,15 +417,22 @@ class HomeService extends HomeApi {
     };
   }
 
-  useCustomerReviews(uuid: string, query?: PaginationQuery) {
-    const {appendPageData, data, fetchMore} = utils.usePagination(query);
+  useCustomerReviews(uuid: string) {
+    const {query, appendPageData, data, fetchMore} = utils.usePagination<
+      Reviews[]
+    >({
+      pagination: {
+        limit: 10,
+        orderBy: 'DESC',
+      },
+    });
 
     const {
       data: reviews,
       isLoading,
       error,
     } = useQuery({
-      queryKey: ['reviews', query, uuid],
+      queryKey: ['reviews', uuid],
       queryFn: async () => await this.getReviews(uuid, query),
       enabled: Boolean(AppStorage.find('isAuthenticated')),
     });
@@ -418,12 +456,26 @@ class HomeService extends HomeApi {
 
   useListCategory(type: ReasonType) {
     const {data, isLoading, error} = useQuery({
-      queryKey: ['customer', type],
+      queryKey: ['category', type],
       queryFn: async () => await this.getReason(type),
       enabled: Boolean(AppStorage.find('isAuthenticated')),
     });
 
     return {data: data?.data, isLoading, error};
+  }
+
+  useUpload() {
+    const {isLoading, upload} = utils.useUploadImage();
+
+    const onSubmit = async (uri: string) => {
+      try {
+        return upload(uri, 'compliance');
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    return {onSubmit, uploading: isLoading};
   }
 }
 

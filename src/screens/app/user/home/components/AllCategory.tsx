@@ -159,6 +159,7 @@ const CategoryActionSheet = React.forwardRef<
           {(filteredCategories || []).map(
             ({image, name, subCategories, uuid}: InternalCategory) => {
               const isCollapse: boolean = openSections.includes(name);
+console.log(subCategories);
 
               return (
                 <View key={uuid || name}>

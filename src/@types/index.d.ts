@@ -18,13 +18,14 @@ declare module '@env' {
   export const CLOUDINARY_URL: string;
 }
 
-type ApiResponse<T, P extends boolean = false> = {
+type ApiResponse<T, P extends boolean = false, E = {}> = {
   status: boolean;
   statusCode: number;
   data: T;
   message: string;
   error: boolean;
-} & (P extends true ? {pagination: Pagination} : {});
+} & E &
+  (P extends true ? {pagination: Pagination} : {});
 
 type Route = 'authentication' | 'app';
 

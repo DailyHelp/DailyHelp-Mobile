@@ -13,7 +13,7 @@ const Reviews: IReviews = ({navigation, route}) => {
   const rate = 5;
   const {query} = utils.usePagination();
 
-  const {data} = homeService.useCustomerReviews(route.params.uuid, query);
+  const {data} = homeService.useCustomerReviews(route.params.uuid);
 
   const rating_categories = [
     {

@@ -1,5 +1,6 @@
 import ActionSheet, {
   ActionSheetRef,
+  SheetManager,
   SheetProps,
 } from 'react-native-actions-sheet';
 import Container from '../../container/Index';
@@ -16,7 +17,6 @@ const CustomSelect = React.forwardRef<
     <ActionSheet
       ref={ref}
       closeOnPressBack={false}
-      gestureEnabled={true}
       containerStyle={{
         borderTopLeftRadius: 16,
         borderTopRightRadius: 16,
@@ -26,7 +26,7 @@ const CustomSelect = React.forwardRef<
         <View
           style={{
             flexDirection: 'row',
-            gap: 10,
+            gap: 100,
           }}>
           <TouchableOpacity onPress={() => {}}>
             <Typography fontWeight="bold" size="md" color="gray">
@@ -43,8 +43,15 @@ const CustomSelect = React.forwardRef<
           keyExtractor={(item, ind) => `${item.label + ind.toString()}`}
           renderItem={({item}) => (
             <Container width={'full'}>
-              <TouchableOpacity>
-                <Typography>{item.label}</Typography>
+              <TouchableOpacity
+                onPress={() => {
+                  SheetManager.hide('CustomSelect', {
+                    payload: {label: item.label, value: item.value, data: item},
+                  });
+                }}>
+                <Typography size="md" color="darkGray" padding={10}>
+                  {item.label}
+                </Typography>
               </TouchableOpacity>
             </Container>
           )}

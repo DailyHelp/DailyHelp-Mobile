@@ -11,88 +11,115 @@ import EmptyState from '../../../components/EmptyState';
 import Typography from '../../../components/Typography';
 import {scale, verticalScale} from '../../../shared/Scaling';
 import chatService from './services/Chat.service';
+import utils from '../../../shared/Utils';
+import {observer} from 'mobx-react-lite';
+import {appStore} from '../../../shared/stores/appStore';
+import {UserTypes} from '../../../shared/Constant';
 
 const Chat: IChat = ({navigation}) => {
   const {data, setQuery, isLoading, fetchMore, refetch} =
     chatService.useGetConversations();
+
+  const user_type = appStore.user_types as UserTypes;
+
+  const {showBottomTab} = utils.useHideBottomTab(navigation);
+
+  React.useEffect(() => {
+    showBottomTab();
+  }, []);
 
   const empty = () => (
     <EmptyState
       navigation={navigation}
       header="No Offers yet!"
       title="Send an offer to start chatting with"
-      subTitle=" service providers"
+      subTitle="service providers"
     />
   );
 
   const renderItem = React.useCallback(
-    ({item, index}: {item: Conversation; index: number}) => (
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate('ChatBox', {
-            uuid: item.conversationId!,
-            title: `${item.spFirstname} ${item.spLastname}`,
-          });
-        }}>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            padding: scale(15),
-            backgroundColor: 'white',
+    ({item, index}: {item: Conversation; index: number}) => {
+      let name = `${item.spFirstname} ${item.spLastname}`;
+
+      if (user_type === UserTypes.PROVIDER) {
+        name = `${item.rqFirstname} ${item.rqLastname}`;
+      }
+
+      return (
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('ChatBox', {
+              uuid: item.conversationId!,
+              title: name,
+              cancellationChances: item.cancellationChances,
+              badge: item.spTier,
+            });
           }}>
-          <View style={{flexDirection: 'row', gap: 10}}>
-            <CustomAvatar
-              showBadge={false}
-              data={{image: Assets.Worker1}}
-              avatarSize={50}
-            />
-
-            <View style={{flexDirection: 'column', gap: 5}}>
-              <Typography fontWeight="bold" size="md">
-                {item.spFirstname} {item.spLastname}
-              </Typography>
-              <View style={{flexDirection: 'row', gap: 9}}>
-                <Assets.DoubleGreenMark style={{marginTop: verticalScale(4)}} />
-                <Typography color="gray" limit={20}>
-                  {item.offerDescription}
-                </Typography>
-                <View
-                  style={{
-                    width: scale(7),
-                    height: verticalScale(7),
-                    backgroundColor: '#757C91',
-                    borderRadius: 100,
-                    marginTop: verticalScale(7),
-                  }}
-                />
-                <Typography color="gray" limit={23}>
-                  {dayjs(item.createdAt).format('h:mm')}
-                </Typography>
-              </View>
-            </View>
-          </View>
-
           <View
             style={{
               flexDirection: 'row',
-              gap: 3,
-              alignItems: 'center',
               justifyContent: 'space-between',
+              padding: scale(15),
+              backgroundColor: 'white',
             }}>
-            <Assets.GreenMark style={{marginTop: verticalScale(3)}} />
-            <Typography
-              currency
-              color="lightGreen"
-              fontWeight="medium"
-              fontType="CabinetGrotesk">
-              {item.offerPrice}
-            </Typography>
+            <View style={{flexDirection: 'row', gap: 10}}>
+              <CustomAvatar
+                data={{image: Assets.Worker1, badge: item.spTier}}
+                avatarSize={50}
+              />
+
+              <View style={{flexDirection: 'column', gap: 5}}>
+                <Typography fontWeight="bold" size="md">
+                  {name}
+                </Typography>
+                <View style={{flexDirection: 'row', gap: 9}}>
+                  {item.iReadLastMessage ? (
+                    <Assets.DoubleGreenMark
+                      style={{marginTop: verticalScale(4)}}
+                    />
+                  ) : (
+                    <Assets.GreenMark style={{marginTop: verticalScale(4)}} />
+                  )}
+                  <Typography color="gray" limit={20}>
+                    {item.offerDescription}
+                  </Typography>
+                  <View
+                    style={{
+                      width: scale(7),
+                      height: verticalScale(7),
+                      backgroundColor: '#757C91',
+                      borderRadius: 100,
+                      marginTop: verticalScale(7),
+                    }}
+                  />
+                  <Typography color="gray" limit={23}>
+                    {dayjs(item.createdAt).format('h:mm')}
+                  </Typography>
+                </View>
+              </View>
+            </View>
+
+            <View
+              style={{
+                flexDirection: 'row',
+                gap: 3,
+                alignItems: 'center',
+                justifyContent: 'space-between',
+              }}>
+              <Assets.GreenMark style={{marginTop: verticalScale(3)}} />
+              <Typography
+                currency
+                color="lightGreen"
+                fontWeight="medium"
+                fontType="CabinetGrotesk">
+                {item.offerPrice}
+              </Typography>
+            </View>
           </View>
-        </View>
-        <Divider style={{width: '80%', alignSelf: 'flex-end'}} />
-      </TouchableOpacity>
-    ),
+          <Divider style={{width: '80%', alignSelf: 'flex-end'}} />
+        </TouchableOpacity>
+      );
+    },
     [],
   );
 
@@ -125,4 +152,4 @@ const Chat: IChat = ({navigation}) => {
     </View>
   );
 };
-export default Chat;
+export default observer(Chat);

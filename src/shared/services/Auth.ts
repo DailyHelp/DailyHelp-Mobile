@@ -1,12 +1,13 @@
+import UpdatePasswordDto from '../../screens/app/more/dto/UpdatePassword.dto';
 import ForgotPasswordDTO, {
   ForgotPasswordResponse,
   ResetPasswordDTO,
 } from '../../screens/auth/dto/ForgotPasswordDto';
-import LoginDto, { LoginResponse } from '../../screens/auth/dto/LoginDto';
+import LoginDto, {LoginResponse} from '../../screens/auth/dto/LoginDto';
 import RegisterDTO, {
   RegisterResponseDTO,
 } from '../../screens/auth/dto/RegisterDto';
-import { VerifyIdentityDTO } from '../../screens/auth/dto/VerifyIdentityDto';
+import {VerifyIdentityDTO} from '../../screens/auth/dto/VerifyIdentityDto';
 import VerifyOtpDTO, {
   SendOtpDTO,
   VerifyOtpResponse,
@@ -130,6 +131,19 @@ export default class AuthApi extends Http {
       body,
     });
     const data = await this.handleResponse<ForgotPasswordResponse>(res);
+
+    this.success(data?.message);
+
+    return data;
+  }
+
+  protected async changePassword(body: UpdatePasswordDto) {
+    const res = await this.fetchHandler({
+      path: Endpoints.changePassword,
+      body,
+      method: 'POST',
+    });
+    const data = await this.handleResponse<any>(res);
 
     this.success(data?.message);
 

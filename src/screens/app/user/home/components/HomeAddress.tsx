@@ -27,11 +27,19 @@ const HomeAddress = React.forwardRef<
   const {currentLocation, locations} = homeService.useLocation(search);
 
   const getLocation = () => {
-    currentLocation(address => {
-      SheetManager.hide('HomeAddress', {
-        payload: {address},
-      });
-    });
+    try {
+      if (typeof currentLocation === 'function') {
+        currentLocation((address, metadata) => {
+          SheetManager.hide('HomeAddress', {
+            payload: {address: address, ...metadata},
+          });
+        });
+      } else {
+        console.error('currentLocation is not a function:', currentLocation);
+      }
+    } catch (error) {
+      console.error('Error in getLocation:', error);
+    }
   };
 
   return (

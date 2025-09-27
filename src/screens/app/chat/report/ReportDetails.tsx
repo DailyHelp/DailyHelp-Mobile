@@ -1,28 +1,27 @@
-import {IReport} from '../../../../@types/routes';
-import Typography from '../../../../components/Typography';
-import {scale} from '../../../../shared/Scaling';
-import CustomInput from '../../../../components/customInput/Index';
+import {useState} from 'react';
 import {
-  launchImageLibrary,
-  launchCamera,
-  ImageLibraryOptions,
-  ImagePickerResponse,
-  MediaType,
-} from 'react-native-image-picker';
-import {
-  View,
+  Alert,
+  Dimensions,
+  Image,
+  ScrollView,
+  StyleSheet,
   Text,
   TouchableOpacity,
-  StyleSheet,
-  Alert,
-  ScrollView,
-  Image,
-  Dimensions,
-  ImageSourcePropType,
+  View,
 } from 'react-native';
-import {useState} from 'react';
+import {
+  ImageLibraryOptions,
+  ImagePickerResponse,
+  launchImageLibrary,
+  MediaType,
+} from 'react-native-image-picker';
+import {IReport} from '../../../../@types/routes';
 import Assets from '../../../../assets/Assets';
 import MainButton from '../../../../components/button/MainButton';
+import Container from '../../../../components/container/Index';
+import CustomInput from '../../../../components/customInput/Index';
+import Typography from '../../../../components/Typography';
+import {scale} from '../../../../shared/Scaling';
 interface Attachment {
   id: string;
   uri: string;
@@ -31,9 +30,17 @@ interface Attachment {
   size?: number;
 }
 
-const ReportDetails: IReport =  ({navigation}) => {
+const ReportDetails: IReport = ({
+  isPending,
+  onAttachment,
+  onChangeDescription,
+  handleSubmit,
+  values,
+}) => {
   const {width} = Dimensions.get('window');
   const [attachments, setAttachments] = useState<Attachment[]>([]);
+
+  console.log(values);
 
   const showAttachmentOptions = (): void => {
     Alert.alert(
@@ -103,62 +110,79 @@ const ReportDetails: IReport =  ({navigation}) => {
   };
 
   return (
-    <View style={{backgroundColor: 'white', width}}>
-      <View style={{flexDirection: 'column', gap: 10, padding: scale(20)}}>
-        <Typography fontWeight="bold" size="xlg">
-          Provide more details
-        </Typography>
-        <Typography fontWeight="regular" size="md" color="#757C91">
-          Tell us more about what happened
-        </Typography>
-      </View>
+    <View
+      style={{
+        backgroundColor: 'white',
+        width,
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+      }}>
+      <Container>
+        <View style={{flexDirection: 'column', gap: 10, padding: scale(20)}}>
+          <Typography fontWeight="bold" size="xlg">
+            Provide more details
+          </Typography>
+          <Typography fontWeight="regular" size="md" color="gray">
+            Tell us more about what happened
+          </Typography>
+        </View>
 
-      <View style={{flexDirection: 'column', gap: 10, padding: scale(20)}}>
-        <CustomInput
-          label="Description"
-          height={150}
-          multiline
-          numberOfLines={6}
-          placeholder="Describe in detail what happened."
-        />
-      </View>
-      <View style={styles.container}>
-        <Typography
-          color="#757C91"
-          size="md"
-          fontWeight="semibold"
-          paddingBottom={8}>
-          Include attachments{' '}
-          <Typography color="#A9AFC2"> (Optional)</Typography>
-        </Typography>
+        <View style={{flexDirection: 'column', gap: 10, padding: scale(20)}}>
+          <CustomInput
+            label="Description"
+            height={150}
+            multiline
+            numberOfLines={6}
+            value={values?.description}
+            placeholder="Describe in detail what happened."
+            onChangeText={onChangeDescription}
+          />
+        </View>
+        <View style={styles.container}>
+          <Typography
+            color="darkGray"
+            size="md"
+            fontWeight="semibold"
+            paddingBottom={8}>
+            Include attachments{' '}
+            <Typography color="gray"> (Optional)</Typography>
+          </Typography>
 
-        <TouchableOpacity
-          style={styles.attachmentButton}
-          onPress={showAttachmentOptions}
-          activeOpacity={0.7}>
-          <View style={styles.attachmentButtonContent}>
-            <Assets.Icon />
-          </View>
-        </TouchableOpacity>
+          <Container flexDirection="row" gap={8}>
+            <TouchableOpacity
+              style={styles.attachmentButton}
+              onPress={showAttachmentOptions}
+              activeOpacity={0.7}>
+              <View style={styles.attachmentButtonContent}>
+                <Assets.Icon />
+              </View>
+            </TouchableOpacity>
 
-        {attachments.length > 0 && (
-          <ScrollView  horizontal={true}
-          showsHorizontalScrollIndicator={false}
-          style={{height: 100}}
-          contentContainerStyle={{flexDirection: 'row', gap: 10}}>
-            {attachments.map(renderAttachment)}
-          </ScrollView>
-        )}
-      </View>
+            {attachments.length > 0 && (
+              <ScrollView
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}
+                style={{height: 100}}
+                contentContainerStyle={{flexDirection: 'row', gap: 10}}>
+                {attachments.map(renderAttachment)}
+              </ScrollView>
+            )}
+          </Container>
+        </View>
+      </Container>
       <View
         style={{
-          position: 'absolute',
-          bottom: 50,
-          left: 0,
-          right: 0,
           paddingHorizontal: 16,
+          marginBottom: 20,
         }}>
-        <MainButton onPress={() => navigation.navigate('ReportSumitted')}> Submit report</MainButton>
+        <MainButton
+          loading={isPending}
+          onPress={() => {
+            onAttachment?.(JSON.stringify(attachments.map(p => p.uri)));
+            handleSubmit?.();
+          }}>
+          Submit report
+        </MainButton>
       </View>
     </View>
   );
@@ -167,11 +191,13 @@ const styles = StyleSheet.create({
   container: {
     padding: 16,
     backgroundColor: '#fff',
+    flexDirection: 'column',
+    gap: 10,
   },
 
   attachmentButton: {
-    width: 120,
-    height: 120,
+    width: 95,
+    height: 95,
     backgroundColor: '#F3F4F6',
     borderRadius: 12,
     borderWidth: 2,
@@ -191,7 +217,6 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     marginBottom: 8,
-    position:"relative"
   },
   attachmentContent: {
     flex: 1,
@@ -231,15 +256,15 @@ const styles = StyleSheet.create({
   },
   removeButton: {
     width: 24,
-    position:'absolute',
+    position: 'absolute',
     height: 24,
     borderRadius: 12,
     backgroundColor: '#EF4444',
     justifyContent: 'flex-start',
     alignItems: 'center',
     marginLeft: 8,
-    top:3,
-    left:75,
+    top: 3,
+    left: 75,
   },
   removeButtonText: {
     color: '#fff',

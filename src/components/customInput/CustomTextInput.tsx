@@ -1,4 +1,4 @@
-import {View} from 'react-native';
+import {TouchableOpacity, View} from 'react-native';
 import {Text, TextInput} from 'react-native-paper';
 import IconF from 'react-native-vector-icons/Feather';
 import {verticalScale} from '../../shared/Scaling';
@@ -26,6 +26,9 @@ const CustomTextInput: IInput = ({
   error,
   keyboardType = 'default',
   wordCount,
+  onLeftIconPress,
+  onRightIconPress,
+  disabled,
 }) => {
   let fontFamily = fonts.GeistBold;
   if (fontWeight === 'regular' || multiline) fontFamily = fonts.GeistRegular;
@@ -63,13 +66,14 @@ const CustomTextInput: IInput = ({
           borderColor: hasError ? '#FF5A5F' : 'transparent',
         }}>
         {leftIcon && (
-          <View
+          <TouchableOpacity
+            onPress={onLeftIconPress}
             style={{
               paddingTop: verticalScale(20),
               paddingLeft: verticalScale(10),
             }}>
             {leftIcon}
-          </View>
+          </TouchableOpacity>
         )}
 
         <TextInput
@@ -83,6 +87,7 @@ const CustomTextInput: IInput = ({
           activeOutlineColor="transparent"
           placeholder={placeholder}
           textColor={multiline ? Colors.gray : '#3B4152'}
+          disabled={disabled}
           placeholderTextColor={'#A9AFC2'}
           maxLength={maxLength}
           cursorColor="#A9AFC2"
@@ -104,6 +109,16 @@ const CustomTextInput: IInput = ({
           onChangeText={onChangeText}
           error={hasError}
         />
+        {rightIcon && (
+          <TouchableOpacity
+            onPress={onRightIconPress}
+            style={{
+              paddingTop: verticalScale(20),
+              paddingRight: verticalScale(20),
+            }}>
+            {rightIcon}
+          </TouchableOpacity>
+        )}
       </View>
 
       {hasError && (

@@ -1,21 +1,30 @@
+import {observer} from 'mobx-react-lite';
+import React from 'react';
 import {ScrollView, TouchableOpacity, View} from 'react-native';
 import {IMore} from '../../../@types/routes';
 import Assets from '../../../assets/Assets';
-import Typography from '../../../components/Typography';
-import {scale, verticalScale} from '../../../shared/Scaling';
-import UserDataCard from './components/UserDataCard';
-import AppStorage from '../../../shared/AppStorage';
-import React from 'react';
-import {UserTypes} from '../../../shared/Constant';
 import Container from '../../../components/container/Index';
+import Typography from '../../../components/Typography';
+import {UserTypes} from '../../../shared/Constant';
+import {scale, verticalScale} from '../../../shared/Scaling';
+import {appStore} from '../../../shared/stores/appStore';
+import UserDataCard from './components/UserDataCard';
 import moreService from './services/More.service';
 
 const More: IMore = ({navigation}) => {
-  const isVerified = AppStorage.find('isIdentityVerified');
+  const {onSwitch, isLoading, data} = moreService.useSwitchUser();
 
-  const {onSwitch, isLoading} = moreService.useSwitchUser();
+  const user_type = appStore.user_types as UserTypes;
 
-  const user_type = AppStorage.find('userType') as UserTypes;
+  const isVerified = appStore.isIdentityVerified;
+  const providerOnboarded = data?.data.user?.onboardingCompleted;
+
+  if (
+    !data?.data.user?.onboardingCompleted &&
+    user_type === UserTypes.PROVIDER
+  ) {
+    appStore.setIsIdentityVerified(false);
+  }
 
   const menus = [
     {
@@ -141,7 +150,11 @@ const More: IMore = ({navigation}) => {
               </View>
 
               <TouchableOpacity
-                onPress={() => navigation.navigate('PersonalInformation')}>
+                onPress={() =>
+                  navigation.navigate(
+                    !providerOnboarded ? 'Address' : 'PersonalInformation',
+                  )
+                }>
                 <View
                   style={{
                     padding: scale(10),
@@ -204,4 +217,4 @@ const More: IMore = ({navigation}) => {
     </View>
   );
 };
-export default React.memo(More);
+export default React.memo(observer(More));

@@ -1,13 +1,14 @@
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {IChatRoute} from '../../@types/routes';
-import AppStorage from '../../shared/AppStorage';
-import {UserTypes} from '../../shared/Constant';
-import {UserChatStackRoutes} from './UserRoutes';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { observer } from 'mobx-react-lite';
+import { IChatRoute } from '../../@types/routes';
+import { UserTypes } from '../../shared/Constant';
+import { appStore } from '../../shared/stores/appStore';
+import { UserChatStackRoutes } from './UserRoutes';
 
 const ChatStack = createNativeStackNavigator<IChatRoute>();
 
 const ChatRoute: Props = () => {
-  const userType = AppStorage.find('userType');
+  const userType = appStore.user_types;
   const isUser = userType === UserTypes.CUSTOMER;
 
   const route = isUser ? UserChatStackRoutes : UserChatStackRoutes;
@@ -35,4 +36,4 @@ const ChatRoute: Props = () => {
   );
 };
 
-export default ChatRoute;
+export default observer(ChatRoute);

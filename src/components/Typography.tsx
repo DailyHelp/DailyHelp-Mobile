@@ -25,6 +25,7 @@ const Typography: ITypography<ColorKeys> = ({
   currency,
   backgroundColor,
   paddingBottom,
+  currencyType = '₦',
   width,
 }) => {
   const [ellipse, setEllipse] = React.useState(limit);
@@ -69,7 +70,8 @@ const Typography: ITypography<ColorKeys> = ({
 
   if (ellipse) children = utils.ellipseText(children as string, ellipse);
 
-  if (currency) children = `₦${utils.numberWithCommas(children as number)}`;
+  if (currency)
+    children = `${currencyType} ${utils.numberWithCommas(children as number)}`;
 
   if (showMore || readMoreConstant)
     return (

@@ -20,6 +20,7 @@ import VerifyOtpDTO, {
   SendOtpDTO,
   VerifyOtpResponse,
 } from '../dto/VerifyOtpDto';
+import UpdatePasswordDto from '../../app/more/dto/UpdatePassword.dto';
 
 export class AuthService extends AuthApi {
   private static instance: AuthService;
@@ -290,6 +291,21 @@ export class AuthService extends AuthApi {
       onSubmit,
       onResetPassword,
       resetLoading,
+    };
+  }
+
+  useChangePassword() {
+    const {mutate, isPending} = useMutation({
+      mutationKey: ['change-password'],
+      mutationFn: async (body: UpdatePasswordDto) => {
+        return await this.changePassword(body);
+      },
+      onError: error => new CatchError(error, true),
+    });
+
+    return {
+      mutate,
+      isPending,
     };
   }
 

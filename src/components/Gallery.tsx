@@ -1,15 +1,15 @@
-import { PhotoIdentifier } from '@react-native-camera-roll/camera-roll';
-import { observer } from 'mobx-react-lite';
+import {PhotoIdentifier} from '@react-native-camera-roll/camera-roll';
+import {observer} from 'mobx-react-lite';
 import React from 'react';
-import { ActivityIndicator, Image, TouchableOpacity, View } from 'react-native';
+import {ActivityIndicator, Image, TouchableOpacity, View} from 'react-native';
 import ActionSheet, {
   ActionSheetRef,
   FlatList,
 } from 'react-native-actions-sheet';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Video from 'react-native-video';
-import { scale, verticalScale } from '../shared/Scaling';
-import { appStore } from '../shared/stores/appStore';
+import {scale, verticalScale} from '../shared/Scaling';
+import {appStore} from '../shared/stores/appStore';
 import utils from '../shared/Utils';
 import Typography from './Typography';
 
@@ -72,7 +72,20 @@ const Gallery = React.forwardRef<ActionSheetRef, IGallery>(
 
       return (
         <TouchableOpacity
-          onPress={() => appStore.toggleGalleryImageSelection(uri)}
+          onPress={() => {
+            if (
+              props.maxSelect &&
+              props.maxSelect <= appStore.selectedGalleryImages.length
+            ) {
+              return;
+            }
+
+            if (props.selectImages) {
+              props.selectImages?.(uri);
+            } else {
+              appStore.toggleGalleryImageSelection(uri);
+            }
+          }}
           style={{margin: 1, position: 'relative'}}>
           {isVideo && isPlaying ? (
             <Video

@@ -1,3 +1,4 @@
+import ReportConversationDto from '../../screens/app/chat/dto/report-conversation.dto';
 import Endpoints from './Endpoints';
 import Http from './Http';
 
@@ -17,15 +18,20 @@ export default class ChatApi extends Http {
       path: Endpoints.getSingleConversation(uuid, query),
       method: 'GET',
     });
-    const data = await this.handleResponse<Message[]>(res);
+    const data = await this.handleResponse<
+      Message[],
+      true,
+      {canSendOffer?: boolean}
+    >(res);
 
     return data;
   }
 
-  protected async sendMessage(uuid: string) {
+  protected async sendMessage(uuid: string, message: string) {
     const res = await this.fetchHandler({
       path: Endpoints.sendMessage(uuid),
       method: 'POST',
+      body: {message},
     });
     const data = await this.handleResponse<any>(res);
 
@@ -34,10 +40,11 @@ export default class ChatApi extends Http {
     return data;
   }
 
-  protected async reportConversation(uuid: string) {
+  protected async reportConversation(body: ReportConversationDto) {
     const res = await this.fetchHandler({
-      path: Endpoints.reportConversation(uuid),
+      path: Endpoints.reportConversation(body.uuid!),
       method: 'POST',
+      body,
     });
     const data = await this.handleResponse<any>(res);
 

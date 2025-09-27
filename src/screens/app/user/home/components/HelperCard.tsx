@@ -79,7 +79,7 @@ const HelperCard: IHelperCard<ProvidersDto> = ({data, mode, horizontal}) => {
                   alignItems: 'center',
                 }}>
                 <Typography
-                  limit={15}
+                  limit={12}
                   fontWeight="bold"
                   size="md"
                   color="gray"

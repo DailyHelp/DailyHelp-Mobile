@@ -322,21 +322,25 @@ class Utils {
     const upload = async (
       uri: string,
       preset: 'compliance' | 'profile' | 'offer' = 'profile',
-    ) => {
+    ): Promise<string> => {
       try {
         setLoading(true);
 
         if (Platform.OS === 'android' && !uri?.includes('://')) {
           uri = `file://${uri}`;
         }
-        const data = await http.imageUpload(uri);
 
-        if (data.error) new ThrowError(data.error);
+        const data = await http.imageUpload(uri, preset);
 
-        setLoading(false);
+        if (data.error) {
+          throw new ThrowError(data.error);
+        }
+
         return data.secure_url;
       } catch (error) {
         new CatchError(error).handleLog();
+        throw error;
+      } finally {
         setLoading(false);
       }
     };
@@ -403,24 +407,18 @@ class Utils {
   }
 
   usePagination<F = PaginationQuery, D = any>(props?: PaginationQuery<F>) {
-    const [query, setQuery] = React.useState<PaginationQuery<F> | undefined>(
-      props,
-    );
+    const defaultQuery: PaginationQuery<F> = {
+      ...props,
+      pagination: {
+        limit: props?.pagination?.limit ?? 10,
+        page: props?.pagination?.page ?? 1,
+        orderBy: props?.pagination?.orderBy ?? 'DESC',
+      },
+    };
+
+    const [query, setQuery] = React.useState<PaginationQuery<F>>(defaultQuery);
     const [data, setData] = React.useState<D[]>([]);
 
-    // Set default states
-    React.useEffect(() => {
-      let cache = query!;
-      if (!cache?.pagination?.limit) {
-        cache = {...cache, pagination: {...cache.pagination, limit: 10}};
-      }
-      if (!cache?.pagination?.page) {
-        cache = {...cache, pagination: {...cache.pagination, page: 1}};
-      }
-      setQuery(cache);
-    }, []);
-
-    // Call this after fetching new data for a page
     const appendPageData = (newData: D[]) => {
       setData(prev => [...prev!, ...newData]);
     };
@@ -431,10 +429,10 @@ class Utils {
 
     const fetchMore = () => {
       setQuery(prev => ({
-        ...prev!,
+        ...prev,
         pagination: {
-          ...prev!.pagination,
-          page: (prev?.pagination?.page ?? 1) + 1,
+          ...prev.pagination,
+          page: prev.pagination?.page! + 1,
         },
       }));
     };

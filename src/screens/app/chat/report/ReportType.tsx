@@ -25,7 +25,7 @@ const ReportType: IReport = ({scroll}) => {
         <Typography fontWeight="bold" size="xlg">
           Report service provider
         </Typography>
-        <Typography fontWeight="regular" size="md" color="#757C91">
+        <Typography fontWeight="regular" size="md" color="gray">
           Help us understand what went wrong. Your report stays private.
         </Typography>
       </View>
@@ -38,7 +38,7 @@ const ReportType: IReport = ({scroll}) => {
                 flexDirection: 'row',
                 justifyContent: 'space-between',
               }}>
-              <Typography size="md" color="#3B4152">
+              <Typography size="md" color="darkGray">
                 {title}
               </Typography>
 

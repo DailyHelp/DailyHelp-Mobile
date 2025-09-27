@@ -1,12 +1,12 @@
-import { observer } from 'mobx-react-lite';
+import {observer} from 'mobx-react-lite';
 import React from 'react';
-import { BackHandler } from 'react-native';
-import { IVerifyIdentity } from '../../@types/routes';
+import {BackHandler} from 'react-native';
+import {IVerifyIdentity} from '../../@types/routes';
 import Assets from '../../assets/Assets';
 import MainButton from '../../components/button/MainButton';
 import Container from '../../components/container/Index';
 import Typography from '../../components/Typography';
-import { appStore } from '../../shared/stores/appStore';
+import {appStore} from '../../shared/stores/appStore';
 
 const VerifyIdentity: IVerifyIdentity = ({route, navigation}) => {
   React.useEffect(() => {
@@ -41,7 +41,11 @@ const VerifyIdentity: IVerifyIdentity = ({route, navigation}) => {
           <Container gap={20} marginTop={20} alignItems="center">
             <MainButton
               width={'95'}
-              onPress={() => navigation.navigate('PersonalInformation')}>
+              onPress={() => {
+                navigation.navigate('PersonalInformation', {
+                  userType: route.params?.userType,
+                });
+              }}>
               Verify identity
             </MainButton>
             <MainButton

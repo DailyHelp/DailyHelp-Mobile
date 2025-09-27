@@ -39,7 +39,7 @@ const MainButton: ICustomButton<ColorKeys> = ({
 
   if (mode === 'outlined') {
     enableButtonColor = 'transparent';
-    borderWidth = 0.5;
+    borderWidth = 0.2;
   }
 
   if (disableButtonColor === 'transparent') {

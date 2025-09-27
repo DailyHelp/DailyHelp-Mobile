@@ -1,14 +1,15 @@
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {IJobsRoute} from '../../@types/routes';
-import AppStorage from '../../shared/AppStorage';
-import {UserTypes} from '../../shared/Constant';
-import {UserJobsStackRoutes} from './UserRoutes';
-import {HelperJobStackRoutes} from './HelperRoutes';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { observer } from 'mobx-react-lite';
+import { IJobsRoute } from '../../@types/routes';
+import { UserTypes } from '../../shared/Constant';
+import { HelperJobStackRoutes } from './HelperRoutes';
+import { UserJobsStackRoutes } from './UserRoutes';
+import { appStore } from '../../shared/stores/appStore';
 
 const JobsStack = createNativeStackNavigator<IJobsRoute>();
 
 const JobsRoute: Props = () => {
-  const userType = AppStorage.find('userType');
+  const userType = appStore.user_types;
   const isUser = userType === UserTypes.CUSTOMER;
 
   const route = isUser ? UserJobsStackRoutes : HelperJobStackRoutes;
@@ -36,4 +37,4 @@ const JobsRoute: Props = () => {
   );
 };
 
-export default JobsRoute;
+export default observer(JobsRoute);

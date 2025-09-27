@@ -1,22 +1,20 @@
-class SaveLocationDto {
-  constructor(dat?: Partial<SaveLocationDto>) {
-    this.address = data.address || 'Set Location';
-  }
-  lat: number;
-  lng: number;
+type SaveLocation = {
+  lat?: number;
+  lng?: number;
   address: string;
-  lga: string;
-  state: string;
-  description: string;
+  lga?: string;
+  state?: string;
+  description?: string;
   default?: boolean;
-  uuid: string;
-}
-
-type DataType = {
-  locations: SaveLocationDto[];
+  uuid?: string;
+  utilityBill?: string;
 };
 
-type GetSavedLocationResponse = SaveLocationDto[];
+type DataType = {
+  locations: SaveLocation[];
+};
+
+type GetSavedLocationResponse = SaveLocation[];
 
 type GoogleLocationResponse = {
   address_components: {

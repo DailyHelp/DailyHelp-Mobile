@@ -107,13 +107,31 @@ import BronzeRatings from './svg/bronzeRating.svg';
 import SilverRatings from './svg/silverRating.svg';
 import GoldRatings from './svg/goldRating.svg';
 import PlatinumRatings from './svg/platinumRating.svg';
+import SearchClose from './svg/search_close.svg';
+import ChatOfferInactive from './svg/chatOfferInactive.svg';
+import ProfileEyeActive from './svg/profile_eye_active.svg';
+import ProfileSuitcaseActive from './svg/profile_suitcase_active.svg';
+import ProfileSupportActive from './svg/profile_support_active.svg';
+import ProfilePadLock from './svg/profile_padlock.svg';
+import ProfileStartInactive from './svg/profile_star_inactive.svg';
+import ProfileSuitcaseInActive from './svg/profile_suitcase_inactive.svg';
+import ProfileSearchInActive from './svg/profile_search_inactive.svg';
 
 export default {
+  ProfileEyeActive,
+  ProfileSuitcaseInActive,
+  ProfileSearchInActive,
+  ProfileStartInactive,
+  ProfileSuitcaseActive,
+  ProfilePadLock,
+  ProfileSupportActive,
   EngageTime,
   BronzeRatings,
+  ChatOfferInactive,
+  SearchClose,
   SilverRatings,
   GoldRatings,
-  PlatinumRatings,  
+  PlatinumRatings,
   Time,
   Delete,
   Support,

@@ -1,10 +1,10 @@
 import {View} from 'react-native';
-import Assets from '../../../../../assets/Assets';
-import MainButton from '../../../../../components/button/MainButton';
-import OutlineButton from '../../../../../components/button/OutlineButton';
-import Typography from '../../../../../components/Typography';
+import Assets from '../../../../../../assets/Assets';
+import MainButton from '../../../../../../components/button/MainButton';
+import OutlineButton from '../../../../../../components/button/OutlineButton';
+import Typography from '../../../../../../components/Typography';
 
-const OfferAction: IMessages = props => {
+const UserAction: IMessages = props => {
   const {data} = props;
 
   const type = data?.type.toLowerCase();
@@ -66,4 +66,4 @@ const OfferAction: IMessages = props => {
     </View>
   );
 };
-export default OfferAction;
+export default UserAction;

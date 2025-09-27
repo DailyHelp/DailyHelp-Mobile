@@ -12,12 +12,22 @@ const CustomSelectInput: IInput = ({
   placeholder,
   onChangeText,
   width,
+  disabled,
+  onSelect: parentSelect,
 }) => {
-  const [select, setSelect] = React.useState('');
+  const [select, setSelect] = React.useState<string>();
 
-  const onSelect = (data?: {label?: string; value: string}) => {
-    setSelect(data?.label!);
-    onChangeText?.(data?.value!);
+  React.useEffect(() => {
+    setSelect(value!);
+  }, [value]);
+
+  const onSelect = (data?: {label?: string; value: string; data?: string}) => {
+    const displayValue = data?.label || data?.data;
+    const actualValue = data?.value || data?.data;
+
+    setSelect(displayValue);
+    onChangeText?.(actualValue!);
+    parentSelect?.(data);
   };
 
   return (
@@ -27,24 +37,31 @@ const CustomSelectInput: IInput = ({
       </Typography>
       <TouchableOpacity
         onPress={() => {
-          SheetManager.show('CustomSelect', {
-            payload: {label, data: options},
-            onClose: onSelect,
-          });
+          try {
+            if (disabled) return;
+
+            SheetManager.show('CustomSelect', {
+              payload: {label, data: options},
+              onClose: onSelect,
+            });
+          } catch (error) {
+            console.error('CustomSelectInput - Error opening modal:', error);
+          }
         }}>
         <Container
           height={50}
           backgroundColor="lightGrey"
           flexDirection="row"
-          justifyContent='space-between'
+          justifyContent="space-between"
           gap={5}
+          padding={10}
           borderRadius={10}
           alignItems="center">
           <Typography
             size="sm"
             fontWeight="bold"
-            color={value ? 'lightGrey' : 'gray'}>
-            {select || placeholder}
+            color={value || select ? 'black' : 'gray'}>
+            {value || select || placeholder}
           </Typography>
           <IconF name="chevron-down" size={20} color="#757C91" />
         </Container>

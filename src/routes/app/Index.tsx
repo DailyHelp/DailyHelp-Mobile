@@ -1,15 +1,16 @@
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {IAppRoute} from '../../@types/routes';
-import AppStorage from '../../shared/AppStorage';
-import {UserTypes} from '../../shared/Constant';
-import {scale, verticalScale} from '../../shared/Scaling';
-import {UserAppStackRoutes} from './UserRoutes';
-import {HelperAppStackRoutes} from './HelperRoutes';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { observer } from 'mobx-react-lite';
+import { IAppRoute } from '../../@types/routes';
+import { UserTypes } from '../../shared/Constant';
+import { scale, verticalScale } from '../../shared/Scaling';
+import { appStore } from '../../shared/stores/appStore';
+import { HelperAppStackRoutes } from './HelperRoutes';
+import { UserAppStackRoutes } from './UserRoutes';
 
 const AppStack = createBottomTabNavigator<IAppRoute>();
 
 const AppRouter: Props = () => {
-  const userType = AppStorage.find('userType');
+  const userType = appStore.user_types;
   const isUser = userType === UserTypes.CUSTOMER;
 
   const route = isUser ? UserAppStackRoutes : HelperAppStackRoutes;
@@ -43,4 +44,4 @@ const AppRouter: Props = () => {
   );
 };
 
-export default AppRouter;
+export default observer(AppRouter);

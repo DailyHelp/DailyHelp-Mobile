@@ -34,7 +34,7 @@ const ReportSubmitted: IReportSubmitted = ({navigation}) => {
           Report Submitted
         </Typography>
 
-        <Typography color="gray" size="sm" marginTop={12}>
+        <Typography color="gray" size="sm" marginTop={12} textAlign="center">
           Thanks for letting us know. We'll review this and take appropriate
           action. Your safety is our top priority.
         </Typography>

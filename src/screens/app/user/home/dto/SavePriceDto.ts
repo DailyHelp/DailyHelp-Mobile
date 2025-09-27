@@ -2,8 +2,8 @@ import {IsNumber} from 'class-validator';
 
 export default class SavePriceDTO {
   @IsNumber()
-  offerStartingPrice!: number;
+  offerStartingPrice: number = 0;
 
   @IsNumber()
-  minimumOfferPrice!: number;
+  minimumOfferPrice: number = 0;
 }

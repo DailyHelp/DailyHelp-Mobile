@@ -41,46 +41,47 @@ export default class JobsApi extends Http {
     return data;
   }
 
-  protected async getCustomerConversation(query: PaginationQuery) {
-    const res = await this.fetchHandler({
-      path: Endpoints.getConversations(query),
-      method: 'GET',
-    });
-    const data = await this.handleResponse<any>(res);
-
-    this.success(data?.message);
-
-    return data;
-  }
-
-  protected async sendCustomerMessage(uuid: string) {
-    const res = await this.fetchHandler({
-      path: Endpoints.sendMessage(uuid),
-      method: 'POST',
-    });
-    const data = await this.handleResponse<any>(res);
-
-    this.success(data?.message);
-
-    return data;
-  }
-
-  protected async customerReportConversation(uuid: string) {
-    const res = await this.fetchHandler({
-      path: Endpoints.reportConversation(uuid),
-      method: 'POST',
-    });
-    const data = await this.handleResponse<any>(res);
-
-    this.success(data?.message);
-
-    return data;
-  }
-
-  protected async getSimilarProviders(uuid: string) {
+  protected async getSimilarProvider(uuid: string) {
     const res = await this.fetchHandler({
       path: Endpoints.getSimilarProducts(uuid),
       method: 'GET',
+    });
+    const data = await this.handleResponse<SimilarJobDto[]>(res);
+
+    this.success(data?.message);
+
+    return data;
+  }
+
+  protected async cancelJob(dto: DeclineOfferDto) {
+    const res = await this.fetchHandler({
+      path: Endpoints.cancelJob(dto.uuid!),
+      method: 'POST',
+      body: dto,
+    });
+    const data = await this.handleResponse<any>(res);
+
+    this.success(data?.message);
+
+    return data;
+  }
+
+  protected async startJob(uuid: string) {
+    const res = await this.fetchHandler({
+      path: Endpoints.startJob(uuid!),
+      method: 'POST',
+    });
+    const data = await this.handleResponse<any>(res);
+
+    this.success(data?.message);
+
+    return data;
+  }
+
+  protected async endJob(uuid: string) {
+    const res = await this.fetchHandler({
+      path: Endpoints.endJob(uuid!),
+      method: 'POST',
     });
     const data = await this.handleResponse<any>(res);
 

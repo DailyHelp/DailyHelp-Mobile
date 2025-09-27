@@ -11,6 +11,8 @@ import MainButton from '../button/MainButton';
 import CustomInput from '../customInput/Index';
 import Typography from '../Typography';
 import homeService from '../../screens/app/user/home/services/Home.service';
+import Container from '../container/Index';
+import Assets from '../../assets/Assets';
 
 const DeclineOffer: IOffer<Message> = ({
   isVisible,
@@ -19,6 +21,7 @@ const DeclineOffer: IOffer<Message> = ({
   onDeclineOffer,
   isLoading,
   data,
+  cancellationChances,
 }) => {
   const [id, setId] = React.useState<number | undefined>();
   const [reason, setReason] = React.useState('');
@@ -41,110 +44,121 @@ const DeclineOffer: IOffer<Message> = ({
   return (
     <Portal>
       <Modal visible={isVisible}>
-        <View
-          style={{
-            flexDirection: 'column',
-            gap: 10,
-            width: '95%',
-            alignSelf: 'center',
-            position: 'relative',
-          }}>
-          <View
-            style={{
-              backgroundColor: 'transparent',
-              paddingTop: 30,
-              borderRadius: 13,
-              width: '95%',
-              alignSelf: 'center',
-            }}>
+        <Container
+          flexDirection="column"
+          gap={10}
+          width={'95'}
+          alignSelf="center"
+          position="absolute">
+          <Container
+            backgroundColor={
+              cancellationChances! > 0 ? 'orange' : 'transparent'
+            }
+            borderRadius={20}
+            width={'full'}>
+            {cancellationChances! > 0 && (
+              <Container
+                flexDirection="row"
+                gap={3}
+                alignItems="center"
+                justifyContent="center">
+                <Typography color="white" textAlign="center" marginTop={14}>
+                  {cancellationChances} cancellations/declines remaining.
+                </Typography>
+              </Container>
+            )}
             <View
               style={{
-                backgroundColor: 'white',
-                paddingBottom: verticalScale(16),
-                borderRadius: 15,
-                flexDirection: 'column',
-                gap: 15,
+                backgroundColor: 'transparent',
+                paddingTop: 16,
+                borderRadius: 13,
+                width: '100%',
+                alignSelf: 'center',
               }}>
               <View
                 style={{
-                  flexDirection: 'row',
-                  gap: scale(90),
-                  justifyContent: 'flex-end',
-                  padding: 10,
+                  backgroundColor: 'white',
+                  paddingBottom: verticalScale(16),
+                  borderRadius: 15,
+                  flexDirection: 'column',
+                  gap: 15,
                 }}>
                 <View
                   style={{
                     flexDirection: 'row',
-                    justifyContent: 'center',
-                    gap: 6,
+                    gap: scale(90),
+                    justifyContent: 'flex-end',
+                    alignItems: 'center',
+                    padding: 10,
                   }}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'center',
+                      gap: 6,
+                    }}>
+                    <Typography
+                      textAlign="center"
+                      fontWeight="medium"
+                      size="md"
+                      color="danger"
+                      marginTop={verticalScale(13)}>
+                      {utils.capitalizeFirstLetter(type)} offer
+                    </Typography>
+                  </View>
+
                   <Icon
                     onPress={() => onClose?.()}
                     name="close"
-                    color={'#F0443A'}
+                    color={'#757C91'}
                     size={15}
+                    style={{marginTop: verticalScale(5)}}
                   />
-                  <Typography
-                    textAlign="center"
-                    fontWeight="medium"
-                    size="md"
-                    color="danger">
-                    {utils.capitalizeFirstLetter(type)} offer
-                  </Typography>
                 </View>
 
-                <Icon
-                  onPress={() => onClose?.()}
-                  name="close"
-                  color={'#757C91'}
-                  size={15}
-                />
-              </View>
+                <View style={{width: '90%', alignSelf: 'center'}}>
+                  <CustomInput
+                    type="text"
+                    label="Reason"
+                    multiline
+                    numberOfLines={3}
+                    height={80}
+                    placeholder="Explain briefly why you're canceling this offer"
+                    value={reason}
+                    onChangeText={setReason}
+                  />
+                </View>
 
-              <View style={{width: '90%', alignSelf: 'center'}}>
-                <CustomInput
-                  type="text"
-                  label="Reason"
-                  multiline
-                  numberOfLines={3}
-                  height={80}
-                  placeholder="Explain briefly why you're canceling this offer"
-                  value={reason}
-                  onChangeText={setReason}
-                />
-              </View>
-
-              <View
-                style={{
-                  flexDirection: 'row',
-                  gap: 7,
-                  flexWrap: 'wrap',
-                  padding: 10,
-                }}>
-                {reasons?.map(({name}, key) => (
-                  <TouchableOpacity
-                    onPress={() => setId(key)}
-                    key={key}
-                    style={{
-                      backgroundColor: id == key ? '#F9FFEB' : '#F9F9FB',
-                      padding: 10,
-                      borderRadius: 100,
-                      borderWidth: id === key ? 1 : 0,
-                      borderColor: id === key ? '#95D21A' : '',
-                    }}>
-                    <Typography>{name}</Typography>
-                  </TouchableOpacity>
-                ))}
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    gap: 7,
+                    flexWrap: 'wrap',
+                    padding: 10,
+                  }}>
+                  {reasons?.map(({name}, key) => (
+                    <TouchableOpacity
+                      onPress={() => setId(key)}
+                      key={key}
+                      style={{
+                        backgroundColor: id == key ? '#F9FFEB' : '#F9F9FB',
+                        padding: 10,
+                        borderRadius: 100,
+                        borderWidth: id === key ? 1 : 0,
+                        borderColor: id === key ? '#95D21A' : '',
+                      }}>
+                      <Typography>{name}</Typography>
+                    </TouchableOpacity>
+                  ))}
+                </View>
               </View>
             </View>
-          </View>
+          </Container>
 
           <View style={{padding: scale(10)}}>
             <MainButton
               loading={isLoading}
               onPress={() => {
-                console.log(data);
-
                 onDeclineOffer?.(
                   reason,
                   reasons?.[id!].name!,
@@ -154,7 +168,7 @@ const DeclineOffer: IOffer<Message> = ({
               {utils.capitalizeFirstLetter(type)} offer
             </MainButton>
           </View>
-        </View>
+        </Container>
       </Modal>
     </Portal>
   );

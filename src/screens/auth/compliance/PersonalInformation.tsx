@@ -38,7 +38,12 @@ const PersonalInformation: IPersonalInformation = ({navigation, route}) => {
             lastname: AppStorage.find('lastname') as string,
           })
         }
-        onSubmit={data => navigation.navigate('IdentityVerification', data)}
+        onSubmit={data => {
+          navigation.navigate('IdentityVerification', {
+            ...data,
+            userType: route.params?.userType,
+          });
+        }}
         validateOnChange={false}
         validateOnBlur={false}
         validate={createValidator(PersonalInformationDTO)}>

@@ -30,13 +30,15 @@ const JobsCard: IJobsCard<UserTypes, JobsDto> = ({
           <CustomAvatar
             avatarSize={50}
             badgeSize={20}
-            data={{image: Assets.Worker1}}
+            data={{image: data?.serviceProvider.picture}}
           />
 
           <Container flexDirection="column" gap={3}>
-            <Typography size="m2d">Amarachi Eze</Typography>
+            <Typography size="m2d">
+              {data?.serviceProvider.lastname} {data?.serviceProvider.firstname}
+            </Typography>
             <Typography size="md" color="gray">
-              Hair stylist
+              {data?.serviceProvider.primaryJobRole?.name}
             </Typography>
           </Container>
         </Container>

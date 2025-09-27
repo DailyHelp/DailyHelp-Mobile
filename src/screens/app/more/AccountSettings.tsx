@@ -12,6 +12,7 @@ import {observer} from 'mobx-react-lite';
 import React from 'react';
 import {appStore} from '../../../shared/stores/appStore';
 import homeService from '../user/home/services/Home.service';
+import dayjs from 'dayjs';
 
 const AccountSettings: IAccountSettings = ({navigation}) => {
   utils.useHideBottomTab(navigation);
@@ -40,7 +41,7 @@ const AccountSettings: IAccountSettings = ({navigation}) => {
     },
     {
       title: 'Date of birth',
-      value: '23 May, 2000',
+      value: dayjs(data?.dob).format('DD MMM, YYYY'),
     },
 
     {
@@ -82,7 +83,7 @@ const AccountSettings: IAccountSettings = ({navigation}) => {
           <CustomAvatar
             avatarSize={150}
             showBadge={false}
-            data={{image: Assets.Worker1}}
+            data={{image: data?.picture}}
           />
         </View>
 

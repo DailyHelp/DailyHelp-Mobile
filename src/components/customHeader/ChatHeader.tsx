@@ -10,6 +10,8 @@ import {ColorKeys} from '../../shared/themes/Index';
 const ChatHeader: ICustomHeader<NativeStackHeaderProps, ColorKeys> = ({
   title,
   navigation,
+  image,
+  badge,
 }) => {
   return (
     <Container
@@ -26,7 +28,10 @@ const ChatHeader: ICustomHeader<NativeStackHeaderProps, ColorKeys> = ({
       </Container>
 
       <Container flexDirection="row" gap={7}>
-        <CustomAvatar avatarSize={40} data={{image: Assets.Worker1}} />
+        <CustomAvatar
+          avatarSize={40}
+          data={{image: image || Assets.Worker1, badge}}
+        />
         <Container>
           <Typography fontWeight="bold" size="md">
             {title}

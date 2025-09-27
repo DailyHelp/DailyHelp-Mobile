@@ -12,13 +12,14 @@ import chatService from './services/Chat.service';
 import AppStorage from '../../../shared/AppStorage';
 import {UserTypes} from '../../../shared/Constant';
 import {observer} from 'mobx-react-lite';
+import UserDTO from '../../auth/dto/UserDto';
 
 const ChatBox: IChatBox = ({navigation, route}) => {
   utils.useHideBottomTab(navigation);
   const userType = AppStorage.find('userType') as UserTypes;
   const isCustomer = userType === UserTypes.CUSTOMER;
 
-  const {data, isLoading} = chatService.useGetSingleConversation(
+  const {data, isLoading, canSendOffer} = chatService.useGetSingleConversation(
     route.params?.uuid!,
   );
 
@@ -31,9 +32,11 @@ const ChatBox: IChatBox = ({navigation, route}) => {
     sendingPending,
   } = homeService.useOffer();
 
+  const {data: message, isPending, mutate} = chatService.useSendMessage();
+
   const [offer, setOffer] = React.useState<{
     visible: boolean;
-    type: 'send' | 'cancel' | 'decline';
+    type: 'send' | 'cancel' | 'decline' | 'edit';
     data?: Message;
   }>({
     visible: false,
@@ -41,16 +44,25 @@ const ChatBox: IChatBox = ({navigation, route}) => {
   });
   const userId = AppStorage.find('user_id');
 
-  const accept = () => {
-    navigation.navigate('Checkout');
+  const accept = (data?: Message) => {
+    navigation.navigate('Checkout', {
+      conversationUuid: data?.uuid!,
+      offerUuid: data?.offer.uuid!,
+      purpose: 'JOB_OFFER',
+      price: data?.offer.price!,
+    });
   };
 
   const decline = (data?: Message) => {
     setOffer({...offer, visible: true, data});
   };
 
-  const edit = (data?: Message) => {
+  const send = (data?: Message) => {
     setOffer({...offer, visible: true, type: 'send', data});
+  };
+
+  const edit = (data?: Message) => {
+    setOffer({...offer, visible: true, type: 'edit', data});
   };
 
   const cancel = (data?: Message) => {
@@ -59,7 +71,7 @@ const ChatBox: IChatBox = ({navigation, route}) => {
 
   const close = () => setOffer({...offer, visible: false});
 
-  const renderItem = React.useCallback(({item}: {item: Message}) => {
+  const renderItem = React.useCallback(({item}: {item: Message<UserDTO>}) => {
     return (
       <Messages
         accept={accept}
@@ -67,7 +79,7 @@ const ChatBox: IChatBox = ({navigation, route}) => {
         cancel={cancel}
         edit={edit}
         data={item}
-        position={userId === item.from ? 'right' : 'left'}
+        position={userId === item.from.uuid ? 'right' : 'left'}
       />
     );
   }, []);
@@ -90,22 +102,31 @@ const ChatBox: IChatBox = ({navigation, route}) => {
           renderItem={renderItem}
           keyExtractor={(item, ind) => item.uuid + ind.toString()}
         />
-        <ChatFooter navigation={navigation} />
+        <ChatFooter
+          navigation={navigation}
+          canSendOffer={canSendOffer!}
+          sendOffer={edit}
+          sendMessage={msg => mutate({message: msg, uuid: route.params?.uuid!})}
+          data={{uuid: route.params?.uuid!}}
+          isSending={isPending}
+        />
 
         <Offer
           type={offer.type}
           isVisible={offer.visible}
+          isAvailable={true}
           onClose={close}
           data={offer.data}
+          cancellationChances={route.params?.cancellationChances}
           isLoading={declinePending || cancelPending}
           onDeclineOffer={(reason, reasonCategory, uuid) => {
             if (offer.type === 'decline') {
-              declineOffer({reason, reasonCategory, uuid});
+              declineOffer({reason, reasonCategory, uuid}, {onSuccess: close});
             } else {
-              cancelOffer({reason, reasonCategory, uuid});
+              cancelOffer({reason, reasonCategory, uuid}, {onSuccess: close});
             }
           }}
-          onSendOffer={() => {}}
+          onSendOffer={data => onSendOffer(data, close)}
         />
       </Container>
     </React.Fragment>

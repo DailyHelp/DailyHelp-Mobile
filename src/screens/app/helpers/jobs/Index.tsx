@@ -5,15 +5,26 @@ import CustomFlatList from '../../../../components/CustomFlatList';
 import CustomHeader from '../../../../components/customHeader/Index';
 import {UserTypes} from '../../../../shared/Constant';
 import JobsCard from '../../user/jobs/components/JobsCard';
-import { verticalScale } from '../../../../shared/Scaling';
+import {verticalScale} from '../../../../shared/Scaling';
+import jobService from '../../user/jobs/service/Jobs.service';
+import EmptyState from '../../../../components/EmptyState';
 
 const Jobs: IJobs = props => {
   const [type, setType] = React.useState('pending');
+
+  const {data, fetchMore, isLoading, setQuery, query, refetch} =
+    jobService.useGetJobs();
 
   const jobs = [
     {title: 'Pending', slug: 'pending'},
     {title: 'Completed', slug: 'completed'},
   ];
+
+  React.useEffect(() => {
+    setQuery({...query!, filter: {status: type.toUpperCase()}});
+  }, [type]);
+
+  console.log(data);
 
   const renderItem = React.useCallback(
     (data: any, type?: 'pending' | 'completed' | 'ongoing') => {
@@ -45,12 +56,25 @@ const Jobs: IJobs = props => {
       />
       <Container padding={15} width={'full'}>
         <CustomFlatList
-          data={['1', '2', '3', '4', '5']}
+          data={data}
           height={verticalScale(620)}
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
           renderItem={() => renderItem('', type as any)}
           keyExtractor={(item, index) => index.toString()}
+          onEndReached={fetchMore}
+          onEndReachedThreshold={0.5}
+          refreshing={isLoading}
+          onRefresh={refetch}
+          ListEmptyComponent={() => (
+            <EmptyState
+              showButton={false}
+              type="jobs"
+              header="No jobs found"
+              title="Jobs would appear when you accept users offer"
+              height={450}
+            />
+          )}
         />
       </Container>
     </Container>

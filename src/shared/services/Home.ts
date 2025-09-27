@@ -10,6 +10,7 @@ import Http from './Http';
 import {CustomerDashboardDto} from '../../screens/app/user/home/dto/customer-dashboard.dto';
 import {ReasonType} from '../Constant';
 import AppStorage from '../AppStorage';
+import {SaveLocationDto} from '../../screens/app/user/home/dto/savedLocationDto';
 
 export default class HomeApi extends Http {
   userType = () => AppStorage.find('userType');
@@ -291,7 +292,7 @@ export default class HomeApi extends Http {
       path: Endpoints.reviews(uuid, query),
       method: 'GET',
     });
-    const data = await this.handleResponse<Reviews[]>(res);
+    const data = await this.handleResponse<Reviews[], true>(res);
 
     return data;
   }

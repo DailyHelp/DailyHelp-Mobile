@@ -1,10 +1,8 @@
 import {BASE_URL, CLOUDINARY_URL} from '@env';
 import Toast from 'react-native-toast-message';
-import ThrowError from '../errors/throwError';
-import utils from '../Utils';
 import AppStorage from '../AppStorage';
+import ThrowError from '../errors/throwError';
 import {customFontSize, fonts} from '../themes/Typography';
-import {Platform} from 'react-native';
 
 type Headers = {
   Authorization: string;
@@ -57,7 +55,7 @@ export default class Http {
 
   public async imageUpload(
     uri: string,
-    preset: 'compliance' | 'profile' = 'profile',
+    preset: 'compliance' | 'profile' | 'offer' = 'profile',
   ) {
     const body = new FormData();
 
@@ -88,17 +86,17 @@ export default class Http {
    * @param res
    * @returns data
    */
-  protected async handleResponse<T, P extends boolean = false>(
+  protected async handleResponse<T, P extends boolean = false, E = {}>(
     res?: Response | void,
   ) {
     // const expires = utils.isDateExpired(AppStorage.getExpiresIn()!)
 
-    const unauthorized = [403, 401];
+    const unauthorized = [401];
 
     ThrowError.handleServerResponse(res);
 
     if (res) {
-      const data: ApiResponse<T, P> = await res.json();
+      const data: ApiResponse<T, P, E> = await res.json();
 
       if (unauthorized.includes(res.status)) {
         ThrowError.handleUnAuthentication();
@@ -106,7 +104,7 @@ export default class Http {
 
       if (!data.status) throw new ThrowError(data.message);
 
-      return data as ApiResponse<T, P>;
+      return data as ApiResponse<T, P, E>;
     }
   }
 

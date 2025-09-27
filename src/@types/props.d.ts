@@ -83,11 +83,14 @@ type IDeleteAddress = {};
 type IInput = Props<{
   label?: string;
   placeholder?: string;
+  disabled?: boolean;
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
   value?: string;
   options?: {label?: string; value: string}[];
   onChangeText?: (text: string) => void;
+  onLeftIconPress?: () => void;
+  onRightIconPress?: () => void;
   error?: string;
   type?:
     | 'text'
@@ -118,6 +121,7 @@ type IInput = Props<{
   multiline?: boolean;
   numberOfLines?: number;
   fontWeight?: 'bold' | 'regular';
+  onSelect?: (data?: any) => void;
   onAddressSelect?: (data?: {
     address?: string;
     lat?: number;
@@ -139,7 +143,8 @@ type ICustomHeader<P, C> = Props<
   Partial<P> & {
     title?: string;
     placeHolder?: string;
-    onPress?: (data?: any) => void;
+    onLeftIconPress?: (data?: any) => void;
+    onRightIconPress?: (data?: any) => void;
     type?: 'back' | 'close' | 'home' | 'search' | 'chat' | 'tabs';
     goBack?: () => void;
     textMiddle?: boolean;
@@ -149,7 +154,10 @@ type ICustomHeader<P, C> = Props<
     value?: string;
     onFocus?: () => void;
     onBlur?: () => void;
+    onPress?: (status: string) => void;
     backgroundColor?: C;
+    badge?: string;
+    image?: string;
   }
 >;
 
@@ -257,13 +265,13 @@ type IStatusChip = Props<{
 
 type IAllCategory = Props<{}>;
 
-type IOffer<D = any> = Props<
+type IOffer<D = any, S = any> = Props<
   {
     isVisible: boolean;
-    type?: 'send' | 'cancel' | 'decline';
+    type?: 'send' | 'cancel' | 'decline' | 'edit';
     onClose?: () => void;
     openGallery?: () => void;
-    onSendOffer?: (data: any) => void;
+    onSendOffer?: (data: S) => void;
     onDeclineOffer?: (
       reason: string,
       reasonCategory: string,
@@ -271,6 +279,7 @@ type IOffer<D = any> = Props<
     ) => void;
     isLoading?: boolean;
     isAvailable?: boolean;
+    cancellationChances?: number;
   },
   D
 >;
@@ -281,6 +290,8 @@ type IRecentSearches = Props<{onPress?: (search?: string) => void}>;
 
 type IGallery = {
   close?: () => void;
+  maxSelect?: number;
+  selectImages?: (images: string[] | string) => void;
 };
 
 type ICategoryCard<D = any> = Props<
@@ -320,6 +331,7 @@ type ITypography<C> = Props<{
   currency?: boolean;
   backgroundColor?: string;
   lineHeight?: number;
+  currencyType?: 'NGN' | 'USD' | 'EUR' | 'GBP' | '₦' | '$' | '€' | '£';
   textDecorationLine?:
     | 'none'
     | 'underline'
@@ -327,7 +339,16 @@ type ITypography<C> = Props<{
     | 'underline line-through';
 }>;
 
-type IChatFooter<N = any> = Props<{navigation: N}>;
+type IChatFooter<N = any> = Props<
+  {
+    navigation: N;
+    canSendOffer: boolean;
+    sendOffer?: () => void;
+    sendMessage?: (message: string) => void;
+    isSending?: boolean;
+  },
+  {uuid: string}
+>;
 
 type IMessages = Props<
   {
@@ -398,17 +419,19 @@ type ITransactionCard = Props<
   }
 >;
 
-type IDisputeCard = Props<
+type IDisputeCard<D = any> = Props<
   {
     type?: 'ongoing' | 'resolved';
   },
   {
     status?: 'partial' | 'full' | '';
+    disputes?: D;
   }
 >;
 
 type IContainer<C> = Props<{
   flex?: number;
+  isTouchable?: boolean;
   type?: 'box' | 'scroll' | 'gradient';
   backgroundColor?: C;
   borderColor?: C;
@@ -443,12 +466,16 @@ type IContainer<C> = Props<{
   showsVerticalScrollIndicator?: boolean;
   scrollsToTop?: boolean;
   gradientColors?: (string | number)[];
+  onPress?: () => void;
 }>;
 
 type IUploadContainer = Props<{
   title: string;
   description: string;
   status?: 'failed' | 'upload' | 'success';
+  upload?: () => void;
+  isUploading?: boolean;
+  uri?: string;
 }>;
 
 type IAttachmentContainer = Props<

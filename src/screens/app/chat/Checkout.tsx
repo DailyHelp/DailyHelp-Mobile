@@ -1,18 +1,23 @@
+import React from 'react';
 import {View} from 'react-native';
 import {ICheckout} from '../../../@types/routes';
+import MainButton from '../../../components/button/MainButton';
+import CustomInput from '../../../components/customInput/Index';
 import Typography from '../../../components/Typography';
 import {verticalScale} from '../../../shared/Scaling';
-import utils from '../../../shared/Utils';
-import {useState} from 'react';
 import PaymentOption from './components/PaymentOption';
-import MainButton from '../../../components/button/MainButton';
+import moreService from '../more/services/More.service';
 
-const Checkout: ICheckout = () => {
-  const [selectedPayment, setSelectedPayment] = useState('wallet');
+const Checkout: ICheckout = ({route}) => {
+  const [selectedPayment, setSelectedPayment] = React.useState('online');
+  const [description, setDescription] = React.useState('');
+
+  const {data, isPending, mutate} = moreService.useFundWallet();
+
   const summary = [
-    {title: 'Amount', value: 32000},
+    {title: 'Amount', value: route.params?.price},
     {title: 'Service fee', value: 2000},
-    {title: 'Total', value: 34000},
+    {title: 'Total', value: route.params?.price},
   ];
 
   return (
@@ -33,10 +38,13 @@ const Checkout: ICheckout = () => {
             DESCRIPTION
           </Typography>
 
-          <Typography readMore readMoreConstant limit={90} lineHeight={25}>
-            I want to make a brazzilian twisting for my wedding, see the
-            attachment for sample
-          </Typography>
+          <CustomInput
+            numberOfLines={4}
+            multiline
+            height={100}
+            value={description}
+            onChangeText={setDescription}
+          />
         </View>
 
         <View
@@ -119,7 +127,19 @@ const Checkout: ICheckout = () => {
           right: 0,
           paddingHorizontal: 16,
         }}>
-        <MainButton>Make payment</MainButton>
+        <MainButton
+          loading={isPending}
+          onPress={() => {
+            mutate({
+              description,
+              amount: route.params?.price!,
+              conversationUuid: route.params?.conversationUuid!,
+              offerUuid: route.params?.offerUuid!,
+              purpose: route.params?.purpose!,
+            });
+          }}>
+          Make payment
+        </MainButton>
       </View>
     </View>
   );

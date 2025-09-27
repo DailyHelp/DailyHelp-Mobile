@@ -15,7 +15,7 @@ const JobsHeader: ICustomHeader<NativeStackHeaderProps, ColorKeys> = ({
   const [index, setIndex] = React.useState(initialTab);
 
   React.useEffect(() => {
-    onPress?.(index);
+    onPress?.(index!);
   }, [index]);
 
   return (

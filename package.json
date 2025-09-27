@@ -33,6 +33,7 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.2",
     "class-validator-formik": "^1.0.1",
+    "country-state-city": "^3.2.1",
     "dayjs": "^1.11.13",
     "formik": "^2.4.6",
     "lucide-react-native": "^0.501.0",

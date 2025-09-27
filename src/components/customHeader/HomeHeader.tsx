@@ -35,7 +35,7 @@ const HomeHeader: ICustomHeader<NativeStackHeaderProps, ColorKeys> = ({
         onPress={() => {
           SheetManager.show('HomeAddress', {
             payload: {showCurrent: true},
-            onClose: d => d && onSubmit({...d}),
+            onClose: d => d && onSubmit({...d, address: d.formatted_address}),
           });
         }}>
         <Container flexDirection="row" gap={5}>

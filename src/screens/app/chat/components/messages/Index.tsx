@@ -1,6 +1,6 @@
 import {View} from 'react-native';
 import OfferRejected from './OfferRejected';
-import OfferAction from './OfferAction';
+import OfferAction from './offerAction/Index';
 import Typography from '../../../../../components/Typography';
 import React from 'react';
 import chatStyle from '../../chatStyle';
@@ -24,7 +24,7 @@ const Messages: IMessages = props => {
     backgroundColor = position === 'left' ? '#CCFFE8' : 'white';
   }
 
-  console.log(type, status);
+  const rejected = ['cancelled', 'declined'];
 
   return (
     <View style={{flexDirection: 'row', alignItems: 'flex-end'}}>
@@ -54,7 +54,7 @@ const Messages: IMessages = props => {
           }}>
           {status && (
             <React.Fragment>
-              {status == 'accepted' ? (
+              {rejected.includes(status) ? (
                 <OfferRejected {...props} data={data} />
               ) : (
                 <OfferAction {...props} data={data} />
@@ -62,7 +62,7 @@ const Messages: IMessages = props => {
             </React.Fragment>
           )}
 
-          <Typography size="md">
+          <Typography size="md" fontWeight="medium">
             {data?.message || data?.offer.description}
           </Typography>
 

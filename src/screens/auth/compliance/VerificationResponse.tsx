@@ -12,7 +12,9 @@ import {customFontSize, fonts} from '../../../shared/themes/Typography';
 import {UserTypes} from '../../../shared/Constant';
 
 const VerificationResponse: IVerificationResponse = ({route, navigation}) => {
-  const user_type = appStore.user_types;
+  const user_type = route.params?.userType;
+
+  const isCustomer = user_type === UserTypes.CUSTOMER;
 
   return (
     <Container
@@ -58,11 +60,11 @@ const VerificationResponse: IVerificationResponse = ({route, navigation}) => {
             width={'full'}
             moveIconRight
             onPress={() => {
-              if (user_type === UserTypes.CUSTOMER) {
+              if (isCustomer) {
                 appStore.setIsAuthenticated(true);
               } else navigation.navigate('VerifyAddress');
             }}>
-            Take me home
+            {isCustomer ? 'Take me home' : 'Verify Address'}
           </MainButton>
         </Container>
       ) : (

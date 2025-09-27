@@ -1,32 +1,52 @@
-import {observer} from 'mobx-react-lite';
+import { Formik } from 'formik';
+import { observer } from 'mobx-react-lite';
 import React from 'react';
-import {TextInput, View} from 'react-native';
-import {Modal, Portal} from 'react-native-paper';
+import { TextInput, View } from 'react-native';
+import { Modal, Portal } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/AntDesign';
 import Assets from '../../assets/Assets';
-import {scale, verticalScale} from '../../shared/Scaling';
+import { scale, verticalScale } from '../../shared/Scaling';
+import { appStore } from '../../shared/stores/appStore';
 import AttachmentContainer from '../AttachmentContainer';
 import MainButton from '../button/MainButton';
+import Container from '../container/Index';
 import CustomInput from '../customInput/Index';
 import Typography from '../Typography';
 import offerStyle from './offerStyle';
-import {Formik} from 'formik';
-import {appStore} from '../../shared/stores/appStore';
-import Container from '../container/Index';
 
-const SendOffer: IOffer = ({
+const SendOffer: IOffer<Message> = ({
   isVisible,
   onClose,
   openGallery,
   onSendOffer,
   isLoading,
   isAvailable,
+  data,
+  type,
 }) => {
   React.useEffect(() => {
     appStore.setOffer({
       attachments: JSON.stringify(appStore.selectedGalleryImages),
     });
   }, [appStore.selectedGalleryImages]);
+
+  React.useEffect(() => {
+    if (data) {
+      appStore.setOffer({
+        amount: data?.offer?.price?.toString(),
+        description: data?.offer?.description!,
+      });
+    }
+  }, [data]);
+
+  React.useEffect(() => {
+    if (data) {
+      const attachment = data?.offer?.pictures.split(',');
+      if (attachment?.length !== appStore?.selectedGalleryImages?.length) {
+        attachment?.map(img => appStore.setSelectedGalleryImages(img));
+      }
+    }
+  }, [data]);
 
   return (
     <Portal>
@@ -123,6 +143,7 @@ const SendOffer: IOffer = ({
                         maxLength={10}
                         style={offerStyle.amountInput}
                         value={values.amount}
+                        defaultValue={values.amount}
                         onChangeText={amount => {
                           handleChange('amount')(amount);
                           appStore.setOffer({amount});
@@ -151,7 +172,7 @@ const SendOffer: IOffer = ({
 
               <View style={{padding: scale(10)}}>
                 <MainButton loading={isLoading} onPress={handleSubmit}>
-                  Send offer
+                  {type === 'edit' ? 'Update' : 'Send'} offer
                 </MainButton>
               </View>
             </Container>

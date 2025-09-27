@@ -6,12 +6,15 @@ import CustomFlatList from '../../../components/CustomFlatList';
 import DisputeCard from './components/DisputeCard';
 import React from 'react';
 import utils from '../../../shared/Utils';
+import moreService from './services/More.service';
+import DisputesDto from './dto/Disputes.dto';
 
 const Disputes: IDisputes = ({navigation, route}) => {
   utils.useHideBottomTab(navigation);
   const [index, setIndex] = React.useState('ongoing');
+  const {data, isLoading, fetchMore} = moreService.useDisputes(index);
   const tabs = [
-    {title: 'Ongoing', slug: 'ongoing'},
+    {title: 'Ongoing', slug: 'pending'},
     {title: 'Resolved', slug: 'resolved'},
   ];
 
@@ -21,10 +24,14 @@ const Disputes: IDisputes = ({navigation, route}) => {
         <Tabs tabs={tabs} initialTab={index} onPress={setIndex} />
       </View>
 
-      <CustomFlatList
-        data={['', '', '', '']}
-        renderItem={() => <DisputeCard type={index as any} />}
+      <CustomFlatList<DisputesDto>
+        data={data}
+        renderItem={({item}) => (
+          <DisputeCard type={index as any} data={{disputes: item}} />
+        )}
         keyExtractor={(item, ind) => ind.toString()}
+        onEndReached={fetchMore}
+        onEndReachedThreshold={0.5}
       />
     </View>
   );
