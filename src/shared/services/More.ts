@@ -8,6 +8,7 @@ import {EVENTS, UserTypes} from '../Constant';
 import Endpoints from './Endpoints';
 import Http from './Http';
 import {LoginResponse} from '../../screens/auth/dto/LoginDto';
+import TransactionDto from '../../screens/app/more/dto/Transaction.dto';
 
 export default class MoreApi extends Http {
   protected async switchUser(userType: UserTypes) {
@@ -66,7 +67,11 @@ export default class MoreApi extends Http {
       method: 'POST',
       body,
     });
-    const data = await this.handleResponse<WalletDto[]>(res);
+    const data = await this.handleResponse<{
+      authorizationUrl: string;
+      accessCode: string;
+      reference: string;
+    }>(res);
 
     return data;
   }
@@ -89,9 +94,10 @@ export default class MoreApi extends Http {
       path: Endpoints.walletTransactions(query),
       method: 'GET',
     });
-    const data = await this.handleResponse<any>(res);
-
-    this.success(data?.message);
+    const data = await this.handleResponse<
+      {transactions: TransactionDto[]},
+      true
+    >(res);
 
     return data;
   }

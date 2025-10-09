@@ -4,10 +4,21 @@ import {Box} from './Box';
 import Gradient from './Gradient';
 import {Scroll} from './Scroll';
 
-const Container: IContainer<ColorKeys> = ({children, ...props}) => {
+const Container: IContainer<ColorKeys> = ({
+  children,
+  horizontal,
+  showsHorizontalScrollIndicator,
+  showsVerticalScrollIndicator,
+  vertical,
+  ...props
+}) => {
   if (props.type === 'scroll') {
     return (
-      <Scroll>
+      <Scroll
+        horizontal={horizontal}
+        vertical={vertical}
+        showsHorizontalScrollIndicator={showsHorizontalScrollIndicator}
+        showsVerticalScrollIndicator={showsVerticalScrollIndicator}>
         <Box {...props}>{children}</Box>
       </Scroll>
     );

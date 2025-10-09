@@ -10,15 +10,19 @@ import Typography from '../../../../../components/Typography';
 import {UserTypes} from '../../../../../shared/Constant';
 import {verticalScale} from '../../../../../shared/Scaling';
 import JobsDto from '../dto/job.dto';
+import dayjs from 'dayjs';
 
 const JobsCard: IJobsCard<UserTypes, JobsDto> = ({
-  type = 'pending',
+  type = 'in_progress',
   viewDetails,
   userType,
   data,
 }) => {
+  console.log(type);
+
   return (
     <Container
+      width={'full'}
       padding={10}
       backgroundColor="white"
       borderRadius={15}
@@ -35,10 +39,10 @@ const JobsCard: IJobsCard<UserTypes, JobsDto> = ({
 
           <Container flexDirection="column" gap={3}>
             <Typography size="m2d">
-              {data?.serviceProvider.lastname} {data?.serviceProvider.firstname}
+              {data?.providerFirstname} {data?.providerLastname}
             </Typography>
             <Typography size="md" color="gray">
-              {data?.serviceProvider.primaryJobRole?.name}
+              {data?.providerPrimaryJobRole}
             </Typography>
           </Container>
         </Container>
@@ -67,9 +71,13 @@ const JobsCard: IJobsCard<UserTypes, JobsDto> = ({
             <Typography color="gray">Ended</Typography>
           </Container>
           <Container flexDirection="row" justifyContent="space-between">
-            <Typography color="lightBlack">23 Mar, 2025, 09:30</Typography>
+            <Typography color="lightBlack">
+              {dayjs(data?.createdAt).format('DD MMM, YYYY, hh:mm')}
+            </Typography>
             {type === 'completed' ? (
-              <Typography color="lightBlack">23 Mar, 2025, 10:30</Typography>
+              <Typography color="lightBlack">
+                {dayjs(data?.endDate).format('DD MMM, YYYY, hh:mm')}
+              </Typography>
             ) : (
               <Assets.JobsHourGlass />
             )}
@@ -88,10 +96,10 @@ const JobsCard: IJobsCard<UserTypes, JobsDto> = ({
         </OutlineButton>
       )}
 
-      {(type === 'ongoing' || type === 'pending') && (
+      {(type === 'in_progress' || type === 'pending') && (
         <Container flexDirection="row" gap={6}>
           <MainButton
-            onPress={viewDetails}
+            onPress={() => viewDetails?.(data!)}
             width={'75%'}
             enableButtonColor="lightGrey"
             color="black">

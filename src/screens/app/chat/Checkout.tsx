@@ -7,12 +7,20 @@ import Typography from '../../../components/Typography';
 import {verticalScale} from '../../../shared/Scaling';
 import PaymentOption from './components/PaymentOption';
 import moreService from '../more/services/More.service';
+import utils from '../../../shared/Utils';
 
-const Checkout: ICheckout = ({route}) => {
+const Checkout: ICheckout = ({route, navigation}) => {
   const [selectedPayment, setSelectedPayment] = React.useState('online');
   const [description, setDescription] = React.useState('');
 
   const {data, isPending, mutate} = moreService.useFundWallet();
+
+  React.useEffect(() => {
+    if (data)
+      navigation.navigate('WebViewComponent', {
+        url: data.data.authorizationUrl,
+      });
+  }, [data]);
 
   const summary = [
     {title: 'Amount', value: route.params?.price},

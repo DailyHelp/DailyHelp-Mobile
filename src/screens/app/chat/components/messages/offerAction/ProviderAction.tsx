@@ -1,8 +1,8 @@
-import {View} from 'react-native';
+import { View } from 'react-native';
 import Assets from '../../../../../../assets/Assets';
 import MainButton from '../../../../../../components/button/MainButton';
-import OutlineButton from '../../../../../../components/button/OutlineButton';
 import Typography from '../../../../../../components/Typography';
+import { scale } from '../../../../../../shared/Scaling';
 
 const ProviderAction: IMessages = props => {
   const {data} = props;
@@ -11,22 +11,27 @@ const ProviderAction: IMessages = props => {
   const status = data?.offer.status.toLowerCase();
 
   const hasActiveJob = false;
+  const isAccepted = status === 'accepted';
 
   const isAcceptDisabled = hasActiveJob && status !== 'accepted';
   const isCounterDisabled = hasActiveJob && status !== 'accepted';
+
+  const backgroundColor = isAccepted ? '#F3FCF4' : 'white';
+  const borderColor = isAccepted ? '#02CA71' : '#E5F7E5';
 
   return (
     <View
       style={{
         padding: 16,
-        backgroundColor: 'white',
-        borderColor: '#E5F7E5',
+        backgroundColor,
+        borderColor,
         borderWidth: 1,
         flexDirection: 'column',
         gap: 12,
         borderRadius: 12,
         borderStyle: 'dashed',
         marginVertical: 8,
+        width: isAccepted ? scale(270) : undefined,
       }}>
       {/* Header with Offer icon and text */}
       <View
@@ -36,9 +41,9 @@ const ProviderAction: IMessages = props => {
           alignItems: 'center',
           justifyContent: 'center',
         }}>
-        <Assets.OfferLetter />
+        {isAccepted ? <Assets.GreenMark /> : <Assets.OfferLetter />}
         <Typography color="gray" size="md" fontWeight="medium">
-          Offer
+          Offer {isAccepted && 'Accepted'}
         </Typography>
       </View>
 
@@ -64,59 +69,57 @@ const ProviderAction: IMessages = props => {
         </View>
       )}
 
-      {/* Action Buttons */}
-      <View style={{gap: 12}}>
-        {/* Accept Button - Center, Large */}
-        <MainButton
-          color={isAcceptDisabled ? 'disabled' : 'white'}
-          enableButtonColor={isAcceptDisabled ? 'lightGrey' : 'secondary'}
-          width={'100%'}
-          onPress={() => {
-            if (!isAcceptDisabled) {
-              type === 'offer' ? props?.edit?.(data) : props?.accept?.(data);
-            }
-          }}
-          disabled={isAcceptDisabled}>
-          Accept
-        </MainButton>
-
-        {/* Decline and Counter Buttons - Bottom row */}
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            gap: 12,
-          }}>
-          {/* Decline Button - Left */}
+      {!isAccepted && (
+        <View style={{gap: 12}}>
           <MainButton
-            mode="outlined"
-            color="danger"
-            borderColor="lightGrey"
-            width={'48%'}
+            color={isAcceptDisabled ? 'disabled' : 'white'}
+            enableButtonColor={isAcceptDisabled ? 'lightGrey' : 'secondary'}
+            loading={props.isAccepting}
+            width={'100%'}
             onPress={() => {
-              type === 'offer' ? props?.cancel?.(data) : props?.decline?.(data);
-            }}>
-            Decline
-          </MainButton>
-
-          {/* Counter Button - Right */}
-          <MainButton
-            mode="outlined"
-            color={isCounterDisabled ? 'gray' : 'secondary'}
-            enableButtonColor={isCounterDisabled ? 'lightGrey' : 'white'}
-            icon={Assets.OfferLetter}
-            borderColor="lightGrey"
-            width={'48%'}
-            onPress={() => {
-              if (!isCounterDisabled) {
-                props?.edit?.(data);
-              }
+              if (!isAcceptDisabled) props?.accept?.(data);
             }}
-            disabled={isCounterDisabled}>
-            Counter
+            disabled={isAcceptDisabled}>
+            Accept
           </MainButton>
+
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              gap: 12,
+            }}>
+            <MainButton
+              mode="outlined"
+              color="danger"
+              borderColor="lightGrey"
+              width={'48%'}
+              onPress={() => {
+                type === 'offer'
+                  ? props?.cancel?.(data)
+                  : props?.decline?.(data);
+              }}>
+              Decline
+            </MainButton>
+
+            <MainButton
+              mode="outlined"
+              color={isCounterDisabled ? 'gray' : 'secondary'}
+              enableButtonColor={isCounterDisabled ? 'lightGrey' : 'white'}
+              icon={Assets.OfferLetter}
+              borderColor="lightGrey"
+              width={'48%'}
+              onPress={() => {
+                if (!isCounterDisabled) {
+                  props?.negotiate?.(data);
+                }
+              }}
+              disabled={isCounterDisabled}>
+              Counter
+            </MainButton>
+          </View>
         </View>
-      </View>
+      )}
     </View>
   );
 };

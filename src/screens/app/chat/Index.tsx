@@ -15,6 +15,7 @@ import utils from '../../../shared/Utils';
 import {observer} from 'mobx-react-lite';
 import {appStore} from '../../../shared/stores/appStore';
 import {UserTypes} from '../../../shared/Constant';
+import Container from '../../../components/container/Index';
 
 const Chat: IChat = ({navigation}) => {
   const {data, setQuery, isLoading, fetchMore, refetch} =
@@ -28,6 +29,8 @@ const Chat: IChat = ({navigation}) => {
     showBottomTab();
   }, []);
 
+  console.log({data});
+
   const empty = () => (
     <EmptyState
       navigation={navigation}
@@ -40,19 +43,26 @@ const Chat: IChat = ({navigation}) => {
   const renderItem = React.useCallback(
     ({item, index}: {item: Conversation; index: number}) => {
       let name = `${item.spFirstname} ${item.spLastname}`;
+      let picture = item.spPicture;
 
       if (user_type === UserTypes.PROVIDER) {
         name = `${item.rqFirstname} ${item.rqLastname}`;
+        picture = item.rqPicture;
       }
 
       return (
         <TouchableOpacity
           onPress={() => {
+            if (item.locked) return;
+
             navigation.navigate('ChatBox', {
               uuid: item.conversationId!,
               title: name,
               cancellationChances: item.cancellationChances,
               badge: item.spTier,
+              picture,
+              restricted: item.restricted,
+              isOnline: item.spOnline,
             });
           }}>
           <View
@@ -64,7 +74,7 @@ const Chat: IChat = ({navigation}) => {
             }}>
             <View style={{flexDirection: 'row', gap: 10}}>
               <CustomAvatar
-                data={{image: Assets.Worker1, badge: item.spTier}}
+                data={{image: picture || Assets.Worker1, badge: item.spTier}}
                 avatarSize={50}
               />
 
@@ -73,7 +83,20 @@ const Chat: IChat = ({navigation}) => {
                   {name}
                 </Typography>
                 <View style={{flexDirection: 'row', gap: 9}}>
-                  {item.iReadLastMessage ? (
+                  {item.unreadCount ? (
+                    <Container
+                      borderRadius={100}
+                      width={20}
+                      height={21}
+                      flexDirection="column"
+                      alignItems="center"
+                      justifyContent="center"
+                      backgroundColor="secondary">
+                      <Typography color="white" fontWeight="medium">
+                        {item.unreadCount}
+                      </Typography>
+                    </Container>
+                  ) : item.iReadLastMessage ? (
                     <Assets.DoubleGreenMark
                       style={{marginTop: verticalScale(4)}}
                     />

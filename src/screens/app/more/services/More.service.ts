@@ -45,17 +45,19 @@ export class MoreService extends MoreApi {
         filter: {status},
       });
 
-    useFocusEffect(() => {
-      resetHistory();
-      setQuery(prev => ({
-        ...prev,
-        filter: {status},
-        pagination: {
-          ...prev.pagination,
-          page: 1,
-        },
-      }));
-    });
+    useFocusEffect(
+      React.useCallback(() => {
+        resetHistory();
+        setQuery(prev => ({
+          ...prev,
+          filter: {status},
+          pagination: {
+            ...prev.pagination,
+            page: 1,
+          },
+        }));
+      }, [status])
+    );
 
     const {
       data: disputes,
@@ -71,12 +73,12 @@ export class MoreService extends MoreApi {
       if (disputes?.data) {
         if (query.pagination?.page === 1) {
           resetHistory();
-          appendPageData(disputes.data.disputes);
+          appendPageData(disputes.data.disputes || []);
         } else {
-          appendPageData(disputes.data.disputes);
+          appendPageData(disputes.data.disputes || []);
         }
       }
-    }, [disputes?.data, query?.pagination?.page]);
+    }, [disputes?.data, query?.pagination?.page, resetHistory, appendPageData]);
 
     return {data, isLoading, error, fetchMore};
   }
@@ -99,10 +101,11 @@ export class MoreService extends MoreApi {
     };
   }
 
-  useFundWallet() {
+  useFundWallet(type: 'FUND_WALLET' | 'JOB_OFFER' = 'JOB_OFFER') {
     const {data, isPending, mutate} = useMutation({
       mutationKey: ['initialize-payment'],
       mutationFn: async (dto: FundWalletDto) => {
+        dto.purpose = type;
         return await this.initializePayment(dto);
       },
       onError: err => new CatchError(err, true),
@@ -132,7 +135,7 @@ export class MoreService extends MoreApi {
   }
 
   useWalletTransactions() {
-    const {query, appendPageData, data, fetchMore, resetHistory} =
+    const {query, setQuery, appendPageData, data, fetchMore, resetHistory} =
       utils.usePagination({
         pagination: {
           limit: 10,
@@ -145,6 +148,7 @@ export class MoreService extends MoreApi {
       data: transactions,
       isLoading,
       error,
+      refetch,
     } = useQuery({
       queryKey: ['transactions', query],
       queryFn: async () => await this.walletTransactions(query),
@@ -155,14 +159,54 @@ export class MoreService extends MoreApi {
       if (transactions?.data) {
         if (query.pagination?.page === 1) {
           resetHistory();
-          appendPageData(transactions.data.transactions);
-        } else {
-          appendPageData(transactions.data.transactions);
+          appendPageData(transactions.data.transactions || []);
+        } else if (
+          transactions?.data &&
+          data.length < (transactions.pagination?.total || 0)
+        ) {
+          appendPageData(transactions.data.transactions || []);
         }
       }
-    }, [transactions?.data, query?.pagination?.page]);
+    }, [transactions?.data, query?.pagination?.page, resetHistory, appendPageData, data.length]);
 
-    return {data, isLoading, error, fetchMore};
+    const controlledFetchMore = () => {
+      if (transactions?.pagination && !isLoading) {
+        const currentPage = transactions.pagination.page;
+        const totalPages = transactions.pagination.pages;
+
+        if (currentPage < totalPages) {
+          fetchMore();
+        }
+      }
+    };
+
+    const hasMore = transactions?.pagination
+      ? transactions.pagination.page < transactions.pagination.pages
+      : false;
+
+    const reset = () => {
+      resetHistory();
+      setQuery(prev => ({
+        ...prev,
+        pagination: {
+          ...prev.pagination,
+          page: 1,
+        },
+      }));
+    };
+
+    return {
+      data,
+      isLoading,
+      error,
+      query,
+      setQuery,
+      fetchMore: controlledFetchMore,
+      refetch,
+      hasMore,
+      pagination: transactions?.pagination,
+      reset,
+    };
   }
 }
 

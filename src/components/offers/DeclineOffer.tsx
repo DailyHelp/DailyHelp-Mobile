@@ -147,7 +147,7 @@ const DeclineOffer: IOffer<Message> = ({
                         borderWidth: id === key ? 1 : 0,
                         borderColor: id === key ? '#95D21A' : '',
                       }}>
-                      <Typography>{name}</Typography>
+                      <Typography>{name || ''}</Typography>
                     </TouchableOpacity>
                   ))}
                 </View>

@@ -389,7 +389,7 @@ class HomeService extends HomeApi {
 
         if (typeof body.attachments === 'string') {
           for (const att of JSON.parse(body.attachments! as string)) {
-            attachments.push(await upload(att, 'offer'));
+            attachments.push(await upload(att));
           }
         }
 

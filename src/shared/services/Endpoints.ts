@@ -2,7 +2,7 @@ import AppStorage from '../AppStorage';
 import {ReasonType, UserTypes} from '../Constant';
 import utils from '../Utils';
 
-const base = () => AppStorage.find('userType') as UserTypes;
+const base = () =>( AppStorage.find('userType') as UserTypes).toLowerCase();
 const bases = () => base().toLowerCase() + 's';
 
 export default {
@@ -23,6 +23,8 @@ export default {
   updateOffer: (uuid: string) => `/${bases()}/offer/${uuid}/update`,
   declineOffer: (uuid: string) => `/${bases()}/offer/${uuid}/decline`,
   cancelOffer: (uuid: string) => `/${bases()}/offer/${uuid}/cancel`,
+  acceptOffer: (uuid: string) => `/${bases()}/offer/${uuid}/accept`,
+  counterOffer: (uuid: string) => `/${bases()}/offer/${uuid}/counter`,
   googleSocialAuth: '/auth/google',
   updateFmcToken: '/account/update/fcm-token',
   savePrice: () => `/${bases()}/save-prices`,
@@ -52,7 +54,8 @@ export default {
   startJob: (uuid: string) => `/${base()}/jobs/${uuid}/start`,
   endJob: (uuid: string) => `/${base()}/jobs/${uuid}/end`,
   disputeJob: (uuid: string) => `/${base()}/jobs/${uuid}/dispute`,
-  rateProvider: (uuid: string) => `/${base()}/jobs/${uuid}/rate-service-provider`,
+  rateProvider: (uuid: string) =>
+    `/${base()}/jobs/${uuid}/rate-service-provider`,
   reviews: (uuid: string, query?: PaginationQuery) =>
     `/${bases()}/${uuid}/reviews?${utils.flattenQuery(query!)}`,
   deleteLocation: (uuid: string) => `/${bases()}/location/${uuid}/delete`,

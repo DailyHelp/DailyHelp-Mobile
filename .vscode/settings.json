@@ -8,5 +8,6 @@
         "playcircleo",
         "Smilie",
         "xxlg"
-    ]
+    ],
+    "java.configuration.updateBuildConfiguration": "interactive"
 }

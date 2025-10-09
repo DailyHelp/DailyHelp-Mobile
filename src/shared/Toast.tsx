@@ -17,10 +17,16 @@ export const toastConfig: ToastConfig = {
       padding={20}
       width={'100%'}
       flexDirection="row"
-      alignItems="center"
+      alignItems="flex-start"
       justifyContent="space-between">
-      <Container flexDirection="row" gap={1} backgroundColor="transparent">
-        <Icon name={'check'} size={20} color={'white'} />
+      <Container
+        flexDirection="row"
+        gap={1}
+        backgroundColor="transparent"
+        flex={1}
+        flexWrap="wrap"
+        alignItems="flex-start">
+        <Icon name={'check'} size={18} color={'white'} style={{marginTop: 2}} />
         <Typography fontWeight="bold" size="xs" color="white">
           {text2}
         </Typography>
@@ -40,10 +46,16 @@ export const toastConfig: ToastConfig = {
       padding={30}
       width={'100%'}
       flexDirection="row"
-      alignItems="center"
+      alignItems="flex-start"
       justifyContent="space-between">
-      <Container flexDirection="row" gap={1} backgroundColor="transparent">
-        <Icon name={'close-o'} size={20} color="white" />
+      <Container
+        flexDirection="row"
+        gap={1}
+        backgroundColor="transparent"
+        flex={1}
+        flexWrap="wrap"
+        alignItems="flex-start">
+        <Icon name={'close-o'} size={18} color="white" style={{marginTop: 2}} />
         <Typography fontWeight="bold" size="xs" color="white">
           {text2}
         </Typography>

@@ -11,7 +11,7 @@ export default class JobsApi extends Http {
       path: Endpoints.getJob(query),
       method: 'GET',
     });
-    const data = await this.handleResponse<Jobs[]>(res);
+    const data = await this.handleResponse<Jobs[], true>(res);
 
     return data;
   }
@@ -36,8 +36,6 @@ export default class JobsApi extends Http {
     });
     const data = await this.handleResponse<any>(res);
 
-    this.success(data?.message);
-
     return data;
   }
 
@@ -47,8 +45,6 @@ export default class JobsApi extends Http {
       method: 'GET',
     });
     const data = await this.handleResponse<SimilarJobDto[]>(res);
-
-    this.success(data?.message);
 
     return data;
   }
@@ -82,6 +78,32 @@ export default class JobsApi extends Http {
     const res = await this.fetchHandler({
       path: Endpoints.endJob(uuid!),
       method: 'POST',
+    });
+    const data = await this.handleResponse<any>(res);
+
+    this.success(data?.message);
+
+    return data;
+  }
+
+  protected async disputeJob(uuid: string, body: any) {
+    const res = await this.fetchHandler({
+      path: Endpoints.disputeJob(uuid),
+      method: 'POST',
+      body,
+    });
+    const data = await this.handleResponse<any>(res);
+
+    this.success(data?.message);
+
+    return data;
+  }
+
+  protected async rateProvider(uuid: string, body: any) {
+    const res = await this.fetchHandler({
+      path: Endpoints.rateProvider(uuid),
+      method: 'POST',
+      body,
     });
     const data = await this.handleResponse<any>(res);
 

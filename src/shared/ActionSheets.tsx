@@ -13,6 +13,7 @@ import AddressOptions from '../screens/app/more/components/AddressOptions';
 import CustomSelect from '../components/customInput/customSelectInput/CustomSelect';
 import ConfirmDeleteActionSheet from '../screens/app/more/deleteAccount/ConfirmDeleteAccount';
 import DeleteAddress from '../screens/app/more/components/DeleteAddress';
+import FullChatActivated from '../screens/app/chat/components/FullChatActivated';
 
 registerSheet('AllCategory', AllCategory);
 registerSheet('Rating', Rating);
@@ -28,6 +29,7 @@ registerSheet('AddressOptions', AddressOptions);
 registerSheet('CustomSelect', CustomSelect);
 registerSheet('ConfirmDelete', ConfirmDeleteActionSheet);
 registerSheet('DeleteAddress', DeleteAddress);
+registerSheet('FullChatActivated', FullChatActivated);
 
 export type ActionSheetLoader = {
   isDefaultLoading?: boolean;
@@ -53,6 +55,9 @@ declare module 'react-native-actions-sheet' {
       };
     }>;
     FundWallet: SheetDefinition<{
+      payload: {
+        type: 'FUND' | 'WITHDRAW';
+      };
       returnValue: {
         amount: number;
       };
@@ -105,6 +110,12 @@ declare module 'react-native-actions-sheet' {
     DeleteAddress: SheetDefinition<{
       payload: {
         onDelete: () => void;
+      };
+    }>;
+    FullChatActivated: SheetDefinition<{
+      payload?: {
+        onContinue?: () => void;
+        onClose?: () => void;
       };
     }>;
   }

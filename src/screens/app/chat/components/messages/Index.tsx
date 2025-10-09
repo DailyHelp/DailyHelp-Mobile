@@ -57,7 +57,7 @@ const Messages: IMessages = props => {
               {rejected.includes(status) ? (
                 <OfferRejected {...props} data={data} />
               ) : (
-                <OfferAction {...props} data={data} />
+                <OfferAction {...props} data={data} userType={props.userType} />
               )}
             </React.Fragment>
           )}

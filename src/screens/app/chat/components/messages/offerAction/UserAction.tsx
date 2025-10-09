@@ -5,16 +5,22 @@ import OutlineButton from '../../../../../../components/button/OutlineButton';
 import Typography from '../../../../../../components/Typography';
 
 const UserAction: IMessages = props => {
-  const {data} = props;
+  const {data, isPaymentMade} = props;
+  console.log({user: data});
 
   const type = data?.type.toLowerCase();
+  const status = data?.offer.status.toLowerCase();
+
   let backgroundColor = props.backgroundColor || 'white';
   let borderColor = '#FDE9E7';
 
-  if (type === 'accepted') {
+  if (status === 'accepted') {
     backgroundColor = '#F3FCF4';
     borderColor = '#02CA71';
   }
+console.log({isPaymentMade});
+
+  const payment = type === 'offer' && status !== 'accepted';
 
   return (
     <View
@@ -35,9 +41,9 @@ const UserAction: IMessages = props => {
           alignItems: 'center',
           justifyContent: 'center',
         }}>
-        {type === 'accepted' ? <Assets.GreenMark /> : <Assets.OfferLetter />}
+        {status === 'accepted' ? <Assets.GreenMark /> : <Assets.OfferLetter />}
         <Typography color="gray" size="md">
-          Offer {type === 'accepted' && 'Accepted'}
+          Offer {status === 'accepted' && 'Accepted'}
         </Typography>
       </View>
 
@@ -45,24 +51,26 @@ const UserAction: IMessages = props => {
         {data?.offer.price}
       </Typography>
 
-      <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
-        <OutlineButton
-          color="#F0443A"
-          width={'45%'}
-          onPress={() => {
-            type === 'offer' ? props?.cancel?.(data) : props?.decline?.(data);
-          }}>
-          {type === 'offer' ? 'Cancel offer' : 'Decline'}
-        </OutlineButton>
-        <MainButton
-          color="secondary"
-          width={'45%'}
-          onPress={() => {
-            type === 'offer' ? props?.edit?.(data) : props?.accept?.(data);
-          }}>
-          {type === 'offer' ? 'Edit offer' : ' Accept & Pay'}
-        </MainButton>
-      </View>
+      {isPaymentMade && (
+        <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
+          <OutlineButton
+            color="danger"
+            width={'45%'}
+            onPress={() => {
+              payment ? props?.cancel?.(data) : props?.decline?.(data);
+            }}>
+            {payment ? 'Cancel offer' : 'Decline'}
+          </OutlineButton>
+          <MainButton
+            color="secondary"
+            width={'45%'}
+            onPress={() => {
+              payment ? props?.edit?.(data) : props?.accept?.(data);
+            }}>
+            {payment ? 'Edit offer' : ' Accept & Pay'}
+          </MainButton>
+        </View>
+      )}
     </View>
   );
 };

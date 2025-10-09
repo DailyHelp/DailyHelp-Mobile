@@ -16,7 +16,7 @@ const MainButton: ICustomButton<ColorKeys> = ({
   color = 'secondary',
   disableButtonColor = 'disabled',
   enableButtonColor = 'primary',
-  borderColor,
+  borderColor = 'transparent',
   borderRadius = 10,
   height = 45,
   paddingTop,
@@ -25,6 +25,8 @@ const MainButton: ICustomButton<ColorKeys> = ({
   marginTop,
   mode,
   borderWidth = 0,
+  marginRight,
+  marginLeft,
 }) => {
   if (typeof width !== 'number') {
     width = utils.getDimensions(width as Dimensions);
@@ -54,7 +56,15 @@ const MainButton: ICustomButton<ColorKeys> = ({
       icon={icon}
       loading={loading}
       onPress={onPress}
-      style={{borderRadius, borderColor, width, marginTop, borderWidth}}
+      style={{
+        borderRadius,
+        borderColor: Colors[borderColor],
+        width,
+        marginTop,
+        borderWidth,
+        marginRight,
+        marginLeft,
+      }}
       textColor={disabled ? Colors[disableColor] : Colors[color]}
       buttonColor={
         disabled ? Colors[disableButtonColor] : Colors[enableButtonColor]

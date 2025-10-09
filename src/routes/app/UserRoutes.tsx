@@ -3,6 +3,7 @@ import React from 'react';
 import {Text} from 'react-native-paper';
 import Assets from '../../assets/Assets';
 import CustomHeader from '../../components/customHeader/Index';
+import TabBadge from '../../components/TabBadge';
 import ChatBox from '../../screens/app/chat/ChatBox';
 import Checkout from '../../screens/app/chat/Checkout';
 import Chat from '../../screens/app/chat/Index';
@@ -11,7 +12,7 @@ import Report from '../../screens/app/chat/report/Index';
 import ReportSubmitted from '../../screens/app/chat/report/ReportSubmitted';
 import AccountSettings from '../../screens/app/more/AccountSettings';
 import Address from '../../screens/app/more/Address';
-import Analytics from '../../screens/app/more/Analytics';
+import Analytics from '../../screens/app/more/analytics/Index';
 import Disputes from '../../screens/app/more/Disputes';
 import Feedback from '../../screens/app/more/Feedback';
 import More from '../../screens/app/more/Index';
@@ -37,6 +38,7 @@ import MoreRoute from './More';
 import SearchRoute from './Search';
 import ProviderProfile from '../../screens/app/more/providerProfile/Index';
 import ProviderTiers from '../../screens/app/more/providerProfile/ProviderTiers';
+import WebViewComponent from '../../components/WebViewComponent';
 
 type LabelPosition = 'beside-icon' | 'below-icon';
 
@@ -134,20 +136,23 @@ export const UserAppStackRoutes = [
           Chat
         </Text>
       ),
-      tabBarIcon: (props: TabIconProps) =>
-        props.focused ? (
-          <Assets.ActiveChat
-            fill={props.color}
-            height={verticalScale(28)}
-            width={scale(28)}
-          />
-        ) : (
-          <Assets.InActiveChat
-            fill={props.color}
-            height={verticalScale(28)}
-            width={scale(28)}
-          />
-        ),
+      tabBarIcon: (props: TabIconProps) => (
+        <TabBadge tabName="ChatIndex">
+          {props.focused ? (
+            <Assets.ActiveChat
+              fill={props.color}
+              height={verticalScale(28)}
+              width={scale(28)}
+            />
+          ) : (
+            <Assets.InActiveChat
+              fill={props.color}
+              height={verticalScale(28)}
+              width={scale(28)}
+            />
+          )}
+        </TabBadge>
+      ),
     },
   },
   {
@@ -166,20 +171,23 @@ export const UserAppStackRoutes = [
           Jobs
         </Text>
       ),
-      tabBarIcon: (props: TabIconProps) =>
-        props.focused ? (
-          <Assets.ActiveJobs
-            fill={props.color}
-            height={verticalScale(28)}
-            width={scale(28)}
-          />
-        ) : (
-          <Assets.InActiveJobs
-            fill={props.color}
-            height={verticalScale(28)}
-            width={scale(28)}
-          />
-        ),
+      tabBarIcon: (props: TabIconProps) => (
+        <TabBadge tabName="JobsIndex">
+          {props.focused ? (
+            <Assets.ActiveJobs
+              fill={props.color}
+              height={verticalScale(28)}
+              width={scale(28)}
+            />
+          ) : (
+            <Assets.InActiveJobs
+              fill={props.color}
+              height={verticalScale(28)}
+              width={scale(28)}
+            />
+          )}
+        </TabBadge>
+      ),
     },
   },
   {
@@ -304,6 +312,13 @@ export const UserChatStackRoutes = [
     },
   },
   {
+    name: 'WebViewComponent',
+    component: WebViewComponent,
+    options: {
+      headerShown: false,
+    },
+  },
+  {
     name: 'Checkout',
     component: Checkout,
     options: {
@@ -373,6 +388,13 @@ export const MoreStackRoutes = [
           textMiddle
         />
       ),
+    },
+  },
+  {
+    name: 'WebViewComponent',
+    component: WebViewComponent,
+    options: {
+      headerShown: false,
     },
   },
   {

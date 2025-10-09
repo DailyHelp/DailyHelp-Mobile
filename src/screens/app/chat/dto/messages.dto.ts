@@ -3,7 +3,7 @@ interface Message<U = any> {
   createdAt: string;
   updatedAt: string;
   deletedAt: null;
-  conversation: string;
+  conversation: {uuid: string};
   from: U;
   to: U;
   message: string;

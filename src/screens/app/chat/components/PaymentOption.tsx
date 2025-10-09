@@ -34,8 +34,8 @@ import Typography from '../../../../components/Typography';
     </View>
     
     <View style={styles.textContainer}>
-      <Typography color='#3B4152' fontWeight='regular' size='sm'>{title}</Typography>
-      {subtitle && <Typography color='#757C91' size='md'>{subtitle}</Typography>}
+      <Typography color='gray' fontWeight='regular' size='sm'>{title}</Typography>
+      {subtitle && <Typography color='gray' size='md'>{subtitle}</Typography>}
     </View>
   </TouchableOpacity>
   )

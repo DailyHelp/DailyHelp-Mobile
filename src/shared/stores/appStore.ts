@@ -31,6 +31,8 @@ class AppStore {
     attachments?: string;
   };
 
+  tabBadges: {[key: string]: number} = {};
+
   actionSheetLoading!: ActionSheetLoader;
 
   constructor() {
@@ -111,6 +113,28 @@ class AppStore {
   clearOffer() {
     this.offerDto = {};
     this.selectedGalleryImages = [];
+  }
+
+  setTabBadge(tabName: string, count: number) {
+    this.tabBadges[tabName] = count;
+  }
+
+  incrementTabBadge(tabName: string) {
+    this.tabBadges[tabName] = (this.tabBadges[tabName] || 0) + 1;
+  }
+
+  decrementTabBadge(tabName: string) {
+    if (this.tabBadges[tabName] && this.tabBadges[tabName] > 0) {
+      this.tabBadges[tabName] = this.tabBadges[tabName] - 1;
+    }
+  }
+
+  clearTabBadge(tabName: string) {
+    this.tabBadges[tabName] = 0;
+  }
+
+  clearAllTabBadges() {
+    this.tabBadges = {};
   }
 }
 

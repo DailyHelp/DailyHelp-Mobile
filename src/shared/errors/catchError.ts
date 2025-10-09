@@ -5,7 +5,7 @@ export default class CatchError extends Error {
   constructor(public err: any, private toast: boolean = false) {
     super(err.message);
 
-    this.message = err.message;
+    this.message = err.message || 'Something went wrong';
     this.cause = err?.cause || '';
     this.name = err?.name || '';
 

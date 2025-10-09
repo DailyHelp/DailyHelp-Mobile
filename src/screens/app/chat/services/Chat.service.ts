@@ -6,6 +6,7 @@ import React from 'react';
 import AppStorage from '../../../../shared/AppStorage';
 import ReportConversationDto from '../dto/report-conversation.dto';
 import CatchError from '../../../../shared/errors/catchError';
+import CounterOfferDto from '../dto/counter-offer.dto';
 
 export class ChatService extends ChatApi {
   private static instance: ChatService;
@@ -183,6 +184,52 @@ export class ChatService extends ChatApi {
       data,
       isPending,
       mutate: onSubmit,
+    };
+  }
+
+  useAcceptOffer() {
+    const queryClient = useQueryClient();
+    const {mutate, isPending, data} = useMutation({
+      mutationKey: ['accept-offer'],
+      mutationFn: async (uuid: string) => {
+        return await this.acceptOffer(uuid);
+      },
+      onSuccess: () => {
+        queryClient.invalidateQueries({queryKey: ['conversations']});
+        queryClient.invalidateQueries({queryKey: ['conversation']});
+        queryClient.invalidateQueries({queryKey: ['jobs']});
+        queryClient.invalidateQueries({queryKey: ['active-jobs']});
+        queryClient.invalidateQueries({queryKey: ['job-history']});
+        queryClient.invalidateQueries({queryKey: ['dashboard']});
+      },
+      onError: error => new CatchError(error, true),
+    });
+
+    return {
+      mutate,
+      isPending,
+      data,
+    };
+  }
+
+  useCounterOffer() {
+    const queryClient = useQueryClient();
+    const {mutate, isPending, data} = useMutation({
+      mutationKey: ['counter-offer'],
+      mutationFn: async (dto: CounterOfferDto) => {
+        return await this.counterOffer(dto);
+      },
+      onSuccess: () => {
+        queryClient.invalidateQueries({queryKey: ['conversations']});
+        queryClient.invalidateQueries({queryKey: ['conversation']});
+      },
+      onError: error => new CatchError(error, true),
+    });
+
+    return {
+      mutate,
+      isPending,
+      data,
     };
   }
 }

@@ -18,6 +18,7 @@ const ChatBox: IChatBox = ({navigation, route}) => {
   utils.useHideBottomTab(navigation);
   const userType = AppStorage.find('userType') as UserTypes;
   const isCustomer = userType === UserTypes.CUSTOMER;
+  const isPaymentMade = route.params?.restricted;
 
   const {data, isLoading, canSendOffer} = chatService.useGetSingleConversation(
     route.params?.uuid!,
@@ -30,13 +31,20 @@ const ChatBox: IChatBox = ({navigation, route}) => {
     cancelPending,
     onSendOffer,
     sendingPending,
+    updateOffer,
   } = homeService.useOffer();
 
   const {data: message, isPending, mutate} = chatService.useSendMessage();
 
+  const {mutate: acceptOffer, isPending: acceptPending} =
+    chatService.useAcceptOffer();
+
+  const {mutate: counterOffer, isPending: counterPending} =
+    chatService.useCounterOffer();
+
   const [offer, setOffer] = React.useState<{
     visible: boolean;
-    type: 'send' | 'cancel' | 'decline' | 'edit';
+    type: 'send' | 'cancel' | 'decline' | 'edit' | 'negotiate';
     data?: Message;
   }>({
     visible: false,
@@ -45,12 +53,25 @@ const ChatBox: IChatBox = ({navigation, route}) => {
   const userId = AppStorage.find('user_id');
 
   const accept = (data?: Message) => {
-    navigation.navigate('Checkout', {
-      conversationUuid: data?.uuid!,
-      offerUuid: data?.offer.uuid!,
-      purpose: 'JOB_OFFER',
-      price: data?.offer.price!,
-    });
+    if (isCustomer) {
+      // Customer flow: Navigate to Checkout for payment (acceptance happens after payment)
+      navigation.navigate('Checkout', {
+        conversationUuid: route.params?.uuid!,
+        offerUuid: data?.offer.uuid!,
+        purpose: 'JOB_OFFER',
+        price: data?.offer.price!,
+      });
+    } else {
+      // Provider flow: Call acceptOffer hook directly
+      if (data?.offer?.uuid) {
+        acceptOffer(data.offer.uuid, {
+          onSuccess: () => {
+            // Close any modals and refresh data
+            setOffer({...offer, visible: false});
+          },
+        });
+      }
+    }
   };
 
   const decline = (data?: Message) => {
@@ -63,6 +84,27 @@ const ChatBox: IChatBox = ({navigation, route}) => {
 
   const edit = (data?: Message) => {
     setOffer({...offer, visible: true, type: 'edit', data});
+  };
+
+  const negotiate = (data?: Message) => {
+    setOffer({...offer, visible: true, type: 'negotiate', data});
+  };
+
+  const handleCounterOffer = (counterData: any) => {
+    if (offer.data?.offer?.uuid) {
+      counterOffer(
+        {
+          uuid: offer.data.offer.uuid,
+          amount: parseInt(counterData.amount?.toString() || '0'),
+          reason: counterData.description || '',
+        },
+        {
+          onSuccess: () => {
+            setOffer({...offer, visible: false});
+          },
+        },
+      );
+    }
   };
 
   const cancel = (data?: Message) => {
@@ -78,8 +120,14 @@ const ChatBox: IChatBox = ({navigation, route}) => {
         decline={decline}
         cancel={cancel}
         edit={edit}
+        negotiate={negotiate}
         data={item}
         position={userId === item.from.uuid ? 'right' : 'left'}
+        userType={isCustomer ? 'customer' : 'provider'}
+        isAccepting={acceptPending}
+        isDeclining={declinePending}
+        isCancelling={cancelPending}
+        isPaymentMade={isPaymentMade}
       />
     );
   }, []);
@@ -126,7 +174,15 @@ const ChatBox: IChatBox = ({navigation, route}) => {
               cancelOffer({reason, reasonCategory, uuid}, {onSuccess: close});
             }
           }}
-          onSendOffer={data => onSendOffer(data, close)}
+          onSendOffer={data => {
+            if (offer.type === 'negotiate') {
+              handleCounterOffer(data);
+            } else if (offer.type === 'edit') {
+              updateOffer({...data, uuid: offer.data?.uuid});
+            } else {
+              onSendOffer(data, close);
+            }
+          }}
         />
       </Container>
     </React.Fragment>

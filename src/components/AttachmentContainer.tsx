@@ -7,6 +7,7 @@ import Attachment from './Attachment';
 import Typography from './Typography';
 import Assets from '../assets/Assets';
 import Icon from 'react-native-vector-icons/AntDesign';
+import utils from '../shared/Utils';
 
 const AttachmentContainer: IAttachmentContainer = ({
   openGallery,
@@ -14,6 +15,10 @@ const AttachmentContainer: IAttachmentContainer = ({
   children,
   data,
 }) => {
+  React.useEffect(() => {
+    utils.hasAndroidPermission().then(console.log);
+  }, []);
+  
   const attachment = data || appStore.selectedGalleryImages;
 
   return (

@@ -37,6 +37,8 @@ type Props<P = {}, D = {}> = React.FC<
     padding?: number;
     marginTop?: number;
     marginBottom?: number;
+    marginRight?: number;
+    marginLeft?: number;
     paddingTop?: number;
     paddingBottom?: number;
   } & P
@@ -268,7 +270,7 @@ type IAllCategory = Props<{}>;
 type IOffer<D = any, S = any> = Props<
   {
     isVisible: boolean;
-    type?: 'send' | 'cancel' | 'decline' | 'edit';
+    type?: 'send' | 'cancel' | 'decline' | 'edit' | 'negotiate';
     onClose?: () => void;
     openGallery?: () => void;
     onSendOffer?: (data: S) => void;
@@ -346,6 +348,7 @@ type IChatFooter<N = any> = Props<
     sendOffer?: () => void;
     sendMessage?: (message: string) => void;
     isSending?: boolean;
+    canSendMessage?: boolean;
   },
   {uuid: string}
 >;
@@ -356,8 +359,16 @@ type IMessages = Props<
     cancel?: (value?: Message) => void;
     accept?: (value?: Message) => void;
     edit?: (value?: Message) => void;
+    negotiate?: (value?: Message) => void;
     backgroundColor?: string;
     position?: 'left' | 'right';
+    userType?: string;
+    isAccepting?: boolean;
+    isDeclining?: boolean;
+    isCancelling?: boolean;
+    isEditing?: boolean;
+    isNegotiating?: boolean;
+    isPaymentMade?: boolean;
   },
   Message
 >;
@@ -375,8 +386,8 @@ type IEmptyState<N = any> = Props<{
 
 type IJobsCard<U, D> = Props<
   {
-    type?: 'pending' | 'ongoing' | 'completed';
-    viewDetails?: () => void;
+    type?: 'pending' | 'in_progress' | 'completed';
+    viewDetails?: (data: D) => void;
     chat?: () => void;
     rate?: () => void;
     userType?: U;
@@ -462,6 +473,7 @@ type IContainer<C> = Props<{
   right?: number;
   flexWrap?: 'wrap' | 'nowrap' | 'wrap-reverse';
   horizontal?: boolean;
+  vertical?: boolean;
   showsHorizontalScrollIndicator?: boolean;
   showsVerticalScrollIndicator?: boolean;
   scrollsToTop?: boolean;
@@ -521,3 +533,37 @@ type IHelperCardSkeleton = Props<{
 }>;
 
 type ISearchResult<D = any> = Props<{fetchMore?: () => void}, D>;
+
+type IRevenueRings = Props<{
+  earningsProgress?: number;
+  tipsProgress?: number;
+  commissionProgress?: number;
+  earningsColor?: string;
+  tipsColor?: string;
+  commissionColor?: string;
+  size?: number;
+}>;
+
+type IRevenueLabel = Props<{
+  earnings?: string;
+  tips?: string;
+  commission?: string;
+}>;
+
+type ISectionBorderSeparatedCard = Props<{
+  title?: string;
+  amount: number | string;
+  type?: 'CREDIT' | 'DEBIT';
+  isBold?: boolean;
+}>;
+
+type IMultipleProgressBarProps = Props<{
+  segments?: Array<{
+    width?: `${number}%` | number;
+    color: string;
+  }>;
+  backgroundColor?: string;
+  borderRadius?: number;
+}>;
+
+type ITipsContainer = Props<{}, {title: string; description: string}[]>;

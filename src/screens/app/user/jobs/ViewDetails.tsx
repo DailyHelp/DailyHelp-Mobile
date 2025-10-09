@@ -18,9 +18,23 @@ import CustomHeader from '../../../../components/customHeader/Index';
 import IconF from 'react-native-vector-icons/FontAwesome';
 import {ColorKeys} from '../../../../shared/themes/Index';
 import Container from '../../../../components/container/Index';
+import dayjs from 'dayjs';
+import jobService from './service/Jobs.service';
+import AttachmentContainer from '../../../../components/AttachmentContainer';
+import Offer from '../../../../components/offers/Index';
+import homeService from '../home/services/Home.service';
 
 const ViewDetails: IViewDetails = ({navigation, route}) => {
-  const type = route.params?.type;
+  const {startJob, endJob} = jobService.useJobsActions();
+  const {rateProvider} = jobService.useRateProvider();
+  const {timeline, isLoading: timelineLoading} = jobService.useJobTimeline(
+    route.params?.uuid || '',
+  );
+  const {declineJob, declinePending} = jobService.useJobsActions();
+
+  const [isOfferCancel, setIsOfferCancel] = React.useState(false);
+
+  const type = route.params?.status.toLowerCase();
 
   utils.useHideBottomTab(navigation);
   const [swipeSuccess, setSwipeSuccess] = React.useState(false);
@@ -29,41 +43,43 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
     const timer = setTimeout(() => setSwipeSuccess(false), 1200);
 
     return () => clearTimeout(timer);
-  });
+  }, []);
 
   let headerText = 'Have they arrived? Tap “Confirm face” to verify.';
   let headerBgColor = '#95D21A';
-  let railBackgroundColor = type === 'ongoing' ? '#FEF7F7' : '#DEF7E1';
-  let railFillBackgroundColor = type === 'ongoing' ? '#F0443A' : '#2BBA3C';
-  let title = type === 'ongoing' ? 'Slide to END job' : 'Slide to START job';
+  let railBackgroundColor = type === 'in_progress' ? '#FEF7F7' : '#DEF7E1';
+  let railFillBackgroundColor = type === 'in_progress' ? '#F0443A' : '#2BBA3C';
+  let title = 'Slide to START job';
+
   let headerColor: ColorKeys = 'lightBlack';
 
-  if (type === 'ongoing') headerBgColor = '#FF6B01';
-  if (type === 'ongoing') headerText = 'Job in-Progress';
-  if (type === 'ongoing') headerColor = 'white';
+  if (type === 'in_progress') headerBgColor = '#FF6B01';
+  if (type === 'in_progress') headerText = 'Job in-Progress';
+  if (type === 'in_progress') headerColor = 'white';
+  if (type === 'in_progress') title = 'Slide to END job';
 
   return (
     <View style={{flex: 1, backgroundColor: 'white'}}>
       <CustomHeader
         type="back"
-        title="Job Details"
+        title={`Job #${route.params?.requestId}`}
         navigation={navigation}
         route={route}
         textMiddle
       />
 
-      {type === 'ongoing' && (
+      {type === 'in_progress' && (
         <View style={{...jobStyle.jobContainerCard}}>
           <CustomAvatar
             avatarSize={50}
             badgeSize={20}
-            data={{image: Assets.Worker1}}
+            data={{image: route?.params?.providerPicture || Assets.Worker1}}
           />
           <Typography size="md" fontWeight="bold">
-            Amarachi Eze
+            {route.params?.providerFirstname} {route.params?.providerLastname}
           </Typography>
           <Typography size="md" color="gray">
-            Hair stylist
+            {route.params?.providerPrimaryJobRole}
           </Typography>
         </View>
       )}
@@ -95,7 +111,7 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
             showsVerticalScrollIndicator={false}
             style={{flex: 1}}
             contentContainerStyle={{paddingBottom: 20}}>
-            {type !== 'ongoing' && (
+            {type !== 'in_progress' && (
               <View style={{...jobStyle.jobContainerCard}}>
                 <CustomAvatar
                   avatarSize={50}
@@ -103,10 +119,11 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
                   data={{image: Assets.Worker1}}
                 />
                 <Typography size="md" fontWeight="bold">
-                  Amarachi Eze
+                  {route.params?.providerFirstname}{' '}
+                  {route.params?.providerLastname}
                 </Typography>
                 <Typography size="md" color="gray">
-                  Hair stylist
+                  {route.params?.providerPrimaryJobRole}
                 </Typography>
 
                 <React.Fragment>
@@ -125,17 +142,20 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
                 ...jobStyle.jobContainerCard,
                 marginTop: verticalScale(10),
               }}>
-              <Typography size="lg" fontWeight="bold">
-                ₦32,000
+              <Typography size="lg" fontWeight="bold" currency>
+                {route.params?.price}
               </Typography>
               <View style={{flexDirection: 'row', gap: 10}}>
                 <Assets.Accepted style={{marginTop: verticalScale(4)}} />
                 <Typography size="md" color="gray">
-                  Accepted on 23 Mar, 2025, 09:30
+                  Accepted on{' '}
+                  {dayjs(route.params?.acceptedAt).format(
+                    'DD MMM, YYYY, hh:mm',
+                  )}
                 </Typography>
               </View>
 
-              {type === 'ongoing' ? (
+              {type === 'in_progress' ? (
                 <View
                   style={{
                     flexDirection: 'row',
@@ -148,7 +168,10 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
                   <MainButton
                     width={'100%'}
                     enableButtonColor="lightGrey"
-                    color="danger">
+                    color="danger"
+                    onPress={() => {
+                      // navigation.navigate('');
+                    }}>
                     Dispute job
                   </MainButton>
                 </View>
@@ -161,7 +184,7 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
                   borderColor="lightDeepGrey"
                   paddingBottom={20}>
                   <MainButton
-                    onPress={() => SheetManager.show('WorkerSuggestion')}
+                    onPress={() => setIsOfferCancel(true)}
                     enableButtonColor="lightGrey"
                     color="black"
                     width={'45%'}
@@ -186,17 +209,30 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
                   </MainButton>
                 </Container>
               )}
-
-              <Typography lineHeight={25} size="md" color="lightBlack">
-                Hey! I need help cleaning my room. It’s mostly just sweeping,
-                mopping, wiping down surfaces, and helping me organize a few
-                things. Nothing too heavy, but I’d love it to look fresh and
-                neat again.
-              </Typography>
             </View>
 
+            <Container gap={3} backgroundColor="white" padding={7}>
+              <Typography
+                lineHeight={25}
+                size="md"
+                color="lightBlack"
+                padding={6}>
+                {route.params?.description}
+              </Typography>
+
+              {route.params?.pictures.split(',').length! > 0 && (
+                <AttachmentContainer
+                  allowUpload={false}
+                  data={route.params?.pictures.split(',')}
+                />
+              )}
+            </Container>
+
             <View style={{marginTop: verticalScale(10)}}>
-              <JobTimeline />
+              <JobTimeline
+                timeline={timeline?.data}
+                isLoading={timelineLoading}
+              />
             </View>
           </ScrollView>
 
@@ -221,7 +257,15 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
                 railFillBorderColor="transparent"
                 title={title}
                 onSwipeSuccess={() => {
-                  setSwipeSuccess(true);
+                  if (type === 'in_progress') {
+                    endJob(route.params?.uuid!, {
+                      onSuccess: () => setSwipeSuccess(true),
+                    });
+                  } else {
+                    startJob(route.params?.uuid!, {
+                      onSuccess: () => setSwipeSuccess(true),
+                    });
+                  }
                 }}
                 shouldResetAfterSuccess={true}
                 titleColor={railFillBackgroundColor}
@@ -253,12 +297,35 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
                   style={{marginTop: verticalScale(5)}}
                 />
               )}
-              color="black">
+              color="black"
+              onPress={() => {
+                // You can add a rating modal here
+                rateProvider({
+                  uuid: route.params?.uuid!,
+                  body: {
+                    rating: 5,
+                    review: 'Great service!',
+                  },
+                });
+              }}>
               Rate service provider
             </OutlineButton>
           )}
         </View>
       </View>
+
+      <Offer
+        type="cancel"
+        isVisible={isOfferCancel}
+        onClose={() => setIsOfferCancel(false)}
+        isLoading={declinePending}
+        onDeclineOffer={(reason, category) => {
+          declineJob(
+            {reason, reasonCategory: category, uuid: route.params?.uuid},
+            {onSuccess: () => SheetManager.show('WorkerSuggestion')},
+          );
+        }}
+      />
     </View>
   );
 };

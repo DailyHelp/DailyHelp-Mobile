@@ -1,13 +1,35 @@
 import {View} from 'react-native';
 import {IVerificationPin} from '../../../../@types/routes';
-import CustomKeyPad from '../../../../components/CustiomKeyPad';
+import CustomKeyPad from '../../../../components/CustomKeyPad';
 import Typography from '../../../../components/Typography';
 import {scale} from '../../../../shared/Scaling';
 import Otp from '../../../../components/Otp';
 import React from 'react';
+import jobService from './service/Jobs.service';
 
-const VerificationPin: IVerificationPin = () => {
+const VerificationPin: IVerificationPin = ({navigation, route}) => {
   const [value, setValue] = React.useState('');
+  const {mutate: verifyJob, isLoading} = jobService.useVerifyJob();
+
+  const handleVerify = () => {
+    if (value.length === 4 && route?.params?.uuid) {
+      verifyJob(
+        {uuid: route.params.uuid, pin: value},
+        {
+          onSuccess: () => {
+            navigation.goBack();
+          },
+          onError: (error: any) => {},
+        },
+      );
+    }
+  };
+
+  React.useEffect(() => {
+    if (value.length === 4) {
+      handleVerify();
+    }
+  }, [value]);
 
   return (
     <View
@@ -40,9 +62,11 @@ const VerificationPin: IVerificationPin = () => {
       </View>
       <CustomKeyPad
         onPress={key => {
-          if (value.length < 4) setValue(prev => prev + key);
+          if (value.length < 4 && !isLoading) setValue(prev => prev + key);
         }}
-        onDelete={() => setValue(prev => prev.slice(0, -1))}
+        onDelete={() => {
+          if (!isLoading) setValue(prev => prev.slice(0, -1));
+        }}
       />
     </View>
   );

@@ -28,7 +28,7 @@ export default StyleSheet.create({
   },
   chatMessageContainer: {
     flexDirection: 'column',
-    gap: 7,
+    gap: 10,
     padding: 15,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,

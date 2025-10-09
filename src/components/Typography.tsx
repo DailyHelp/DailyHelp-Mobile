@@ -27,6 +27,7 @@ const Typography: ITypography<ColorKeys> = ({
   paddingBottom,
   currencyType = '₦',
   width,
+  marginBottom,
 }) => {
   const [ellipse, setEllipse] = React.useState(limit);
   const [showMore, setShowMore] = React.useState(readMore);
@@ -89,6 +90,7 @@ const Typography: ITypography<ColorKeys> = ({
             lineHeight,
             backgroundColor,
             paddingBottom,
+            marginBottom,
             width: typeof width === 'number' ? scale(width) : width,
           }}>
           {children}

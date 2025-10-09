@@ -13,6 +13,7 @@ const ChatFooter: IChatFooter<Navigate<IChatRoute>> = ({
   sendMessage,
   data,
   isSending,
+  canSendMessage,
 }) => {
   const [message, setMessage] = React.useState('');
 
@@ -25,6 +26,10 @@ const ChatFooter: IChatFooter<Navigate<IChatRoute>> = ({
           style={{color: '#A9AFC2', height: 50, width: '90%'}}
           onChangeText={setMessage}
           value={message}
+          
+          placeholder={
+            !canSendMessage ? 'Type a message' : 'You cannot send messages'
+          }
         />
       </View>
 

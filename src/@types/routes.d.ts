@@ -7,6 +7,7 @@ import {VerifyIdentityDTO} from '../screens/auth/dto/VerifyIdentityDto';
 import {UserTypes} from '../shared/Constant';
 import ProvidersDto from '../screens/app/user/home/dto/providersDto';
 import ReportConversationDto from '../screens/app/chat/dto/report-conversation.dto';
+import JobsDto from '../screens/app/user/jobs/dto/job.dto';
 
 /**
  * Routes for `AuthStackRoute`
@@ -228,6 +229,9 @@ type IChatRoute = {
     title: string;
     cancellationChances?: number;
     badge?: string;
+    picture?: string;
+    restricted?: boolean;
+    isOnline?: boolean;
   };
   Checkout?: {
     offerUuid: string;
@@ -240,6 +244,7 @@ type IChatRoute = {
     uuid: string;
   };
   ReportSubmitted?: undefined;
+  WebViewComponent?: {url: string};
 };
 
 type IChat = Props<NativeStackScreenProps<IChatRoute, 'Chat'>>;
@@ -249,6 +254,10 @@ type IChatBox = Props<NativeStackScreenProps<IChatRoute, 'ChatBox'>>;
 type ICheckout = Props<NativeStackScreenProps<IChatRoute, 'Checkout'>>;
 
 type IVoiceCall = Props<NativeStackScreenProps<IChatRoute, 'VoiceCall'>>;
+
+type IWebViewComponent = Props<
+  NativeStackScreenProps<IChatRoute, 'WebViewComponent'>
+>;
 
 type IReportSubmitted = Props<
   NativeStackScreenProps<IChatRoute, 'ReportSubmitted'>
@@ -268,10 +277,9 @@ type IReport = Props<
 type IJobsRoute = {
   Jobs?: undefined;
   JobsIndex?: undefined;
-  ViewDetails?: {
-    type: 'pending' | 'ongoing' | 'completed';
-  };
-  VerificationPin?: undefined;
+  ViewDetails?: JobsDto;
+  VerificationPin?: {uuid: string};
+  WebViewComponent?: {url: string; title: string};
 };
 
 type IJobs = Props<NativeStackScreenProps<IJobsRoute, 'Jobs'>>;
@@ -280,6 +288,10 @@ type IViewDetails = Props<NativeStackScreenProps<IJobsRoute, 'ViewDetails'>>;
 
 type IVerificationPin = Props<
   NativeStackScreenProps<IJobsRoute, 'VerificationPin'>
+>;
+
+type IWebViewComponent = Props<
+  NativeStackScreenProps<IJobsRoute, 'WebViewComponent'>
 >;
 
 type IMoreRoute = {
@@ -304,6 +316,7 @@ type IMoreRoute = {
   DeleteReason?: any;
   ProviderProfile?: ProvidersDto;
   ProviderTiers?: ProvidersDto;
+  WebViewComponent?: {url: string; title: string};
 };
 
 type IMore = Props<NativeStackScreenProps<IMoreRoute, 'More'>>;

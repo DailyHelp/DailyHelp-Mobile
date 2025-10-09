@@ -10,8 +10,10 @@ import Typography from '../../../../../components/Typography';
 import Icon from 'react-native-vector-icons/AntDesign';
 import IconI from 'react-native-vector-icons/Ionicons';
 import MainButton from '../../../../../components/button/MainButton';
+import jobService from '../service/Jobs.service';
 
 const FaceMatch = React.forwardRef<ActionSheetRef, IFaceMatch>((props, ref) => {
+  const {mutate} = jobService.useVerifyJob()
   return (
     <ActionSheet gestureEnabled ref={ref} id="FaceMatch">
       <View

@@ -2,9 +2,17 @@ import {View} from 'react-native';
 import Typography from '../../../../../components/Typography';
 import {scale, verticalScale} from '../../../../../shared/Scaling';
 import Icon from 'react-native-vector-icons/Ionicons';
+import React from 'react';
+import dayjs from 'dayjs';
 
-const JobTimeline: IJobTimeline = () => {
-  const timeline = [
+interface JobTimelineProps {
+  timeline?: any[];
+  isLoading?: boolean;
+}
+
+const JobTimeline: React.FC<JobTimelineProps> = ({timeline, isLoading}) => {
+  // Default timeline if no data is provided
+  const defaultTimeline = [
     {
       action: 'Offer Accepted',
       date: '23 Mar, 2025, 09:30',
@@ -13,6 +21,28 @@ const JobTimeline: IJobTimeline = () => {
     {action: 'Job Start', date: '23 Mar, 2025, 09:30', status: 'completed'},
     {action: 'Job End', date: 'In-progress', status: 'pending'},
   ];
+
+  const timelineData = timeline || defaultTimeline;
+
+  if (isLoading) {
+    return (
+      <View
+        style={{
+          flexDirection: 'column',
+          gap: 7,
+          padding: scale(10),
+          borderRadius: 10,
+          backgroundColor: 'white',
+        }}>
+        <Typography fontWeight="bold" color="lightBlack">
+          JOB TIMELINE
+        </Typography>
+        <Typography size="md" color="gray">
+          Loading timeline...
+        </Typography>
+      </View>
+    );
+  }
 
   return (
     <View
@@ -28,9 +58,9 @@ const JobTimeline: IJobTimeline = () => {
       </Typography>
 
       <View style={{flexDirection: 'column', gap: 21}}>
-        {timeline.map((item, index) => {
-          const isLast = index === timeline.length - 1;
-          const nextItem = timeline[index + 1];
+        {timelineData.map((item, index) => {
+          const isLast = index === timelineData.length - 1;
+          const nextItem = timelineData[index + 1];
           const showLine = !isLast;
           const isPending = nextItem?.status === 'pending';
           const isCompleted = item.status === 'completed';

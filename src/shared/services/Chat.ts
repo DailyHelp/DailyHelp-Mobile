@@ -1,3 +1,4 @@
+import CounterOfferDto from '../../screens/app/chat/dto/counter-offer.dto';
 import ReportConversationDto from '../../screens/app/chat/dto/report-conversation.dto';
 import Endpoints from './Endpoints';
 import Http from './Http';
@@ -45,6 +46,31 @@ export default class ChatApi extends Http {
       path: Endpoints.reportConversation(body.uuid!),
       method: 'POST',
       body,
+    });
+    const data = await this.handleResponse<any>(res);
+
+    this.success(data?.message);
+
+    return data;
+  }
+
+  protected async counterOffer(body: CounterOfferDto) {
+    const res = await this.fetchHandler({
+      path: Endpoints.counterOffer(body.uuid!),
+      method: 'POST',
+      body,
+    });
+    const data = await this.handleResponse<any>(res);
+
+    this.success(data?.message);
+
+    return data;
+  }
+
+  protected async acceptOffer(uuid: string) {
+    const res = await this.fetchHandler({
+      path: Endpoints.acceptOffer(uuid!),
+      method: 'PATCH',
     });
     const data = await this.handleResponse<any>(res);
 

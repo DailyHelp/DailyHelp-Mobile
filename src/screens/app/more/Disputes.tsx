@@ -25,7 +25,7 @@ const Disputes: IDisputes = ({navigation, route}) => {
       </View>
 
       <CustomFlatList<DisputesDto>
-        data={data}
+        data={data || []}
         renderItem={({item}) => (
           <DisputeCard type={index as any} data={{disputes: item}} />
         )}

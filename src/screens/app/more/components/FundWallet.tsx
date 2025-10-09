@@ -3,6 +3,7 @@ import {TouchableOpacity, View} from 'react-native';
 import ActionSheet, {
   ActionSheetRef,
   SheetManager,
+  SheetProps,
 } from 'react-native-actions-sheet';
 import CustomInput from '../../../../components/customInput/Index';
 import Typography from '../../../../components/Typography';
@@ -11,10 +12,23 @@ import FundWalletDto from '../dto/FundWallet.dto';
 import createValidator from 'class-validator-formik';
 import moreService from '../services/More.service';
 import {ActivityIndicator} from 'react-native-paper';
+import {useNavigation} from '@react-navigation/native';
 
-const FundedWallet = React.forwardRef<ActionSheetRef, IFundWallet>(
+const FundedWallet = React.forwardRef<ActionSheetRef, SheetProps<'FundWallet'>>(
   (props, ref) => {
-    const {data, isPending, mutate} = moreService.useFundWallet();
+    const {data, isPending, mutate} = moreService.useFundWallet('FUND_WALLET');
+    const navigation: any = useNavigation();
+
+    console.log(props);
+
+    React.useEffect(() => {
+      if (data) {
+        SheetManager.hide('FundWallet');
+        navigation.navigate('WebViewComponent', {
+          url: data.data.authorizationUrl,
+        });
+      }
+    }, [data]);
 
     return (
       <ActionSheet
@@ -52,7 +66,7 @@ const FundedWallet = React.forwardRef<ActionSheetRef, IFundWallet>(
                   </Typography>
                 </TouchableOpacity>
                 <Typography fontWeight="bold" size="md">
-                  Fund wallet
+                  {props.payload?.type === 'FUND' ? 'Fund wallet' : 'Amount'}
                 </Typography>
 
                 {isPending ? (
@@ -63,7 +77,7 @@ const FundedWallet = React.forwardRef<ActionSheetRef, IFundWallet>(
                       handleSubmit();
                     }}>
                     <Typography fontWeight="bold" size="sm" color="secondary">
-                      Fund
+                      {props.payload?.type === 'FUND' ? 'Fund' : 'Withdraw'}
                     </Typography>
                   </TouchableOpacity>
                 )}

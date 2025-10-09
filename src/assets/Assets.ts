@@ -116,9 +116,11 @@ import ProfilePadLock from './svg/profile_padlock.svg';
 import ProfileStartInactive from './svg/profile_star_inactive.svg';
 import ProfileSuitcaseInActive from './svg/profile_suitcase_inactive.svg';
 import ProfileSearchInActive from './svg/profile_search_inactive.svg';
+import ChatActivated from './svg/chat_activated.svg';
 
 export default {
   ProfileEyeActive,
+  ChatActivated,
   ProfileSuitcaseInActive,
   ProfileSearchInActive,
   ProfileStartInactive,

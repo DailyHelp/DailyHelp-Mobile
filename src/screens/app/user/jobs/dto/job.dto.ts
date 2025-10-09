@@ -54,6 +54,10 @@ export default class JobsDto {
   'cancelledAt': string;
   'cancellationReason': string;
   'cancellationCategory': string;
+  providerPrimaryJobRole?: string;
+  providerFirstname?: string;
+  providerLastname?: string;
+  providerPicture?: string;
   'createdAt': string;
   'updatedAt': string;
   'deletedAt': string;

@@ -8,11 +8,19 @@ import CustomFlatList from '../../../components/CustomFlatList';
 import TransactionCard from './components/TransactionCard';
 import {SheetManager} from 'react-native-actions-sheet';
 import moreService from './services/More.service';
+import TransactionDto from './dto/Transaction.dto';
+import dayjs from 'dayjs';
+import {observer} from 'mobx-react-lite';
+import {appStore} from '../../../shared/stores/appStore';
+import {UserTypes} from '../../../shared/Constant';
 
 const WalletBalance: IWalletBalance = ({navigation}) => {
   utils.useHideBottomTab(navigation);
 
   const {wallet} = moreService.useWalletBalance();
+  const {data} = moreService.useWalletTransactions();
+
+  const userType = appStore.user_types;
 
   return (
     <View style={{flex: 1}}>
@@ -31,10 +39,17 @@ const WalletBalance: IWalletBalance = ({navigation}) => {
           {wallet?.data[0].availableBalance || 0}
         </Typography>
         <MainButton
+          enableButtonColor={
+            userType === UserTypes.CUSTOMER ? 'primary' : 'secondary'
+          }
           onPress={() => {
-            SheetManager.show('FundWallet');
+            SheetManager.show('FundWallet', {
+              payload: {
+                type: userType === UserTypes.CUSTOMER ? 'FUND' : 'WITHDRAW',
+              },
+            });
           }}>
-          Fund wallet
+          {userType === UserTypes.CUSTOMER ? 'Fund wallet' : 'Withdraw'}
         </MainButton>
       </View>
 
@@ -50,13 +65,13 @@ const WalletBalance: IWalletBalance = ({navigation}) => {
           Transaction history
         </Typography>
 
-        <CustomFlatList
-          data={['']}
-          renderItem={() => (
+        <CustomFlatList<TransactionDto>
+          data={data}
+          renderItem={({item}) => (
             <TransactionCard
               data={{
-                amount: 32000,
-                date: '23 Mar, 2025. 09:12 AM',
+                amount: item.amount,
+                date: dayjs(item.createdAt).format('DD MMM, YYYY'),
                 title: 'Wallet top up',
               }}
             />
@@ -67,4 +82,4 @@ const WalletBalance: IWalletBalance = ({navigation}) => {
     </View>
   );
 };
-export default WalletBalance;
+export default observer(WalletBalance);

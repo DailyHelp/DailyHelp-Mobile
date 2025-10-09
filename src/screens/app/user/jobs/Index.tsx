@@ -29,10 +29,10 @@ const Jobs: IJobs = props => {
       return (
         <Container marginBottom={16}>
           <JobsCard
-            type={type as any}
+            type={type.toLowerCase() as any}
             data={dto.item}
-            viewDetails={() => {
-              props.navigation.navigate('ViewDetails', {type: type as any});
+            viewDetails={data => {
+              props.navigation.navigate('ViewDetails', data);
             }}
           />
         </Container>
@@ -52,28 +52,26 @@ const Jobs: IJobs = props => {
         tabs={jobs}
         width={'full'}
       />
-      <Container padding={15} width={'full'}>
-        <CustomFlatList<JobsDto>
-          data={data}
-          showsVerticalScrollIndicator={false}
-          showsHorizontalScrollIndicator={false}
-          renderItem={renderItem}
-          keyExtractor={(item, index) => index.toString()}
-          onEndReached={fetchMore}
-          onEndReachedThreshold={0.5}
-          refreshing={isLoading}
-          onRefresh={refetch}
-          ListEmptyComponent={() => (
-            <EmptyState
-              showButton={false}
-              type="jobs"
-              header="No jobs found"
-              title="Send offer to see jobs"
-              height={450}
-            />
-          )}
-        />
-      </Container>
+      <CustomFlatList<JobsDto>
+        data={data}
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
+        renderItem={renderItem}
+        keyExtractor={(item, index) => index.toString()}
+        onEndReached={fetchMore}
+        onEndReachedThreshold={0.5}
+        refreshing={isLoading}
+        onRefresh={refetch}
+        ListEmptyComponent={() => (
+          <EmptyState
+            showButton={false}
+            type="jobs"
+            header="No jobs found"
+            title="Send offer to see jobs"
+            height={450}
+          />
+        )}
+      />
     </Container>
   );
 };

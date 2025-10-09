@@ -1,28 +1,27 @@
-import React from 'react';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import {
-  heightPercentageToDP as hp,
-  widthPercentageToDP as wp,
-} from 'react-native-responsive-screen';
+import {CameraRoll} from '@react-native-camera-roll/camera-roll';
 import {ParamListBase} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import React from 'react';
+import {Alert, Linking, PermissionsAndroid, Platform} from 'react-native';
 import ReactNativeBiometrics, {
   BiometryType,
   BiometryTypes,
 } from 'react-native-biometrics';
-import ThrowError from './errors/throwError';
-import CatchError from './errors/catchError';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {
-  setBadgeCount,
   getNotificationBadgeSetting,
+  setBadgeCount,
 } from 'react-native-notification-badge';
-import {scale, verticalScale} from './Scaling';
-import {PermissionsAndroid, Platform} from 'react-native';
-import {CameraRoll} from '@react-native-camera-roll/camera-roll';
-import {validate} from 'class-validator';
-import Http, {http} from './services/Http';
+import {
+  heightPercentageToDP as hp,
+  widthPercentageToDP as wp,
+} from 'react-native-responsive-screen';
 import AppStorage from './AppStorage';
 import {UserTypes} from './Constant';
+import CatchError from './errors/catchError';
+import ThrowError from './errors/throwError';
+import {scale, verticalScale} from './Scaling';
+import {http} from './services/Http';
 
 class Utils {
   private static instance: Utils;
@@ -420,7 +419,7 @@ class Utils {
     const [data, setData] = React.useState<D[]>([]);
 
     const appendPageData = (newData: D[]) => {
-      setData(prev => [...prev!, ...newData]);
+      setData(prev => [...(prev || []), ...newData]);
     };
 
     const resetHistory = () => {

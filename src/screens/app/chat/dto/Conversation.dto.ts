@@ -21,4 +21,7 @@ interface Conversation {
   spOnline?: boolean;
   spTier?: string;
   srOnline?: boolean;
+  spPicture: string;
+  rqPicture: string;
+  unreadCount: string;
 }

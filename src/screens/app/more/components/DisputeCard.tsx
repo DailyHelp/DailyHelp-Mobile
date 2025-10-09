@@ -41,12 +41,12 @@ const DisputeCard: IDisputeCard<DisputesDto> = ({type, data}) => {
 
           <View style={{flexDirection: 'column', gap: 3}}>
             <Typography size="m2d">
-              {data?.disputes?.submittedBy.lastname}{' '}
-              {data?.disputes?.submittedBy.firstname}
+              {data?.disputes?.submittedBy?.lastname || ''}{' '}
+              {data?.disputes?.submittedBy?.firstname || ''}
             </Typography>
             <View style={{flexDirection: 'row', alignItems: 'center', gap: 5}}>
               <Typography size="xs" color="gray">
-                {dayjs(data?.disputes?.createdAt).format('DD, MMM, YYYY')}
+                {data?.disputes?.createdAt ? dayjs(data.disputes.createdAt).format('DD, MMM, YYYY') : 'N/A'}
               </Typography>
               <View
                 style={{
@@ -56,7 +56,7 @@ const DisputeCard: IDisputeCard<DisputesDto> = ({type, data}) => {
                 }}
               />
               <Typography size="xs" color="gray">
-                Dispute ID #{data?.disputes?.uuid}
+                Dispute ID #{data?.disputes?.uuid || 'N/A'}
               </Typography>
             </View>
           </View>
