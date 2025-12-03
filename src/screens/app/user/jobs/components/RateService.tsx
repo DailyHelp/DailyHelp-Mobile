@@ -1,9 +1,11 @@
 import {Formik} from 'formik';
 import React from 'react';
-import {TouchableOpacity, View} from 'react-native';
+import {RefreshControl, TouchableOpacity, View} from 'react-native';
 import ActionSheet, {
+  ActionSheetProps,
   ActionSheetRef,
   ScrollView,
+  SheetManager,
 } from 'react-native-actions-sheet';
 import Icon from 'react-native-vector-icons/AntDesign';
 import Assets from '../../../../../assets/Assets';
@@ -12,47 +14,70 @@ import Typography from '../../../../../components/Typography';
 import {scale, verticalScale} from '../../../../../shared/Scaling';
 import CustomInput from '../../../../../components/customInput/Index';
 import MainButton from '../../../../../components/button/MainButton';
-import { ColorKeys } from '../../../../../shared/themes/Index';
+import {ColorKeys} from '../../../../../shared/themes/Index';
+import jobService from '../service/Jobs.service';
+import moreService from '../../../more/services/More.service';
 
-const RateService = React.forwardRef<ActionSheetRef, IWorkerSuggestion>(
-  (props, ref) => {
-    const rating = [
-      {
-        emoji: '😡',
-        title: 'Terrible service',
-        slug: 'terrible_service',
-        color: 'danger',
-      },
-      {
-        emoji: '🤨',
-        title: 'Not so great service',
-        slug: 'not_so_great_service',
-        color: 'danger',
-      },
-      {
-        emoji: '🙂',
-        title: 'Okay service',
-        slug: 'okay_service',
-        color: 'orange',
-      },
-      {
-        emoji: '😀',
-        title: 'Good service',
-        slug: 'good_service',
-        color: 'lightGreen',
-      },
-      {
-        emoji: '🤩',
-        title: 'Excellent service',
-        slug: 'excellent_service',
-        color: 'lightGreen',
-      },
-    ];
+const RateService = React.forwardRef<
+  ActionSheetRef,
+  ActionSheetProps<'RateService'>
+>((props, ref) => {
+  const {rateProvider, ratePending} = jobService.useRateProvider();
+  const {wallet, refetch, isLoading} = moreService.useWalletBalance();
+  const [refreshing, setRefreshing] = React.useState(false);
 
-    const tips = [1000, 2000, 3000, 4000];
+  const rating = [
+    {
+      emoji: '😡',
+      title: 'Terrible service',
+      slug: 'terrible_service',
+      color: 'danger',
+    },
+    {
+      emoji: '🤨',
+      title: 'Not so great service',
+      slug: 'not_so_great_service',
+      color: 'danger',
+    },
+    {
+      emoji: '🙂',
+      title: 'Okay service',
+      slug: 'okay_service',
+      color: 'orange',
+    },
+    {
+      emoji: '😀',
+      title: 'Good service',
+      slug: 'good_service',
+      color: 'lightGreen',
+    },
+    {
+      emoji: '🤩',
+      title: 'Excellent service',
+      slug: 'excellent_service',
+      color: 'lightGreen',
+    },
+  ];
 
-    return (
-      <ActionSheet ref={ref} gestureEnabled>
+  const tips = [1000, 2000, 3000, 4000];
+
+  const prop: any = props.payload;
+
+  const onRefresh = React.useCallback(async () => {
+    setRefreshing(true);
+    try {
+      await refetch();
+    } finally {
+      setRefreshing(false);
+    }
+  }, [refetch]);
+
+  return (
+    <ActionSheet ref={ref} gestureEnabled>
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={refreshing || isLoading} onRefresh={onRefresh} />
+        }>
         <View style={{backgroundColor: 'white', padding: scale(5)}}>
           <View
             style={{
@@ -99,12 +124,22 @@ const RateService = React.forwardRef<ActionSheetRef, IWorkerSuggestion>(
               <CustomAvatar
                 badgeSize={30}
                 avatarSize={70}
-                data={{image: Assets.Worker1}}
+                data={{image: prop?.providerImage, badge: prop.tier}}
               />
             </View>
           </View>
-          <Formik initialValues={{rate: '', tip: ''}} onSubmit={() => {}}>
-            {({values: v, handleChange}) => (
+          <Formik
+            initialValues={{rate: '', tip: '', review: ''}}
+            onSubmit={data => {
+              rateProvider(
+                {
+                  uuid: prop.uuid,
+                  body: data,
+                },
+                {onSuccess: () => SheetManager.hide('RateService')},
+              );
+            }}>
+            {({values: v, handleChange, handleSubmit}) => (
               <React.Fragment>
                 <ScrollView>
                   <View
@@ -143,7 +178,7 @@ const RateService = React.forwardRef<ActionSheetRef, IWorkerSuggestion>(
                     {v.rate && (
                       <Typography
                         textAlign="center"
-                        size="m3d"
+                        size="md"
                         fontWeight="semibold"
                         paddingBottom={verticalScale(15)}
                         color={rating[+v.rate].color as ColorKeys}>
@@ -169,6 +204,8 @@ const RateService = React.forwardRef<ActionSheetRef, IWorkerSuggestion>(
                         multiline
                         placeholder="They did exceptionally great!"
                         label="Tell us more"
+                        value={v.review}
+                        onChangeText={handleChange('review')}
                       />
 
                       <View
@@ -215,20 +252,30 @@ const RateService = React.forwardRef<ActionSheetRef, IWorkerSuggestion>(
                           gap: 5,
                         }}>
                         <Typography size="md">Wallet balance</Typography>
-                        <View></View>
+                        <View>
+                          <Typography currency fontWeight="bold" size="md">
+                            {wallet?.data.totalBalance || 0}
+                          </Typography>
+                        </View>
                       </View>
                     </View>
                   </View>
                 </ScrollView>
                 <View style={{padding: scale(10)}}>
-                  <MainButton>Rate service provider</MainButton>
+                  <MainButton
+                    loading={ratePending}
+                    onPress={handleSubmit}
+                    enableButtonColor="secondary"
+                    color="white">
+                    Rate service provider
+                  </MainButton>
                 </View>
               </React.Fragment>
             )}
           </Formik>
         </View>
-      </ActionSheet>
-    );
-  },
-);
+      </ScrollView>
+    </ActionSheet>
+  );
+});
 export default RateService;

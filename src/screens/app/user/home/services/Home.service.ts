@@ -2,7 +2,12 @@ import Geolocation, {
   GeolocationResponse,
 } from '@react-native-community/geolocation';
 import {RouteProp, useRoute} from '@react-navigation/native';
-import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
+import {
+  QueryClient,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 import React from 'react';
 import {SheetManager} from 'react-native-actions-sheet';
 import {IHomeRoute} from '../../../../../@types/routes';
@@ -14,11 +19,13 @@ import utils from '../../../../../shared/Utils';
 import DeclineOfferDto from '../../jobs/dto/DeclineOffer.dto';
 import SendOfferDto from '../../jobs/dto/SendOffer.dto';
 import ProvidersDto from '../dto/providersDto';
+import Review from '../dto/reviews.dto';
 import SaveHelpersDetailsDTO from '../dto/SaveHelpersDetailsDto';
 import SavePriceDTO from '../dto/SavePriceDto';
 
 class HomeService extends HomeApi {
   private static instance: HomeService;
+  queryClient = new QueryClient();
 
   static getInstance() {
     if (!this.instance) {
@@ -32,7 +39,6 @@ class HomeService extends HomeApi {
     const {data, isLoading, error} = useQuery({
       queryKey: ['allCategories'],
       queryFn: async () => await this.getAllCategories(),
-      enabled: Boolean(AppStorage.find('isAuthenticated')),
     });
 
     return {data, isLoading, error};
@@ -232,6 +238,7 @@ class HomeService extends HomeApi {
         return await this.savePrice(body);
       },
       onError: error => new CatchError(error, true),
+      onSuccess: () => this.queryClient.invalidateQueries({queryKey: ['user']}),
     });
 
     return {
@@ -315,9 +322,12 @@ class HomeService extends HomeApi {
     const {mutateAsync, isPending} = useMutation({
       mutationKey: ['helper-details'],
       mutationFn: async (body: SaveHelpersDetailsDTO) => {
+        console.log(body);
+
         return await this.saveHelpersDetails(body);
       },
       onError: error => new CatchError(error, true),
+      onSuccess: () => this.queryClient.invalidateQueries({queryKey: ['user']}),
     });
 
     return {
@@ -353,7 +363,7 @@ class HomeService extends HomeApi {
     } = useMutation({
       mutationKey: ['update-offer'],
       mutationFn: async (body: SendOfferDto) => {
-        return await this.updateOffer(router.params?.uuid!!, body);
+        return await this.updateOffer(body.uuid!, body);
       },
       onSuccess: (data, body) => {
         client.invalidateQueries({queryKey: ['conversation']});
@@ -403,26 +413,118 @@ class HomeService extends HomeApi {
       }
     };
 
+    const parseAttachments = React.useCallback(
+      (raw?: SendOfferDto['attachments']) => {
+        if (!raw) {
+          return [];
+        }
+
+        if (Array.isArray(raw)) {
+          return raw.filter(Boolean).filter(item => {
+            // Filter out the string '[]' which represents an empty array
+            if (item === '[]') {
+              return false;
+            }
+            // If item is a stringified array, try to parse it
+            if (typeof item === 'string' && item.trim().startsWith('[')) {
+              try {
+                const parsed = JSON.parse(item);
+                // If it's an empty array, filter it out
+                return Array.isArray(parsed) && parsed.length > 0;
+              } catch {
+                // If parsing fails, keep the item as is
+                return true;
+              }
+            }
+            return true;
+          }) as string[];
+        }
+
+        try {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed)) {
+            return parsed
+              .filter(Boolean)
+              .filter(item => item !== '[]' && item !== '');
+          }
+        } catch (error) {
+          console.warn('Attachment parse error:', error);
+        }
+
+        return [];
+      },
+      [],
+    );
+
+    const buildAttachmentPayload = React.useCallback(
+      async (raw?: SendOfferDto['attachments']) => {
+        const attachments = parseAttachments(raw);
+
+        if (!attachments.length) return undefined;
+
+        const remoteAttachments: string[] = [];
+        for (const uri of attachments) {
+          if (!uri) continue;
+
+          if (/^https?:\/\//i.test(uri)) {
+            remoteAttachments.push(uri);
+            continue;
+          }
+
+          try {
+            const uploaded = await upload(uri);
+            remoteAttachments.push(uploaded);
+          } catch (error) {
+            console.error('Offer attachment upload failed:', error);
+            throw error;
+          }
+        }
+
+        return remoteAttachments.length ? remoteAttachments : undefined;
+      },
+      [parseAttachments, upload],
+    );
+
+    const handleUpdateOffer = React.useCallback(
+      async (payload: SendOfferDto, close: () => void) => {
+        const attachments = await buildAttachmentPayload(payload.attachments);
+        const normalizedAmount = payload.amount || 0;
+
+        const body: SendOfferDto = {
+          ...payload,
+          amount: normalizedAmount,
+          attachments: attachments || undefined,
+        };
+
+        updateOffer(body, {
+          onSuccess: () => {
+            close();
+          },
+        });
+      },
+      [updateOffer, buildAttachmentPayload],
+    );
+
     return {
       onSendOffer,
       sendOfferData,
       sendingPending: isLoading || sendingPending,
       declineOffer,
       declinePending,
-      updateOffer,
       updateOfferData,
       cancelOffer,
       cancelPending,
       updatePending,
+      handleUpdateOffer,
     };
   }
 
-  useCustomerReviews(uuid: string) {
+  useReviews(size = 10) {
     const {query, appendPageData, data, fetchMore} = utils.usePagination<
-      Reviews[]
+      Review[]
     >({
       pagination: {
-        limit: 10,
+        limit: size,
         orderBy: 'DESC',
       },
     });
@@ -432,8 +534,8 @@ class HomeService extends HomeApi {
       isLoading,
       error,
     } = useQuery({
-      queryKey: ['reviews', uuid],
-      queryFn: async () => await this.getReviews(uuid, query),
+      queryKey: ['reviews'],
+      queryFn: async () => await this.getReviews(query),
       enabled: Boolean(AppStorage.find('isAuthenticated')),
     });
 
@@ -441,7 +543,13 @@ class HomeService extends HomeApi {
       if (reviews?.data) appendPageData(reviews?.data!);
     }, [reviews?.data]);
 
-    return {data: data, isLoading, error, fetchMore};
+    return {
+      data: data as Review[],
+      isLoading,
+      error,
+      fetchMore,
+      total: reviews?.pagination.total,
+    };
   }
 
   useUser() {
@@ -476,6 +584,16 @@ class HomeService extends HomeApi {
     };
 
     return {onSubmit, uploading: isLoading};
+  }
+
+  useGetReviewRatingMetrics(uuid: string) {
+    const {data, isLoading, error} = useQuery({
+      queryKey: ['rating-metrics', uuid],
+      queryFn: async () => await this.customerProviderReview(uuid),
+      enabled: Boolean(AppStorage.find('isAuthenticated')),
+    });
+
+    return {data: data?.data, isLoading, error};
   }
 }
 

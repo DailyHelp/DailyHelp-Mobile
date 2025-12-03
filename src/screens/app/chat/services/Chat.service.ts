@@ -7,6 +7,7 @@ import AppStorage from '../../../../shared/AppStorage';
 import ReportConversationDto from '../dto/report-conversation.dto';
 import CatchError from '../../../../shared/errors/catchError';
 import CounterOfferDto from '../dto/counter-offer.dto';
+import {websocketService} from '../../../../shared/services/WebSocket';
 
 export class ChatService extends ChatApi {
   private static instance: ChatService;
@@ -41,8 +42,6 @@ export class ChatService extends ChatApi {
 
     React.useEffect(() => {
       if (conversations?.data) {
-        console.log(conversations);
-
         if (query?.pagination?.page === 1) {
           // First page - reset data
           resetHistory();
@@ -187,6 +186,25 @@ export class ChatService extends ChatApi {
     };
   }
 
+  useAgoraToken(uuid: string) {
+    const {
+      data: agoraToken,
+      isLoading,
+      error,
+      refetch,
+    } = useQuery({
+      queryKey: ['agora-token', uuid],
+      queryFn: async () => await this.agoraTokens(uuid),
+    });
+
+    return {
+      config: agoraToken?.data,
+      isLoading,
+      error,
+      refetch,
+    };
+  }
+
   useAcceptOffer() {
     const queryClient = useQueryClient();
     const {mutate, isPending, data} = useMutation({
@@ -230,6 +248,204 @@ export class ChatService extends ChatApi {
       mutate,
       isPending,
       data,
+    };
+  }
+
+  /**
+   * Hook to handle all WebSocket functionality for conversations
+   * This handles incoming events, connection, and provides functions to send events
+   * @param conversations - Array of conversations to auto-read when loaded
+   */
+  useWebSocketListeners(conversations?: Conversation[]) {
+    const queryClient = useQueryClient();
+
+    // Ensure WebSocket is connected on mount
+    React.useEffect(() => {
+      if (!websocketService.isConnected()) {
+        websocketService.connect().catch(error => {
+          console.error('Failed to connect WebSocket:', error);
+        });
+      }
+    }, []);
+
+    // Set up WebSocket event listeners for incoming events
+    React.useEffect(() => {
+      websocketService.on({
+        onMessage: (message: any) => {
+          const eventType = message.event || message.type;
+
+          // Handle conversation:joined event
+          if (eventType === 'conversation:joined') {
+            const {conversationUuid} = message.data || {};
+            if (conversationUuid) {
+              console.log('Conversation joined:', conversationUuid);
+              queryClient.invalidateQueries({queryKey: ['conversations']});
+            }
+          }
+
+          // Handle conversation:left event
+          if (eventType === 'conversation:left') {
+            const {conversationUuid} = message.data || {};
+            if (conversationUuid) {
+              console.log('Conversation left:', conversationUuid);
+              queryClient.invalidateQueries({queryKey: ['conversations']});
+            }
+          }
+
+          // Handle conversation:created event
+          if (eventType === 'conversation:created') {
+            const {
+              uuid,
+              serviceProviderUuid,
+              serviceRequestorUuid,
+              lastMessage,
+              createdAt,
+            } = message.data || {};
+            if (uuid) {
+              console.log('Conversation created:', uuid);
+              queryClient.invalidateQueries({queryKey: ['conversations']});
+            }
+          }
+
+          // Handle conversation:updated event
+          if (eventType === 'conversation:updated') {
+            const {
+              uuid,
+              serviceProviderUuid,
+              serviceRequestorUuid,
+              lastMessageUuid,
+              locked,
+            } = message.data || {};
+            if (uuid) {
+              console.log('Conversation updated:', uuid);
+              queryClient.invalidateQueries({queryKey: ['conversations']});
+              queryClient.invalidateQueries({queryKey: ['conversation', uuid]});
+            }
+          }
+
+          // Handle conversation:read event
+          if (eventType === 'conversation:read') {
+            const {conversationUuid, readerUuid, unreadCount, readAt} =
+              message.data || {};
+            if (conversationUuid) {
+              console.log('Conversation read:', conversationUuid);
+              queryClient.invalidateQueries({queryKey: ['conversations']});
+              queryClient.invalidateQueries({
+                queryKey: ['conversation', conversationUuid],
+              });
+            }
+          }
+
+          // Handle message:created event
+          if (eventType === 'message:created') {
+            const {
+              uuid,
+              conversationUuid,
+              fromUuid,
+              toUuid,
+              message: messageText,
+              type,
+              createdAt,
+            } = message.data || {};
+            if (uuid && conversationUuid) {
+              console.log('Message created:', uuid);
+              // Invalidate conversation list to update last message
+              queryClient.invalidateQueries({queryKey: ['conversations']});
+              // Invalidate specific conversation to show new message
+              // This will automatically trigger a refetch in ChatBox if it's mounted
+              queryClient.invalidateQueries({
+                queryKey: ['conversation', conversationUuid],
+              });
+            }
+          }
+
+          // Handle message:read event
+          if (eventType === 'message:read') {
+            const {conversationUuid, messageUuid, readerUuid, readAt} =
+              message.data || {};
+            if (conversationUuid && messageUuid) {
+              console.log('Message read:', messageUuid);
+              // Invalidate to update read status
+              queryClient.invalidateQueries({queryKey: ['conversations']});
+              queryClient.invalidateQueries({
+                queryKey: ['conversation', conversationUuid],
+              });
+            }
+          }
+
+          // Handle presence:update event
+          if (eventType === 'presence:update') {
+            const {userUuid, online, at} = message.data || {};
+            if (userUuid) {
+              console.log('Presence updated:', {userUuid, online, at});
+              // Invalidate conversations to update online status
+              queryClient.invalidateQueries({queryKey: ['conversations']});
+              // Also invalidate any active conversation with this user
+              queryClient.invalidateQueries({queryKey: ['conversation']});
+            }
+          }
+        },
+      });
+
+      // Cleanup: remove event listeners on unmount
+      return () => {
+        websocketService.off(['onMessage']);
+      };
+    }, [queryClient]);
+
+    // Auto-read conversations when list is loaded
+    React.useEffect(() => {
+      if (
+        conversations &&
+        conversations.length > 0 &&
+        websocketService.isConnected()
+      ) {
+        conversations.forEach((conversation: Conversation) => {
+          if (conversation.conversationId) {
+            websocketService.send({
+              type: 'conversation:read',
+              data: {conversationUuid: conversation.conversationId},
+            });
+          }
+        });
+      }
+    }, [conversations]);
+
+    // Functions to send WebSocket events
+    const joinConversation = React.useCallback((conversationUuid: string) => {
+      if (websocketService.isConnected() && conversationUuid) {
+        websocketService.send({
+          type: 'conversation:join',
+          data: {conversationUuid},
+        });
+      }
+    }, []);
+
+    const leaveConversation = React.useCallback((conversationUuid: string) => {
+      if (websocketService.isConnected() && conversationUuid) {
+        websocketService.send({
+          type: 'conversation:leave',
+          data: {conversationUuid},
+        });
+      }
+    }, []);
+
+    const readMessage = React.useCallback(
+      (messageUuid: string, conversationUuid: string) => {
+        if (websocketService.isConnected() && messageUuid && conversationUuid) {
+          websocketService.send({
+            type: 'message:read',
+            data: {messageUuid, conversationUuid},
+          });
+        }
+      },
+      [],
+    );
+
+    return {
+      joinConversation,
+      leaveConversation,
+      readMessage,
     };
   }
 }

@@ -1,32 +1,35 @@
+import dayjs from 'dayjs';
+import React from 'react';
 import {ScrollView, View} from 'react-native';
+import {SheetManager} from 'react-native-actions-sheet';
+import Icon from 'react-native-vector-icons/AntDesign';
+import IconF from 'react-native-vector-icons/FontAwesome';
+import SwipeButton from 'rn-swipe-button';
 import {IViewDetails} from '../../../../@types/routes';
 import Assets from '../../../../assets/Assets';
+import AttachmentContainer from '../../../../components/AttachmentContainer';
+import MainButton from '../../../../components/button/MainButton';
+import OutlineButton from '../../../../components/button/OutlineButton';
+import Container from '../../../../components/container/Index';
 import CustomAvatar from '../../../../components/CustomAvatar';
+import CustomHeader from '../../../../components/customHeader/Index';
+import Offer from '../../../../components/offers/Index';
 import Typography from '../../../../components/Typography';
 import {scale, verticalScale} from '../../../../shared/Scaling';
-import OutlineButton from '../../../../components/button/OutlineButton';
-import jobStyle from './jobStyle';
-import MainButton from '../../../../components/button/MainButton';
-import Icon from 'react-native-vector-icons/AntDesign';
-import utils from '../../../../shared/Utils';
-import SwipeButton from 'rn-swipe-button';
-import {customFontSize, fonts} from '../../../../shared/themes/Typography';
-import React from 'react';
-import {SheetManager} from 'react-native-actions-sheet';
-import JobTimeline from './components/JobTimeline';
-import CustomHeader from '../../../../components/customHeader/Index';
-import IconF from 'react-native-vector-icons/FontAwesome';
 import {ColorKeys} from '../../../../shared/themes/Index';
-import Container from '../../../../components/container/Index';
-import dayjs from 'dayjs';
+import {customFontSize, fonts} from '../../../../shared/themes/Typography';
+import utils from '../../../../shared/Utils';
+import JobTimeline from './components/JobTimeline';
+import jobStyle from './jobStyle';
 import jobService from './service/Jobs.service';
-import AttachmentContainer from '../../../../components/AttachmentContainer';
-import Offer from '../../../../components/offers/Index';
-import homeService from '../home/services/Home.service';
 
 const ViewDetails: IViewDetails = ({navigation, route}) => {
+  // Set up WebSocket listeners for jobs and offers
+  jobService.useWebSocketListeners();
+
   const {startJob, endJob} = jobService.useJobsActions();
-  const {rateProvider} = jobService.useRateProvider();
+
+  const {jobDetails} = jobService.useGetJobDetails(route.params?.uuid!);
   const {timeline, isLoading: timelineLoading} = jobService.useJobTimeline(
     route.params?.uuid || '',
   );
@@ -34,16 +37,21 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
 
   const [isOfferCancel, setIsOfferCancel] = React.useState(false);
 
-  const type = route.params?.status.toLowerCase();
-
   utils.useHideBottomTab(navigation);
   const [swipeSuccess, setSwipeSuccess] = React.useState(false);
+  const [type, setType] = React.useState(
+    (jobDetails?.data.job.status || route.params?.status)?.toLowerCase(),
+  );
 
   React.useEffect(() => {
     const timer = setTimeout(() => setSwipeSuccess(false), 1200);
 
     return () => clearTimeout(timer);
   }, []);
+
+  React.useEffect(() => {
+    setType(jobDetails?.data.job.status?.toLowerCase());
+  }, [jobDetails]);
 
   let headerText = 'Have they arrived? Tap “Confirm face” to verify.';
   let headerBgColor = '#95D21A';
@@ -57,6 +65,14 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
   if (type === 'in_progress') headerText = 'Job in-Progress';
   if (type === 'in_progress') headerColor = 'white';
   if (type === 'in_progress') title = 'Slide to END job';
+
+  if (type === 'completed') headerBgColor = '#27A535';
+  if (type === 'completed') headerText = 'Job Completed';
+  if (type === 'completed') headerColor = 'white';
+
+  if (type === 'canceled') headerBgColor = '#27A535';
+  if (type === 'canceled') headerText = 'Job Canceled';
+  if (type === 'completed') headerColor = 'white';
 
   return (
     <View style={{flex: 1, backgroundColor: 'white'}}>
@@ -126,14 +142,16 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
                   {route.params?.providerPrimaryJobRole}
                 </Typography>
 
-                <React.Fragment>
-                  <OutlineButton
-                    height={verticalScale(50)}
-                    onPress={() => SheetManager.show('FaceMatch')}
-                    icon={() => <Assets.ConfirmFace />}>
-                    Confirm face
-                  </OutlineButton>
-                </React.Fragment>
+                {type !== 'completed' && (
+                  <React.Fragment>
+                    <OutlineButton
+                      height={verticalScale(50)}
+                      onPress={() => SheetManager.show('FaceMatch')}
+                      icon={() => <Assets.ConfirmFace />}>
+                      Confirm face
+                    </OutlineButton>
+                  </React.Fragment>
+                )}
               </View>
             )}
 
@@ -170,44 +188,46 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
                     enableButtonColor="lightGrey"
                     color="danger"
                     onPress={() => {
-                      // navigation.navigate('');
+                      navigation.navigate('Dispute');
                     }}>
                     Dispute job
                   </MainButton>
                 </View>
               ) : (
-                <Container
-                  flexDirection="row"
-                  gap={10}
-                  borderBottomWidth={1}
-                  borderStyle="dashed"
-                  borderColor="lightDeepGrey"
-                  paddingBottom={20}>
-                  <MainButton
-                    onPress={() => setIsOfferCancel(true)}
-                    enableButtonColor="lightGrey"
-                    color="black"
-                    width={'45%'}
-                    icon={() => (
-                      <Icon
-                        name="close"
-                        color={'#757C91'}
-                        size={20}
-                        style={{
-                          marginTop: verticalScale(5),
-                        }}
-                      />
-                    )}>
-                    Cancel job
-                  </MainButton>
-                  <MainButton
-                    enableButtonColor="lightGrey"
-                    color="black"
-                    width={'45%'}
-                    icon={() => <Assets.SendOffer />}>
-                    Chat
-                  </MainButton>
-                </Container>
+                type !== 'completed' && (
+                  <Container
+                    flexDirection="row"
+                    gap={10}
+                    borderBottomWidth={1}
+                    borderStyle="dashed"
+                    borderColor="lightDeepGrey"
+                    paddingBottom={20}>
+                    <MainButton
+                      onPress={() => setIsOfferCancel(true)}
+                      enableButtonColor="lightGrey"
+                      color="black"
+                      width={'45%'}
+                      icon={() => (
+                        <Icon
+                          name="close"
+                          color={'#757C91'}
+                          size={20}
+                          style={{
+                            marginTop: verticalScale(5),
+                          }}
+                        />
+                      )}>
+                      Cancel job
+                    </MainButton>
+                    <MainButton
+                      enableButtonColor="lightGrey"
+                      color="black"
+                      width={'45%'}
+                      icon={() => <Assets.SendOffer />}>
+                      Chat
+                    </MainButton>
+                  </Container>
+                )
               )}
             </View>
 
@@ -232,6 +252,7 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
               <JobTimeline
                 timeline={timeline?.data}
                 isLoading={timelineLoading}
+                status={type!}
               />
             </View>
           </ScrollView>
@@ -298,16 +319,15 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
                 />
               )}
               color="black"
-              onPress={() => {
-                // You can add a rating modal here
-                rateProvider({
-                  uuid: route.params?.uuid!,
-                  body: {
-                    rating: 5,
-                    review: 'Great service!',
+              onPress={() =>
+                SheetManager.show('RateService', {
+                  payload: {
+                    uuid: route.params?.uuid!,
+                    providerImage: route?.params?.providerPicture || '',
+                    tier: route?.params?.serviceProvider.tier || '',
                   },
-                });
-              }}>
+                })
+              }>
               Rate service provider
             </OutlineButton>
           )}
@@ -322,7 +342,12 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
         onDeclineOffer={(reason, category) => {
           declineJob(
             {reason, reasonCategory: category, uuid: route.params?.uuid},
-            {onSuccess: () => SheetManager.show('WorkerSuggestion')},
+            {
+              onSuccess: () => {
+                setIsOfferCancel(false);
+                SheetManager.show('WorkerSuggestion');
+              },
+            },
           );
         }}
       />

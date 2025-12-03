@@ -104,9 +104,15 @@ export default class AuthApi extends Http {
     });
     const data = await this.handleResponse<VerifyOtpResponse>(res);
 
-    AppStorage.save('access_token', data?.data.accessToken!);
-    AppStorage.save('firstname', data?.data.user?.firstname!);
-    AppStorage.save('lastname', data?.data.user?.lastname!);
+    if (data?.data.accessToken) {
+      AppStorage.save('access_token', data?.data.accessToken!);
+    }
+    if (data?.data.user?.firstname) {
+      AppStorage.save('firstname', data?.data.user?.firstname!);
+    }
+    if (data?.data.user?.lastname) {
+      AppStorage.save('lastname', data?.data.user?.lastname!);
+    }
 
     this.success(data?.message);
 

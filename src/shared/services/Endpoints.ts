@@ -2,7 +2,7 @@ import AppStorage from '../AppStorage';
 import {ReasonType, UserTypes} from '../Constant';
 import utils from '../Utils';
 
-const base = () =>( AppStorage.find('userType') as UserTypes).toLowerCase();
+const base = () => (AppStorage.find('userType') as UserTypes).toLowerCase();
 const bases = () => base().toLowerCase() + 's';
 
 export default {
@@ -25,10 +25,16 @@ export default {
   cancelOffer: (uuid: string) => `/${bases()}/offer/${uuid}/cancel`,
   acceptOffer: (uuid: string) => `/${bases()}/offer/${uuid}/accept`,
   counterOffer: (uuid: string) => `/${bases()}/offer/${uuid}/counter`,
+  jobDetails: (uuid: string) => `/${base()}/jobs/${uuid}`,
+  analytics: () => `/${bases()}/analytics`,
+  addBankAccount: () => `/${bases()}/bank-account`,
+  getBankAccount: () => `/${bases()}/bank-account`,
+  saveDetails: () => `/${bases()}/save-details`,
+  resolveBankAccount: () => `/${bases()}/bank-account/resolve`,
   googleSocialAuth: '/auth/google',
   updateFmcToken: '/account/update/fcm-token',
   savePrice: () => `/${bases()}/save-prices`,
-  saveHelpersDetails: () => `/${bases()}/save-provider-details`,
+  saveHelpersDetails: () => `/${bases()}/save-details`,
   providerDashboard: '/providers/dashboard',
   providerReviews: (uuid: string) => `/${bases()}/${uuid}/reviews`,
   user: () => `/${bases()}`,
@@ -56,15 +62,21 @@ export default {
   disputeJob: (uuid: string) => `/${base()}/jobs/${uuid}/dispute`,
   rateProvider: (uuid: string) =>
     `/${base()}/jobs/${uuid}/rate-service-provider`,
-  reviews: (uuid: string, query?: PaginationQuery) =>
-    `/${bases()}/${uuid}/reviews?${utils.flattenQuery(query!)}`,
+  reviews: (query?: PaginationQuery) =>
+    `/${bases()}/reviews?${utils.flattenQuery(query!)}`,
   deleteLocation: (uuid: string) => `/${bases()}/location/${uuid}/delete`,
-  wallet: () => `${bases()}/wallet`,
+  wallet: () => `/${bases()}/wallet`,
+  withdraw: () => `/${bases()}/wallet/withdraw`,
   reasons: (type: ReasonType) => `/lists/reason-category?type=${type}`,
   deletionRequest: (uuid: string) =>
     `/${bases()}/deletion-request/${uuid}/confirm-deletion`,
   switchUser: () => `/${bases()}/switch-user-type`,
   initializePayment: () => `/${bases()}/initialize-paystack-payment`,
+  listBanks: '/lists/banks',
+  providerReview: '/providers/reviews/summary',
+  customerProviderReview: (uuid: string) =>
+    `/customers/providers/${uuid}/reviews/summary`,
   walletTransactions: (query: PaginationQuery) =>
     `/wallets/transactions?${utils.flattenQuery(query)}`,
+  agoraTokens: (uuid: string) => `/${base()}/jobs/${uuid}/call-token`,
 };

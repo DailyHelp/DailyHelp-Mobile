@@ -19,15 +19,15 @@ const getCategoryImage = (categoryName: string) => {
     'Home & Cleaning': Assets.CleaningBroom,
     'Repairs & Maintenance': Assets.Maintenance,
     'Food & Kitchen': Assets.FoodKitchen,
-    'Family & Personal Care': Assets.Comb,
-    'Transport & Delivery': Assets.Transport,
+    'Family & Personal Care': Assets.FamilyPersonalCare,
+    'Transport & Delivery': Assets.TransportDelivery,
     'Automobile Services': Assets.AutomobileServices,
     'Tech & Digital Help': Assets.TechDigitalSkills,
     'Events & Setup': Assets.EventsSetup,
     'Skilled Labor': Assets.SkilledLabour,
   };
 
-  return imageMap[categoryName as keyof typeof imageMap] || Assets.Maintenance;
+  return imageMap[categoryName as keyof typeof imageMap] || '';
 };
 
 const Search: ISearch = ({navigation}) => {
@@ -53,13 +53,16 @@ const Search: ISearch = ({navigation}) => {
     const transformedCategories = apiCategories.map(
       (apiCategory: CategoryDto): InternalCategory => {
         const subCategories = (apiCategory.categories || []).map(
-          (subCat: SubCategoryDto) => subCat.name,
+          (subCat: SubCategoryDto) => ({
+            name: subCat.name,
+            uuid: subCat.uuid,
+          }),
         );
 
-        const transformed = {
-          name: apiCategory.name || 'Untitled Category',
-          image: getCategoryImage(apiCategory.name || ''),
-          subCategories: subCategories,
+        const transformed: InternalCategory = {
+          name: apiCategory.name,
+          image: getCategoryImage(apiCategory.name || '') || apiCategory.icon,
+          subCategories,
           uuid: apiCategory.uuid,
         };
         return transformed;

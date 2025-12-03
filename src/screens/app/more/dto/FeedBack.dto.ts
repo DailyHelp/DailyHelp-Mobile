@@ -1,4 +1,9 @@
+import {IsString} from 'class-validator';
+
 export default class FeedbackDto {
-  'title': string;
-  'description': string;
+  @IsString()
+  title?: string;
+
+  @IsString()
+  description?: string;
 }

@@ -7,7 +7,7 @@ import UserAction from './UserAction';
 const OfferAction: IMessages = props => {
   const userType = appStore.user_types as UserTypes;
 
-  if (userType === UserTypes.PROVIDER) {
+  if (userType.toUpperCase() === UserTypes.PROVIDER) {
     return <ProviderAction {...props} />;
   }
 

@@ -37,9 +37,7 @@ const CategoryActionSheet = React.forwardRef<
   const {data, isLoading, error} = homeService.useAllCategories();
   const [search, setSearch] = React.useState('');
   const [selected, setSelected] = React.useState<string[]>([]);
-  const [openSections, setOpenSections] = React.useState<string[]>([
-    'Home & Cleaning',
-  ]);
+  const [openSections, setOpenSections] = React.useState<string[]>([]);
 
   const categories = React.useMemo(() => {
     let apiCategories: CategoryDto[] = [];
@@ -51,13 +49,16 @@ const CategoryActionSheet = React.forwardRef<
     const transformedCategories = apiCategories.map(
       (apiCategory: CategoryDto): InternalCategory => {
         const subCategories = (apiCategory.categories || []).map(
-          (subCat: SubCategoryDto) => subCat.name,
+          (subCat: SubCategoryDto) => ({
+            name: subCat.name,
+            uuid: subCat.uuid,
+          }),
         );
 
-        const transformed = {
+        const transformed: InternalCategory = {
           name: apiCategory.name || 'Untitled Category',
           image: getCategoryImage(apiCategory.name || ''),
-          subCategories: subCategories,
+          subCategories,
           uuid: apiCategory.uuid,
         };
         return transformed;
@@ -74,33 +75,59 @@ const CategoryActionSheet = React.forwardRef<
       (category: InternalCategory) =>
         category.name?.toLowerCase().includes(search?.toLowerCase()) ||
         category.subCategories.some(sub =>
-          sub.toLowerCase().includes(search?.toLowerCase()),
+          sub.name?.toLowerCase().includes(search?.toLowerCase()),
         ),
     );
   }, [categories, search]);
 
-  const toggleSection = (name: string) => {
+  const toggleSection = (uuid: string) => {
     setOpenSections(prev =>
-      prev.includes(name) ? prev.filter(n => n !== name) : [...prev, name],
+      prev.includes(uuid) ? prev.filter(id => id !== uuid) : [...prev, uuid],
     );
   };
 
-  const selectCategory = (sub: string) => {
+  const selectCategory = (sub: SubCategory) => {
     setSelected(prevSelected => {
-      if (prevSelected.includes(sub)) {
-        return prevSelected.filter(item => item !== sub);
+      if (prevSelected.includes(sub.uuid)) {
+        return prevSelected.filter(item => item !== sub.uuid);
       } else {
-        return [...prevSelected, sub];
+        return [...prevSelected, sub.uuid];
       }
     });
   };
 
   const handleApply = () => {
     if (props?.onCategoriesSelected) {
-      props.onCategoriesSelected(selected);
+      props.onCategoriesSelected(
+        selected.map(uuid => {
+          const foundSub =
+            categories
+              .flatMap(cat => cat.subCategories)
+              .find(sub => sub.uuid === uuid)?.name || '';
+          return foundSub;
+        }),
+      );
     }
+
+    // Get the names of open sections for backward compatibility
+    const openSectionNames = openSections
+      .map(uuid => {
+        const category = categories.find(cat => cat.uuid === uuid);
+        return category?.name || '';
+      })
+      .filter(name => name !== '');
+
+    const selectedSubCategories = categories
+      .flatMap(cat => cat.subCategories)
+      .filter(sub => selected.includes(sub.uuid));
+
     SheetManager.hide('AllCategory', {
-      payload: {subCategory: selected, mainCategory: openSections},
+      payload: {
+        subCategory: selectedSubCategories.map(sub => sub.name),
+        subCategoriesUuid: selectedSubCategories.map(sub => sub.uuid),
+        mainCategory: openSectionNames,
+        mainCategoryUuids: openSections,
+      },
     });
   };
 
@@ -110,6 +137,8 @@ const CategoryActionSheet = React.forwardRef<
       id="AllCategory"
       closeOnPressBack={false}
       gestureEnabled={true}
+      backgroundInteractionEnabled={true}
+      initialSnapIndex={0}
       closable={false}
       containerStyle={{
         borderTopLeftRadius: 16,
@@ -158,13 +187,12 @@ const CategoryActionSheet = React.forwardRef<
         <ScrollView style={{maxHeight: 500}}>
           {(filteredCategories || []).map(
             ({image, name, subCategories, uuid}: InternalCategory) => {
-              const isCollapse: boolean = openSections.includes(name);
-console.log(subCategories);
+              const isCollapse: boolean = openSections.includes(uuid);
 
               return (
                 <View key={uuid || name}>
                   <TouchableOpacity
-                    onPress={() => toggleSection(name)}
+                    onPress={() => toggleSection(uuid)}
                     style={{
                       flexDirection: 'row',
                       justifyContent: 'space-between',
@@ -216,12 +244,12 @@ console.log(subCategories);
                       }}>
                       {subCategories.length > 0 ? (
                         subCategories.map(sub => {
-                          const isSelected = selected.includes(sub);
+                          const isSelected = selected.includes(sub.uuid);
 
                           return (
                             <TouchableOpacity
                               onPress={() => selectCategory(sub)}
-                              key={sub}
+                              key={sub.uuid}
                               style={{
                                 backgroundColor: isSelected
                                   ? '#F9FFEB'
@@ -241,7 +269,7 @@ console.log(subCategories);
                                   fontFamily: fonts.GeistBold,
                                   fontSize: customFontSize.xs2,
                                 }}>
-                                {sub}
+                                {sub.name}
                               </Text>
 
                               {isSelected && (

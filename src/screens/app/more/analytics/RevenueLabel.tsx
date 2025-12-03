@@ -9,10 +9,10 @@ const RevenueLabel: IRevenueLabel = ({commission, tips, earnings}) => {
           width={10}
           height={10}
           borderRadius={2}
-          backgroundColor="primary"
+          backgroundColor="secondary"
         />
         <Container>
-          <Typography size="sm" fontWeight="bold">
+          <Typography size="sm" fontWeight="bold" color='black'>
             {earnings}
           </Typography>
           <Typography size="xs" color="gray">
@@ -28,7 +28,7 @@ const RevenueLabel: IRevenueLabel = ({commission, tips, earnings}) => {
           backgroundColor="primary"
         />
         <Container>
-          <Typography size="sm" fontWeight="bold" color="lightGreen">
+          <Typography size="sm" fontWeight="bold" color="black">
             {tips}
           </Typography>
           <Typography size="xs" color="gray">
@@ -44,7 +44,7 @@ const RevenueLabel: IRevenueLabel = ({commission, tips, earnings}) => {
           backgroundColor="danger"
         />
         <Container>
-          <Typography size="sm" fontWeight="bold" color="danger">
+          <Typography size="sm" fontWeight="bold" color="black">
             {commission}
           </Typography>
           <Typography size="xs" color="gray">

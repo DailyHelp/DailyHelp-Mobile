@@ -17,7 +17,7 @@ class AppStore {
 
   isAuthenticated = AppStorage.find('isAuthenticated') || false;
 
-  user_types = (AppStorage.find('userType') as UserTypes) || UserTypes.CUSTOMER;
+  user_types = (AppStorage.find('userType') as UserTypes).toUpperCase() || UserTypes.CUSTOMER;
 
   hideSelfieVerificationHeader: boolean = true;
 

@@ -45,6 +45,15 @@ const Home: IHome = () => {
     [allProviders],
   );
 
+  let price = 'Price';
+
+  if (
+    query.filter?.priceRange?.minPrice &&
+    query.filter?.priceRange?.maxPrice
+  ) {
+    price = `${query.filter?.priceRange.minPrice}-${query.filter?.priceRange.maxPrice}`;
+  }
+
   return (
     <FlatList
       data={[]}
@@ -57,13 +66,38 @@ const Home: IHome = () => {
             paddingTop={10}>
             <CategorySection
               onFilter={q => {
+                const isEmptyFilter =
+                  !q || Object.keys(q).length === 0 || q === ({} as any);
+
+                if (isEmptyFilter) {
+                  setQuery({
+                    ...query!,
+                    filter: {
+                      isSearchPage: query?.filter?.isSearchPage,
+                    },
+                  });
+                  return;
+                }
+
                 setQuery({...query!, filter: {...query?.filter, ...q}});
               }}
               data={[
-                {label: 'All categories', showIcon: true},
-                {label: 'Available'},
-                {label: 'Price', showIcon: true},
-                {label: 'Rating', showIcon: true},
+                {label: 'Reset'},
+                {
+                  label: query.filter?.subCategory || 'All categories',
+                  showIcon: true,
+                  isActive: !!query.filter?.subCategory,
+                },
+                {label: 'Available', isActive: !!query.filter?.engaged},
+                {
+                  label: price,
+                  showIcon: true,
+                },
+                {
+                  label: query.filter?.minRating || 'Rating',
+                  showIcon: true,
+                  isActive: !!query.filter?.minRating,
+                },
               ]}
             />
             {!AppStorage.find('isPhoneVerified') && (
@@ -84,7 +118,12 @@ const Home: IHome = () => {
               renderItem={renderTopRatedCard}
               ListEmptyComponent={() =>
                 isLoading ? (
-                  <HelperCardSkeleton direction="horizontal" />
+                  <HelperCardSkeleton
+                    direction="horizontal"
+                    count={3}
+                    cardHeight={280}
+                    mode="middle"
+                  />
                 ) : (
                   <EmptyState
                     showButton={false}
@@ -111,7 +150,12 @@ const Home: IHome = () => {
               renderItem={renderRecommendedCard}
               ListEmptyComponent={() =>
                 isLoading ? (
-                  <HelperCardSkeleton direction="horizontal" />
+                  <HelperCardSkeleton
+                    direction="horizontal"
+                    count={3}
+                    cardHeight={280}
+                    mode="row"
+                  />
                 ) : (
                   <EmptyState
                     showButton={false}
@@ -139,7 +183,7 @@ const Home: IHome = () => {
               renderItem={renderExploreCard}
               ListEmptyComponent={() =>
                 isLoading ? (
-                  <HelperCardSkeleton />
+                  <HelperCardSkeleton count={3} cardHeight={280} mode="row" />
                 ) : (
                   <EmptyState
                     showButton={false}
@@ -151,7 +195,9 @@ const Home: IHome = () => {
                 )
               }
               ListFooterComponent={
-                isLoading && <HelperCardSkeleton count={1} cardHeight={120} />
+                isLoading && (
+                  <HelperCardSkeleton count={1} cardHeight={280} mode="row" />
+                )
               }
             />
           </Container>

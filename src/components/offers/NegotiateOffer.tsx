@@ -1,15 +1,23 @@
-import { observer } from 'mobx-react-lite';
+import {observer} from 'mobx-react-lite';
 import React from 'react';
-import { TextInput, View } from 'react-native';
-import { Modal, Portal } from 'react-native-paper';
+import {TextInput, View} from 'react-native';
+import {Modal, Portal} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/AntDesign';
+import {createNumberMask, useMaskedInputProps} from 'react-native-mask-input';
 import Assets from '../../assets/Assets';
-import { scale, verticalScale } from '../../shared/Scaling';
+import {scale, verticalScale} from '../../shared/Scaling';
 import MainButton from '../button/MainButton';
 import Container from '../container/Index';
 import CustomInput from '../customInput/Index';
 import Typography from '../Typography';
 import offerStyle from './offerStyle';
+
+const amountMask = createNumberMask({
+  prefix: [],
+  delimiter: ',',
+  separator: ',',
+  precision: 0,
+});
 
 const NegotiateOffer: IOffer<Message> = ({
   isVisible,
@@ -19,8 +27,16 @@ const NegotiateOffer: IOffer<Message> = ({
   data,
   cancellationChances,
 }) => {
-  const [amount, setAmount] = React.useState(data?.offer?.price?.toString() || '5000');
+  const [amount, setAmount] = React.useState(
+    data?.offer?.price?.toString() || '0',
+  );
   const [reason, setReason] = React.useState('');
+
+  const maskedInputProps = useMaskedInputProps({
+    value: amount || '',
+    onChangeText: (masked: string, text: string) => setAmount(text),
+    mask: amountMask,
+  });
 
   React.useEffect(() => {
     if (data) {
@@ -51,7 +67,11 @@ const NegotiateOffer: IOffer<Message> = ({
           alignSelf="center"
           position="absolute">
           <Container
-            backgroundColor={cancellationChances && cancellationChances > 0 ? 'orange' : 'transparent'}
+            backgroundColor={
+              cancellationChances && cancellationChances > 0
+                ? 'orange'
+                : 'transparent'
+            }
             borderRadius={20}
             width={'full'}>
             {cancellationChances && cancellationChances > 0 && (
@@ -117,18 +137,14 @@ const NegotiateOffer: IOffer<Message> = ({
                 </View>
 
                 <View style={offerStyle.amountContainer}>
-                  <Typography
-                    fontWeight="bold"
-                    size="m2d"
-                    color="lighterGray">
+                  <Typography fontWeight="bold" size="m2d" color="lighterGray">
                     NGN
                   </Typography>
                   <TextInput
+                    {...maskedInputProps}
                     keyboardType="numeric"
-                    maxLength={10}
+                    maxLength={15}
                     style={offerStyle.amountInput}
-                    value={amount}
-                    onChangeText={setAmount}
                   />
                 </View>
                 <View style={{width: '90%', alignSelf: 'center'}}>
@@ -148,8 +164,8 @@ const NegotiateOffer: IOffer<Message> = ({
           </Container>
 
           <View style={{padding: scale(10)}}>
-            <MainButton 
-              loading={isLoading} 
+            <MainButton
+              loading={isLoading}
               onPress={handleSubmit}
               disabled={!isButtonEnabled}>
               Send offer

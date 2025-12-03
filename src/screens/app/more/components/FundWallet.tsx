@@ -1,3 +1,6 @@
+import {useNavigationContainerRef} from '@react-navigation/native';
+import createValidator from 'class-validator-formik';
+import {Formik} from 'formik';
 import React from 'react';
 import {TouchableOpacity, View} from 'react-native';
 import ActionSheet, {
@@ -5,79 +8,102 @@ import ActionSheet, {
   SheetManager,
   SheetProps,
 } from 'react-native-actions-sheet';
+import {ActivityIndicator} from 'react-native-paper';
 import CustomInput from '../../../../components/customInput/Index';
 import Typography from '../../../../components/Typography';
-import {Formik} from 'formik';
 import FundWalletDto from '../dto/FundWallet.dto';
-import createValidator from 'class-validator-formik';
 import moreService from '../services/More.service';
-import {ActivityIndicator} from 'react-native-paper';
-import {useNavigation} from '@react-navigation/native';
 
 const FundedWallet = React.forwardRef<ActionSheetRef, SheetProps<'FundWallet'>>(
   (props, ref) => {
-    const {data, isPending, mutate} = moreService.useFundWallet('FUND_WALLET');
-    const navigation: any = useNavigation();
-
-    console.log(props);
+    const isWithdraw = props.payload?.type === 'WITHDRAW';
+    const fund = moreService.useFundWallet('FUND_WALLET');
+    const withdraw = moreService.useWithdraw();
+    const isPending = fund?.isPending;
+    const navigation: any =
+      props.payload?.navigation || useNavigationContainerRef();
 
     React.useEffect(() => {
-      if (data) {
+      const data = fund.data;
+      if (data && !isWithdraw) {
         SheetManager.hide('FundWallet');
         navigation.navigate('WebViewComponent', {
           url: data.data.authorizationUrl,
         });
       }
-    }, [data]);
+    }, [fund.data, isWithdraw]);
+
+    React.useEffect(() => {
+      if (isWithdraw && withdraw?.isSuccess) {
+        SheetManager.hide('FundWallet');
+      }
+    }, [withdraw?.isSuccess, isWithdraw]);
+
+    const onSubmit = (d: FundWalletDto) => {
+      if (isWithdraw) {
+        navigation.navigate('SelectBank', {
+          amount: +d.amount!,
+          bankAccountUuid: d.bankAccountUuid,
+        });
+        SheetManager.hide('FundWallet');
+      } else {
+        fund.mutate({...d, amount: +d.amount!});
+      }
+    };
 
     return (
       <ActionSheet
         ref={ref}
         id="FundWallet"
-        closeOnPressBack={false}
+        closable={true}
+        closeOnPressBack={true}
+        backgroundInteractionEnabled={true}
         gestureEnabled={true}
-        closable={false}
+        initialSnapIndex={0}
         containerStyle={{
           borderTopLeftRadius: 16,
           borderTopRightRadius: 16,
         }}>
         <Formik
           initialValues={new FundWalletDto()}
-          validate={createValidator(FundWalletDto)}
-          onSubmit={d => mutate({...d, amount: +d.amount})}>
+          validate={body => {
+            body.amount = +body.amount!;
+            return createValidator(FundWalletDto)(body);
+          }}
+          onSubmit={onSubmit}>
           {({values, handleChange, handleSubmit}) => (
             <View
               style={{
                 padding: 16,
                 flexDirection: 'column',
                 gap: 20,
+                width: '100%',
               }}>
               {/* Header */}
               <View
                 style={{
                   flexDirection: 'row',
                   justifyContent: 'space-between',
+                  alignItems: 'center',
                   marginBottom: 12,
+                  paddingHorizontal: 10,
                 }}>
                 <TouchableOpacity
                   onPress={() => SheetManager.hide('FundWallet')}>
-                  <Typography fontWeight="bold" size="sm" color="gray">
+                  <Typography fontWeight="semibold" size="md" color="gray">
                     Cancel
                   </Typography>
                 </TouchableOpacity>
-                <Typography fontWeight="bold" size="md">
-                  {props.payload?.type === 'FUND' ? 'Fund wallet' : 'Amount'}
+                <Typography fontWeight="bold" size="md" color="black">
+                  {!isWithdraw ? 'Fund wallet' : 'Withdraw'}
                 </Typography>
 
                 {isPending ? (
-                  <ActivityIndicator />
+                  <ActivityIndicator size={20} />
                 ) : (
-                  <TouchableOpacity
-                    onPress={() => {
-                      handleSubmit();
-                    }}>
-                    <Typography fontWeight="bold" size="sm" color="secondary">
-                      {props.payload?.type === 'FUND' ? 'Fund' : 'Withdraw'}
+                  <TouchableOpacity onPress={() => handleSubmit()}>
+                    <Typography fontWeight="bold" size="md" color="secondary">
+                      {!isWithdraw ? 'Fund' : 'Withdraw'}
                     </Typography>
                   </TouchableOpacity>
                 )}
@@ -86,8 +112,11 @@ const FundedWallet = React.forwardRef<ActionSheetRef, SheetProps<'FundWallet'>>(
               <CustomInput
                 type="text"
                 label="Amount"
-                value={values.amount as string}
+                value={values.amount?.toString()}
                 onChangeText={handleChange('amount')}
+                maskType="amount"
+                mask
+                keyboardType="decimal-pad"
               />
             </View>
           )}

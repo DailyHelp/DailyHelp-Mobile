@@ -40,8 +40,6 @@ const ReportDetails: IReport = ({
   const {width} = Dimensions.get('window');
   const [attachments, setAttachments] = useState<Attachment[]>([]);
 
-  console.log(values);
-
   const showAttachmentOptions = (): void => {
     Alert.alert(
       'Add Attachment',

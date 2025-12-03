@@ -1,19 +1,14 @@
-type Reviews = {
-  conversationId: string;
-  serviceProviderId: string;
-  spFirstname: string;
-  spLastname: string;
-  spMiddlename: string;
-  rqFirstname: string;
-  rqLastname: string;
-  rqMiddlename: string;
-  lastMessageId: string;
-  lastMessage: string;
-  offerDescription: string;
-  status: string;
-  lastLockedAt: string;
-  locked: boolean;
-  restricted: boolean;
-  cancellationChances: number;
-  createdAt: string;
-};
+import UserDTO from '../../../../auth/dto/UserDto';
+import JobsDto from '../../jobs/dto/job.dto';
+
+export default class Review {
+  uuid?: string;
+  job?: JobsDto;
+  rating?: number;
+  review?: string;
+  reviewedBy?: UserDTO;
+  reviewedFor?: UserDTO;
+  createdAt?: string;
+  updatedAt?: string;
+  deletedAt?: string;
+}

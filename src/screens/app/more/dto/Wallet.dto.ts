@@ -1,11 +1,12 @@
+import {UserTypes} from '../../../../shared/Constant';
 import UserDTO from '../../../auth/dto/UserDto';
 
 export default class WalletDto {
   'uuid': string;
-  'totalBalance': number;
-  'availableBalance': number;
+  'totalBalance'?: number;
+  'availableBalance'?: number;
   'user': UserDTO;
-  'userType': string;
+  'userType': UserTypes;
   'createdAt': string;
   'updatedAt': string;
   'deletedAt': string;

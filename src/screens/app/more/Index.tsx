@@ -10,21 +10,41 @@ import {scale, verticalScale} from '../../../shared/Scaling';
 import {appStore} from '../../../shared/stores/appStore';
 import UserDataCard from './components/UserDataCard';
 import moreService from './services/More.service';
+import homeService from '../user/home/services/Home.service';
+import utils from '../../../shared/Utils';
 
 const More: IMore = ({navigation}) => {
   const {onSwitch, isLoading, data} = moreService.useSwitchUser();
+  const {data: user} = homeService.useUser();
 
   const user_type = appStore.user_types as UserTypes;
 
   const isVerified = appStore.isIdentityVerified;
-  const providerOnboarded = data?.data.user?.onboardingCompleted;
 
-  if (
-    !data?.data.user?.onboardingCompleted &&
-    user_type === UserTypes.PROVIDER
-  ) {
-    appStore.setIsIdentityVerified(false);
-  }
+  React.useEffect(() => {
+    if (
+      !data?.data.user?.onboardingCompleted &&
+      user_type.toUpperCase() === UserTypes.PROVIDER
+    ) {
+      appStore.setIsIdentityVerified(false);
+    }
+  }, [data]);
+
+  let verificationUrl = utils.getVerificationRoutes(
+    {
+      ...user?.providerOnboarding,
+      onboardingCompleted: user?.onboardingCompleted,
+    },
+    user_type,
+  );
+  let params = {
+    firstname: user?.firstname,
+    lastname: user?.lastname,
+    userType: appStore.user_types,
+    ...user?.providerOnboarding,
+    middlename: user?.middlename || '',
+    gender: user?.gender,
+  };
 
   const menus = [
     {
@@ -142,19 +162,21 @@ const More: IMore = ({navigation}) => {
                   style={{
                     flexDirection: 'column',
                   }}>
-                  <Typography fontWeight="semibold" color="danger">
-                    Complete ID Verification
+                  <Container flexDirection="row" justifyContent="space-between">
+                    <Typography size="sm" fontWeight="semibold" color="danger">
+                      Complete ID Verification
+                    </Typography>
+                  </Container>
+                  <Typography size="xs">
+                    Unlock more by completing your KYC.
                   </Typography>
-                  <Typography>Unlock more by completing your KYC.</Typography>
                 </View>
               </View>
 
               <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate(
-                    !providerOnboarded ? 'Address' : 'PersonalInformation',
-                  )
-                }>
+                onPress={() => {
+                  navigation.navigate(verificationUrl as any, params);
+                }}>
                 <View
                   style={{
                     padding: scale(10),

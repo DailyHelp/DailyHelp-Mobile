@@ -1,12 +1,14 @@
-import {IsNumber, IsString, IsUUID} from 'class-validator';
+import {IsArray, IsNumber, IsString, IsUUID} from 'class-validator';
 
 export default class SaveHelpersDetailsDTO {
   @IsUUID()
-  subCategoryUuid!: string;
+  subCategoryUuid?: string;
 
   @IsString()
-  serviceDescription!: string;
+  serviceDescription?: string;
 
-  @IsString()
-  serviceImages!: string;
+  @IsArray()
+  serviceImages?: string[] = [];
+
+  name?: string;
 }

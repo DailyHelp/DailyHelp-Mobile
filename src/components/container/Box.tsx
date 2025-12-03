@@ -36,6 +36,7 @@ export const Box: IContainer<ColorKeys> = ({children, ...props}) => {
     marginBottom,
     borderBottomWidth,
     marginVertical,
+    flexShrink,
   } = props;
 
   const isNumber = (value?: any) => typeof value === 'number';
@@ -50,7 +51,8 @@ export const Box: IContainer<ColorKeys> = ({children, ...props}) => {
   if (isNumber(margin)) margin = scale(margin);
   if (isNumber(marginTop)) marginTop = verticalScale(marginTop);
   if (isNumber(marginBottom)) marginBottom = verticalScale(marginBottom);
-  if (isNumber(borderBottomWidth)) borderBottomWidth = verticalScale(borderBottomWidth);
+  if (isNumber(borderBottomWidth))
+    borderBottomWidth = verticalScale(borderBottomWidth);
   if (isNumber(marginVertical)) marginVertical = verticalScale(marginVertical);
 
   if (typeof width === 'string') {
@@ -93,6 +95,7 @@ export const Box: IContainer<ColorKeys> = ({children, ...props}) => {
     marginBottom,
     borderBottomWidth,
     marginVertical,
+    flexShrink,
   };
 
   return <View style={style}>{children}</View>;

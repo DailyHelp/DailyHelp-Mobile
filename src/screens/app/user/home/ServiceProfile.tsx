@@ -45,9 +45,7 @@ const STATUS_MAP: any = {
 const ServiceProfile: IServiceProfile = ({route, navigation}) => {
   utils.useHideBottomTab(navigation);
 
-  const {data: reviews} = homeService.useCustomerReviews(route.params?.uuid!, {
-    pagination: {limit: 3},
-  });
+  const {data: reviews} = homeService.useReviews();
 
   const {data: customer} = homeService.useUser();
 
@@ -89,7 +87,12 @@ const ServiceProfile: IServiceProfile = ({route, navigation}) => {
         <Icon2 name="left" size={20} />
       </TouchableOpacity>
       <ScrollView horizontal>
-        {(route.params?.serviceImages as string[])?.map((uri, key) => (
+        {(Array.isArray(route.params?.serviceImages)
+          ? route.params?.serviceImages
+          : typeof route.params?.serviceImages === 'string'
+          ? route.params?.serviceImages.split(',').filter(Boolean)
+          : []
+        ).map((uri, key) => (
           <Image
             source={{uri}}
             style={homeStyle.serviceProfileScrollImage}
@@ -282,7 +285,7 @@ const ServiceProfile: IServiceProfile = ({route, navigation}) => {
                         No reviews
                       </Typography>
                     ) : (
-                      reviews?.map(({}) => <ReviewsCard data={{rate: 5}} />)
+                      reviews?.map(rate => <ReviewsCard data={rate} />)
                     )}
                   </View>
                 </Container>

@@ -16,10 +16,15 @@ type SubCategoryDto = {
     deletedAt: string | null;
   };
   
-  type InternalCategory = {
-    name: string;
-    image: any;
-    subCategories: string[];
-    uuid: string;
-  };
+type SubCategory = {
+  name: string;
+  uuid: string;
+};
+
+type InternalCategory = {
+  name: string;
+  image: any;
+  subCategories: SubCategory[];
+  uuid: string;
+};
   

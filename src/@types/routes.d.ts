@@ -24,11 +24,11 @@ type IAuthRoute = {
     userType: any;
   };
   VerifyAccount?: {
-    email: string;
+    email?: string;
     type: OtpActionType;
     to?: keyof IAuthRoute;
-    user_id: string;
-    pin: string;
+    user_id?: string;
+    pin?: string;
     phone?: string;
     payload?: any;
     userType?: UserTypes;
@@ -38,15 +38,48 @@ type IAuthRoute = {
     first_name?: string;
     last_name?: string;
     userType: UserTypes;
+    step1?: boolean;
+    step2?: boolean;
+    step3?: boolean;
+    onboardingComplete?: boolean;
   };
-  IdentityVerification?: VerifyIdentityDTO;
-  FacialVerification?: VerifyIdentityDTO;
-  SelfieVerification?: VerifyIdentityDTO;
-  ConfirmDetails?: VerifyIdentityDTO;
-  Verifying?: VerifyIdentityDTO;
+  IdentityVerification?: VerifyIdentityDTO & {
+    step1?: boolean;
+    step2?: boolean;
+    step3?: boolean;
+    onboardingComplete?: boolean;
+  };
+  FacialVerification?: VerifyIdentityDTO & {
+    step1?: boolean;
+    step2?: boolean;
+    step3?: boolean;
+    onboardingComplete?: boolean;
+  };
+  SelfieVerification?: VerifyIdentityDTO & {
+    step1?: boolean;
+    step2?: boolean;
+    step3?: boolean;
+    onboardingComplete?: boolean;
+  };
+  ConfirmDetails?: VerifyIdentityDTO & {
+    step1?: boolean;
+    step2?: boolean;
+    step3?: boolean;
+    onboardingComplete?: boolean;
+  };
+  Verifying?: VerifyIdentityDTO & {
+    step1?: boolean;
+    step2?: boolean;
+    step3?: boolean;
+    onboardingComplete?: boolean;
+  };
   VerificationResponse?: {
-    status: 'success' | 'failed';
+    status?: 'success' | 'failed';
     userType: UserTypes;
+    step1?: boolean;
+    step2?: boolean;
+    step3?: boolean;
+    onboardingComplete?: boolean;
   };
   ForgotPassword?: undefined;
   ResetPassword?: undefined;
@@ -152,7 +185,7 @@ type IResetPassword = Props<
  * Typed interface for `IVerifyAddress` under  `IAuthRoute`
  */
 type IVerifyAddress = Props<
-  NativeStackScreenProps<IAuthRoute, 'VerifyAddress'>
+  NativeStackScreenProps<IAuthRoute & IMoreRoute, 'VerifyAddress'>
 >;
 
 /**
@@ -187,6 +220,16 @@ type IHomeRoute = {
   };
   VerifyPhone?: undefined;
   ServiceProfile?: ProvidersDto;
+  VerifyAccount?: {
+    email?: string;
+    type: OtpActionType;
+    to?: keyof IAuthRoute;
+    user_id?: string;
+    pin?: string;
+    phone?: string;
+    payload?: any;
+    userType?: UserTypes;
+  };
   VerifyIdentity?: {
     first_name?: string;
     last_name?: string;
@@ -230,7 +273,7 @@ type IChatRoute = {
     cancellationChances?: number;
     badge?: string;
     picture?: string;
-    restricted?: boolean;
+    hasActiveJob?: boolean;
     isOnline?: boolean;
   };
   Checkout?: {
@@ -239,7 +282,12 @@ type IChatRoute = {
     purpose: string;
     price: number;
   };
-  VoiceCall?: undefined;
+  VoiceCall?: {
+    conversationUuid: string;
+  };
+  VideoCall?: {
+    conversationUuid: string;
+  };
   Report?: {
     uuid: string;
   };
@@ -254,6 +302,8 @@ type IChatBox = Props<NativeStackScreenProps<IChatRoute, 'ChatBox'>>;
 type ICheckout = Props<NativeStackScreenProps<IChatRoute, 'Checkout'>>;
 
 type IVoiceCall = Props<NativeStackScreenProps<IChatRoute, 'VoiceCall'>>;
+
+type IVideoCall = Props<NativeStackScreenProps<IChatRoute, 'VideoCall'>>;
 
 type IWebViewComponent = Props<
   NativeStackScreenProps<IChatRoute, 'WebViewComponent'>
@@ -280,6 +330,7 @@ type IJobsRoute = {
   ViewDetails?: JobsDto;
   VerificationPin?: {uuid: string};
   WebViewComponent?: {url: string; title: string};
+  Dispute?: undefined;
 };
 
 type IJobs = Props<NativeStackScreenProps<IJobsRoute, 'Jobs'>>;
@@ -296,18 +347,62 @@ type IWebViewComponent = Props<
 
 type IMoreRoute = {
   MoreIndex?: undefined;
+  UpdatePrices?: {
+    offerStartingPrice?: number;
+    minimumOfferPrice?: number;
+  };
   More?: undefined;
   AccountSettings?: undefined;
   UpdatePassword?: undefined;
   WalletBalance?: undefined;
   Disputes?: undefined;
-  PersonalInformation?: undefined;
-  IdentityVerification?: undefined;
-  FacialVerification?: undefined;
-  SelfieVerification?: undefined;
-  ConfirmDetails?: undefined;
-  Verifying?: undefined;
-  VerificationResponse?: undefined;
+  PersonalInformation?: {
+    first_name?: string;
+    last_name?: string;
+    userType: UserTypes;
+    step1?: boolean;
+    step2?: boolean;
+    step3?: boolean;
+    onboardingComplete?: boolean;
+  };
+  IdentityVerification?: VerifyIdentityDTO & {
+    step1?: boolean;
+    step2?: boolean;
+    step3?: boolean;
+    onboardingComplete?: boolean;
+  };
+  FacialVerification?: VerifyIdentityDTO & {
+    step1?: boolean;
+    step2?: boolean;
+    step3?: boolean;
+    onboardingComplete?: boolean;
+  };
+  SelfieVerification?: VerifyIdentityDTO & {
+    step1?: boolean;
+    step2?: boolean;
+    step3?: boolean;
+    onboardingComplete?: boolean;
+  };
+  ConfirmDetails?: VerifyIdentityDTO & {
+    step1?: boolean;
+    step2?: boolean;
+    step3?: boolean;
+    onboardingComplete?: boolean;
+  };
+  Verifying?: {
+    step1?: boolean;
+    step2?: boolean;
+    step3?: boolean;
+    onboardingComplete?: boolean;
+  };
+  VerificationResponse?: {
+    status: 'success' | 'failed';
+    userType: UserTypes;
+    step1?: boolean;
+    step2?: boolean;
+    step3?: boolean;
+    onboardingComplete?: boolean;
+  };
   Address?: undefined;
   Feedback?: undefined;
   VerifyPhone?: undefined;
@@ -317,6 +412,28 @@ type IMoreRoute = {
   ProviderProfile?: ProvidersDto;
   ProviderTiers?: ProvidersDto;
   WebViewComponent?: {url: string; title: string};
+  ProfileSetUp?: undefined;
+  VerifyAddress?: undefined;
+  VerifyAccount?: {
+    email?: string;
+    type: OtpActionType;
+    to?: keyof IAuthRoute;
+    user_id?: string;
+    pin?: string;
+    phone?: string;
+    payload?: any;
+    userType?: UserTypes;
+  };
+  AddBankAccount?: any;
+  ConfirmTransaction?: {
+    amount: number;
+    accountNumber?: any;
+    bankAccountUuid?: string;
+    bankName?: string;
+    accountName?: string;
+  };
+  UpdateAbout?: {about?: string};
+  SelectBank?: {amount: number; bankAccountUuid: string};
 };
 
 type IMore = Props<NativeStackScreenProps<IMoreRoute, 'More'>>;
@@ -340,7 +457,7 @@ type IAddress = Props<NativeStackScreenProps<IMoreRoute, 'Address'>>;
 type IFeedback = Props<NativeStackScreenProps<IMoreRoute, 'Feedback'>>;
 
 type IVerifyPhone = Props<
-  NativeStackScreenProps<IMoreRoute | IHomeRoute, 'VerifyPhone'>
+  NativeStackScreenProps<IMoreRoute & IHomeRoute, 'VerifyPhone'>
 >;
 
 type IServiceProfile = Props<
@@ -362,3 +479,17 @@ type IProviderProfile = Props<
 type IProviderTiers = Props<
   NativeStackScreenProps<IMoreRoute, 'ProviderTiers'>
 >;
+
+type IAddBankAccount = Props<
+  NativeStackScreenProps<IMoreRoute, 'AddBankAccount'>
+>;
+
+type IConfirmTransaction = Props<
+  NativeStackScreenProps<IMoreRoute, 'ConfirmTransaction'>
+>;
+
+type IUpdateAbout = Props<NativeStackScreenProps<IMoreRoute, 'UpdateAbout'>>;
+
+type IUpdatePrices = Props<NativeStackScreenProps<IMoreRoute, 'UpdatePrices'>>;
+
+type ISelectBank = Props<NativeStackScreenProps<IMoreRoute, 'SelectBank'>>;

@@ -1,35 +1,44 @@
 import React, {useState} from 'react';
 import {ScrollView, TouchableOpacity, View} from 'react-native';
 import {IAnalytics} from '../../../../@types/routes';
-import MainButton from '../../../../components/button/MainButton';
 import Container from '../../../../components/container/Index';
-import SectionBorderSeparatedCard from '../../../../components/SectionBorderSeperatedCard';
 import Typography from '../../../../components/Typography';
-import {scale, verticalScale} from '../../../../shared/Scaling';
+import {scale} from '../../../../shared/Scaling';
+import {Colors} from '../../../../shared/themes/Index';
 import utils from '../../../../shared/Utils';
 import MultipleProgressBar from './MultipleProgressBar';
 import RevenueLabel from './RevenueLabel';
 import RevenueRings from './RevenueRings';
 import TipsContainer from './TipsContainer';
-import {Colors} from '../../../../shared/themes/Index';
+import SectionBorderSeparatedCard from '../../../../components/SectionBorderSeparatedCard';
+import moreService from '../services/More.service';
 
 const Analytics: IAnalytics = ({navigation}) => {
   utils.useHideBottomTab(navigation);
 
+  const {analytics} = moreService.useAnalytics();
+
   const [selectedDateFilter, setSelectedDateFilter] = useState('Today');
 
-  const dateFilters = ['Today', 'Current week', 'Last week', 'This month'];
+  const dateFilters = [
+    'Today',
+    'Current week',
+    'Last week',
+    'This month',
+    'This Year',
+    'All time',
+  ];
 
   // Revenue data and progress (0-1) for rings to match mock
   const revenueProgress = {
-    earnings: 0.92,
-    tips: 0.65,
-    commission: 0.35,
+    earnings: analytics?.data.revenue.rings.earnings,
+    tips: analytics?.data.revenue.rings.tips,
+    commission: analytics?.data.revenue.rings.commission,
   };
   const revenueAmounts = {
-    earnings: '₦2,020,000',
-    tips: '+ ₦20,000',
-    commission: '- ₦200,000',
+    earnings: `₦${analytics?.data.revenue.rings.earnings || 0}`,
+    tips: `+ ₦${analytics?.data.revenue.rings.tips || 0}`,
+    commission: `- ₦${analytics?.data.revenue.rings.commission || 0}`,
   };
 
   const tipsData = [
@@ -114,9 +123,9 @@ const Analytics: IAnalytics = ({navigation}) => {
               }}>
               <View style={{paddingVertical: 10, paddingLeft: 6}}>
                 <RevenueRings
-                  earningsProgress={revenueProgress.earnings}
-                  tipsProgress={revenueProgress.tips}
-                  commissionProgress={revenueProgress.commission}
+                  earningsProgress={revenueProgress.earnings || 0}
+                  tipsProgress={revenueProgress.tips || 0}
+                  commissionProgress={revenueProgress.commission || 0}
                 />
               </View>
               <RevenueLabel
@@ -141,22 +150,25 @@ const Analytics: IAnalytics = ({navigation}) => {
 
             <View style={{gap: 16, marginTop: 10}}>
               <SectionBorderSeparatedCard
-                amount={2200000}
+                amount={analytics?.data.revenue.breakdown.jobPayment || 0}
                 title="Job payment"
               />
-              <SectionBorderSeparatedCard amount={22000} title="Tips" />
+              <SectionBorderSeparatedCard
+                amount={analytics?.data.revenue.breakdown.tips || 0}
+                title="Tips"
+              />
 
               <SectionBorderSeparatedCard
-                amount={2200000}
+                amount={analytics?.data.revenue.breakdown.income || 0}
                 title="Income"
                 isBold
               />
               <SectionBorderSeparatedCard
-                amount={200000}
+                amount={analytics?.data.revenue.breakdown.commissionRate || 0}
                 title=" DailyHelp commission"
               />
               <SectionBorderSeparatedCard
-                amount={'10%'}
+                amount={`${analytics?.data.revenue.breakdown.deductions || 0}%`}
                 title=" Deductions"
                 isBold
               />
@@ -180,8 +192,8 @@ const Analytics: IAnalytics = ({navigation}) => {
                     borderStyle: 'dashed',
                   }}
                 />
-                <Typography size="sm" fontWeight="bold">
-                  ₦2,020,000
+                <Typography size="sm" fontWeight="bold" currency>
+                  {analytics?.data.revenue.breakdown.yourEarnings || 0}
                 </Typography>
               </View>
             </View>
@@ -209,7 +221,7 @@ const Analytics: IAnalytics = ({navigation}) => {
               Total Jobs
             </Typography>
             <Typography size="sm" fontWeight="bold" color="white">
-              54
+              {analytics?.data.jobs.total || 0}
             </Typography>
           </View>
 
@@ -239,7 +251,7 @@ const Analytics: IAnalytics = ({navigation}) => {
                   }}
                 />
                 <Typography size="sm" fontWeight="bold">
-                  48
+                  {analytics?.data.jobs.completed || 0}
                 </Typography>
               </View>
               <View
@@ -262,7 +274,7 @@ const Analytics: IAnalytics = ({navigation}) => {
                   }}
                 />
                 <Typography size="sm" fontWeight="bold">
-                  3
+                  {analytics?.data.jobs.canceled || 0}
                 </Typography>
               </View>
               <View
@@ -285,7 +297,7 @@ const Analytics: IAnalytics = ({navigation}) => {
                   }}
                 />
                 <Typography size="sm" fontWeight="bold">
-                  3
+                  {analytics?.data.jobs.disputed || 0}
                 </Typography>
               </View>
             </View>
@@ -317,15 +329,16 @@ const Analytics: IAnalytics = ({navigation}) => {
                   Offers
                 </Typography>
                 <Typography size="lg" fontWeight="medium">
-                  54/80
+                  {analytics?.data.offers.accepted || 0}/
+                  {analytics?.data.offers.total || 0}
                 </Typography>
               </Container>
               <Container gap={7}>
                 <Typography size="md" color="gray">
                   Acceptance rate
                 </Typography>
-                <Typography size="lg" fontWeight="medium">
-                  67.5%
+                <Typography size="lg" fontWeight="medium" textAlign="center">
+                  {analytics?.data.offers.acceptanceRate || 0}%
                 </Typography>
               </Container>
             </View>
@@ -358,7 +371,10 @@ const Analytics: IAnalytics = ({navigation}) => {
                     borderStyle: 'dashed',
                   }}
                 />
-                <Typography size="sm"> 54 (67.5%)</Typography>
+                <Typography size="sm">
+                  {analytics?.data.offers.breakdown.youAccepted.count || 0} (
+                  {analytics?.data.offers.breakdown.youAccepted.percent}%)
+                </Typography>
               </View>
               <View
                 style={{flexDirection: 'row', alignItems: 'center', gap: 8}}>
@@ -383,7 +399,10 @@ const Analytics: IAnalytics = ({navigation}) => {
                     borderStyle: 'dashed',
                   }}
                 />
-                <Typography size="sm">6 (7.5%)</Typography>
+                <Typography size="sm">
+                  {analytics?.data.offers.breakdown.youDeclined.count || 0} (
+                  {analytics?.data.offers.breakdown.youDeclined.percent}%)
+                </Typography>
               </View>
               <View
                 style={{flexDirection: 'row', alignItems: 'center', gap: 8}}>
@@ -408,7 +427,10 @@ const Analytics: IAnalytics = ({navigation}) => {
                     borderStyle: 'dashed',
                   }}
                 />
-                <Typography size="sm">4 (5%)</Typography>
+                <Typography size="sm">
+                  {analytics?.data.offers.breakdown.youCancelled.count || 0} (
+                  {analytics?.data.offers.breakdown.youCancelled.percent}%)
+                </Typography>
               </View>
               <View
                 style={{flexDirection: 'row', alignItems: 'center', gap: 8}}>
@@ -433,7 +455,10 @@ const Analytics: IAnalytics = ({navigation}) => {
                     borderStyle: 'dashed',
                   }}
                 />
-                <Typography size="sm">6 (7.5%)</Typography>
+                <Typography size="sm">
+                  {analytics?.data.offers.breakdown.clientDeclined.count || 0} (
+                  {analytics?.data.offers.breakdown.clientDeclined.percent}%)
+                </Typography>
               </View>
               <View
                 style={{flexDirection: 'row', alignItems: 'center', gap: 8}}>
@@ -458,7 +483,10 @@ const Analytics: IAnalytics = ({navigation}) => {
                     borderStyle: 'dashed',
                   }}
                 />
-                <Typography size="sm">10 (12.5%)</Typography>
+                <Typography size="sm">
+                  {analytics?.data.offers.breakdown.clientCancelled.count || 0}(
+                  {analytics?.data.offers.breakdown.clientCancelled.percent}%)
+                </Typography>
               </View>
             </View>
           </Container>

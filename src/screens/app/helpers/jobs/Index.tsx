@@ -8,9 +8,13 @@ import JobsCard from '../../user/jobs/components/JobsCard';
 import {verticalScale} from '../../../../shared/Scaling';
 import jobService from '../../user/jobs/service/Jobs.service';
 import EmptyState from '../../../../components/EmptyState';
+import JobsDto from '../../user/jobs/dto/job.dto';
 
 const Jobs: IJobs = props => {
   const [type, setType] = React.useState('pending');
+
+  // Set up WebSocket listeners for jobs and offers
+  jobService.useWebSocketListeners();
 
   const {data, fetchMore, isLoading, setQuery, query, refetch} =
     jobService.useGetJobs();
@@ -24,17 +28,19 @@ const Jobs: IJobs = props => {
     setQuery({...query!, filter: {status: type.toUpperCase()}});
   }, [type]);
 
-  console.log(data);
-
   const renderItem = React.useCallback(
-    (data: any, type?: 'pending' | 'completed' | 'ongoing') => {
+    (
+      data: JobsDto,
+      type?: 'pending' | 'completed' | 'in_progress' | 'canceled',
+    ) => {
       return (
         <Container marginBottom={16}>
           <JobsCard
             type={type}
             userType={UserTypes.PROVIDER}
+            data={data}
             viewDetails={() => {
-              props.navigation.navigate('ViewDetails', {type: type!});
+              props.navigation.navigate('ViewDetails', data);
             }}
           />
         </Container>
@@ -55,12 +61,12 @@ const Jobs: IJobs = props => {
         tabs={jobs}
       />
       <Container padding={15} width={'full'}>
-        <CustomFlatList
+        <CustomFlatList<JobsDto>
           data={data}
           height={verticalScale(620)}
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
-          renderItem={() => renderItem('', type as any)}
+          renderItem={data => renderItem(data.item, type as any)}
           keyExtractor={(item, index) => index.toString()}
           onEndReached={fetchMore}
           onEndReachedThreshold={0.5}

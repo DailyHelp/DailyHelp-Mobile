@@ -9,4 +9,5 @@ type ProvidersQuery = {
   minRating?: number;
   search?: string;
   isSearchPage?: boolean;
+  engaged?: boolean;
 };

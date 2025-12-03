@@ -1,18 +1,79 @@
 import {NativeStackHeaderProps} from '@react-navigation/native-stack';
-import {TouchableOpacity, View} from 'react-native';
+import React from 'react';
+import {TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Assets from '../../assets/Assets';
+import AppStorage from '../../shared/AppStorage';
+import {websocketService} from '../../shared/services/WebSocket';
+import {ColorKeys} from '../../shared/themes/Index';
 import Container from '../container/Index';
 import CustomAvatar from '../CustomAvatar';
 import Typography from '../Typography';
-import {ColorKeys} from '../../shared/themes/Index';
 
 const ChatHeader: ICustomHeader<NativeStackHeaderProps, ColorKeys> = ({
   title,
   navigation,
   image,
   badge,
+  isOnline,
+  ...props
 }) => {
+  const conversationUuid = props.conversationUuid;
+
+  const handleVoiceCall = React.useCallback(() => {
+    if (!conversationUuid) {
+      console.warn('No conversation UUID available for call');
+      return;
+    }
+
+    if (websocketService.isConnected()) {
+      websocketService.send({
+        type: 'call:initiate',
+        data: {
+          conversationUuid,
+          callType: 'voice',
+          callerUuid: AppStorage.find('user_id'),
+          callerName: title,
+          callerAvatar: image,
+        },
+      });
+    }
+
+    navigation?.navigate('VoiceCall', {
+      isIncoming: false,
+      peerAvatar: image,
+      peerName: title,
+      conversationUuid,
+    });
+  }, [conversationUuid, navigation, title, image]);
+
+  const handleVideoCall = React.useCallback(() => {
+    if (!conversationUuid) {
+      console.warn('No conversation UUID available for call');
+      return;
+    }
+
+    if (websocketService.isConnected()) {
+      websocketService.send({
+        type: 'call:initiate',
+        data: {
+          conversationUuid,
+          callType: 'video',
+          callerUuid: AppStorage.find('user_id'),
+          callerName: title,
+          callerAvatar: image,
+        },
+      });
+    }
+
+    navigation?.navigate('VideoCall', {
+      isIncoming: false,
+      peerAvatar: image,
+      peerName: title,
+      conversationUuid,
+    });
+  }, [conversationUuid, navigation, title, image]);
+
   return (
     <Container
       flexDirection="row"
@@ -36,19 +97,26 @@ const ChatHeader: ICustomHeader<NativeStackHeaderProps, ColorKeys> = ({
           <Typography fontWeight="bold" size="md">
             {title}
           </Typography>
-          <Typography fontWeight="medium" size="md" color="lightGreen">
-            Online
+          <Typography
+            fontWeight="medium"
+            size="md"
+            color={isOnline ? 'lightGreen' : 'gray'}>
+            {isOnline ? 'Online' : 'Offline'}
           </Typography>
         </Container>
       </Container>
 
       <Container flexDirection="row" gap={16}>
-        <TouchableOpacity onPress={() => navigation?.navigate('VoiceCall')}>
-          <Assets.InActiveCallIcon />
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <Assets.InActiveVideoIcon />
-        </TouchableOpacity>
+        {props.isPaymentMade && (
+          <TouchableOpacity onPress={handleVoiceCall}>
+            <Assets.InActiveCallIcon />
+          </TouchableOpacity>
+        )}
+        {props.isPaymentMade && (
+          <TouchableOpacity onPress={handleVideoCall}>
+            <Assets.InActiveVideoIcon />
+          </TouchableOpacity>
+        )}
       </Container>
     </Container>
   );

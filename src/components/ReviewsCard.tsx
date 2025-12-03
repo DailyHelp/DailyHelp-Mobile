@@ -1,8 +1,10 @@
-import { View } from 'react-native';
+import {View} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Typography from './Typography';
+import Review from '../screens/app/user/home/dto/reviews.dto';
+import dayjs from 'dayjs';
 
-const ReviewsCard: IReviewCard = ({data}) => {
+const ReviewsCard: IReviewCard<Review> = ({data}) => {
   return (
     <View
       style={{
@@ -18,13 +20,13 @@ const ReviewsCard: IReviewCard = ({data}) => {
           gap: 6,
         }}>
         <Typography fontWeight="bold" size="md">
-          Funmi A
+          {data?.reviewedBy?.firstname} {data?.reviewedBy?.lastname}
         </Typography>
         <Typography fontWeight="regular" size="md" color="gray">
-          23, Mar
+          {dayjs(data?.createdAt).format('DD, MMM')}
         </Typography>
-        <Typography fontWeight="medium" size="md" color='lightBlack'>
-          She did amazing well when she came
+        <Typography fontWeight="medium" size="md" color="lightBlack">
+          {data?.review}
         </Typography>
       </View>
 
@@ -34,7 +36,7 @@ const ReviewsCard: IReviewCard = ({data}) => {
             name="star"
             key={len}
             size={15}
-            color={len + 1 > data?.rate! ? '#F1F2F4' : '#FFD100'}
+            color={len + 1 > data?.rating! ? '#F1F2F4' : '#FFD100'}
           />
         ))}
       </View>

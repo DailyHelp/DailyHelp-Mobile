@@ -26,7 +26,7 @@ export const toastConfig: ToastConfig = {
         flex={1}
         flexWrap="wrap"
         alignItems="flex-start">
-        <Icon name={'check'} size={18} color={'white'} style={{marginTop: 2}} />
+        <Icon name={'check'} size={18} color={'white'} />
         <Typography fontWeight="bold" size="xs" color="white">
           {text2}
         </Typography>

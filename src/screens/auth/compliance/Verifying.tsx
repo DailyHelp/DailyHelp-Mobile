@@ -7,8 +7,10 @@ import Assets from '../../../assets/Assets';
 import Container from '../../../components/container/Index';
 import {customFontSize, fonts} from '../../../shared/themes/Typography';
 import authService from '../services/Auth.service';
+import utils from '../../../shared/Utils';
 
 const Verifying: IVerifying = ({route, navigation}) => {
+  utils.useHideBottomTab(navigation);
   const rotateAnim = React.useRef(new Animated.Value(0)).current;
 
   authService.useVerifyIdentity(

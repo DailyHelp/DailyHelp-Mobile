@@ -1,6 +1,7 @@
 /**
- * Sample React Native App
- * https://github.com/facebook/react-native
+ * TITLE: DailyHelp App
+ * REPO: https://github.com/emmanueladeola/dailyhelp.git
+ * AUTHORS: Emmanuel Adeola
  *
  * @format
  */
@@ -16,6 +17,7 @@ import 'reflect-metadata';
 import utils from './shared/Utils';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import PushNotification from './components/pushNotification/Index';
 
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
@@ -49,6 +51,7 @@ function App(): React.JSX.Element {
         <GestureHandlerRootView>
           <QueryClientProvider client={queryClient}>
             <Routes />
+            <PushNotification />
           </QueryClientProvider>
         </GestureHandlerRootView>
       </SafeAreaView>

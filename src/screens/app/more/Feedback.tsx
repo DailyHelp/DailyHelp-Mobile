@@ -8,6 +8,7 @@ import MainButton from '../../../components/button/MainButton';
 import utils from '../../../shared/Utils';
 import FeedbackDto from './dto/FeedBack.dto';
 import moreService from './services/More.service';
+import createValidator from 'class-validator-formik';
 
 const Feedback: IFeedback = ({navigation}) => {
   utils.useHideBottomTab(navigation);
@@ -23,6 +24,7 @@ const Feedback: IFeedback = ({navigation}) => {
 
         <Formik
           initialValues={new FeedbackDto()}
+          validate={createValidator(FeedbackDto)}
           onSubmit={data => {
             mutate(data, {onSuccess: () => navigation.goBack()});
           }}>
@@ -51,7 +53,11 @@ const Feedback: IFeedback = ({navigation}) => {
                 />
               </View>
 
-              <MainButton loading={isPending} onPress={handleSubmit}>
+              <MainButton
+                enableButtonColor="secondary"
+                color="white"
+                loading={isPending}
+                onPress={handleSubmit}>
                 Submit feedback
               </MainButton>
             </View>

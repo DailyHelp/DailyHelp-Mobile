@@ -14,7 +14,7 @@ const Disputes: IDisputes = ({navigation, route}) => {
   const [index, setIndex] = React.useState('ongoing');
   const {data, isLoading, fetchMore} = moreService.useDisputes(index);
   const tabs = [
-    {title: 'Ongoing', slug: 'pending'},
+    {title: 'Ongoing', slug: 'ongoing'},
     {title: 'Resolved', slug: 'resolved'},
   ];
 

@@ -8,8 +8,10 @@ import {verticalScale, scale} from '../../../shared/Scaling';
 import {customFontSize, fonts} from '../../../shared/themes/Typography';
 import Icon from 'react-native-vector-icons/Fontisto';
 import Container from '../../../components/container/Index';
+import utils from '../../../shared/Utils';
 
 const FacialVerification: IFacialVerification = ({navigation, route}) => {
+  utils.useHideBottomTab(navigation);
   return (
     <ScrollView>
       <Container

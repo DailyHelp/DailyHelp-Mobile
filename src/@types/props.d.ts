@@ -63,9 +63,9 @@ type ICodeModal = Props<
   {
     isVisible: boolean;
     onClose: () => void;
-    onPress: () => void;
+    onPress?: () => void;
   },
-  {code: string}
+  {code: string; jobUuid?: string}
 >;
 
 type ICategoryActionSheet = {
@@ -84,6 +84,8 @@ type IDeleteAddress = {};
 
 type IInput = Props<{
   label?: string;
+  borderColor?: string;
+  backGroundColor?: string;
   placeholder?: string;
   disabled?: boolean;
   leftIcon?: React.ReactNode;
@@ -139,6 +141,12 @@ type IInput = Props<{
     | 'url';
   selectType?: 'CustomSelect' | 'AllCategory';
   wordCount?: boolean;
+  selection?: {
+    start: number;
+    end: number;
+  };
+  mask?: any;
+  maskType?: 'amount';
 }>;
 
 type ICustomHeader<P, C> = Props<
@@ -160,6 +168,11 @@ type ICustomHeader<P, C> = Props<
     backgroundColor?: C;
     badge?: string;
     image?: string;
+    isOnline?: boolean;
+    rightAction?: React.ReactNode;
+    onRightActionPress?: () => void;
+    conversationUuid?: string;
+    isPaymentMade?: boolean;
   }
 >;
 
@@ -215,6 +228,7 @@ type ICategorySection = Props<
   {
     label: string;
     slug?: string;
+    isActive?: boolean;
     showIcon?: boolean;
     value?: string;
   }[]
@@ -263,6 +277,7 @@ type ICustomFlatListProps<T> = {
 type IStatusChip = Props<{
   backgroundColor?: string;
   dotColor?: string;
+  dot?: boolean;
 }>;
 
 type IAllCategory = Props<{}>;
@@ -286,7 +301,7 @@ type IOffer<D = any, S = any> = Props<
   D
 >;
 
-type IReviewCard = Props<{}, {rate: number}>;
+type IReviewCard<D = any> = Props<{}, D>;
 
 type IRecentSearches = Props<{onPress?: (search?: string) => void}>;
 
@@ -294,6 +309,8 @@ type IGallery = {
   close?: () => void;
   maxSelect?: number;
   selectImages?: (images: string[] | string) => void;
+  selectedImages?: string[];
+  toggleGalleryImageSelection?: (uri: string) => void;
 };
 
 type ICategoryCard<D = any> = Props<
@@ -386,7 +403,7 @@ type IEmptyState<N = any> = Props<{
 
 type IJobsCard<U, D> = Props<
   {
-    type?: 'pending' | 'in_progress' | 'completed';
+    type?: 'pending' | 'in_progress' | 'completed' | 'canceled';
     viewDetails?: (data: D) => void;
     chat?: () => void;
     rate?: () => void;
@@ -456,6 +473,7 @@ type IContainer<C> = Props<{
     | 'space-evenly';
   flexDirection?: 'row' | 'column' | 'row-reverse' | 'column-reverse';
   gap?: number;
+  flexShrink?: number;
   alignSelf?: 'flex-start' | 'flex-end' | 'center' | 'stretch' | 'baseline';
   borderRadius?: number;
   borderTopLeftRadius?: number;
@@ -530,6 +548,25 @@ type IHelperCardSkeleton = Props<{
   count?: number;
   direction?: 'vertical' | 'horizontal';
   cardHeight?: number;
+  mode?: 'middle' | 'row';
+}>;
+
+type IAddressSkeleton = Props<{
+  count?: number;
+}>;
+
+type IJobsSkeleton = Props<{
+  count?: number;
+}>;
+
+type IMessageSkeleton = Props<{
+  count?: number;
+  position?: 'left' | 'right';
+  showOffer?: boolean;
+}>;
+
+type IConversationSkeleton = Props<{
+  count?: number;
 }>;
 
 type ISearchResult<D = any> = Props<{fetchMore?: () => void}, D>;
@@ -567,3 +604,18 @@ type IMultipleProgressBarProps = Props<{
 }>;
 
 type ITipsContainer = Props<{}, {title: string; description: string}[]>;
+
+type IBankCard<D = any> = Props<{onPress?: (data: any) => void}, D>;
+
+type ICustomNotification<D = any> = Props<
+  {
+    appIconSource?: any;
+    appTitle?: string;
+    timeText?: string;
+    title?: string;
+    body?: string;
+  },
+  D
+>;
+
+type ICodeContainer = Props<{code: string}>;

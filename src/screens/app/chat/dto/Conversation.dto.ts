@@ -24,4 +24,5 @@ interface Conversation {
   spPicture: string;
   rqPicture: string;
   unreadCount: string;
+  hasActiveJob?: boolean;
 }

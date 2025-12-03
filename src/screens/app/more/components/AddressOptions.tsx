@@ -41,12 +41,14 @@ const AddressOptions = React.forwardRef<
     <ActionSheet
       ref={ref}
       id="AddressOptions"
-      closeOnPressBack={false}
+      closeOnPressBack={true}
       gestureEnabled={true}
       containerStyle={{
         borderTopLeftRadius: 16,
         borderTopRightRadius: 16,
-      }}>
+        backgroundColor: 'white',
+      }}
+      backgroundInteractionEnabled={true}>
       <View
         style={{
           padding: 16,
@@ -55,9 +57,12 @@ const AddressOptions = React.forwardRef<
         <View
           style={{
             flexDirection: 'row',
-            gap: 90,
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            paddingHorizontal: 10,
           }}>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => SheetManager.hide('AddressOptions')}>
             <Typography fontWeight="semibold" size="md" color="gray">
               Cancel
             </Typography>
@@ -65,6 +70,7 @@ const AddressOptions = React.forwardRef<
           <Typography fontWeight="bold" size="md" color="black">
             Options
           </Typography>
+          <View style={{width: 50}} />
         </View>
 
         <Container padding={10} flexDirection="column" gap={30} marginTop={30}>

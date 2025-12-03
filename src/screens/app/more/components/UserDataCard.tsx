@@ -11,6 +11,7 @@ import {UserTypes} from '../../../../shared/Constant';
 import {scale, verticalScale} from '../../../../shared/Scaling';
 import Container from '../../../../components/container/Index';
 import UserDTO from '../../../auth/dto/UserDto';
+import {appStore} from '../../../../shared/stores/appStore';
 
 const UserDataCard: IUserDataCard<UserDTO, UserTypes> = ({
   isVerified,
@@ -18,7 +19,7 @@ const UserDataCard: IUserDataCard<UserDTO, UserTypes> = ({
   onSwitch,
   isLoading,
 }) => {
-  const user_type = AppStorage.find('userType') as UserTypes;
+  const user_type = appStore.user_types;
 
   const isCustomer = user_type === UserTypes.CUSTOMER;
 
@@ -45,7 +46,7 @@ const UserDataCard: IUserDataCard<UserDTO, UserTypes> = ({
           <CustomAvatar
             showBadge={false}
             avatarSize={60}
-            data={{image: Assets.Worker1}}
+            data={{image: data?.picture}}
           />
         </CircularProgressBase>
       )}
@@ -95,11 +96,12 @@ const UserDataCard: IUserDataCard<UserDTO, UserTypes> = ({
           borderRadius: 10,
           justifyContent: 'space-between',
         }}>
-        <Typography fontWeight="bold" size="md">
+        <Typography fontWeight="bold" size="sm">
           {mode}
         </Typography>
 
         <MainButton
+          height={40}
           loading={isLoading}
           onPress={() => {
             onSwitch?.(isCustomer ? UserTypes.PROVIDER : UserTypes.CUSTOMER);

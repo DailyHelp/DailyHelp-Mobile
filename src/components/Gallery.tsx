@@ -47,6 +47,20 @@ const Gallery = React.forwardRef<ActionSheetRef, IGallery>(
       fetchPhotos();
     }, []);
 
+    const selectedImages =
+      props.selectedImages ?? appStore.selectedGalleryImages;
+
+    const toggleSelection = React.useCallback(
+      (uri: string) => {
+        if (props.toggleGalleryImageSelection) {
+          props.toggleGalleryImageSelection(uri);
+        } else {
+          appStore.toggleGalleryImageSelection(uri);
+        }
+      },
+      [props.toggleGalleryImageSelection],
+    );
+
     const renderItem = ({item}: {item: any}) => {
       if (item?.isCamera) {
         return (
@@ -67,23 +81,35 @@ const Gallery = React.forwardRef<ActionSheetRef, IGallery>(
       const uri = item.node.image.uri;
       const type = item.node.type;
       const isVideo = type?.startsWith('video/');
-      const isSelected = appStore.selectedGalleryImages.includes(uri);
+      const isSelected = selectedImages.includes(uri);
       const isPlaying = playingVideoUri === uri;
 
       return (
         <TouchableOpacity
-          onPress={() => {
+          onPress={async () => {
+            const selectedCount = selectedImages.length;
             if (
               props.maxSelect &&
-              props.maxSelect <= appStore.selectedGalleryImages.length
+              !isSelected &&
+              selectedCount >= props.maxSelect
             ) {
               return;
             }
 
+            if (isSelected) {
+              toggleSelection(uri);
+              return;
+            }
+
             if (props.selectImages) {
-              props.selectImages?.(uri);
+              try {
+                await props.selectImages?.(uri);
+                toggleSelection(uri);
+              } catch (error) {
+                console.error('Failed to select image:', error);
+              }
             } else {
-              appStore.toggleGalleryImageSelection(uri);
+              toggleSelection(uri);
             }
           }}
           style={{margin: 1, position: 'relative'}}>
@@ -189,7 +215,7 @@ const Gallery = React.forwardRef<ActionSheetRef, IGallery>(
             ) : (
               <FlatList
                 data={[{isCamera: true}, ...images]}
-                extraData={appStore.selectedGalleryImages}
+                extraData={selectedImages}
                 initialNumToRender={12}
                 maxToRenderPerBatch={8}
                 windowSize={5}

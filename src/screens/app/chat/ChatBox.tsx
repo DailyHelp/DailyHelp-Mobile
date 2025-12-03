@@ -1,28 +1,130 @@
+import {observer} from 'mobx-react-lite';
 import React from 'react';
+import {ActionSheetRef} from 'react-native-actions-sheet';
 import {IChatBox} from '../../../@types/routes';
 import Container from '../../../components/container/Index';
 import CustomFlatList from '../../../components/CustomFlatList';
 import CustomHeader from '../../../components/customHeader/Index';
+import Gallery from '../../../components/Gallery';
 import Offer from '../../../components/offers/Index';
+import AppStorage from '../../../shared/AppStorage';
+import {UserTypes} from '../../../shared/Constant';
+import {websocketService} from '../../../shared/services/WebSocket';
 import utils from '../../../shared/Utils';
+import UserDTO from '../../auth/dto/UserDto';
 import homeService from '../user/home/services/Home.service';
 import ChatFooter from './components/ChatFooter';
 import Messages from './components/messages/Index';
 import chatService from './services/Chat.service';
-import AppStorage from '../../../shared/AppStorage';
-import {UserTypes} from '../../../shared/Constant';
-import {observer} from 'mobx-react-lite';
-import UserDTO from '../../auth/dto/UserDto';
+import MessageSkeleton from '../../../components/skeleton/MessageSkeleton';
 
 const ChatBox: IChatBox = ({navigation, route}) => {
   utils.useHideBottomTab(navigation);
+  const galleryBottomSheetRef = React.useRef<ActionSheetRef | null>(null);
   const userType = AppStorage.find('userType') as UserTypes;
   const isCustomer = userType === UserTypes.CUSTOMER;
-  const isPaymentMade = route.params?.restricted;
+  const isPaymentMade = route.params?.hasActiveJob;
+  const conversationUuid = route.params?.uuid!;
 
-  const {data, isLoading, canSendOffer} = chatService.useGetSingleConversation(
-    route.params?.uuid!,
+  const userId = AppStorage.find('user_id');
+
+  const {data, canSendOffer, isLoading} =
+    chatService.useGetSingleConversation(conversationUuid);
+
+  const {readMessage, joinConversation, leaveConversation} =
+    chatService.useWebSocketListeners();
+
+  const [isOnline, setIsOnline] = React.useState<boolean>(
+    route.params?.isOnline || false,
   );
+
+  const otherUserUuid = React.useMemo(() => {
+    if (data && data.length > 0) {
+      const otherUserMessage = data.find(
+        (msg: Message<UserDTO>) => msg.from.uuid !== userId,
+      );
+      return otherUserMessage?.from.uuid;
+    }
+    return null;
+  }, [data, userId]);
+
+  React.useEffect(() => {
+    const handler = (message: any) => {
+      const eventType = message.event || message.type;
+      if (eventType === 'presence:update') {
+        const {userUuid, online} = message.data || {};
+
+        if (
+          userUuid &&
+          online !== undefined &&
+          otherUserUuid &&
+          userUuid === otherUserUuid
+        ) {
+          setIsOnline(online);
+        }
+      }
+
+      // Handle incoming call notifications
+      if (eventType === 'call:initiate') {
+        const {
+          conversationUuid: callConversationUuid,
+          callType,
+          callerUuid,
+          callerName,
+          callerAvatar,
+        } = message.data || {};
+      }
+    };
+
+    websocketService.on({onMessage: handler});
+
+    return () => {
+      websocketService.off(['onMessage']);
+    };
+  }, [otherUserUuid, conversationUuid, userId, navigation]);
+
+  React.useEffect(() => {
+    if (conversationUuid) {
+      joinConversation(conversationUuid);
+    }
+
+    return () => {
+      if (conversationUuid) {
+        leaveConversation(conversationUuid);
+      }
+    };
+  }, [conversationUuid, joinConversation, leaveConversation]);
+
+  const readMessagesRef = React.useRef<Set<string>>(new Set());
+
+  React.useEffect(() => {
+    if (
+      data &&
+      data.length > 0 &&
+      conversationUuid &&
+      websocketService.isConnected()
+    ) {
+      websocketService.send({
+        type: 'conversation:read',
+        data: {conversationUuid},
+      });
+
+      data.forEach((message: Message<UserDTO>) => {
+        if (
+          message.from.uuid !== userId &&
+          message.uuid &&
+          !readMessagesRef.current.has(message.uuid)
+        ) {
+          readMessagesRef.current.add(message.uuid);
+          readMessage(message.uuid, conversationUuid);
+        }
+      });
+    }
+  }, [data, conversationUuid, userId, readMessage]);
+
+  React.useEffect(() => {
+    readMessagesRef.current.clear();
+  }, [conversationUuid]);
 
   const {
     declineOffer,
@@ -30,8 +132,8 @@ const ChatBox: IChatBox = ({navigation, route}) => {
     cancelOffer,
     cancelPending,
     onSendOffer,
-    sendingPending,
-    updateOffer,
+    updatePending,
+    handleUpdateOffer,
   } = homeService.useOffer();
 
   const {data: message, isPending, mutate} = chatService.useSendMessage();
@@ -44,29 +146,25 @@ const ChatBox: IChatBox = ({navigation, route}) => {
 
   const [offer, setOffer] = React.useState<{
     visible: boolean;
-    type: 'send' | 'cancel' | 'decline' | 'edit' | 'negotiate';
+    type?: 'send' | 'cancel' | 'decline' | 'edit' | 'negotiate';
     data?: Message;
   }>({
     visible: false,
     type: isCustomer ? 'cancel' : 'decline',
   });
-  const userId = AppStorage.find('user_id');
 
   const accept = (data?: Message) => {
     if (isCustomer) {
-      // Customer flow: Navigate to Checkout for payment (acceptance happens after payment)
       navigation.navigate('Checkout', {
-        conversationUuid: route.params?.uuid!,
+        conversationUuid,
         offerUuid: data?.offer.uuid!,
         purpose: 'JOB_OFFER',
         price: data?.offer.price!,
       });
     } else {
-      // Provider flow: Call acceptOffer hook directly
       if (data?.offer?.uuid) {
         acceptOffer(data.offer.uuid, {
           onSuccess: () => {
-            // Close any modals and refresh data
             setOffer({...offer, visible: false});
           },
         });
@@ -76,10 +174,6 @@ const ChatBox: IChatBox = ({navigation, route}) => {
 
   const decline = (data?: Message) => {
     setOffer({...offer, visible: true, data});
-  };
-
-  const send = (data?: Message) => {
-    setOffer({...offer, visible: true, type: 'send', data});
   };
 
   const edit = (data?: Message) => {
@@ -111,7 +205,7 @@ const ChatBox: IChatBox = ({navigation, route}) => {
     setOffer({...offer, visible: true, type: 'cancel', data});
   };
 
-  const close = () => setOffer({...offer, visible: false});
+  const close = () => setOffer({visible: false});
 
   const renderItem = React.useCallback(({item}: {item: Message<UserDTO>}) => {
     return (
@@ -128,6 +222,8 @@ const ChatBox: IChatBox = ({navigation, route}) => {
         isDeclining={declinePending}
         isCancelling={cancelPending}
         isPaymentMade={isPaymentMade}
+        isEditing={updatePending}
+        isNegotiating={counterPending}
       />
     );
   }, []);
@@ -138,24 +234,38 @@ const ChatBox: IChatBox = ({navigation, route}) => {
         title={route.params?.title}
         type="chat"
         navigation={navigation}
+        image={route.params?.picture}
+        badge={route.params?.badge}
+        isOnline={isOnline}
+        conversationUuid={conversationUuid}
+        isPaymentMade={isPaymentMade}
       />
       <Container
         width={'full'}
         flex={1}
         justifyContent="space-between"
         gap={10}>
-        <CustomFlatList<Message>
-          data={data}
-          inverted
-          renderItem={renderItem}
-          keyExtractor={(item, ind) => item.uuid + ind.toString()}
-        />
+        {isLoading && (!data || data.length === 0) ? (
+          <MessageSkeleton
+            position={isCustomer ? 'right' : 'left'}
+            showOffer={false}
+          />
+        ) : (
+          <CustomFlatList<Message>
+            data={data}
+            inverted
+            renderItem={renderItem}
+            keyExtractor={(item, ind) => item.uuid + ind.toString()}
+          />
+        )}
         <ChatFooter
           navigation={navigation}
           canSendOffer={canSendOffer!}
           sendOffer={edit}
-          sendMessage={msg => mutate({message: msg, uuid: route.params?.uuid!})}
-          data={{uuid: route.params?.uuid!}}
+          sendMessage={msg => {
+            mutate({message: msg, uuid: conversationUuid});
+          }}
+          data={{uuid: conversationUuid}}
           isSending={isPending}
         />
 
@@ -166,7 +276,9 @@ const ChatBox: IChatBox = ({navigation, route}) => {
           onClose={close}
           data={offer.data}
           cancellationChances={route.params?.cancellationChances}
-          isLoading={declinePending || cancelPending}
+          openGallery={() => {
+            setTimeout(() => galleryBottomSheetRef.current?.show(), 1000);
+          }}
           onDeclineOffer={(reason, reasonCategory, uuid) => {
             if (offer.type === 'decline') {
               declineOffer({reason, reasonCategory, uuid}, {onSuccess: close});
@@ -178,11 +290,19 @@ const ChatBox: IChatBox = ({navigation, route}) => {
             if (offer.type === 'negotiate') {
               handleCounterOffer(data);
             } else if (offer.type === 'edit') {
-              updateOffer({...data, uuid: offer.data?.uuid});
+              (data.uuid = offer?.data?.offer.uuid),
+                handleUpdateOffer(data, close);
             } else {
               onSendOffer(data, close);
             }
           }}
+          isLoading={declinePending || cancelPending || updatePending}
+        />
+
+        <Gallery
+          ref={galleryBottomSheetRef}
+          maxSelect={10}
+          close={() => galleryBottomSheetRef.current?.hide()}
         />
       </Container>
     </React.Fragment>

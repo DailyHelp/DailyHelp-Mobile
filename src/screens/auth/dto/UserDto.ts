@@ -67,7 +67,7 @@ export default class UserDTO {
   completedJobs?: number;
   ratedCompletedJobs?: number;
   progressToNextTier?: string;
-  providerOnboarding: any;
+  providerOnboarding?: {step1: boolean; step2: boolean; step3: boolean};
   utilityBill?: string;
   createdAt?: string;
   updatedAt?: string;

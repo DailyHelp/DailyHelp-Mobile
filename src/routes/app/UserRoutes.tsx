@@ -1,26 +1,35 @@
-import {NativeStackHeaderProps} from '@react-navigation/native-stack';
+import { NativeStackHeaderProps } from '@react-navigation/native-stack';
 import React from 'react';
-import {Text} from 'react-native-paper';
+import { Text } from 'react-native-paper';
 import Assets from '../../assets/Assets';
 import CustomHeader from '../../components/customHeader/Index';
 import TabBadge from '../../components/TabBadge';
+import WebViewComponent from '../../components/WebViewComponent';
 import ChatBox from '../../screens/app/chat/ChatBox';
 import Checkout from '../../screens/app/chat/Checkout';
 import Chat from '../../screens/app/chat/Index';
-import VoiceCall from '../../screens/app/chat/VoiceCall';
 import Report from '../../screens/app/chat/report/Index';
 import ReportSubmitted from '../../screens/app/chat/report/ReportSubmitted';
+import VoiceCall from '../../screens/app/chat/VoiceCall';
+import VideoCall from '../../screens/app/chat/VideoCall';
 import AccountSettings from '../../screens/app/more/AccountSettings';
 import Address from '../../screens/app/more/Address';
 import Analytics from '../../screens/app/more/analytics/Index';
+import AddBankAccount from '../../screens/app/more/bankAccount/AddBank';
+import ConfirmTransaction from '../../screens/app/more/bankAccount/ConfirmTransaction';
+import SelectBank from '../../screens/app/more/bankAccount/Index';
+import DeleteReason from '../../screens/app/more/deleteAccount/DeleteReason';
+import DeleteAccount from '../../screens/app/more/deleteAccount/Index';
 import Disputes from '../../screens/app/more/Disputes';
 import Feedback from '../../screens/app/more/Feedback';
 import More from '../../screens/app/more/Index';
+import ProviderProfile from '../../screens/app/more/providerProfile/Index';
+import ProviderTiers from '../../screens/app/more/providerProfile/ProviderTiers';
+import UpdateAbout from '../../screens/app/more/providerProfile/UpdateAbout';
+import UpdatePrices from '../../screens/app/more/providerProfile/UpdatePrices';
 import UpdatePassword from '../../screens/app/more/UpdatePassword';
 import VerifyPhone from '../../screens/app/more/VerifyPhone';
 import WalletBalance from '../../screens/app/more/WalletBallance';
-import DeleteReason from '../../screens/app/more/deleteAccount/DeleteReason';
-import DeleteAccount from '../../screens/app/more/deleteAccount/Index';
 import Home from '../../screens/app/user/home/Index';
 import Reviews from '../../screens/app/user/home/Reviews';
 import ServiceProfile from '../../screens/app/user/home/ServiceProfile';
@@ -28,17 +37,16 @@ import Jobs from '../../screens/app/user/jobs/Index';
 import VerificationPin from '../../screens/app/user/jobs/VerificationPin';
 import ViewDetails from '../../screens/app/user/jobs/ViewDetails';
 import Search from '../../screens/app/user/search/Index';
-import {scale, verticalScale} from '../../shared/Scaling';
-import {customFontSize, fonts} from '../../shared/themes/Typography';
+import ProfileSetup from '../../screens/auth/compliance/ProfileSetup';
+import VerifyAccount from '../../screens/auth/VerifyAccount';
+import { scale, verticalScale } from '../../shared/Scaling';
+import { customFontSize, fonts } from '../../shared/themes/Typography';
 import IdentityVerificationRoute from '../auth/IdentityVerificationRoute';
 import ChatRoute from './Chat';
 import HomeRoute from './Home';
 import JobsRoute from './Jobs';
 import MoreRoute from './More';
 import SearchRoute from './Search';
-import ProviderProfile from '../../screens/app/more/providerProfile/Index';
-import ProviderTiers from '../../screens/app/more/providerProfile/ProviderTiers';
-import WebViewComponent from '../../components/WebViewComponent';
 
 type LabelPosition = 'beside-icon' | 'below-icon';
 
@@ -259,6 +267,16 @@ export const UserHomeStackRoutes = [
       ),
     },
   },
+  {
+    name: 'VerifyAccount',
+    component: VerifyAccount,
+    options: {
+      headerShown: true,
+      header: (props: NativeStackHeaderProps) => (
+        <CustomHeader type="back" {...props} />
+      ),
+    },
+  },
   ...IdentityVerificationRoute,
 ];
 
@@ -335,6 +353,16 @@ export const UserChatStackRoutes = [
       headerShown: true,
       header: (props: NativeStackHeaderProps) => (
         <CustomHeader type="back" title="In-app call" {...props} textMiddle />
+      ),
+    },
+  },
+  {
+    name: 'VideoCall',
+    component: VideoCall,
+    options: {
+      headerShown: true,
+      header: (props: NativeStackHeaderProps) => (
+        <CustomHeader type="back" title="Video call" {...props} textMiddle />
       ),
     },
   },
@@ -493,6 +521,51 @@ export const MoreStackRoutes = [
     },
   },
   {
+    name: 'AddBankAccount',
+    component: AddBankAccount,
+    options: {
+      headerShown: true,
+      header: (props: NativeStackHeaderProps) => (
+        <CustomHeader
+          type="back"
+          title="Add bank account"
+          {...props}
+          textMiddle
+        />
+      ),
+    },
+  },
+  {
+    name: 'SelectBank',
+    component: SelectBank,
+    options: {
+      headerShown: true,
+      header: (props: NativeStackHeaderProps) => (
+        <CustomHeader
+          type="back"
+          title="Select account"
+          {...props}
+          textMiddle
+        />
+      ),
+    },
+  },
+  {
+    name: 'ConfirmTransaction',
+    component: ConfirmTransaction,
+    options: {
+      headerShown: true,
+      header: (props: NativeStackHeaderProps) => (
+        <CustomHeader
+          type="back"
+          title="Confirm transaction"
+          {...props}
+          textMiddle
+        />
+      ),
+    },
+  },
+  {
     name: 'DeleteReason',
     component: DeleteReason,
     options: {
@@ -508,6 +581,26 @@ export const MoreStackRoutes = [
     },
   },
   {
+    name: 'UpdateAbout',
+    component: UpdateAbout,
+    options: {
+      headerShown: true,
+      header: (props: NativeStackHeaderProps) => (
+        <CustomHeader type="back" title="Update about" {...props} textMiddle />
+      ),
+    },
+  },
+  {
+    name: 'UpdatePrices',
+    component: UpdatePrices,
+    options: {
+      headerShown: true,
+      header: (props: NativeStackHeaderProps) => (
+        <CustomHeader type="back" title="Update prices" {...props} textMiddle />
+      ),
+    },
+  },
+  {
     name: 'ProviderProfile',
     component: ProviderProfile,
     options: {
@@ -519,6 +612,23 @@ export const MoreStackRoutes = [
     component: ProviderTiers,
     options: {
       headerShown: false,
+    },
+  },
+  {
+    name: 'ProfileSetup',
+    component: ProfileSetup,
+    options: {
+      headerShown: false,
+    },
+  },
+  {
+    name: 'VerifyAccount',
+    component: VerifyAccount,
+    options: {
+      headerShown: true,
+      header: (props: NativeStackHeaderProps) => (
+        <CustomHeader type="back" {...props} />
+      ),
     },
   },
   ...IdentityVerificationRoute,

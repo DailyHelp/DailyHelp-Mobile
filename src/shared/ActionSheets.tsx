@@ -14,6 +14,8 @@ import CustomSelect from '../components/customInput/customSelectInput/CustomSele
 import ConfirmDeleteActionSheet from '../screens/app/more/deleteAccount/ConfirmDeleteAccount';
 import DeleteAddress from '../screens/app/more/components/DeleteAddress';
 import FullChatActivated from '../screens/app/chat/components/FullChatActivated';
+import WithdrawalModal from '../screens/app/more/bankAccount/components/WithdrawalModal';
+import FundWalletDto from '../screens/app/more/dto/FundWallet.dto';
 
 registerSheet('AllCategory', AllCategory);
 registerSheet('Rating', Rating);
@@ -30,6 +32,7 @@ registerSheet('CustomSelect', CustomSelect);
 registerSheet('ConfirmDelete', ConfirmDeleteActionSheet);
 registerSheet('DeleteAddress', DeleteAddress);
 registerSheet('FullChatActivated', FullChatActivated);
+registerSheet('Withdrawal', WithdrawalModal);
 
 export type ActionSheetLoader = {
   isDefaultLoading?: boolean;
@@ -47,6 +50,8 @@ declare module 'react-native-actions-sheet' {
       returnValue: {
         subCategory: string[];
         mainCategory: string[];
+        mainCategoryUuids: string[];
+        subCategoriesUuid: string[];
       };
     }>;
     Rating: SheetDefinition<{
@@ -57,6 +62,7 @@ declare module 'react-native-actions-sheet' {
     FundWallet: SheetDefinition<{
       payload: {
         type: 'FUND' | 'WITHDRAW';
+        navigation?: any;
       };
       returnValue: {
         amount: number;
@@ -87,7 +93,13 @@ declare module 'react-native-actions-sheet' {
     FaceMatch: SheetDefinition<{}>;
     CancelJob: SheetDefinition<{}>;
     WorkerSuggestion: SheetDefinition<{}>;
-    RateService: SheetDefinition<{}>;
+    RateService: SheetDefinition<{
+      payload: {
+        uuid: string;
+        providerImage: string;
+        tier: string;
+      };
+    }>;
     AddressOptions: SheetDefinition<{
       payload: {
         uuid: string;
@@ -99,6 +111,8 @@ declare module 'react-native-actions-sheet' {
       payload: {
         label?: string;
         data?: {label?: string; value: string}[];
+        enableSearch?: boolean;
+        searchPlaceholder?: string;
       };
       returnValue: {label?: string; value: string; data?: any};
     }>;
@@ -117,6 +131,9 @@ declare module 'react-native-actions-sheet' {
         onContinue?: () => void;
         onClose?: () => void;
       };
+    }>;
+    Withdrawal: SheetDefinition<{
+      payload?: Partial<FundWalletDto>;
     }>;
   }
 }

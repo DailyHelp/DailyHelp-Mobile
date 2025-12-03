@@ -42,6 +42,7 @@ const PersonalInformation: IPersonalInformation = ({navigation, route}) => {
           navigation.navigate('IdentityVerification', {
             ...data,
             userType: route.params?.userType,
+            step1: true,
           });
         }}
         validateOnChange={false}

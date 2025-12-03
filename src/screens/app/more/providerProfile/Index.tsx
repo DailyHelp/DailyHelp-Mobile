@@ -15,7 +15,13 @@ import homeService from '../../user/home/services/Home.service';
 
 const ProviderProfile: IProviderProfile = ({navigation}) => {
   const {data} = homeService.useUser();
-  const [progress, setProgress] = React.useState(0.15);
+
+  const {data: reviews, total} = homeService.useReviews(3);
+  const [progress, setProgress] = React.useState(data?.ratedCompletedJobs);
+
+  React.useEffect(() => {
+    setProgress(data?.ratedCompletedJobs);
+  }, [data?.ratedCompletedJobs]);
 
   const tierColor: {[x: string]: string} = {
     bronze: '#E27C00',
@@ -115,7 +121,7 @@ const ProviderProfile: IProviderProfile = ({navigation}) => {
                 />
                 <Container flexDirection="row" justifyContent="space-between">
                   <Typography fontWeight="semibold" size="md" color="gray">
-                    {100 * progress}% completed
+                    {100 * progress!}% completed
                   </Typography>
                   <TouchableOpacity
                     onPress={() => navigation.navigate('ProviderTiers')}>
@@ -136,7 +142,12 @@ const ProviderProfile: IProviderProfile = ({navigation}) => {
                 <Typography color="gray" fontWeight="medium">
                   ABOUT
                 </Typography>
-                <TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate('UpdateAbout', {
+                      about: data?.serviceDescription,
+                    })
+                  }>
                   <Typography size="md" color="green" fontWeight="semibold">
                     Edit
                   </Typography>
@@ -144,11 +155,7 @@ const ProviderProfile: IProviderProfile = ({navigation}) => {
               </Container>
               <Container padding={3}>
                 <Typography color="lightBlack" lineHeight={22}>
-                  Flawless styles, every time. I specialize in knotless braids,
-                  cornrows, lace installs, silk press, twists, and more —
-                  starting from ₦5,000. Available Mon–Sat (9 AM – 6 PM).Home
-                  service in Surulere & nearby (extra fee). Your hair, done
-                  right.
+                  {data?.serviceDescription}
                 </Typography>
               </Container>
             </Container>
@@ -162,7 +169,8 @@ const ProviderProfile: IProviderProfile = ({navigation}) => {
                 <Typography color="gray" fontWeight="medium">
                   PRICES
                 </Typography>
-                <TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate('UpdatePrices', data)}>
                   <Typography size="md" color="green" fontWeight="semibold">
                     Edit
                   </Typography>
@@ -172,13 +180,13 @@ const ProviderProfile: IProviderProfile = ({navigation}) => {
                 <Container flexDirection="row" justifyContent="space-between">
                   <Typography color="gray">Starting fee</Typography>
                   <Typography color="lightBlack" currency fontWeight="bold">
-                    {20000}
+                    {data?.offerStartingPrice}
                   </Typography>
                 </Container>
                 <Container flexDirection="row" justifyContent="space-between">
                   <Typography color="gray">Minimum acceptable Offer</Typography>
                   <Typography color="lightBlack" currency fontWeight="bold">
-                    {5000}
+                    {data?.minimumOfferPrice}
                   </Typography>
                 </Container>
               </Container>
@@ -210,13 +218,15 @@ const ProviderProfile: IProviderProfile = ({navigation}) => {
                   <Assets.Star width={15} />
                   <Typography fontWeight="bold">4.5</Typography>
                   <Typography color="gray" fontWeight="bold">
-                    (2000)
+                    {`(${total || 0})`}
                   </Typography>
                 </Container>
               </Container>
 
-              <Container padding={3} gap={10}>
-                <ReviewsCard data={{rate: 5}} />
+              <Container type="scroll" padding={3} gap={10}>
+                {reviews.map(rate => (
+                  <ReviewsCard data={rate} />
+                ))}
               </Container>
             </Container>
           </Container>

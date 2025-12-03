@@ -13,6 +13,8 @@ const BackHeader: ICustomHeader<NativeStackHeaderProps, ColorKeys> = ({
   goBack,
   textMiddle,
   backgroundColor,
+  rightAction,
+  onRightActionPress,
 }) => {
   if (textMiddle) {
     // Centered title layout
@@ -21,14 +23,15 @@ const BackHeader: ICustomHeader<NativeStackHeaderProps, ColorKeys> = ({
         flexDirection="row"
         alignItems="center"
         backgroundColor={backgroundColor || 'white'}
-        justifyContent="center"
+        justifyContent="space-between"
         position="relative"
         height={50}
-        width={'full'}>
+        width={'full'}
+        paddingHorizontal={scale(16)}>
         {/* Back Icon on far left */}
         <TouchableOpacity
           onPress={goBack || navigation?.goBack}
-          style={{position: 'absolute', left: scale(5), zIndex: 1}}>
+          style={{position: 'absolute', left: scale(16), zIndex: 1}}>
           <Icon name="chevron-back" size={20} color={'#014C2B'} />
         </TouchableOpacity>
 
@@ -38,9 +41,19 @@ const BackHeader: ICustomHeader<NativeStackHeaderProps, ColorKeys> = ({
             fontFamily: fonts.GeistBold,
             fontSize: customFontSize.md,
             textAlign: 'center',
+            flex: 1,
           }}>
           {title}
         </Text>
+
+        {/* Right Action Button */}
+        {rightAction && (
+          <TouchableOpacity
+            onPress={onRightActionPress}
+            style={{position: 'absolute', right: scale(16), zIndex: 1}}>
+            {rightAction}
+          </TouchableOpacity>
+        )}
       </Container>
     );
   }

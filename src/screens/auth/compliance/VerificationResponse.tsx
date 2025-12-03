@@ -10,8 +10,10 @@ import Typography from '../../../components/Typography';
 import {appStore} from '../../../shared/stores/appStore';
 import {customFontSize, fonts} from '../../../shared/themes/Typography';
 import {UserTypes} from '../../../shared/Constant';
+import utils from '../../../shared/Utils';
 
 const VerificationResponse: IVerificationResponse = ({route, navigation}) => {
+  utils.useHideBottomTab(navigation);
   const user_type = route.params?.userType;
 
   const isCustomer = user_type === UserTypes.CUSTOMER;
@@ -79,17 +81,12 @@ const VerificationResponse: IVerificationResponse = ({route, navigation}) => {
                 size={15}
               />
             )}
-            onPress={() => {
-              navigation.reset({
-                index: 0,
-                routes: [{name: 'PersonalInformation'}],
-              });
-            }}>
+            onPress={() => navigation.popTo('PersonalInformation')}>
             Edit details
           </MainButton>
 
           <TouchableOpacity
-            onPress={() => navigation.replace('VerifyIdentity')}
+            onPress={() => navigation.popToTop()}
             style={{
               backgroundColor: '#F9F9FB',
               flexDirection: 'row',

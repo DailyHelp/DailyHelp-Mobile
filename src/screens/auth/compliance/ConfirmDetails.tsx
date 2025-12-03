@@ -7,8 +7,10 @@ import ScreenHeader from '../../../components/ScreenHeader';
 import {scale, verticalScale} from '../../../shared/Scaling';
 import {appStore} from '../../../shared/stores/appStore';
 import {customFontSize, fonts} from '../../../shared/themes/Typography';
+import utils from '../../../shared/Utils';
 
 const ConfirmDetails: IConfirmDetails = ({navigation, route}) => {
+  utils.useHideBottomTab(navigation);
   const user_data = [
     {
       title: 'Full name',

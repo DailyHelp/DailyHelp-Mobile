@@ -41,7 +41,11 @@ const DeleteAddress = React.forwardRef<
           <TouchableOpacity
             onPress={() => {
               SheetManager.hide('DeleteAddress');
-            }}></TouchableOpacity>
+            }}>
+            <Typography fontWeight="semibold" size="md" color="gray">
+              ✕
+            </Typography>
+          </TouchableOpacity>
         </View>
 
         <Container gap={6}>
@@ -64,7 +68,6 @@ const DeleteAddress = React.forwardRef<
           </MainButton>
           <MainButton
             onPress={() => {
-              SheetManager.hide('AddressOptions');
               SheetManager.hide('DeleteAddress');
             }}
             enableButtonColor="transparent"

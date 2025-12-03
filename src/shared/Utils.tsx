@@ -22,6 +22,7 @@ import CatchError from './errors/catchError';
 import ThrowError from './errors/throwError';
 import {scale, verticalScale} from './Scaling';
 import {http} from './services/Http';
+import UserDTO from '../screens/auth/dto/UserDto';
 
 class Utils {
   private static instance: Utils;
@@ -418,15 +419,15 @@ class Utils {
     const [query, setQuery] = React.useState<PaginationQuery<F>>(defaultQuery);
     const [data, setData] = React.useState<D[]>([]);
 
-    const appendPageData = (newData: D[]) => {
+    const appendPageData = React.useCallback((newData: D[]) => {
       setData(prev => [...(prev || []), ...newData]);
-    };
+    }, []);
 
-    const resetHistory = () => {
+    const resetHistory = React.useCallback(() => {
       setData([]);
-    };
+    }, []);
 
-    const fetchMore = () => {
+    const fetchMore = React.useCallback(() => {
       setQuery(prev => ({
         ...prev,
         pagination: {
@@ -434,7 +435,7 @@ class Utils {
           page: prev.pagination?.page! + 1,
         },
       }));
-    };
+    }, []);
 
     return {
       query,
@@ -479,6 +480,39 @@ class Utils {
       base,
       bases,
     };
+  }
+
+  getVerificationRoutes(
+    steps?: {
+      step1?: boolean;
+      step2?: boolean;
+      step3?: boolean;
+      onboardingCompleted?: boolean;
+    },
+    userType: UserTypes = UserTypes.PROVIDER,
+  ) {
+    let verificationUrl = 'PersonalInformation';
+    if (!steps?.step1) {
+      verificationUrl = 'PersonalInformation';
+    }
+    if (!steps?.step2 && steps?.step1) {
+      verificationUrl = 'IdentityVerification';
+    }
+    if (!steps?.step3 && steps?.step2) {
+      verificationUrl = 'FacialVerification';
+    }
+
+    if (
+      steps?.step1 &&
+      steps?.step2 &&
+      steps?.step3 &&
+      !steps.onboardingCompleted &&
+      userType === UserTypes.PROVIDER
+    ) {
+      verificationUrl = 'VerifyAddress';
+    }
+
+    return verificationUrl;
   }
 }
 

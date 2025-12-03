@@ -81,21 +81,21 @@ const HelperCard: IHelperCard<ProvidersDto> = ({data, mode, horizontal}) => {
                 <Typography
                   limit={12}
                   fontWeight="bold"
-                  size="md"
+                  size="sm"
                   color="gray"
                   textAlign="center">
                   {data?.primaryJobRole}
                 </Typography>
                 <Typography
                   fontWeight="bold"
-                  size="md"
+                  size="sm"
                   color="gray"
                   textAlign="center">
                   |
                 </Typography>
                 <Typography
                   fontWeight="bold"
-                  size="md"
+                  size="sm"
                   color="gray"
                   textAlign="center">
                   From
@@ -103,14 +103,14 @@ const HelperCard: IHelperCard<ProvidersDto> = ({data, mode, horizontal}) => {
                 <Typography
                   currency
                   fontWeight="bold"
-                  size="md"
+                  size="sm"
                   color="gray"
                   textAlign="center">
                   {data?.offerStartingPrice}
                 </Typography>
                 <Typography
                   fontWeight="bold"
-                  size="md"
+                  size="sm"
                   color="gray"
                   textAlign="center">
                   |
@@ -120,7 +120,7 @@ const HelperCard: IHelperCard<ProvidersDto> = ({data, mode, horizontal}) => {
                   <Icon name="star" size={15} color={'#FFD100'} />
                   <Typography
                     fontWeight="medium"
-                    size="md"
+                    size="sm"
                     color="gray"
                     textAlign="center">
                     {data?.avgRating}
@@ -174,7 +174,10 @@ const HelperCard: IHelperCard<ProvidersDto> = ({data, mode, horizontal}) => {
               }}>
               <View style={{flexDirection: 'row', gap: 10}}>
                 <CustomAvatar
-                  data={{image: data?.picture, badge: data?.tier?.toLowerCase()}}
+                  data={{
+                    image: data?.picture,
+                    badge: data?.tier?.toLowerCase(),
+                  }}
                 />
                 <View style={{flexDirection: 'column', gap: 5, width: '80%'}}>
                   <View
@@ -182,7 +185,7 @@ const HelperCard: IHelperCard<ProvidersDto> = ({data, mode, horizontal}) => {
                       flexDirection: 'row',
                       justifyContent: 'space-between',
                     }}>
-                    <Typography fontWeight="bold" size="m2d">
+                    <Typography fontWeight="bold" size="md">
                       {data?.firstname} {data?.lastname}
                     </Typography>
 
@@ -214,18 +217,18 @@ const HelperCard: IHelperCard<ProvidersDto> = ({data, mode, horizontal}) => {
                     }}>
                     <Typography
                       fontWeight="medium"
-                      size="md"
+                      size="sm"
                       color="gray"
                       limit={12}>
                       {data?.primaryJobRole}
                     </Typography>
-                    <Typography fontWeight="bold" size="md" color="gray">
+                    <Typography fontWeight="bold" size="sm" color="gray">
                       |
                     </Typography>
-                    <Typography fontWeight="regular" size="md" color="gray">
+                    <Typography fontWeight="regular" size="sm" color="gray">
                       From
                     </Typography>
-                    <Typography currency fontWeight="bold" size="md">
+                    <Typography currency fontWeight="bold" size="sm">
                       {data?.offerStartingPrice}
                     </Typography>
                   </View>

@@ -1,16 +1,17 @@
 import {GOOGLE_API_KEY} from '@env';
+import {CustomerDashboardDto} from '../../screens/app/user/home/dto/customer-dashboard.dto';
+import Review from '../../screens/app/user/home/dto/reviews.dto';
+import {SaveLocationDto} from '../../screens/app/user/home/dto/savedLocationDto';
 import SaveHelpersDetailsDTO from '../../screens/app/user/home/dto/SaveHelpersDetailsDto';
 import SavePriceDTO from '../../screens/app/user/home/dto/SavePriceDto';
 import DeclineOfferDto from '../../screens/app/user/jobs/dto/DeclineOffer.dto';
 import SendOfferDto from '../../screens/app/user/jobs/dto/SendOffer.dto';
 import UserDTO from '../../screens/auth/dto/UserDto';
+import AppStorage from '../AppStorage';
+import {ReasonType} from '../Constant';
 import ThrowError from '../errors/throwError';
 import Endpoints from './Endpoints';
 import Http from './Http';
-import {CustomerDashboardDto} from '../../screens/app/user/home/dto/customer-dashboard.dto';
-import {ReasonType} from '../Constant';
-import AppStorage from '../AppStorage';
-import {SaveLocationDto} from '../../screens/app/user/home/dto/savedLocationDto';
 
 export default class HomeApi extends Http {
   userType = () => AppStorage.find('userType');
@@ -287,12 +288,12 @@ export default class HomeApi extends Http {
     return data;
   }
 
-  protected async getReviews(uuid: string, query?: PaginationQuery) {
+  protected async getReviews(query?: PaginationQuery) {
     const res = await this.fetchHandler({
-      path: Endpoints.reviews(uuid, query),
+      path: Endpoints.reviews(query),
       method: 'GET',
     });
-    const data = await this.handleResponse<Reviews[], true>(res);
+    const data = await this.handleResponse<Review[], true>(res);
 
     return data;
   }
@@ -327,6 +328,26 @@ export default class HomeApi extends Http {
       method: 'GET',
     });
     const data = await this.handleResponse<Reason[]>(res);
+
+    return data;
+  }
+
+  protected async customerProviderReview(uuid: string) {
+    const res = await this.fetchHandler({
+      path: Endpoints.customerProviderReview(uuid),
+      method: 'GET',
+    });
+    const data = await this.handleResponse<{
+      averageRating: number;
+      totalReviews: number;
+      breakdown: {
+        fiveStar: number;
+        fourStar: number;
+        threeStar: number;
+        twoStar: number;
+        oneStar: number;
+      };
+    }>(res);
 
     return data;
   }

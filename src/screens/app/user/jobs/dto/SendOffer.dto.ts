@@ -7,7 +7,7 @@ export default class SendOfferDto {
   @IsString()
   description?: string;
 
-  attachments: string[] | string;
+  attachments?: string[] | string;
 
   uuid?: string;
 

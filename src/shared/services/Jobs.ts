@@ -6,12 +6,22 @@ import Endpoints from './Endpoints';
 import Http from './Http';
 
 export default class JobsApi extends Http {
-  protected async getsJobs(query: PaginationQuery) {
+  protected async getJobs(query: PaginationQuery) {
     const res = await this.fetchHandler({
       path: Endpoints.getJob(query),
       method: 'GET',
     });
     const data = await this.handleResponse<Jobs[], true>(res);
+
+    return data;
+  }
+
+  protected async getJobDetails(uuid: string) {
+    const res = await this.fetchHandler({
+      path: Endpoints.jobDetails(uuid),
+      method: 'GET',
+    });
+    const data = await this.handleResponse<{job: Jobs; timelines: any[]}>(res);
 
     return data;
   }

@@ -4,25 +4,23 @@ import {scale, verticalScale} from '../../../../../shared/Scaling';
 import Icon from 'react-native-vector-icons/Ionicons';
 import React from 'react';
 import dayjs from 'dayjs';
+import JobTimelineDto from '../dto/JobTimeline.dto';
 
 interface JobTimelineProps {
-  timeline?: any[];
+  timeline?: JobTimelineDto[];
   isLoading?: boolean;
+  status: string;
 }
 
-const JobTimeline: React.FC<JobTimelineProps> = ({timeline, isLoading}) => {
+const JobTimeline: React.FC<JobTimelineProps> = ({
+  timeline,
+  isLoading,
+  status,
+}) => {
   // Default timeline if no data is provided
-  const defaultTimeline = [
-    {
-      action: 'Offer Accepted',
-      date: '23 Mar, 2025, 09:30',
-      status: 'completed',
-    },
-    {action: 'Job Start', date: '23 Mar, 2025, 09:30', status: 'completed'},
-    {action: 'Job End', date: 'In-progress', status: 'pending'},
-  ];
+  console.log(timeline);
 
-  const timelineData = timeline || defaultTimeline;
+  const timelineData = timeline || [];
 
   if (isLoading) {
     return (
@@ -62,8 +60,8 @@ const JobTimeline: React.FC<JobTimelineProps> = ({timeline, isLoading}) => {
           const isLast = index === timelineData.length - 1;
           const nextItem = timelineData[index + 1];
           const showLine = !isLast;
-          const isPending = nextItem?.status === 'pending';
-          const isCompleted = item.status === 'completed';
+          const isPending = status === 'in_progress';
+          const isCompleted = index != timelineData.length - 1;
 
           return (
             <View
@@ -101,10 +99,12 @@ const JobTimeline: React.FC<JobTimelineProps> = ({timeline, isLoading}) => {
                   )}
                 </View>
                 <Typography size="md" color="gray">
-                  {item.action}
+                  {item.event}
                 </Typography>
               </View>
-              <Typography size="sm">{item.date}</Typography>
+              <Typography size="sm">
+                {dayjs(item.createdAt).format('DD MMM, YYYY, hh:mm')}
+              </Typography>
             </View>
           );
         })}

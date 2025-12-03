@@ -1,3 +1,4 @@
+import '../shared/ActionSheets';
 import {
   NavigationContainer,
   useNavigationContainerRef,
@@ -6,7 +7,6 @@ import React from 'react';
 import {SheetProvider} from 'react-native-actions-sheet';
 import SplashScreen from 'react-native-splash-screen';
 import Toast from 'react-native-toast-message';
-import '../shared/ActionSheets';
 import AuthRouter from './auth/Index';
 import {toastConfig} from '../shared/Toast';
 import {PaperProvider} from 'react-native-paper';
@@ -15,7 +15,8 @@ import {observer, Observer} from 'mobx-react-lite';
 import {appStore} from '../shared/stores/appStore';
 import AppRouter from './app/Index';
 import {EventRegister} from 'react-native-event-listeners';
-import {EVENTS} from '../shared/Constant';
+import {ERRORS, EVENTS} from '../shared/Constant';
+import GlobalCallHandler from '../components/callNotification/GlobalCallHandler';
 
 const Routes: Props = () => {
   const navigationRef = useNavigationContainerRef();
@@ -35,21 +36,34 @@ const Routes: Props = () => {
     });
   }, []);
 
+  React.useEffect(() => {
+    EventRegister.addEventListener(ERRORS.UNAUTHENTICATED, user => {
+      appStore.setIsAuthenticated(!user);
+    });
+  }, []);
+
   return (
-    <NavigationContainer ref={navigationRef}>
-      <PaperProvider theme={theme}>
-        <SheetProvider context="global">
+    <SheetProvider>
+      <NavigationContainer ref={navigationRef}>
+        <PaperProvider theme={theme}>
           <Observer>
             {() => (
               <React.Fragment>
-                {appStore.isAuthenticated ? <AppRouter /> : <AuthRouter />}
+                {appStore.isAuthenticated ? (
+                  <>
+                    <AppRouter />
+                    <GlobalCallHandler navigationRef={navigationRef} />
+                  </>
+                ) : (
+                  <AuthRouter />
+                )}
               </React.Fragment>
             )}
           </Observer>
           <Toast config={toastConfig} />
-        </SheetProvider>
-      </PaperProvider>
-    </NavigationContainer>
+        </PaperProvider>
+      </NavigationContainer>
+    </SheetProvider>
   );
 };
 

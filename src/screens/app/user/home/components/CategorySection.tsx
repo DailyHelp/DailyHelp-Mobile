@@ -6,24 +6,10 @@ import Typography from '../../../../../components/Typography';
 import {scale} from '../../../../../shared/Scaling';
 
 const CategorySection: ICategorySection = ({data: cat, onFilter}) => {
-  const [categories, setCategories] = React.useState(cat);
-
-  const selectCategory = (sub: string) => {
-    setCategories(prevSelected => {
-      const isSelected = prevSelected?.some(item => item.label === sub);
-
-      if (isSelected) {
-        return prevSelected?.filter(item => item.label !== sub);
-      } else {
-        // Add new category with only slug (you can expand this if needed)
-        return [...prevSelected!, {label: sub, slug: sub}];
-      }
-    });
-  };
-
   const onClick = (action: string) => {
-    action = action?.toLowerCase();
-    if (action === 'all categories') {
+    const label = action?.toLowerCase();
+
+    if (label === 'all categories') {
       SheetManager.show('AllCategory', {
         onClose: q => {
           onFilter?.({
@@ -32,8 +18,10 @@ const CategorySection: ICategorySection = ({data: cat, onFilter}) => {
           });
         },
       });
+      return;
     }
-    if (action === 'rating') {
+
+    if (label === 'rating') {
       SheetManager.show('Rating', {
         onClose: q => {
           onFilter?.({
@@ -41,8 +29,10 @@ const CategorySection: ICategorySection = ({data: cat, onFilter}) => {
           });
         },
       });
+      return;
     }
-    if (action === 'price') {
+
+    if (label === 'price') {
       SheetManager.show('PriceRange', {
         onClose: q => {
           onFilter?.({
@@ -53,25 +43,54 @@ const CategorySection: ICategorySection = ({data: cat, onFilter}) => {
           });
         },
       });
+      return;
     }
-    selectCategory(action);
+
+    if (label === 'available') {
+      const availableItem = cat?.find(
+        item => item.label.toLowerCase() === 'available',
+      );
+      const currentlyEngaged = !!availableItem?.isActive;
+
+      onFilter?.({
+        engaged: !currentlyEngaged,
+      });
+      return;
+    }
+
+    if (label === 'reset') {
+      // Pass an empty filter object; the parent decides how to handle a full reset.
+      onFilter?.({} as any);
+      return;
+    }
   };
 
   return (
     <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-      <View style={{flexDirection: 'row', gap: 12}}>
-        {categories?.map((item, key) => (
+      <View style={{flexDirection: 'row', gap: 12, padding: 6}}>
+        {cat?.map((item, key) => (
           <TouchableOpacity
             onPress={() => onClick(item.label)}
             key={key}
             style={{
+              borderWidth: item.isActive ? 0.5 : 0,
+              borderColor: '#95D21A',
               flexDirection: 'row',
               gap: 13,
               padding: scale(10),
-              backgroundColor: '#F9F9FB',
+              backgroundColor: item.isActive
+                ? '#F9FFEB'
+                : item.label.toLowerCase() === 'reset'
+                ? '#FFF3EB'
+                : '#F9F9FB',
               borderRadius: 100,
             }}>
-            <Typography fontWeight="medium" size="sm" color="darkGray">
+            <Typography
+              fontWeight="medium"
+              size="sm"
+              color={
+                item.label.toLowerCase() === 'reset' ? 'danger' : 'darkGray'
+              }>
               {item.label}
             </Typography>
 

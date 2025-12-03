@@ -6,6 +6,7 @@ import MainButton from '../../../../../components/button/MainButton';
 import OutlineButton from '../../../../../components/button/OutlineButton';
 import Container from '../../../../../components/container/Index';
 import CustomAvatar from '../../../../../components/CustomAvatar';
+import StatusChip from '../../../../../components/StatusChip';
 import Typography from '../../../../../components/Typography';
 import {UserTypes} from '../../../../../shared/Constant';
 import {verticalScale} from '../../../../../shared/Scaling';
@@ -18,10 +19,19 @@ const JobsCard: IJobsCard<UserTypes, JobsDto> = ({
   userType,
   data,
 }) => {
-  console.log(type);
+  const serviceProvider = data?.serviceProvider;
+
+  const picture = serviceProvider?.picture || data?.providerPicture;
+  const firstname = serviceProvider?.firstname || data?.providerFirstname;
+  const lastname = serviceProvider?.lastname || data?.providerLastname;
+
+  console.log(data);
+  
 
   return (
     <Container
+      isTouchable={type === 'completed'}
+      onPress={() => viewDetails?.(data!)}
       width={'full'}
       padding={10}
       backgroundColor="white"
@@ -34,12 +44,12 @@ const JobsCard: IJobsCard<UserTypes, JobsDto> = ({
           <CustomAvatar
             avatarSize={50}
             badgeSize={20}
-            data={{image: data?.serviceProvider.picture}}
+            data={{image: picture}}
           />
 
           <Container flexDirection="column" gap={3}>
             <Typography size="m2d">
-              {data?.providerFirstname} {data?.providerLastname}
+              {firstname} {lastname}
             </Typography>
             <Typography size="md" color="gray">
               {data?.providerPrimaryJobRole}
@@ -47,9 +57,20 @@ const JobsCard: IJobsCard<UserTypes, JobsDto> = ({
           </Container>
         </Container>
 
-        <Typography color="secondary" fontWeight="bold" currency>
-          {data?.price}
-        </Typography>
+        <Container flexDirection="column" alignItems="flex-end" gap={5}>
+          {(type === 'completed' || type === 'canceled') && (
+            <StatusChip
+              dot={false}
+              backgroundColor={
+                data?.status === 'COMPLETED' ? '#E6FFF4' : '#FEF6F6'
+              }>
+              {data?.status === 'COMPLETED' ? 'Completed' : 'Canceled'}
+            </StatusChip>
+          )}
+          <Typography color="black" fontWeight="bold" currency>
+            {data?.price}
+          </Typography>
+        </Container>
       </Container>
 
       <Typography color="lightBlack" lineHeight={20}>
@@ -89,7 +110,15 @@ const JobsCard: IJobsCard<UserTypes, JobsDto> = ({
 
       {type === 'completed' && userType !== UserTypes.PROVIDER && (
         <OutlineButton
-          onPress={() => SheetManager.show('RateService')}
+          onPress={() =>
+            SheetManager.show('RateService', {
+              payload: {
+                providerImage: data?.serviceProvider.picture!,
+                uuid: data?.uuid!,
+                tier: data?.serviceProvider.tier || '',
+              },
+            })
+          }
           icon={() => <Icon name="star" size={15} color={'#FFD100'} />}
           color="black">
           Rate service provider

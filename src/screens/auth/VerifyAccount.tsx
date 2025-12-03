@@ -1,15 +1,15 @@
-import { Formik } from 'formik';
+import {Formik} from 'formik';
 import React from 'react';
-import { View } from 'react-native';
-import { ActivityIndicator, Text } from 'react-native-paper';
-import { IVerifyAccount } from '../../@types/routes';
+import {View} from 'react-native';
+import {ActivityIndicator, Text} from 'react-native-paper';
+import {IVerifyAccount} from '../../@types/routes';
 import MainButton from '../../components/button/MainButton';
 import Container from '../../components/container/Index';
 import Otp from '../../components/Otp';
 import OtpCountDown from '../../components/OtpCountDown';
 import Typography from '../../components/Typography';
-import { scale, verticalScale } from '../../shared/Scaling';
-import { customFontSize, fonts } from '../../shared/themes/Typography';
+import {scale, verticalScale} from '../../shared/Scaling';
+import {customFontSize, fonts} from '../../shared/themes/Typography';
 import VerifyOtpDTO from './dto/VerifyOtpDto';
 import authService from './services/Auth.service';
 
@@ -59,7 +59,7 @@ const VerifyAccount: IVerifyAccount = ({route, navigation}) => {
               color: '#757C91',
             }}>
             {' '}
-            {route?.params?.email}{' '}
+            {route?.params?.email || route.params?.phone}{' '}
           </Text>
           <Text
             style={{
@@ -67,7 +67,7 @@ const VerifyAccount: IVerifyAccount = ({route, navigation}) => {
               fontSize: customFontSize.sm,
               color: '#757C91',
             }}>
-            to verify your account.
+            to verify your {route.params?.email ? 'account' : 'phone number'}.
           </Text>
         </View>
       </Container>

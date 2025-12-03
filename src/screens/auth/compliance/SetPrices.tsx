@@ -9,8 +9,13 @@ import Typography from '../../../components/Typography';
 import homeService from '../../app/user/home/services/Home.service';
 import SavePriceDTO from '../../app/user/home/dto/SavePriceDto';
 import createValidator from 'class-validator-formik';
+import {observer} from 'mobx-react-lite';
+import {appStore} from '../../../shared/stores/appStore';
+import {UserTypes} from '../../../shared/Constant';
+import utils from '../../../shared/Utils';
 
 const SetPrices: ISetPrices = ({navigation}) => {
+  utils.useHideBottomTab(navigation);
   const {savePrice, isPending} = homeService.useSavePrice();
 
   return (
@@ -23,10 +28,20 @@ const SetPrices: ISetPrices = ({navigation}) => {
       <Formik
         initialValues={new SavePriceDTO()}
         validate={createValidator(SavePriceDTO)}
-        onSubmit={data =>
-          savePrice(data, {onSuccess: () => navigation.navigate('SetPrices')})
-        }>
-        {({values, handleChange, handleSubmit}) => (
+        onSubmit={data => {
+          savePrice(
+            {
+              minimumOfferPrice: +data.minimumOfferPrice,
+              offerStartingPrice: +data.offerStartingPrice,
+            },
+            {
+              onSuccess: () => {
+                appStore.setIsAuthenticated(true, UserTypes.PROVIDER);
+              },
+            },
+          );
+        }}>
+        {({values, handleChange, handleSubmit, errors}) => (
           <Container width={'full'} height={600} justifyContent="space-between">
             <Container width={'full'} gap={30}>
               <Container width={'full'} gap={3}>
@@ -35,6 +50,7 @@ const SetPrices: ISetPrices = ({navigation}) => {
                   placeholder="₦ 5,000"
                   value={values.offerStartingPrice?.toString() || '0'}
                   onChangeText={handleChange('offerStartingPrice')}
+                  error={errors.offerStartingPrice}
                 />
 
                 <Typography color="gray" size="sm">
@@ -48,6 +64,7 @@ const SetPrices: ISetPrices = ({navigation}) => {
                   placeholder="₦ 0.00"
                   value={values.minimumOfferPrice?.toString() || '0'}
                   onChangeText={handleChange('minimumOfferPrice')}
+                  error={errors.minimumOfferPrice}
                 />
                 <Typography color="gray" size="sm">
                   This is the lowest amount you can accept for a job.
@@ -55,11 +72,7 @@ const SetPrices: ISetPrices = ({navigation}) => {
               </Container>
             </Container>
 
-            <MainButton
-              loading={isPending}
-              onPress={() => {
-                console.log(values);
-              }}>
+            <MainButton loading={isPending} onPress={handleSubmit}>
               Save
             </MainButton>
           </Container>
@@ -68,4 +81,4 @@ const SetPrices: ISetPrices = ({navigation}) => {
     </Container>
   );
 };
-export default SetPrices;
+export default observer(SetPrices);

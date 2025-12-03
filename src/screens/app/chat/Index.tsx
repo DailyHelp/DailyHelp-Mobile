@@ -2,6 +2,7 @@ import dayjs from 'dayjs';
 import React from 'react';
 import {TouchableOpacity, View} from 'react-native';
 import {Divider} from 'react-native-paper';
+import {useFocusEffect} from '@react-navigation/native';
 import {IChat} from '../../../@types/routes';
 import Assets from '../../../assets/Assets';
 import CustomAvatar from '../../../components/CustomAvatar';
@@ -16,20 +17,44 @@ import {observer} from 'mobx-react-lite';
 import {appStore} from '../../../shared/stores/appStore';
 import {UserTypes} from '../../../shared/Constant';
 import Container from '../../../components/container/Index';
+import ConversationSkeleton from '../../../components/skeleton/ConversationSkeleton';
 
 const Chat: IChat = ({navigation}) => {
   const {data, setQuery, isLoading, fetchMore, refetch} =
     chatService.useGetConversations();
 
   const user_type = appStore.user_types as UserTypes;
+  const [activeConversationUuid, setActiveConversationUuid] = React.useState<
+    string | null
+  >(null);
 
   const {showBottomTab} = utils.useHideBottomTab(navigation);
+
+  const {joinConversation, leaveConversation} =
+    chatService.useWebSocketListeners(data);
 
   React.useEffect(() => {
     showBottomTab();
   }, []);
 
-  console.log({data});
+  const hasNavigatedToChatBox = React.useRef(false);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      if (hasNavigatedToChatBox.current && activeConversationUuid) {
+        leaveConversation(activeConversationUuid);
+        setActiveConversationUuid(null);
+        hasNavigatedToChatBox.current = false;
+      }
+
+      return () => {
+        if (activeConversationUuid) {
+          leaveConversation(activeConversationUuid);
+          setActiveConversationUuid(null);
+        }
+      };
+    }, [activeConversationUuid, leaveConversation]),
+  );
 
   const empty = () => (
     <EmptyState
@@ -45,7 +70,7 @@ const Chat: IChat = ({navigation}) => {
       let name = `${item.spFirstname} ${item.spLastname}`;
       let picture = item.spPicture;
 
-      if (user_type === UserTypes.PROVIDER) {
+      if (user_type.toUpperCase() === UserTypes.PROVIDER) {
         name = `${item.rqFirstname} ${item.rqLastname}`;
         picture = item.rqPicture;
       }
@@ -55,13 +80,19 @@ const Chat: IChat = ({navigation}) => {
           onPress={() => {
             if (item.locked) return;
 
+            const conversationUuid = item.conversationId!;
+
+            joinConversation(conversationUuid);
+            setActiveConversationUuid(conversationUuid);
+            hasNavigatedToChatBox.current = true;
+
             navigation.navigate('ChatBox', {
-              uuid: item.conversationId!,
+              uuid: conversationUuid,
               title: name,
               cancellationChances: item.cancellationChances,
               badge: item.spTier,
               picture,
-              restricted: item.restricted,
+              hasActiveJob: item.hasActiveJob,
               isOnline: item.spOnline,
             });
           }}>
@@ -103,7 +134,7 @@ const Chat: IChat = ({navigation}) => {
                   ) : (
                     <Assets.GreenMark style={{marginTop: verticalScale(4)}} />
                   )}
-                  <Typography color="gray" limit={20}>
+                  <Typography color="gray" limit={12}>
                     {item.offerDescription}
                   </Typography>
                   <View
@@ -143,7 +174,7 @@ const Chat: IChat = ({navigation}) => {
         </TouchableOpacity>
       );
     },
-    [],
+    [user_type, setActiveConversationUuid, navigation, joinConversation],
   );
 
   const header = React.useMemo(
@@ -161,17 +192,24 @@ const Chat: IChat = ({navigation}) => {
 
   return (
     <View style={{flex: 1}}>
-      <CustomFlatList<Conversation>
-        data={data}
-        ListEmptyComponent={empty}
-        renderItem={renderItem}
-        ListHeaderComponent={header}
-        refreshing={isLoading}
-        onRefresh={refetch}
-        onEndReached={fetchMore}
-        onEndReachedThreshold={1}
-        keyExtractor={(item, index) => item.conversationId + index}
-      />
+      {isLoading && (!data || data.length === 0) ? (
+        <View style={{flex: 1}}>
+          {header}
+          <ConversationSkeleton count={5} />
+        </View>
+      ) : (
+        <CustomFlatList<Conversation>
+          data={data}
+          ListEmptyComponent={empty}
+          renderItem={renderItem}
+          ListHeaderComponent={header}
+          refreshing={isLoading}
+          onRefresh={refetch}
+          onEndReached={fetchMore}
+          onEndReachedThreshold={1}
+          keyExtractor={(item, index) => item.conversationId + index}
+        />
+      )}
     </View>
   );
 };

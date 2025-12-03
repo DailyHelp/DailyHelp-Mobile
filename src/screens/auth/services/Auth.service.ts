@@ -70,7 +70,7 @@ export class AuthService extends AuthApi {
     const navigation = useNavigation<Navigate<IAuthRoute>>();
 
     const {mutateAsync, isPending} = useMutation({
-      mutationKey: ['verify-otp'],
+      mutationKey: ['login'],
       mutationFn: async (body: LoginDto) => await this.login(body),
       onSuccess: (data, body) => {
         if (data?.status) {
@@ -110,6 +110,7 @@ export class AuthService extends AuthApi {
     });
 
     const onSubmit = async (body: LoginDto) => {
+      body.deviceToken = await messaging().getToken();
       return await mutateAsync(body);
     };
 
@@ -136,9 +137,9 @@ export class AuthService extends AuthApi {
       onError: error => new CatchError(error, true),
     });
 
-    const {mutateAsync: resendOtp, isPending: rsLoading} = useMutation({
-      mutationKey: ['resend-otp'],
-      mutationFn: async (body: VerifyOtpDTO) => await this.sendOtp(body),
+    const {mutateAsync: sendOtp, isPending: rsLoading} = useMutation({
+      mutationKey: ['send-otp'],
+      mutationFn: async (body: SendOtpDTO) => await this.sendOtp(body),
       onError: error => new CatchError(error, true),
     });
 
@@ -169,7 +170,7 @@ export class AuthService extends AuthApi {
         body.otpActionType = OtpActionType.VERIFY_ACCOUNT;
       }
 
-      return await resendOtp(body, {onSuccess: callback});
+      return await sendOtp(body, {onSuccess: callback});
     };
 
     return {

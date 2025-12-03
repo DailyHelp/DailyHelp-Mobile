@@ -3,6 +3,7 @@ import {IJobs} from '../../../../@types/routes';
 import CustomFlatList from '../../../../components/CustomFlatList';
 import Container from '../../../../components/container/Index';
 import CustomHeader from '../../../../components/customHeader/Index';
+import JobsSkeleton from '../../../../components/skeleton/JobsSkeleton';
 import JobsCard from './components/JobsCard';
 import jobService from './service/Jobs.service';
 import JobsDto from './dto/job.dto';
@@ -10,6 +11,9 @@ import EmptyState from '../../../../components/EmptyState';
 
 const Jobs: IJobs = props => {
   const [type, setType] = React.useState('PENDING');
+
+  // Set up WebSocket listeners for jobs and offers
+  jobService.useWebSocketListeners();
 
   const {data, fetchMore, isLoading, setQuery, query, refetch} =
     jobService.useGetJobs();
@@ -52,26 +56,30 @@ const Jobs: IJobs = props => {
         tabs={jobs}
         width={'full'}
       />
-      <CustomFlatList<JobsDto>
-        data={data}
-        showsVerticalScrollIndicator={false}
-        showsHorizontalScrollIndicator={false}
-        renderItem={renderItem}
-        keyExtractor={(item, index) => index.toString()}
-        onEndReached={fetchMore}
-        onEndReachedThreshold={0.5}
-        refreshing={isLoading}
-        onRefresh={refetch}
-        ListEmptyComponent={() => (
-          <EmptyState
-            showButton={false}
-            type="jobs"
-            header="No jobs found"
-            title="Send offer to see jobs"
-            height={450}
-          />
-        )}
-      />
+      {isLoading ? (
+        <JobsSkeleton count={2} />
+      ) : (
+        <CustomFlatList<JobsDto>
+          data={data}
+          showsVerticalScrollIndicator={false}
+          showsHorizontalScrollIndicator={false}
+          renderItem={renderItem}
+          keyExtractor={(item, index) => index.toString()}
+          onEndReached={fetchMore}
+          onEndReachedThreshold={0.5}
+          refreshing={isLoading}
+          onRefresh={refetch}
+          ListEmptyComponent={() => (
+            <EmptyState
+              showButton={false}
+              type="jobs"
+              header="No jobs found"
+              title="Send offer to see jobs"
+              height={450}
+            />
+          )}
+        />
+      )}
     </Container>
   );
 };

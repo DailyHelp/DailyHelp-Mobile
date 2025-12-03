@@ -6,7 +6,8 @@ import Typography from '../../../../../../components/Typography';
 
 const UserAction: IMessages = props => {
   const {data, isPaymentMade} = props;
-  console.log({user: data});
+  console.log(props);
+  
 
   const type = data?.type.toLowerCase();
   const status = data?.offer.status.toLowerCase();
@@ -18,7 +19,6 @@ const UserAction: IMessages = props => {
     backgroundColor = '#F3FCF4';
     borderColor = '#02CA71';
   }
-console.log({isPaymentMade});
 
   const payment = type === 'offer' && status !== 'accepted';
 
@@ -51,7 +51,7 @@ console.log({isPaymentMade});
         {data?.offer.price}
       </Typography>
 
-      {isPaymentMade && (
+      {!isPaymentMade && status == 'accepted' && (
         <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
           <OutlineButton
             color="danger"

@@ -1,16 +1,17 @@
-import Container from '../../../components/container/Index';
-import ScreenHeader from '../../../components/ScreenHeader';
-import CustomInput from '../../../components/customInput/Index';
+import {City, State} from 'country-state-city';
+import React, {useReducer} from 'react';
+import {ActionSheetRef, SheetManager} from 'react-native-actions-sheet';
 import {IVerifyAddress} from '../../../@types/routes';
+import Gallery from '../../../components/Gallery';
+import ScreenHeader from '../../../components/ScreenHeader';
 import UploadContainer from '../../../components/UploadContainer';
 import MainButton from '../../../components/button/MainButton';
-import {ActionSheetRef, SheetManager} from 'react-native-actions-sheet';
-import homeService from '../../app/user/home/services/Home.service';
+import Container from '../../../components/container/Index';
+import CustomInput from '../../../components/customInput/Index';
+import utils from '../../../shared/Utils';
 import {SaveLocationDto} from '../../app/user/home/dto/savedLocationDto';
-import Gallery from '../../../components/Gallery';
-import React, {useReducer} from 'react';
-import {State, City} from 'country-state-city';
-import Typography from '../../../components/Typography';
+import homeService from '../../app/user/home/services/Home.service';
+import {TouchableOpacity} from 'react-native';
 
 // Form state interface
 interface FormState {
@@ -88,6 +89,8 @@ const formReducer = (state: FormState, action: FormAction): FormState => {
 const VerifyAddress: IVerifyAddress = ({navigation}) => {
   const {onSubmit} = homeService.useLocation();
   const {onSubmit: onUpload, uploading} = homeService.useUpload();
+
+  utils.useHideBottomTab(navigation);
 
   const galleryBottomSheetRef = React.useRef<ActionSheetRef | null>(null);
 
@@ -181,7 +184,7 @@ const VerifyAddress: IVerifyAddress = ({navigation}) => {
     try {
       await onSubmit(formState.values, () => {
         dispatch({type: 'SET_SUBMITTING', isSubmitting: false});
-        navigation.navigate('SetPrices');
+        navigation.navigate('ProfileSetup');
       });
     } catch (error) {
       console.error('Form submission error:', error);
@@ -203,29 +206,25 @@ const VerifyAddress: IVerifyAddress = ({navigation}) => {
 
       <Container width={'full'} gap={20}>
         <CustomInput
+          type="address"
           label="House address"
           placeholder="e.g 45 Odunlade street, Bariga"
+          disabled
+          onAddressSelect={data => {
+            try {
+              if (data) {
+                if (data.address) {
+                  handleFieldChange('address', data.address);
+                }
+                if (data.lat) handleFieldChange('lat', data.lat);
+                if (data.lng) handleFieldChange('lng', data.lng);
+              }
+            } catch (error) {
+              console.error('Error in onClose callback:', error);
+            }
+          }}
           value={formState.values.address}
           error={formState.touched.address ? formState.errors.address : ''}
-          onFocus={() => {
-            SheetManager.show('HomeAddress', {
-              payload: {label: 'House Address'},
-              onClose(data) {
-                try {
-                  if (data) {
-                    if (data.address) {
-                      handleFieldChange('address', data.address);
-                    }
-                    if (data.lat) handleFieldChange('lat', data.lat);
-                    if (data.lng) handleFieldChange('lng', data.lng);
-                  }
-                } catch (error) {
-                  console.error('Error in onClose callback:', error);
-                }
-              },
-            });
-          }}
-          onBlur={() => handleFieldBlur('address')}
         />
 
         <Container

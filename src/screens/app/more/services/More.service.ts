@@ -1,3 +1,4 @@
+import {useFocusEffect} from '@react-navigation/native';
 import {useMutation, useQuery} from '@tanstack/react-query';
 import React from 'react';
 import AppStorage from '../../../../shared/AppStorage';
@@ -5,9 +6,10 @@ import {UserTypes} from '../../../../shared/Constant';
 import CatchError from '../../../../shared/errors/catchError';
 import MoreApi from '../../../../shared/services/More';
 import utils from '../../../../shared/Utils';
-import FundWalletDto from '../dto/FundWallet.dto';
+import AddBankDto from '../bankAccount/dto/add.bank.dto';
+import ResolveBankDto from '../bankAccount/dto/reslove-bank.dto';
 import FeedbackDto from '../dto/FeedBack.dto';
-import {useFocusEffect} from '@react-navigation/native';
+import FundWalletDto from '../dto/FundWallet.dto';
 
 export class MoreService extends MoreApi {
   private static instance: MoreService;
@@ -56,7 +58,7 @@ export class MoreService extends MoreApi {
             page: 1,
           },
         }));
-      }, [status])
+      }, [status]),
     );
 
     const {
@@ -88,16 +90,17 @@ export class MoreService extends MoreApi {
       data: wallet,
       isLoading,
       error,
+      refetch,
     } = useQuery({
       queryKey: ['wallet'],
       queryFn: async () => await this.wallet(),
-      enabled: Boolean(AppStorage.find('isAuthenticated')),
     });
 
     return {
       wallet,
       isLoading,
       error,
+      refetch,
     };
   }
 
@@ -115,6 +118,88 @@ export class MoreService extends MoreApi {
       data,
       isPending,
       mutate,
+    };
+  }
+
+  useWithdraw() {
+    const {data, isPending, mutate, isSuccess} = useMutation({
+      mutationKey: ['withdraw'],
+      mutationFn: async (dto: Partial<FundWalletDto>) => {
+        return await this.withdraw(dto);
+      },
+      onError: err => new CatchError(err, true),
+    });
+
+    return {data, isPending, mutate, isSuccess};
+  }
+
+  useListBanks() {
+    const {
+      data: banks,
+      isLoading,
+      error,
+    } = useQuery({
+      queryKey: ['listBanks'],
+      queryFn: async () => await this.listBanks(),
+      enabled: Boolean(AppStorage.find('isAuthenticated')),
+    });
+
+    return {
+      banks,
+      isLoading,
+      error,
+    };
+  }
+
+  useAddBankAccount() {
+    const {data, isPending, mutate} = useMutation({
+      mutationKey: ['addBankAccount'],
+      mutationFn: async (dto: AddBankDto) => {
+        return await this.addBankAccount(dto);
+      },
+      onError: err => new CatchError(err, true),
+    });
+
+    return {data, isPending, mutate};
+  }
+
+  useGetBankAccount() {
+    const {
+      data: bankAccounts,
+      isLoading,
+      error,
+      refetch,
+    } = useQuery({
+      queryKey: ['getBankAccount'],
+      queryFn: async () => await this.getBankAccount(),
+      enabled: Boolean(AppStorage.find('isAuthenticated')),
+    });
+
+    return {
+      bankAccounts,
+      isLoading,
+      error,
+      refetch,
+    };
+  }
+
+  useAnalytics() {
+    const {
+      data: analytics,
+      isLoading,
+      error,
+      refetch,
+    } = useQuery({
+      queryKey: ['analytics'],
+      queryFn: async () => await this.analytics(),
+      enabled: Boolean(AppStorage.find('isAuthenticated')),
+    });
+
+    return {
+      analytics,
+      isLoading,
+      error,
+      refetch,
     };
   }
 
@@ -152,27 +237,34 @@ export class MoreService extends MoreApi {
     } = useQuery({
       queryKey: ['transactions', query],
       queryFn: async () => await this.walletTransactions(query),
-      enabled: Boolean(AppStorage.find('isAuthenticated')),
     });
+
+    const pagination = query.pagination;
 
     React.useEffect(() => {
       if (transactions?.data) {
         if (query.pagination?.page === 1) {
           resetHistory();
-          appendPageData(transactions.data.transactions || []);
+          appendPageData(transactions.data || []);
         } else if (
           transactions?.data &&
-          data.length < (transactions.pagination?.total || 0)
+          data.length < (pagination?.total || 0)
         ) {
-          appendPageData(transactions.data.transactions || []);
+          appendPageData(transactions.data || []);
         }
       }
-    }, [transactions?.data, query?.pagination?.page, resetHistory, appendPageData, data.length]);
+    }, [
+      transactions?.data,
+      query?.pagination?.page,
+      resetHistory,
+      appendPageData,
+      data.length,
+    ]);
 
     const controlledFetchMore = () => {
       if (transactions?.pagination && !isLoading) {
-        const currentPage = transactions.pagination.page;
-        const totalPages = transactions.pagination.pages;
+        const currentPage = pagination?.page!;
+        const totalPages = pagination?.pages!;
 
         if (currentPage < totalPages) {
           fetchMore();
@@ -181,7 +273,7 @@ export class MoreService extends MoreApi {
     };
 
     const hasMore = transactions?.pagination
-      ? transactions.pagination.page < transactions.pagination.pages
+      ? pagination?.page! < pagination?.pages!
       : false;
 
     const reset = () => {
@@ -206,6 +298,23 @@ export class MoreService extends MoreApi {
       hasMore,
       pagination: transactions?.pagination,
       reset,
+    };
+  }
+
+  useResolveBank() {
+    const {data, isPending, isSuccess, mutate} = useMutation({
+      mutationKey: ['add-bank'],
+      mutationFn: async (dto: ResolveBankDto) => {
+        return await this.resolveBankAccount(dto);
+      },
+      onError: err => new CatchError(err, true),
+    });
+
+    return {
+      data,
+      isPending,
+      mutate,
+      isSuccess,
     };
   }
 }

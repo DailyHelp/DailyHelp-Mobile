@@ -3,11 +3,17 @@ import {scale, verticalScale} from '../shared/Scaling';
 import {Text} from 'react-native-paper';
 import {fonts} from '../shared/themes/Typography';
 
-const StatusChip: IStatusChip = ({children, backgroundColor, dotColor}) => {
+const StatusChip: IStatusChip = ({
+  children,
+  backgroundColor,
+  dotColor,
+  dot = true,
+}) => {
+  const success = ['available', 'completed'];
   let textColor = '#757C91';
   if (typeof children === 'string') {
     const text = (children as string)?.toLowerCase();
-    if (text === 'available') {
+    if (success.includes(text)) {
       textColor = '#27A535';
       backgroundColor = '#E6FFF4';
       dotColor = '#27A535';
@@ -27,7 +33,7 @@ const StatusChip: IStatusChip = ({children, backgroundColor, dotColor}) => {
         borderRadius: 10,
         height: verticalScale(30),
       }}>
-      {dotColor && (
+      {dotColor && dot && (
         <View
           style={{
             width: scale(10),

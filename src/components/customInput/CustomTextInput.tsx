@@ -29,6 +29,8 @@ const CustomTextInput: IInput = ({
   onLeftIconPress,
   onRightIconPress,
   disabled,
+  borderColor,
+  backGroundColor,
 }) => {
   let fontFamily = fonts.GeistBold;
   if (fontWeight === 'regular' || multiline) fontFamily = fonts.GeistRegular;
@@ -83,7 +85,7 @@ const CustomTextInput: IInput = ({
           numberOfLines={numberOfLines}
           keyboardType={keyboardType}
           mode="outlined"
-          outlineColor="transparent"
+          outlineColor={borderColor || 'transparent'}
           activeOutlineColor="transparent"
           placeholder={placeholder}
           textColor={multiline ? Colors.gray : '#3B4152'}
@@ -98,10 +100,10 @@ const CustomTextInput: IInput = ({
           }}
           outlineStyle={{
             borderRadius: 10,
-            borderColor: 'transparent',
+            borderColor: borderColor || 'transparent',
           }}
           style={{
-            backgroundColor: '#F9F9FB',
+            backgroundColor: backGroundColor || '#F9F9FB',
             height,
             flex: 1,
           }}

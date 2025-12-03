@@ -64,7 +64,11 @@ const UpdatePassword: IUpdatePassword = ({navigation}) => {
                 />
               </View>
 
-              <MainButton loading={isPending} onPress={handleSubmit}>
+              <MainButton
+                enableButtonColor="secondary"
+                color='white'
+                loading={isPending}
+                onPress={handleSubmit}>
                 Save password
               </MainButton>
             </Container>

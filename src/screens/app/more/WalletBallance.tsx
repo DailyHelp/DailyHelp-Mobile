@@ -36,16 +36,18 @@ const WalletBalance: IWalletBalance = ({navigation}) => {
           Available balance
         </Typography>
         <Typography fontWeight="bold" size="m3d" currency>
-          {wallet?.data[0].availableBalance || 0}
+          {wallet?.data.totalBalance || 0}
         </Typography>
         <MainButton
           enableButtonColor={
             userType === UserTypes.CUSTOMER ? 'primary' : 'secondary'
           }
+          color={userType === UserTypes.CUSTOMER ? 'secondary' : 'white'}
           onPress={() => {
             SheetManager.show('FundWallet', {
               payload: {
                 type: userType === UserTypes.CUSTOMER ? 'FUND' : 'WITHDRAW',
+                navigation,
               },
             });
           }}>

@@ -8,40 +8,51 @@ import utils from '../../../../shared/Utils';
 import ReviewsCard from '../../../../components/ReviewsCard';
 import React from 'react';
 import homeService from './services/Home.service';
+import CustomFlatList from '../../../../components/CustomFlatList';
+import Review from './dto/reviews.dto';
+import EmptyState from '../../../../components/EmptyState';
 
 const Reviews: IReviews = ({navigation, route}) => {
-  const rate = 5;
-  const {query} = utils.usePagination();
+  const {data} = homeService.useReviews();
+  const {data: metrics} = homeService.useGetReviewRatingMetrics(
+    route.params.uuid,
+  );
 
-  const {data} = homeService.useCustomerReviews(route.params.uuid);
-
+  const rate = metrics?.averageRating!;
   const rating_categories = [
     {
       emoji: '🤩',
       slug: 'excellent',
-      rate: 1212,
+      rate: metrics?.breakdown.fiveStar! || 0,
     },
     {
       emoji: '😀',
       slug: 'very_good',
-      rate: 182,
+      rate: metrics?.breakdown.fourStar! || 0,
     },
     {
       emoji: '🙂',
       slug: 'good',
-      rate: 123,
+      rate: metrics?.breakdown.threeStar! || 0,
     },
     {
       emoji: '🤨',
       slug: 'bad',
-      rate: 345,
+      rate: metrics?.breakdown.twoStar! || 0,
     },
     {
       emoji: '😡',
       slug: 'very_bad',
-      rate: 212,
+      rate: metrics?.breakdown.oneStar! || 0,
     },
   ];
+
+  const renderItem = React.useCallback(
+    (review: Review) => {
+      return <ReviewsCard data={review} />;
+    },
+    [data],
+  );
 
   return (
     <View style={{backgroundColor: '#e6fff4'}}>
@@ -70,7 +81,7 @@ const Reviews: IReviews = ({navigation, route}) => {
 
           <View style={{flexDirection: 'column', gap: 5}}>
             <Typography fontWeight="bold" size="xxlg" textAlign="center">
-              4.5
+              {metrics?.averageRating || 0}
             </Typography>
 
             <View style={{flexDirection: 'row', gap: 2, alignSelf: 'center'}}>
@@ -88,7 +99,7 @@ const Reviews: IReviews = ({navigation, route}) => {
               size="md"
               textAlign="center"
               color="gray">
-              2,000 reviews
+              {metrics?.totalReviews} reviews
             </Typography>
           </View>
         </View>
@@ -127,12 +138,20 @@ const Reviews: IReviews = ({navigation, route}) => {
           flexDirection: 'column',
           gap: 10,
         }}>
-        <ReviewsCard />
-        <ReviewsCard />
-        <ReviewsCard />
-        <ReviewsCard />
-        <ReviewsCard />
-        <ReviewsCard />
+        <CustomFlatList<Review>
+          data={data}
+          keyExtractor={item => item.uuid!}
+          renderItem={({item}) => renderItem(item)}
+          ListEmptyComponent={() => (
+            <EmptyState
+              showButton={false}
+              type="jobs"
+              header="No review found"
+              title="Reviews would appear when users give review"
+              height={450}
+            />
+          )}
+        />
       </View>
     </View>
   );

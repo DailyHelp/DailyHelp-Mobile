@@ -161,7 +161,7 @@ const DeclineOffer: IOffer<Message> = ({
               onPress={() => {
                 onDeclineOffer?.(
                   reason,
-                  reasons?.[id!].name!,
+                  reasons?.[id!]?.name!,
                   data?.offer.uuid!,
                 );
               }}>
