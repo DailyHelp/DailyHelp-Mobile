@@ -1,23 +1,32 @@
 import React from 'react';
-import {Image, View} from 'react-native';
+import { View } from 'react-native';
 import ActionSheet, {
   ActionSheetRef,
   SheetManager,
+  SheetProps,
 } from 'react-native-actions-sheet';
-import {scale, verticalScale} from '../../../../../shared/Scaling';
-import Assets from '../../../../../assets/Assets';
-import Typography from '../../../../../components/Typography';
+import { CommonActions } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/AntDesign';
 import IconF from 'react-native-vector-icons/Feather';
+import { IJobsRoute, Navigate } from '../../../../../@types/routes';
+import Assets from '../../../../../assets/Assets';
 import MainButton from '../../../../../components/button/MainButton';
-import {useNavigation} from '@react-navigation/native';
-import {IJobsRoute, Navigate} from '../../../../../@types/routes';
+import Typography from '../../../../../components/Typography';
+import { scale, verticalScale } from '../../../../../shared/Scaling';
 
-const CancelJob = React.forwardRef<ActionSheetRef, ICancelJob>((props, ref) => {
-  const navigation = useNavigation<Navigate<IJobsRoute>>();
+const CancelJob = React.forwardRef<
+  ActionSheetRef,
+  SheetProps<'CancelJob'>
+>((props, ref) => {
+  const navigation = props.payload?.navigation as Navigate<IJobsRoute> | undefined;
 
   return (
-    <ActionSheet gestureEnabled ref={ref} id="CancelJob">
+    <ActionSheet 
+      gestureEnabled 
+      ref={ref} 
+      id="CancelJob"
+      overlayColor="black"
+      defaultOverlayOpacity={0.5}>
       <View
         style={{
           flexDirection: 'column',
@@ -51,7 +60,14 @@ const CancelJob = React.forwardRef<ActionSheetRef, ICancelJob>((props, ref) => {
         <MainButton
           onPress={() => {
             SheetManager.hide('CancelJob');
-            navigation.navigate('VerificationPin');
+            if (navigation) {
+              navigation.dispatch(
+                CommonActions.navigate({
+                  name: 'VerificationPin',
+                  params: props.payload?.verificationPinParams,
+                }),
+              );
+            }
           }}
           icon={() => <IconF name="lock" color={'#014C2B'} size={15} />}
           enableButtonColor="primary">

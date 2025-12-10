@@ -1,6 +1,6 @@
-import { NativeStackHeaderProps } from '@react-navigation/native-stack';
+import {NativeStackHeaderProps} from '@react-navigation/native-stack';
 import React from 'react';
-import { Text } from 'react-native-paper';
+import {Text} from 'react-native-paper';
 import Assets from '../../assets/Assets';
 import CustomHeader from '../../components/customHeader/Index';
 import TabBadge from '../../components/TabBadge';
@@ -39,14 +39,17 @@ import ViewDetails from '../../screens/app/user/jobs/ViewDetails';
 import Search from '../../screens/app/user/search/Index';
 import ProfileSetup from '../../screens/auth/compliance/ProfileSetup';
 import VerifyAccount from '../../screens/auth/VerifyAccount';
-import { scale, verticalScale } from '../../shared/Scaling';
-import { customFontSize, fonts } from '../../shared/themes/Typography';
+import {scale, verticalScale} from '../../shared/Scaling';
+import {customFontSize, fonts} from '../../shared/themes/Typography';
 import IdentityVerificationRoute from '../auth/IdentityVerificationRoute';
 import ChatRoute from './Chat';
 import HomeRoute from './Home';
 import JobsRoute from './Jobs';
 import MoreRoute from './More';
 import SearchRoute from './Search';
+import {BottomTabBarButtonProps} from '@react-navigation/bottom-tabs';
+import {TouchableOpacity} from 'react-native';
+import Typography from '../../components/Typography';
 
 type LabelPosition = 'beside-icon' | 'below-icon';
 
@@ -70,15 +73,18 @@ export const UserAppStackRoutes = [
     options: {
       headerShown: false,
       tabBarLabel: (props: TabLabelProps) => (
-        <Text
-          style={{
-            fontFamily: props.focused ? fonts.GeistBold : fonts.GeistRegular,
-            fontSize: customFontSize.md,
-            paddingBottom: verticalScale(6),
-            color: props.focused ? '#121921' : '#A9AFC2',
-          }}>
+        <Typography
+          fontWeight={props.focused ? 'bold' : 'regular'}
+          size="md"
+          color={props.focused ? 'black' : 'gray'}
+          paddingBottom={6}>
           Home
-        </Text>
+        </Typography>
+      ),
+      tabBarButton: (props: BottomTabBarButtonProps) => (
+        <TouchableOpacity {...(props as any)} style={[props.style]}>
+          {props.children}
+        </TouchableOpacity>
       ),
       tabBarIcon: (props: TabIconProps) =>
         props.focused ? (
@@ -102,15 +108,18 @@ export const UserAppStackRoutes = [
     options: {
       headerShown: false,
       tabBarLabel: (props: TabLabelProps) => (
-        <Text
-          style={{
-            fontFamily: props.focused ? fonts.GeistBold : fonts.GeistRegular,
-            fontSize: customFontSize.md,
-            paddingBottom: verticalScale(6),
-            color: props.focused ? '#121921' : '#A9AFC2',
-          }}>
+        <Typography
+          fontWeight={props.focused ? 'bold' : 'regular'}
+          size="md"
+          color={props.focused ? 'black' : 'gray'}
+          paddingBottom={6}>
           Search
-        </Text>
+        </Typography>
+      ),
+      tabBarButton: (props: BottomTabBarButtonProps) => (
+        <TouchableOpacity {...(props as any)} style={[props.style]}>
+          {props.children}
+        </TouchableOpacity>
       ),
       tabBarIcon: (props: TabIconProps) =>
         props.focused ? (
@@ -134,15 +143,18 @@ export const UserAppStackRoutes = [
     options: {
       headerShown: false,
       tabBarLabel: (props: TabLabelProps) => (
-        <Text
-          style={{
-            fontFamily: props.focused ? fonts.GeistBold : fonts.GeistRegular,
-            fontSize: customFontSize.md,
-            paddingBottom: verticalScale(6),
-            color: props.focused ? '#121921' : '#A9AFC2',
-          }}>
+        <Typography
+          fontWeight={props.focused ? 'bold' : 'regular'}
+          size="md"
+          color={props.focused ? 'black' : 'gray'}
+          paddingBottom={6}>
           Chat
-        </Text>
+        </Typography>
+      ),
+      tabBarButton: (props: BottomTabBarButtonProps) => (
+        <TouchableOpacity {...(props as any)} style={[props.style]}>
+          {props.children}
+        </TouchableOpacity>
       ),
       tabBarIcon: (props: TabIconProps) => (
         <TabBadge tabName="ChatIndex">
@@ -169,15 +181,18 @@ export const UserAppStackRoutes = [
     options: {
       headerShown: false,
       tabBarLabel: (props: TabLabelProps) => (
-        <Text
-          style={{
-            fontFamily: props.focused ? fonts.GeistBold : fonts.GeistRegular,
-            fontSize: customFontSize.md,
-            paddingBottom: verticalScale(6),
-            color: props.focused ? '#121921' : '#A9AFC2',
-          }}>
+        <Typography
+          fontWeight={props.focused ? 'bold' : 'regular'}
+          size="md"
+          color={props.focused ? 'black' : 'gray'}
+          paddingBottom={6}>
           Jobs
-        </Text>
+        </Typography>
+      ),
+      tabBarButton: (props: BottomTabBarButtonProps) => (
+        <TouchableOpacity {...(props as any)} style={[props.style]}>
+          {props.children}
+        </TouchableOpacity>
       ),
       tabBarIcon: (props: TabIconProps) => (
         <TabBadge tabName="JobsIndex">
@@ -204,15 +219,18 @@ export const UserAppStackRoutes = [
     options: {
       headerShown: false,
       tabBarLabel: (props: TabLabelProps) => (
-        <Text
-          style={{
-            fontFamily: props.focused ? fonts.GeistBold : fonts.GeistRegular,
-            fontSize: customFontSize.md,
-            paddingBottom: verticalScale(6),
-            color: props.focused ? '#121921' : '#A9AFC2',
-          }}>
+        <Typography
+          fontWeight={props.focused ? 'bold' : 'regular'}
+          size="md"
+          color={props.focused ? 'black' : 'gray'}
+          paddingBottom={6}>
           More
-        </Text>
+        </Typography>
+      ),
+      tabBarButton: (props: BottomTabBarButtonProps) => (
+        <TouchableOpacity {...(props as any)} style={[props.style]}>
+          {props.children}
+        </TouchableOpacity>
       ),
       tabBarIcon: (props: TabIconProps) =>
         props.focused ? (
@@ -239,7 +257,7 @@ export const UserHomeStackRoutes = [
     options: {
       headerShown: true,
       header: (props: NativeStackHeaderProps) => (
-        <CustomHeader type="home" title="23 Adebayo street" {...props} />
+        <CustomHeader type="home" title="No address set" {...props} />
       ),
     },
   },

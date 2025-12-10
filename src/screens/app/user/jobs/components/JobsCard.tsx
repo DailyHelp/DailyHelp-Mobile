@@ -12,6 +12,8 @@ import {UserTypes} from '../../../../../shared/Constant';
 import {verticalScale} from '../../../../../shared/Scaling';
 import JobsDto from '../dto/job.dto';
 import dayjs from 'dayjs';
+import {useNavigation, CommonActions} from '@react-navigation/native';
+import {IJobsRoute, Navigate} from '../../../../../@types/routes';
 
 const JobsCard: IJobsCard<UserTypes, JobsDto> = ({
   type = 'in_progress',
@@ -19,14 +21,13 @@ const JobsCard: IJobsCard<UserTypes, JobsDto> = ({
   userType,
   data,
 }) => {
-  const serviceProvider = data?.serviceProvider;
+  const navigation = useNavigation<Navigate<IJobsRoute>>();
 
-  const picture = serviceProvider?.picture || data?.providerPicture;
-  const firstname = serviceProvider?.firstname || data?.providerFirstname;
-  const lastname = serviceProvider?.lastname || data?.providerLastname;
+  const picture = data?.providerPicture;
+  const firstname = data?.providerFirstname;
+  const lastname = data?.providerLastname;
 
-  console.log(data);
-  
+  const name = `${firstname} ${lastname}`.trim();
 
   return (
     <Container
@@ -48,10 +49,8 @@ const JobsCard: IJobsCard<UserTypes, JobsDto> = ({
           />
 
           <Container flexDirection="column" gap={3}>
-            <Typography size="m2d">
-              {firstname} {lastname}
-            </Typography>
-            <Typography size="md" color="gray">
+            <Typography size="m2d">{name}</Typography>
+            <Typography size="md" color="gray" limit={30}>
               {data?.providerPrimaryJobRole}
             </Typography>
           </Container>
@@ -108,22 +107,25 @@ const JobsCard: IJobsCard<UserTypes, JobsDto> = ({
 
       <Divider style={{backgroundColor: '#F1F2F4', height: verticalScale(2)}} />
 
-      {type === 'completed' && userType !== UserTypes.PROVIDER && (
-        <OutlineButton
-          onPress={() =>
-            SheetManager.show('RateService', {
-              payload: {
-                providerImage: data?.serviceProvider.picture!,
-                uuid: data?.uuid!,
-                tier: data?.serviceProvider.tier || '',
-              },
-            })
-          }
-          icon={() => <Icon name="star" size={15} color={'#FFD100'} />}
-          color="black">
-          Rate service provider
-        </OutlineButton>
-      )}
+      {type === 'completed' &&
+        userType !== UserTypes.PROVIDER &&
+        !data?.review && (
+          <OutlineButton
+            onPress={() =>
+              SheetManager.show('RateService', {
+                payload: {
+                  providerImage: data?.serviceProvider.picture!,
+                  uuid: data?.uuid!,
+                  tier: data?.serviceProvider.tier || '',
+                  name: `${data?.providerLastname}`,
+                },
+              })
+            }
+            icon={() => <Icon name="star" size={15} color={'#FFD100'} />}
+            color="black">
+            Rate service provider
+          </OutlineButton>
+        )}
 
       {(type === 'in_progress' || type === 'pending') && (
         <Container flexDirection="row" gap={6}>
@@ -135,7 +137,15 @@ const JobsCard: IJobsCard<UserTypes, JobsDto> = ({
             View details
           </MainButton>
 
-          <MainButton enableButtonColor="lightGrey">
+          <MainButton
+            onPress={() => {
+              navigation.dispatch(
+                CommonActions.navigate({
+                  name: 'ChatIndex',
+                }),
+              );
+            }}
+            enableButtonColor="lightGrey">
             <Assets.SendOffer />
           </MainButton>
         </Container>

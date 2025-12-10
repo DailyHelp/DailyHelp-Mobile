@@ -34,11 +34,11 @@ const Home: IHome = () => {
 
   const renderTopRatedCard = React.useCallback(
     ({item}: any) => <HelperCard mode="middle" data={item} horizontal />,
-    [],
+    [data?.topRatedProviders],
   );
   const renderRecommendedCard = React.useCallback(
     ({item}: any) => <HelperCard mode="row" data={item} horizontal />,
-    [],
+    [data?.recommendedProviders],
   );
   const renderExploreCard = React.useCallback(
     ({item}: any) => <HelperCard mode="row" data={item} />,
@@ -66,10 +66,10 @@ const Home: IHome = () => {
             paddingTop={10}>
             <CategorySection
               onFilter={q => {
-                const isEmptyFilter =
+                const isEmpty =
                   !q || Object.keys(q).length === 0 || q === ({} as any);
 
-                if (isEmptyFilter) {
+                if (isEmpty) {
                   setQuery({
                     ...query!,
                     filter: {

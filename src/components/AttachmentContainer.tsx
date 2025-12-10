@@ -14,6 +14,7 @@ const AttachmentContainer: IAttachmentContainer = ({
   allowUpload = true,
   children,
   data,
+  canClose
 }) => {
   React.useEffect(() => {
     utils.hasAndroidPermission().then(console.log);
@@ -34,7 +35,7 @@ const AttachmentContainer: IAttachmentContainer = ({
             </TouchableOpacity>
           )}
 
-          <Attachment data={{attachment}} canClose={false} />
+          <Attachment data={{attachment}} canClose={canClose} />
         </View>
       ) : (
         // Dashed upload box

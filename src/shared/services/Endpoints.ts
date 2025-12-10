@@ -2,8 +2,8 @@ import AppStorage from '../AppStorage';
 import {ReasonType, UserTypes} from '../Constant';
 import utils from '../Utils';
 
-const base = () => (AppStorage.find('userType') as UserTypes).toLowerCase();
-const bases = () => base().toLowerCase() + 's';
+const base = () => (AppStorage.find('userType') as UserTypes)?.toLowerCase();
+const bases = () => base() + 's';
 
 export default {
   signUp: '/auth/signup',
@@ -79,4 +79,9 @@ export default {
   walletTransactions: (query: PaginationQuery) =>
     `/wallets/transactions?${utils.flattenQuery(query)}`,
   agoraTokens: (uuid: string) => `/${base()}/jobs/${uuid}/call-token`,
+  availability: `/${bases()}/availability`,
+  identityVerification: (uuid: string) =>
+    `/${base()}/jobs/${uuid}/provider-identity-verification`,
+  alternateProviders: (uuid: string) =>
+    `/customer/jobs/${uuid}/alternate-providers`,
 };

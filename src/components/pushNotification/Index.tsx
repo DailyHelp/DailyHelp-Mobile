@@ -1,106 +1,107 @@
 // Core packages
 import messaging, {
   FirebaseMessagingTypes,
-} from '@react-native-firebase/messaging'
-import React, { useEffect, useRef } from 'react'
+} from '@react-native-firebase/messaging';
+import React, {useEffect, useRef} from 'react';
 import NotificationPopup, {
   ContentOptionsBase,
-} from 'react-native-push-notification-popup'
-import Assets from '../../assets/Assets'
-import CatchError from '../../shared/errors/catchError'
-import CustomNotification from './CustomNotification'
+} from 'react-native-push-notification-popup';
+import Assets from '../../assets/Assets';
+import CatchError from '../../shared/errors/catchError';
+import CustomNotification from './CustomNotification';
+import notifee from '@notifee/react-native';
 
 const PushNotification = () => {
-  const popupRef = useRef<any>(null)
-  const [showOnMessage, setShowOnMessage] = React.useState(false)
+  const popupRef = useRef<any>(null);
+  const [showOnMessage, setShowOnMessage] = React.useState(false);
   const [push, setPush] = React.useState<
     Partial<FirebaseMessagingTypes.RemoteMessage>
-  >({})
-  const fcmToken = null
+  >({});
+  const fcmToken = null;
 
   const requestPermission = async () => {
-    await requestUserPermission()
-  }
+    await requestUserPermission();
+  };
   useEffect(() => {
-    requestPermission()
-    notificationListener()
-    backgroundNotification()
+    requestPermission();
+    notificationListener();
+    backgroundNotification();
     // return () => unsubscribe();
-  }, [])
+  }, []);
 
   const requestUserPermission = async () => {
     try {
-      const authStatus = await messaging().requestPermission()
+      const authStatus = await messaging().requestPermission();
       const enabled =
         authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-        authStatus === messaging.AuthorizationStatus.PROVISIONAL
+        authStatus === messaging.AuthorizationStatus.PROVISIONAL;
 
       if (enabled) {
-        await getFCMToken()
+        await getFCMToken();
       }
     } catch (err: any) {
-      new CatchError(err)
+      new CatchError(err);
     }
-  }
+  };
 
   const getFCMToken = async () => {
     try {
       if (!fcmToken) {
-        const newToken = await messaging().getToken()
-        return newToken
+        const newToken = await messaging().getToken();
+        return newToken;
       }
     } catch (err: any) {
-      new CatchError(err)
+      new CatchError(err);
     }
-  }
+  };
 
   const showMessage = (
     remoteMessage: FirebaseMessagingTypes.RemoteMessage,
-    from?: string
+    from?: string,
   ) => {
-    setShowOnMessage(true)
+    setShowOnMessage(true);
     popupRef?.current?.show({
       appIconSource: Assets.Logo,
       title: remoteMessage?.notification?.title,
       body: remoteMessage?.notification?.body,
       timeText: remoteMessage?.sentTime,
       slideOutTime: 5000,
-    })
-  }
+    });
+  };
 
   const notificationListener = () => {
-    messaging().onNotificationOpenedApp((remoteMessage) => {
-      setPush(remoteMessage)
-      showMessage?.(remoteMessage, 'onNotificationOpenedApp')
-    })
+    messaging().onNotificationOpenedApp(remoteMessage => {
+      setPush(remoteMessage);
+      showMessage?.(remoteMessage, 'onNotificationOpenedApp');
+    });
 
-    messaging().onMessage(async (remoteMessage) => {
-      setPush(remoteMessage)
-      showMessage?.(remoteMessage, 'onMessage')
-    })
+    messaging().onMessage(async remoteMessage => {
+      setPush(remoteMessage);
+      showMessage?.(remoteMessage, 'onMessage');
+    });
 
     // Check whether an initial notification is available
     messaging()
       .getInitialNotification()
-      .then((remoteMessage) => {
+      .then(remoteMessage => {
         if (remoteMessage) {
-          setPush(remoteMessage)
-          showMessage?.(remoteMessage, 'getInitialNotification')
+          setPush(remoteMessage);
+          showMessage?.(remoteMessage, 'getInitialNotification');
         }
-      })
-  }
+      });
+  };
 
   const backgroundNotification = () => {
-    return messaging().setBackgroundMessageHandler(async (remoteMessage) => {
-      popupRef?.current?.show({
-        appIconSource: Assets.Logo,
+    return messaging().setBackgroundMessageHandler(async remoteMessage => {
+      notifee.displayNotification({
         title: remoteMessage?.notification?.title,
         body: remoteMessage?.notification?.body,
-        timeText: remoteMessage?.sentTime,
-        slideOutTime: 5000,
-      })
-    })
-  }
+        android: {
+          channelId: '',
+        },
+      });
+    });
+  };
 
   return (
     <React.Fragment>
@@ -113,7 +114,7 @@ const PushNotification = () => {
         shouldChildHandleResponderMove
       />
     </React.Fragment>
-  )
-}
+  );
+};
 
-export default PushNotification
+export default PushNotification;

@@ -206,6 +206,7 @@ export default class HomeApi extends Http {
       jobGoal?: number;
       todaysEarnings?: number;
       totalDecisions?: number;
+      ratingGoal?: number;
       user: UserDTO;
     }>(res);
 
@@ -349,6 +350,17 @@ export default class HomeApi extends Http {
       };
     }>(res);
 
+    return data;
+  }
+
+  protected async availability(availability: boolean) {
+    const res = await this.fetchHandler({
+      path: Endpoints.availability,
+      method: 'PATCH',
+      body: {availability},
+    });
+
+    const data = await this.handleResponse<{availability: true}>(res);
     return data;
   }
 }

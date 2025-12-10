@@ -15,6 +15,8 @@ const ConfirmDeleteActionSheet = React.forwardRef<
       closeOnPressBack={false}
       gestureEnabled={true}
       closable={false}
+      overlayColor="black"
+      defaultOverlayOpacity={0.5}
       containerStyle={{
         borderTopLeftRadius: 16,
         borderTopRightRadius: 16,

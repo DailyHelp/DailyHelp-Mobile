@@ -178,7 +178,12 @@ const Gallery = React.forwardRef<ActionSheetRef, IGallery>(
     }, [cursor, hasNextPage, loading]);
 
     return (
-      <ActionSheet ref={bottomSheetRef} gestureEnabled closable={false}>
+      <ActionSheet 
+        ref={bottomSheetRef} 
+        gestureEnabled 
+        closable={false}
+        overlayColor="black"
+        defaultOverlayOpacity={0.5}>
         <View style={{paddingBottom: 20}}>
           {/* Header */}
           <View
@@ -194,7 +199,7 @@ const Gallery = React.forwardRef<ActionSheetRef, IGallery>(
                 Cancel
               </Typography>
             </TouchableOpacity>
-            <Typography fontWeight="bold" size="md" color="primary">
+            <Typography fontWeight="bold" size="md" color="darkGray">
               Image gallery
             </Typography>
 

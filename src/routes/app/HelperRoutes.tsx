@@ -11,6 +11,9 @@ import {NativeStackHeaderProps} from '@react-navigation/native-stack';
 import CustomHeader from '../../components/customHeader/Index';
 import Jobs from '../../screens/app/helpers/jobs/Index';
 import JobDetails from '../../screens/app/helpers/jobs/JobDetails';
+import {TouchableOpacity} from 'react-native';
+import {BottomTabBarButtonProps} from '@react-navigation/bottom-tabs';
+import Typography from '../../components/Typography';
 
 type LabelPosition = 'beside-icon' | 'below-icon';
 
@@ -34,15 +37,18 @@ export const HelperAppStackRoutes = [
     options: {
       headerShown: false,
       tabBarLabel: (props: TabLabelProps) => (
-        <Text
-          style={{
-            fontFamily: props.focused ? fonts.GeistBold : fonts.GeistRegular,
-            fontSize: customFontSize.md,
-            paddingBottom: verticalScale(6),
-            color: props.focused ? '#121921' : '#A9AFC2',
-          }}>
+        <Typography
+          fontWeight={props.focused ? 'bold' : 'regular'}
+          size="md"
+          color={props.focused ? 'black' : 'gray'}
+          paddingBottom={6}>
           Home
-        </Text>
+        </Typography>
+      ),
+      tabBarButton: (props: BottomTabBarButtonProps) => (
+        <TouchableOpacity {...(props as any)} style={[props.style]}>
+          {props.children}
+        </TouchableOpacity>
       ),
       tabBarIcon: (props: TabIconProps) =>
         props.focused ? (
@@ -66,15 +72,18 @@ export const HelperAppStackRoutes = [
     options: {
       headerShown: false,
       tabBarLabel: (props: TabLabelProps) => (
-        <Text
-          style={{
-            fontFamily: props.focused ? fonts.GeistBold : fonts.GeistRegular,
-            fontSize: customFontSize.md,
-            paddingBottom: verticalScale(6),
-            color: props.focused ? '#121921' : '#A9AFC2',
-          }}>
+        <Typography
+          fontWeight={props.focused ? 'bold' : 'regular'}
+          size="md"
+          color={props.focused ? 'black' : 'gray'}
+          paddingBottom={6}>
           Chat
-        </Text>
+        </Typography>
+      ),
+      tabBarButton: (props: BottomTabBarButtonProps) => (
+        <TouchableOpacity {...(props as any)} style={[props.style]}>
+          {props.children}
+        </TouchableOpacity>
       ),
       tabBarIcon: (props: TabIconProps) =>
         props.focused ? (
@@ -98,15 +107,18 @@ export const HelperAppStackRoutes = [
     options: {
       headerShown: false,
       tabBarLabel: (props: TabLabelProps) => (
-        <Text
-          style={{
-            fontFamily: props.focused ? fonts.GeistBold : fonts.GeistRegular,
-            fontSize: customFontSize.md,
-            paddingBottom: verticalScale(6),
-            color: props.focused ? '#121921' : '#A9AFC2',
-          }}>
+        <Typography
+          fontWeight={props.focused ? 'bold' : 'regular'}
+          size="md"
+          color={props.focused ? 'black' : 'gray'}
+          paddingBottom={6}>
           Jobs
-        </Text>
+        </Typography>
+      ),
+      tabBarButton: (props: BottomTabBarButtonProps) => (
+        <TouchableOpacity {...(props as any)} style={[props.style]}>
+          {props.children}
+        </TouchableOpacity>
       ),
       tabBarIcon: (props: TabIconProps) =>
         props.focused ? (
@@ -130,15 +142,18 @@ export const HelperAppStackRoutes = [
     options: {
       headerShown: false,
       tabBarLabel: (props: TabLabelProps) => (
-        <Text
-          style={{
-            fontFamily: props.focused ? fonts.GeistBold : fonts.GeistRegular,
-            fontSize: customFontSize.md,
-            paddingBottom: verticalScale(6),
-            color: props.focused ? '#121921' : '#A9AFC2',
-          }}>
+        <Typography
+          fontWeight={props.focused ? 'bold' : 'regular'}
+          size="md"
+          color={props.focused ? 'black' : 'gray'}
+          paddingBottom={6}>
           More
-        </Text>
+        </Typography>
+      ),
+      tabBarButton: (props: BottomTabBarButtonProps) => (
+        <TouchableOpacity {...(props as any)} style={[props.style]}>
+          {props.children}
+        </TouchableOpacity>
       ),
       tabBarIcon: (props: TabIconProps) =>
         props.focused ? (
@@ -182,7 +197,7 @@ export const HelperHomeStackRoutes = [
     options: {
       headerShown: true,
       header: (props: NativeStackHeaderProps) => (
-        <CustomHeader type="home" title="23 Adebayo street" {...props} />
+        <CustomHeader type="home" title="No address set" {...props} />
       ),
     },
   },

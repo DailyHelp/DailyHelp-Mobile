@@ -1,10 +1,9 @@
 import {Formik} from 'formik';
 import React from 'react';
-import {RefreshControl, TouchableOpacity, View} from 'react-native';
+import {RefreshControl, ScrollView, TouchableOpacity, View} from 'react-native';
 import ActionSheet, {
   ActionSheetProps,
   ActionSheetRef,
-  ScrollView,
   SheetManager,
 } from 'react-native-actions-sheet';
 import Icon from 'react-native-vector-icons/AntDesign';
@@ -22,11 +21,21 @@ const RateService = React.forwardRef<
   ActionSheetRef,
   ActionSheetProps<'RateService'>
 >((props, ref) => {
-  const {rateProvider, ratePending} = jobService.useRateProvider();
+  const {
+    rateProvider,
+    ratePending,
+    rating: ratingResponse,
+  } = jobService.useRateProvider();
   const {wallet, refetch, isLoading} = moreService.useWalletBalance();
   const [refreshing, setRefreshing] = React.useState(false);
 
-  const rating = [
+  React.useEffect(() => {
+    if (ratingResponse?.data && ratingResponse?.status) {
+      SheetManager.hide('RateService');
+    }
+  }, [ratingResponse]);
+
+  const ratingOptions = [
     {
       emoji: '😡',
       title: 'Terrible service',
@@ -73,10 +82,29 @@ const RateService = React.forwardRef<
   }, [refetch]);
 
   return (
-    <ActionSheet ref={ref} gestureEnabled>
+    <ActionSheet
+      ref={ref}
+      gestureEnabled
+      closable={true}
+      closeOnPressBack={true}
+      overlayColor="black"
+      defaultOverlayOpacity={0.5}
+      containerStyle={{
+        borderTopLeftRadius: 16,
+        borderTopRightRadius: 16,
+      }}>
       <ScrollView
+        keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="interactive"
+        contentInsetAdjustmentBehavior="automatic"
+        showsVerticalScrollIndicator={true}
+        nestedScrollEnabled={true}
+        automaticallyAdjustKeyboardInsets={true}
         refreshControl={
-          <RefreshControl refreshing={refreshing || isLoading} onRefresh={onRefresh} />
+          <RefreshControl
+            refreshing={refreshing || isLoading}
+            onRefresh={onRefresh}
+          />
         }>
         <View style={{backgroundColor: 'white', padding: scale(5)}}>
           <View
@@ -114,7 +142,7 @@ const RateService = React.forwardRef<
                   width: '60%',
                 }}>
                 <Typography fontWeight="semibold" size="lg">
-                  How did Amarachi perform?
+                  How did {prop.name} perform?
                 </Typography>
                 <Typography color="gray" size="md">
                   Tell us about your experience working with them.
@@ -141,127 +169,123 @@ const RateService = React.forwardRef<
             }}>
             {({values: v, handleChange, handleSubmit}) => (
               <React.Fragment>
-                <ScrollView>
+                <View
+                  style={{
+                    borderTopWidth: 1,
+                    borderBlockStartColor: '#F1F2F4',
+                  }}>
                   <View
                     style={{
-                      borderTopWidth: 1,
-                      borderBlockStartColor: '#F1F2F4',
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      padding: scale(20),
                     }}>
+                    {ratingOptions.map(({emoji}, ind) => (
+                      <TouchableOpacity
+                        key={ind}
+                        onPress={() => handleChange('rate')(ind.toString())}>
+                        <View
+                          style={{
+                            padding: scale(16),
+                            backgroundColor:
+                              v.rate === ind.toString() ? '#F9FFEB' : '#F9F9FB',
+                            borderRadius: 10,
+                            borderWidth: v.rate === ind.toString() ? 1 : 0,
+                            borderColor: '#95D21A',
+                          }}>
+                          <Typography>{emoji}</Typography>
+                        </View>
+                      </TouchableOpacity>
+                    ))}
+                  </View>
+
+                  {v.rate && (
+                    <Typography
+                      textAlign="center"
+                      size="md"
+                      fontWeight="semibold"
+                      paddingBottom={verticalScale(15)}
+                      color={ratingOptions[+v.rate].color as ColorKeys}>
+                      {ratingOptions[+v.rate].title}
+                    </Typography>
+                  )}
+                </View>
+
+                <View
+                  style={{
+                    borderTopWidth: 1,
+                    borderBlockStartColor: '#F1F2F4',
+                  }}>
+                  <View
+                    style={{
+                      flexDirection: 'column',
+                      gap: 30,
+                      padding: scale(20),
+                    }}>
+                    <CustomInput
+                      numberOfLines={5}
+                      height={verticalScale(150)}
+                      multiline
+                      placeholder="They did exceptionally great!"
+                      label="Tell us more"
+                      value={v.review}
+                      onChangeText={handleChange('review')}
+                    />
+
+                    <View
+                      style={{
+                        flexDirection: 'column',
+                        gap: 5,
+                      }}>
+                      <Typography fontWeight="semibold" size="md">
+                        Tip them
+                      </Typography>
+                      <Typography color="gray">
+                        They get 100% of every tip
+                      </Typography>
+                    </View>
                     <View
                       style={{
                         flexDirection: 'row',
                         justifyContent: 'space-between',
-                        alignItems: 'center',
-                        padding: scale(20),
                       }}>
-                      {rating.map(({emoji}, ind) => (
+                      {tips.map((tip, ind) => (
                         <TouchableOpacity
                           key={ind}
-                          onPress={() => handleChange('rate')(ind.toString())}>
+                          onPress={() => handleChange('tip')(tip.toString())}>
                           <View
                             style={{
                               padding: scale(16),
                               backgroundColor:
-                                v.rate === ind.toString()
+                                v.tip === tip.toString()
                                   ? '#F9FFEB'
                                   : '#F9F9FB',
                               borderRadius: 10,
-                              borderWidth: v.rate === ind.toString() ? 1 : 0,
+                              borderWidth: v.tip === tip.toString() ? 1 : 0,
                               borderColor: '#95D21A',
                             }}>
-                            <Typography>{emoji}</Typography>
+                            <Typography currency>{tip}</Typography>
                           </View>
                         </TouchableOpacity>
                       ))}
                     </View>
 
-                    {v.rate && (
-                      <Typography
-                        textAlign="center"
-                        size="md"
-                        fontWeight="semibold"
-                        paddingBottom={verticalScale(15)}
-                        color={rating[+v.rate].color as ColorKeys}>
-                        {rating[+v.rate].title}
-                      </Typography>
-                    )}
-                  </View>
-
-                  <View
-                    style={{
-                      borderTopWidth: 1,
-                      borderBlockStartColor: '#F1F2F4',
-                    }}>
                     <View
                       style={{
                         flexDirection: 'column',
-                        gap: 30,
-                        padding: scale(20),
+                        gap: 5,
                       }}>
-                      <CustomInput
-                        numberOfLines={5}
-                        height={verticalScale(150)}
-                        multiline
-                        placeholder="They did exceptionally great!"
-                        label="Tell us more"
-                        value={v.review}
-                        onChangeText={handleChange('review')}
-                      />
-
-                      <View
-                        style={{
-                          flexDirection: 'column',
-                          gap: 5,
-                        }}>
-                        <Typography fontWeight="semibold" size="md">
-                          Tip them
+                      <Typography size="md">Wallet balance</Typography>
+                      <View>
+                        <Typography currency fontWeight="bold" size="md">
+                          {wallet?.data.totalBalance || 0}
                         </Typography>
-                        <Typography color="gray">
-                          They get 100% of every tip
-                        </Typography>
-                      </View>
-                      <View
-                        style={{
-                          flexDirection: 'row',
-                          justifyContent: 'space-between',
-                        }}>
-                        {tips.map((tip, ind) => (
-                          <TouchableOpacity
-                            key={ind}
-                            onPress={() => handleChange('tip')(tip.toString())}>
-                            <View
-                              style={{
-                                padding: scale(16),
-                                backgroundColor:
-                                  v.tip === tip.toString()
-                                    ? '#F9FFEB'
-                                    : '#F9F9FB',
-                                borderRadius: 10,
-                                borderWidth: v.tip === tip.toString() ? 1 : 0,
-                                borderColor: '#95D21A',
-                              }}>
-                              <Typography currency>{tip}</Typography>
-                            </View>
-                          </TouchableOpacity>
-                        ))}
-                      </View>
-
-                      <View
-                        style={{
-                          flexDirection: 'column',
-                          gap: 5,
-                        }}>
-                        <Typography size="md">Wallet balance</Typography>
-                        <View>
-                          <Typography currency fontWeight="bold" size="md">
-                            {wallet?.data.totalBalance || 0}
-                          </Typography>
-                        </View>
                       </View>
                     </View>
                   </View>
-                </ScrollView>
-                <View style={{padding: scale(10)}}>
+                </View>
+                <View style={{padding: scale(10), paddingBottom: scale(30)}}>
                   <MainButton
                     loading={ratePending}
                     onPress={handleSubmit}

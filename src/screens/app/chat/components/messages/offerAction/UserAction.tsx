@@ -1,18 +1,18 @@
 import {View} from 'react-native';
 import Assets from '../../../../../../assets/Assets';
 import MainButton from '../../../../../../components/button/MainButton';
-import OutlineButton from '../../../../../../components/button/OutlineButton';
 import Typography from '../../../../../../components/Typography';
+import {Colors} from '../../../../../../shared/themes/Index';
 
 const UserAction: IMessages = props => {
-  const {data, isPaymentMade} = props;
-  console.log(props);
-  
+  const {data} = props;
 
   const type = data?.type.toLowerCase();
   const status = data?.offer.status.toLowerCase();
+  const isCountered = status === 'countered';
+  const isCounteredOffered = !!data?.offer.currentOffer;
 
-  let backgroundColor = props.backgroundColor || 'white';
+  let backgroundColor = props.backgroundColor || Colors.lightGrey;
   let borderColor = '#FDE9E7';
 
   if (status === 'accepted') {
@@ -21,6 +21,8 @@ const UserAction: IMessages = props => {
   }
 
   const payment = type === 'offer' && status !== 'accepted';
+
+  const shouldCancel = payment && isCountered;
 
   return (
     <View
@@ -51,23 +53,25 @@ const UserAction: IMessages = props => {
         {data?.offer.price}
       </Typography>
 
-      {!isPaymentMade && status == 'accepted' && (
+      {payment && (
         <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
-          <OutlineButton
+          <MainButton
+            mode="outlined"
+            borderColor="lightDeepGrey"
             color="danger"
             width={'45%'}
             onPress={() => {
-              payment ? props?.cancel?.(data) : props?.decline?.(data);
+              shouldCancel ? props?.cancel?.(data) : props?.decline?.(data);
             }}>
-            {payment ? 'Cancel offer' : 'Decline'}
-          </OutlineButton>
+            {shouldCancel ? 'Cancel offer' : 'Decline'}
+          </MainButton>
           <MainButton
             color="secondary"
             width={'45%'}
             onPress={() => {
-              payment ? props?.edit?.(data) : props?.accept?.(data);
+              shouldCancel ? props?.edit?.(data) : props?.accept?.(data);
             }}>
-            {payment ? 'Edit offer' : ' Accept & Pay'}
+            {shouldCancel ? 'Edit offer' : ' Accept & Pay'}
           </MainButton>
         </View>
       )}

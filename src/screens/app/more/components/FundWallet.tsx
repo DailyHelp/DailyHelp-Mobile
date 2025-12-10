@@ -60,6 +60,8 @@ const FundedWallet = React.forwardRef<ActionSheetRef, SheetProps<'FundWallet'>>(
         backgroundInteractionEnabled={true}
         gestureEnabled={true}
         initialSnapIndex={0}
+        overlayColor="black"
+        defaultOverlayOpacity={0.5}
         containerStyle={{
           borderTopLeftRadius: 16,
           borderTopRightRadius: 16,

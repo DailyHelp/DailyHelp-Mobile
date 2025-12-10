@@ -1,6 +1,6 @@
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 import React, {useState} from 'react';
-import {Text, TouchableOpacity, View} from 'react-native';
+import {Text, TextInput, TouchableOpacity, View} from 'react-native';
 import ActionSheet, {SheetManager} from 'react-native-actions-sheet';
 import Assets from '../../../../../assets/Assets';
 import Typography from '../../../../../components/Typography';
@@ -9,12 +9,78 @@ import {fonts} from '../../../../../shared/themes/Typography';
 
 const PriceRange = React.forwardRef((props, ref) => {
   const [priceRange, setPriceRange] = useState([2000, 100000]);
+  const [minInput, setMinInput] = useState('2000');
+  const [maxInput, setMaxInput] = useState('100000');
+  const isInputChangingRef = React.useRef(false);
+
+  const handleMinChange = (text: string) => {
+    const numericValue = text.replace(/[^0-9]/g, '');
+    setMinInput(numericValue);
+
+    if (numericValue) {
+      const numValue = parseInt(numericValue, 10);
+      if (!isNaN(numValue)) {
+        isInputChangingRef.current = true;
+
+        const newMin = Math.min(Math.max(0, numValue), priceRange[1], 200000);
+        setPriceRange([newMin, priceRange[1]]);
+
+        if (newMin !== numValue) {
+          setMinInput(newMin.toString());
+        }
+        setTimeout(() => {
+          isInputChangingRef.current = false;
+        }, 0);
+      }
+    } else {
+      isInputChangingRef.current = true;
+      setTimeout(() => {
+        isInputChangingRef.current = false;
+      }, 0);
+    }
+  };
+
+  const handleMaxChange = (text: string) => {
+    const numericValue = text.replace(/[^0-9]/g, '');
+    setMaxInput(numericValue);
+
+    if (numericValue) {
+      const numValue = parseInt(numericValue, 10);
+      if (!isNaN(numValue)) {
+        isInputChangingRef.current = true;
+
+        const newMax = Math.max(Math.min(200000, numValue), priceRange[0], 0);
+        setPriceRange([priceRange[0], newMax]);
+
+        if (newMax !== numValue) {
+          setMaxInput(newMax.toString());
+        }
+        setTimeout(() => {
+          isInputChangingRef.current = false;
+        }, 0);
+      }
+    } else {
+      isInputChangingRef.current = true;
+      setTimeout(() => {
+        isInputChangingRef.current = false;
+      }, 0);
+    }
+  };
+
+  React.useEffect(() => {
+    if (!isInputChangingRef.current) {
+      setMinInput(priceRange[0].toString());
+      setMaxInput(priceRange[1].toString());
+    }
+  }, [priceRange]);
 
   return (
     <ActionSheet
       ref={ref as any}
       closeOnPressBack={false}
       gestureEnabled={true}
+      overlayColor="black"
+      defaultOverlayOpacity={0.5}
       containerStyle={{
         borderTopLeftRadius: 16,
         borderTopRightRadius: 16,
@@ -72,33 +138,80 @@ const PriceRange = React.forwardRef((props, ref) => {
           }}
         />
 
-        {/* Price Display */}
+        {/* Price Input */}
         <View
           style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
             marginTop: 16,
+            gap: 52,
           }}>
-          <Text
+          <View
             style={{
+              flex: 1,
               backgroundColor: '#F9F9FB',
-              padding: 10,
               borderRadius: 8,
-              fontFamily: fonts.GeistBold,
-              color: '#A9AFC2',
+              paddingHorizontal: 10,
+              paddingVertical: 10,
+              flexDirection: 'row',
+              alignItems: 'center',
             }}>
-            ₦{priceRange[0].toLocaleString()}
-          </Text>
-          <Text
+            <Text
+              style={{
+                fontFamily: fonts.GeistBold,
+                color: '#A9AFC2',
+                marginRight: 4,
+              }}>
+              ₦
+            </Text>
+            <TextInput
+              value={minInput}
+              onChangeText={handleMinChange}
+              keyboardType="numeric"
+              placeholder="Min"
+              placeholderTextColor="#A9AFC2"
+              style={{
+                flex: 1,
+                fontFamily: fonts.GeistBold,
+                color: '#A9AFC2',
+                fontSize: 14,
+                padding: 0,
+              }}
+            />
+          </View>
+          <View
             style={{
+              flex: 1,
               backgroundColor: '#F9F9FB',
-              padding: 10,
               borderRadius: 8,
-              fontFamily: fonts.GeistBold,
-              color: '#A9AFC2',
+              paddingHorizontal: 10,
+              paddingVertical: 10,
+              flexDirection: 'row',
+              alignItems: 'center',
             }}>
-            ₦{priceRange[1].toLocaleString()}
-          </Text>
+            <Text
+              style={{
+                fontFamily: fonts.GeistBold,
+                color: '#A9AFC2',
+                marginRight: 4,
+              }}>
+              ₦
+            </Text>
+            <TextInput
+              value={maxInput}
+              onChangeText={handleMaxChange}
+              keyboardType="numeric"
+              placeholder="Max"
+              placeholderTextColor="#A9AFC2"
+              style={{
+                flex: 1,
+                fontFamily: fonts.GeistBold,
+                color: '#A9AFC2',
+                fontSize: 14,
+                padding: 0,
+              }}
+            />
+          </View>
         </View>
       </View>
     </ActionSheet>

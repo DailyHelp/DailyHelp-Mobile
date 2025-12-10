@@ -5,6 +5,7 @@ import {SheetManager} from 'react-native-actions-sheet';
 import Icon from 'react-native-vector-icons/AntDesign';
 import IconF from 'react-native-vector-icons/FontAwesome';
 import SwipeButton from 'rn-swipe-button';
+import {CommonActions} from '@react-navigation/native';
 import {IViewDetails} from '../../../../@types/routes';
 import Assets from '../../../../assets/Assets';
 import AttachmentContainer from '../../../../components/AttachmentContainer';
@@ -24,7 +25,6 @@ import jobStyle from './jobStyle';
 import jobService from './service/Jobs.service';
 
 const ViewDetails: IViewDetails = ({navigation, route}) => {
-  // Set up WebSocket listeners for jobs and offers
   jobService.useWebSocketListeners();
 
   const {startJob, endJob} = jobService.useJobsActions();
@@ -70,9 +70,13 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
   if (type === 'completed') headerText = 'Job Completed';
   if (type === 'completed') headerColor = 'white';
 
-  if (type === 'canceled') headerBgColor = '#27A535';
+  if (type === 'canceled') headerBgColor = '#F0443A';
   if (type === 'canceled') headerText = 'Job Canceled';
-  if (type === 'completed') headerColor = 'white';
+  if (type === 'canceled') headerColor = 'white';
+
+  let timelines = timeline?.data;
+
+  if (!timelines) timelines = jobDetails?.data.timelines;
 
   return (
     <View style={{flex: 1, backgroundColor: 'white'}}>
@@ -132,7 +136,7 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
                 <CustomAvatar
                   avatarSize={50}
                   badgeSize={20}
-                  data={{image: Assets.Worker1}}
+                  data={{image: jobDetails?.data.job.providerPicture}}
                 />
                 <Typography size="md" fontWeight="bold">
                   {route.params?.providerFirstname}{' '}
@@ -142,11 +146,36 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
                   {route.params?.providerPrimaryJobRole}
                 </Typography>
 
-                {type !== 'completed' && (
+                {jobDetails?.data.job.cancellationCategory && (
+                  <Container
+                    flexDirection="row"
+                    backgroundColor="pink"
+                    gap={4}
+                    padding={10}
+                    borderRadius={16}
+                    alignItems="center"
+                    borderWidth={1}>
+                    <Typography size="md" fontWeight="medium" color="danger">
+                      {jobDetails?.data.job.cancellationCategory}
+                    </Typography>
+                  </Container>
+                )}
+
+                {type !== 'completed' && type !== 'canceled' && (
                   <React.Fragment>
                     <OutlineButton
                       height={verticalScale(50)}
-                      onPress={() => SheetManager.show('FaceMatch')}
+                      onPress={() =>
+                        SheetManager.show('FaceMatch', {
+                          payload: {
+                            image: jobDetails?.data.job.providerPicture,
+                            navigation: navigation,
+                            verificationPinParams: {
+                              uuid: route.params?.uuid!,
+                            },
+                          },
+                        })
+                      }
                       icon={() => <Assets.ConfirmFace />}>
                       Confirm face
                     </OutlineButton>
@@ -194,7 +223,8 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
                   </MainButton>
                 </View>
               ) : (
-                type !== 'completed' && (
+                type !== 'completed' &&
+                type !== 'canceled' && (
                   <Container
                     flexDirection="row"
                     gap={10}
@@ -223,6 +253,13 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
                       enableButtonColor="lightGrey"
                       color="black"
                       width={'45%'}
+                      onPress={() => {
+                        navigation.dispatch(
+                          CommonActions.navigate({
+                            name: 'ChatIndex',
+                          }),
+                        );
+                      }}
                       icon={() => <Assets.SendOffer />}>
                       Chat
                     </MainButton>
@@ -244,20 +281,21 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
                 <AttachmentContainer
                   allowUpload={false}
                   data={route.params?.pictures.split(',')}
+                  canClose={false}
                 />
               )}
             </Container>
 
             <View style={{marginTop: verticalScale(10)}}>
               <JobTimeline
-                timeline={timeline?.data}
+                timeline={timelines}
                 isLoading={timelineLoading}
                 status={type!}
               />
             </View>
           </ScrollView>
 
-          {type !== 'completed' ? (
+          {type !== 'completed' && type !== 'canceled' ? (
             <View
               style={{
                 padding: scale(20),
@@ -309,27 +347,30 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
               />
             </View>
           ) : (
-            <OutlineButton
-              icon={() => (
-                <IconF
-                  name="star"
-                  size={15}
-                  color={'#FFD100'}
-                  style={{marginTop: verticalScale(5)}}
-                />
-              )}
-              color="black"
-              onPress={() =>
-                SheetManager.show('RateService', {
-                  payload: {
-                    uuid: route.params?.uuid!,
-                    providerImage: route?.params?.providerPicture || '',
-                    tier: route?.params?.serviceProvider.tier || '',
-                  },
-                })
-              }>
-              Rate service provider
-            </OutlineButton>
+            type !== 'canceled' && (
+              <OutlineButton
+                icon={() => (
+                  <IconF
+                    name="star"
+                    size={15}
+                    color={'#FFD100'}
+                    style={{marginTop: verticalScale(5)}}
+                  />
+                )}
+                color="black"
+                onPress={() =>
+                  SheetManager.show('RateService', {
+                    payload: {
+                      uuid: route.params?.uuid!,
+                      providerImage: route?.params?.providerPicture || '',
+                      tier: route?.params?.serviceProvider.tier || '',
+                      name: `${route.params?.providerLastname}`,
+                    },
+                  })
+                }>
+                Rate service provider
+              </OutlineButton>
+            )
           )}
         </View>
       </View>

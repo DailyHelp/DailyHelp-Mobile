@@ -13,6 +13,7 @@ import dayjs from 'dayjs';
 import {observer} from 'mobx-react-lite';
 import {appStore} from '../../../shared/stores/appStore';
 import {UserTypes} from '../../../shared/Constant';
+import Container from '../../../components/container/Index';
 
 const WalletBalance: IWalletBalance = ({navigation}) => {
   utils.useHideBottomTab(navigation);
@@ -23,7 +24,7 @@ const WalletBalance: IWalletBalance = ({navigation}) => {
   const userType = appStore.user_types;
 
   return (
-    <View style={{flex: 1}}>
+    <Container flex={1}>
       <View
         style={{
           flexDirection: 'column',
@@ -36,7 +37,7 @@ const WalletBalance: IWalletBalance = ({navigation}) => {
           Available balance
         </Typography>
         <Typography fontWeight="bold" size="m3d" currency>
-          {wallet?.data.totalBalance || 0}
+          {wallet?.data?.totalBalance || 0}
         </Typography>
         <MainButton
           enableButtonColor={
@@ -57,31 +58,38 @@ const WalletBalance: IWalletBalance = ({navigation}) => {
 
       <View
         style={{
+          flex: 1,
           flexDirection: 'column',
           marginTop: verticalScale(40),
           width: '95%',
           alignSelf: 'center',
-          gap: 10,
         }}>
-        <Typography color="gray" size="md" fontWeight="semibold">
+        <Typography
+          color="gray"
+          size="md"
+          fontWeight="semibold"
+          marginBottom={10}>
           Transaction history
         </Typography>
 
-        <CustomFlatList<TransactionDto>
-          data={data}
-          renderItem={({item}) => (
-            <TransactionCard
-              data={{
-                amount: item.amount,
-                date: dayjs(item.createdAt).format('DD MMM, YYYY'),
-                title: 'Wallet top up',
-              }}
-            />
-          )}
-          keyExtractor={(item, index) => index.toString()}
-        />
+        <View style={{flex: 1}}>
+          <CustomFlatList<TransactionDto>
+            data={data}
+            showsVerticalScrollIndicator={true}
+            renderItem={({item}) => (
+              <TransactionCard
+                data={{
+                  amount: item.amount,
+                  date: dayjs(item.createdAt).format('DD MMM, YYYY'),
+                  title: 'Wallet top up',
+                }}
+              />
+            )}
+            keyExtractor={(item, index) => index.toString()}
+          />
+        </View>
       </View>
-    </View>
+    </Container>
   );
 };
 export default observer(WalletBalance);

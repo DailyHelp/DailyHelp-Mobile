@@ -40,7 +40,7 @@ const WithdrawalModal = React.forwardRef<
       closable
       gestureEnabled
       closeOnPressBack
-      backgroundInteractionEnabled
+      overlayColor="black"
       containerStyle={{
         borderTopLeftRadius: 16,
         borderTopRightRadius: 16,

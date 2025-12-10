@@ -13,11 +13,6 @@ import Typography from '../../../../../components/Typography';
 import {verticalScale} from '../../../../../shared/Scaling';
 import homeService from '../services/Home.service';
 
-const savedLocations = [
-  '88 Ilaje road, yaba, Lagos',
-  '12 Adebayo street, Lekki-Ajah, Lagos',
-];
-
 const HomeAddress = React.forwardRef<
   ActionSheetRef<'HomeAddress'>,
   SheetProps<'HomeAddress'>
@@ -25,13 +20,18 @@ const HomeAddress = React.forwardRef<
   const [search, setSearch] = React.useState('');
 
   const {currentLocation, locations} = homeService.useLocation(search);
+  const {data, setAsDefault} = homeService.useSavedLocation();
 
-  const getLocation = () => {
+  const getLocation = async () => {
     try {
       if (typeof currentLocation === 'function') {
-        currentLocation((address, metadata) => {
+        await currentLocation((address, metadata) => {
           SheetManager.hide('HomeAddress', {
-            payload: {address: address, ...metadata},
+            payload: {
+              address: address || metadata?.address || metadata?.description,
+              formatted_address: address || metadata?.description,
+              ...metadata,
+            },
           });
         });
       } else {
@@ -45,11 +45,13 @@ const HomeAddress = React.forwardRef<
   return (
     <ActionSheet
       ref={ref}
+      id="HomeAddress"
       closeOnPressBack={false}
       gestureEnabled={true}
+      overlayColor="black"
+      initialSnapIndex={0}
       backgroundInteractionEnabled={true}
       closable={true}
-      initialSnapIndex={0}
       containerStyle={{
         borderTopLeftRadius: 16,
         borderTopRightRadius: 16,
@@ -65,7 +67,7 @@ const HomeAddress = React.forwardRef<
             flexDirection: 'row',
             gap: 10,
           }}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => SheetManager.hide('HomeAddress')}>
             <Icon2 color={'#757C91'} name={'close'} size={16} />
           </TouchableOpacity>
           <Typography fontWeight="bold" size="md" color="gray">
@@ -81,28 +83,31 @@ const HomeAddress = React.forwardRef<
               onChangeText={setSearch}
             />
 
+            {/* Use current location */}
+            <List.Item
+              title="Use current location"
+              left={() => (
+                <Assets.CurrentLocation style={{marginTop: verticalScale(7)}} />
+              )}
+              titleStyle={{color: '#3CBF4E', fontWeight: '600'}}
+              onPress={getLocation}
+            />
+
             {props.payload?.showCurrent && (
               <React.Fragment>
-                {/* Use current location */}
-                <List.Item
-                  title="Use current location"
-                  left={() => (
-                    <Assets.CurrentLocation
-                      style={{marginTop: verticalScale(7)}}
-                    />
-                  )}
-                  titleStyle={{color: '#3CBF4E', fontWeight: '600'}}
-                  onPress={getLocation}
-                />
-
                 {/* Saved locations */}
-                {savedLocations.map((address, idx) => (
+                {data?.slice(0, 3)?.map((address, idx) => (
                   <List.Item
-                    key={idx}
-                    title={address}
+                    key={address.uuid || idx}
+                    title={address.address || address.description}
                     left={() => <Assets.SearchResult />}
                     onPress={() => {
-                      // handle selection
+                      let location = address.address;
+                      if (!location) location = address.description!;
+
+                      setAsDefault(address.uuid!, {
+                        onSuccess: () => SheetManager.hide('HomeAddress'),
+                      });
                     }}
                   />
                 ))}

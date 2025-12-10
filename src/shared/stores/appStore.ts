@@ -11,13 +11,15 @@ class AppStore {
 
   currentLocation: SaveLocationDto = new SaveLocationDto();
 
+  messagePermissionCount = AppStorage.find('messagePermissionCount') as number;
+
   isIdentityVerified?: boolean = AppStorage.find(
     'isIdentityVerified',
   ) as boolean;
 
   isAuthenticated = AppStorage.find('isAuthenticated') || false;
 
-  user_types = (AppStorage.find('userType') as UserTypes).toUpperCase() || UserTypes.CUSTOMER;
+  user_types = (AppStorage.find('userType') as UserTypes)?.toUpperCase();
 
   hideSelfieVerificationHeader: boolean = true;
 
@@ -82,7 +84,10 @@ class AppStore {
       this.currentLocation = new SaveLocationDto();
       return;
     }
-    this.currentLocation = {...(this.currentLocation || new SaveLocationDto()), ...location};
+    this.currentLocation = {
+      ...(this.currentLocation || new SaveLocationDto()),
+      ...location,
+    };
   }
 
   setIsAuthenticated(dto: boolean, userType = this.user_types) {
@@ -93,7 +98,7 @@ class AppStore {
       this.user_types = userType;
       AppStorage.save('userType', userType);
     } else {
-      AppStorage.removeAll()
+      AppStorage.removeAll();
     }
   }
 
@@ -121,6 +126,19 @@ class AppStore {
 
   incrementTabBadge(tabName: string) {
     this.tabBadges[tabName] = (this.tabBadges[tabName] || 0) + 1;
+  }
+
+  setMessagePermissionCount() {
+    if (this.messagePermissionCount >= 3) return;
+
+    this.messagePermissionCount = ++this.messagePermissionCount;
+    AppStorage.save('messagePermissionCount', this.messagePermissionCount);
+  }
+
+  shouldShowMessagePermission() {
+    if (this.messagePermissionCount >= 3) return false;
+
+    return true;
   }
 
   decrementTabBadge(tabName: string) {

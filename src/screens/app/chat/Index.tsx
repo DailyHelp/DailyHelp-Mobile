@@ -18,12 +18,14 @@ import {appStore} from '../../../shared/stores/appStore';
 import {UserTypes} from '../../../shared/Constant';
 import Container from '../../../components/container/Index';
 import ConversationSkeleton from '../../../components/skeleton/ConversationSkeleton';
+import {SheetManager} from 'react-native-actions-sheet';
 
 const Chat: IChat = ({navigation}) => {
   const {data, setQuery, isLoading, fetchMore, refetch} =
     chatService.useGetConversations();
 
   const user_type = appStore.user_types as UserTypes;
+  const isCustomers = user_type === UserTypes.CUSTOMER;
   const [activeConversationUuid, setActiveConversationUuid] = React.useState<
     string | null
   >(null);
@@ -60,8 +62,9 @@ const Chat: IChat = ({navigation}) => {
     <EmptyState
       navigation={navigation}
       header="No Offers yet!"
-      title="Send an offer to start chatting with"
-      subTitle="service providers"
+      title={isCustomers ? `Send an offer to start chatting with` : ''}
+      subTitle={isCustomers ? 'your service providers.' : ''}
+      showButton={isCustomers}
     />
   );
 
@@ -75,26 +78,40 @@ const Chat: IChat = ({navigation}) => {
         picture = item.rqPicture;
       }
 
+      const join = () => {
+        const conversationUuid = item.conversationId!;
+
+        joinConversation(conversationUuid);
+        setActiveConversationUuid(conversationUuid);
+        hasNavigatedToChatBox.current = true;
+
+        navigation.navigate('ChatBox', {
+          uuid: conversationUuid,
+          title: name,
+          cancellationChances: item.cancellationChances,
+          badge: item.spTier,
+          picture,
+          hasActiveJob: item.hasActiveJob,
+          isOnline: item.spOnline,
+        });
+      };
+
       return (
         <TouchableOpacity
           onPress={() => {
             if (item.locked) return;
 
-            const conversationUuid = item.conversationId!;
+            if (appStore.shouldShowMessagePermission()) {
+              SheetManager.show('ChatDisclaimer', {
+                onClose: () => {
+                  appStore.setMessagePermissionCount();
+                  join();
+                },
+              });
+              return;
+            }
 
-            joinConversation(conversationUuid);
-            setActiveConversationUuid(conversationUuid);
-            hasNavigatedToChatBox.current = true;
-
-            navigation.navigate('ChatBox', {
-              uuid: conversationUuid,
-              title: name,
-              cancellationChances: item.cancellationChances,
-              badge: item.spTier,
-              picture,
-              hasActiveJob: item.hasActiveJob,
-              isOnline: item.spOnline,
-            });
+            join();
           }}>
           <View
             style={{

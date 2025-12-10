@@ -23,6 +23,7 @@ import utils from '../../../../shared/Utils';
 import ReviewsCard from '../../../../components/ReviewsCard';
 import homeStyle from './homeStyle';
 import homeService from './services/Home.service';
+import ServiceImageGallery from './components/ServiceImageGallery';
 
 const STATUS_MAP: any = {
   available: {
@@ -54,6 +55,21 @@ const ServiceProfile: IServiceProfile = ({route, navigation}) => {
   const [sendOffer, setSendOffer] = React.useState(false);
 
   const [gallery, setGallery] = React.useState(false);
+
+  const [imageGalleryVisible, setImageGalleryVisible] = React.useState(false);
+  const [selectedImageIndex, setSelectedImageIndex] = React.useState(0);
+
+  const serviceImages = React.useMemo(() => {
+    if (Array.isArray(route.params?.serviceImages)) {
+      return route.params?.serviceImages;
+    }
+
+    if (typeof route.params?.serviceImages === 'string') {
+      return route.params?.serviceImages.split(',').filter(Boolean);
+    }
+
+    return [];
+  }, [route.params?.serviceImages]);
 
   let status = route.params?.status || 'available';
 
@@ -87,17 +103,16 @@ const ServiceProfile: IServiceProfile = ({route, navigation}) => {
         <Icon2 name="left" size={20} />
       </TouchableOpacity>
       <ScrollView horizontal>
-        {(Array.isArray(route.params?.serviceImages)
-          ? route.params?.serviceImages
-          : typeof route.params?.serviceImages === 'string'
-          ? route.params?.serviceImages.split(',').filter(Boolean)
-          : []
-        ).map((uri, key) => (
-          <Image
-            source={{uri}}
-            style={homeStyle.serviceProfileScrollImage}
+        {serviceImages.map((uri, key) => (
+          <TouchableOpacity
             key={key}
-          />
+            activeOpacity={0.9}
+            onPress={() => {
+              setSelectedImageIndex(key);
+              setImageGalleryVisible(true);
+            }}>
+            <Image source={{uri}} style={homeStyle.serviceProfileScrollImage} />
+          </TouchableOpacity>
         ))}
       </ScrollView>
 
@@ -365,6 +380,13 @@ const ServiceProfile: IServiceProfile = ({route, navigation}) => {
             appStore.clearOffer();
           });
         }}
+      />
+
+      <ServiceImageGallery
+        visible={imageGalleryVisible}
+        images={serviceImages}
+        initialIndex={selectedImageIndex}
+        onClose={() => setImageGalleryVisible(false)}
       />
     </React.Fragment>
   );

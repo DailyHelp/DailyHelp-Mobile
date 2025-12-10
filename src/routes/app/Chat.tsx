@@ -1,17 +1,12 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { observer } from 'mobx-react-lite';
 import { IChatRoute } from '../../@types/routes';
-import { UserTypes } from '../../shared/Constant';
-import { appStore } from '../../shared/stores/appStore';
 import { UserChatStackRoutes } from './UserRoutes';
 
 const ChatStack = createNativeStackNavigator<IChatRoute>();
 
 const ChatRoute: Props = () => {
-  const userType = appStore.user_types;
-  const isUser = userType === UserTypes.CUSTOMER;
-
-  const route = isUser ? UserChatStackRoutes : UserChatStackRoutes;
+  const route = UserChatStackRoutes;
 
   return (
     <ChatStack.Navigator

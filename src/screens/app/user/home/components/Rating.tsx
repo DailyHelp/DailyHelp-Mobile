@@ -15,6 +15,8 @@ const Rating = React.forwardRef((props, ref) => {
       ref={ref as any}
       closeOnPressBack={false}
       gestureEnabled={true}
+      overlayColor="black"
+      defaultOverlayOpacity={0.5}
       containerStyle={{
         borderTopLeftRadius: 16,
         borderTopRightRadius: 16,

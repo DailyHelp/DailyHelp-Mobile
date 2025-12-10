@@ -4,9 +4,9 @@ import Typography from '../../../../../components/Typography';
 const CodeContainer: ICodeContainer = ({code}) => {
   return (
     <Container
-      backgroundColor="gray"
-      padding={7}
-      borderRadius={7}
+      backgroundColor="lightGrey"
+      padding={10}
+      borderRadius={10}
       flexDirection="row"
       alignItems="center"
       justifyContent="space-between">
@@ -14,14 +14,18 @@ const CodeContainer: ICodeContainer = ({code}) => {
         Code:
       </Typography>
 
-      <Container flexDirection="row" gap={1}>
+      <Container flexDirection="row" gap={3}>
         {code.split('').map(c => (
           <Container
             width={40}
             backgroundColor="white"
             height={40}
-            borderRadius={5}>
-            <Typography textAlign="center">{c}</Typography>
+            justifyContent="center"
+            alignItems="center"
+            borderRadius={7}>
+            <Typography size="md" fontWeight="medium" textAlign="center">
+              {c}
+            </Typography>
           </Container>
         ))}
       </Container>

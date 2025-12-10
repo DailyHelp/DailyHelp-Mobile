@@ -76,7 +76,7 @@ const Search: ISearch = ({navigation}) => {
   const search = query?.filter?.search;
 
   return (
-    <View>
+    <View style={{flex: 1}}>
       <CustomHeader
         navigation={navigation}
         title="Search"
@@ -93,7 +93,7 @@ const Search: ISearch = ({navigation}) => {
         }}
       />
 
-      {isFocused && prdLen < 0 && (
+      {isFocused && !search && (
         <RecentSearches
           onPress={search => {
             setQuery(q => ({
@@ -126,7 +126,7 @@ const Search: ISearch = ({navigation}) => {
         </Container>
       )}
 
-      {search && prdLen > 0 ? (
+      {search ? (
         <SearchResults data={allProviders} fetchMore={fetchMore} />
       ) : (
         !providerLoading && (

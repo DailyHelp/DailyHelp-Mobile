@@ -32,6 +32,8 @@ const FullChatActivated = React.forwardRef<
       closeOnPressBack={false}
       gestureEnabled={false}
       snapPoints={[400]}
+      overlayColor="black"
+      defaultOverlayOpacity={0.5}
       containerStyle={{
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,

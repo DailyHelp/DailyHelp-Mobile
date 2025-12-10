@@ -6,18 +6,18 @@
  * @format
  */
 
+import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import React from 'react';
 import {StatusBar, useColorScheme, View} from 'react-native';
-import {Colors} from 'react-native/Libraries/NewAppScreen';
-import Routes from './routes/Index';
-import 'react-native-reanimated';
 import 'react-native-gesture-handler';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
-import 'reflect-metadata';
-import utils from './shared/Utils';
-import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
+import 'react-native-reanimated';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {Colors} from 'react-native/Libraries/NewAppScreen';
+import 'reflect-metadata';
 import PushNotification from './components/pushNotification/Index';
+import Routes from './routes/Index';
+import utils from './shared/Utils';
 
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
@@ -47,8 +47,8 @@ function App(): React.JSX.Element {
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <SafeAreaView edges={['top']} style={{flex: 1}}>
-        <GestureHandlerRootView>
+      <SafeAreaView edges={['top', 'bottom']} style={{flex: 1}}>
+        <GestureHandlerRootView style={{flex: 1}}>
           <QueryClientProvider client={queryClient}>
             <Routes />
             <PushNotification />

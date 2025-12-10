@@ -72,17 +72,19 @@ const Address: IAddress = ({navigation, route}) => {
 
   return (
     <Container flex={1} width={'full'} backgroundColor="white">
-      <CustomInput
-        type="address"
-        placeholder="Add new address"
-        leftIcon={<Assets.InputSearch />}
-        width={'full'}
-      />
+      <Container width={'97'} alignSelf='center'>
+        <CustomInput
+          type="text"
+          placeholder="Search address"
+          leftIcon={<Assets.InputSearch />}
+          width={'full'}
+        />
+      </Container>
 
       <Container
         onPress={() => {
           SheetManager.show('HomeAddress', {
-            payload: {label: 'House Address', showCurrent: true},
+            payload: {label: 'House Address'},
             onClose(data) {
               try {
                 if (data) {

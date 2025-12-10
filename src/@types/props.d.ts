@@ -412,7 +412,9 @@ type IJobsCard<U, D> = Props<
   D
 >;
 
-type IFaceMatch = {};
+type IFaceMatch = {
+  image: a;
+};
 
 type ICancelJob = {};
 
@@ -513,6 +515,7 @@ type IAttachmentContainer = Props<
     openGallery?: () => void;
     allowUpload?: boolean;
     Icon?: React.FunctionComponent<React.SVGAttributes<SVGElement>>;
+    canClose?: boolean;
   },
   string[]
 >;
@@ -619,3 +622,10 @@ type ICustomNotification<D = any> = Props<
 >;
 
 type ICodeContainer = Props<{code: string}>;
+
+type IServiceImageGalleryProps = Props<{
+  visible: boolean;
+  images: string[];
+  initialIndex?: number;
+  onClose: () => void;
+}>;

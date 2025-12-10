@@ -18,6 +18,7 @@ const Home: IHome = () => {
   );
 
   const {data} = homeService.useProviderDashboard();
+  const {mutate} = homeService.useAvailability();
 
   React.useEffect(() => {
     if (isSwitch) {
@@ -56,9 +57,22 @@ const Home: IHome = () => {
       title: 'Ratings',
       stats: (data?.user.avgRating ?? 0).toString(),
       Icon: Assets.Star,
-      goal: '4.5 rating',
+      goal: `${data?.ratingGoal} rating`,
     },
   ];
+
+  const setAvailability = (availability: boolean) => {
+    mutate(availability, {
+      onSuccess: data => {
+        const available = data?.data.availability;
+
+        setIsSwitch(available!);
+        setHelpersStatus(
+          available ? HelpersStatus.AVAILABLE : HelpersStatus.UNAVAILABLE,
+        );
+      },
+    });
+  };
 
   return (
     <Container
@@ -69,7 +83,7 @@ const Home: IHome = () => {
       backgroundColor={status[helpersStatus] as ColorKeys}
       flex={1}>
       <Availability
-        setAvailability={setIsSwitch}
+        setAvailability={setAvailability}
         isAvailable={data?.user.availability}
         status={helpersStatus}
       />

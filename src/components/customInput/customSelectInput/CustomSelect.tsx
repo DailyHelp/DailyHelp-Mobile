@@ -42,7 +42,8 @@ const CustomSelect = React.forwardRef<
       ref={ref}
       id="CustomSelect"
       closeOnPressBack={true}
-      backgroundInteractionEnabled={true}
+      overlayColor="black"
+      defaultOverlayOpacity={0.5}
       containerStyle={{
         borderTopLeftRadius: 16,
         borderTopRightRadius: 16,

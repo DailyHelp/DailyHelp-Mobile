@@ -34,6 +34,5 @@ export default StyleSheet.create({
     borderTopRightRadius: 30,
     borderWidth: 1,
     borderColor: '#F1F2F4',
-    margin: 10,
   },
 });

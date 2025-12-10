@@ -43,12 +43,15 @@ const AddressOptions = React.forwardRef<
       id="AddressOptions"
       closeOnPressBack={true}
       gestureEnabled={true}
+      backgroundInteractionEnabled={true}
       containerStyle={{
         borderTopLeftRadius: 16,
         borderTopRightRadius: 16,
         backgroundColor: 'white',
       }}
-      backgroundInteractionEnabled={true}>
+      initialSnapIndex={0}
+      overlayColor="black"
+      defaultOverlayOpacity={0.5}>
       <View
         style={{
           padding: 16,
@@ -61,8 +64,7 @@ const AddressOptions = React.forwardRef<
             alignItems: 'center',
             paddingHorizontal: 10,
           }}>
-          <TouchableOpacity
-            onPress={() => SheetManager.hide('AddressOptions')}>
+          <TouchableOpacity onPress={() => SheetManager.hide('AddressOptions')}>
             <Typography fontWeight="semibold" size="md" color="gray">
               Cancel
             </Typography>

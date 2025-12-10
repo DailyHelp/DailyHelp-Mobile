@@ -18,7 +18,7 @@ interface Message<U = any> {
     description: string;
     pictures: string;
     status: string;
-    currentOffer: string;
+    currentOffer?: {uuid: string};
     declinedReason: string;
     declinedReasonCategory: string;
     cancelledReason: string;

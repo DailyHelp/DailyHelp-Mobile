@@ -10,6 +10,7 @@ import Container from '../container/Index';
 import Typography from '../Typography';
 import {observer} from 'mobx-react-lite';
 import {ColorKeys} from '../../shared/themes/Index';
+import React from 'react';
 
 const HomeHeader: ICustomHeader<NativeStackHeaderProps, ColorKeys> = ({
   title,
@@ -17,10 +18,17 @@ const HomeHeader: ICustomHeader<NativeStackHeaderProps, ColorKeys> = ({
   goBack,
 }) => {
   const {data} = homeService.useUser();
-  const {onSubmit} = homeService.useLocation();
+  const defaultLocation = data?.defaultLocation;
+  const address = defaultLocation?.address || defaultLocation?.description;
 
-  const location = data?.defaultLocation?.address || title;
+  const {onSubmit} = homeService.useLocation();
+  const [location, setLocation] = React.useState(address || title);
+
   const trimmedLocation = utils.ellipseText(location);
+
+  React.useEffect(() => {
+    setLocation(address || title);
+  }, [data]);
 
   return (
     <Container
@@ -35,7 +43,13 @@ const HomeHeader: ICustomHeader<NativeStackHeaderProps, ColorKeys> = ({
         onPress={() => {
           SheetManager.show('HomeAddress', {
             payload: {showCurrent: true},
-            onClose: d => d && onSubmit({...d, address: d.formatted_address}),
+            onClose: d => {
+              if (d) {
+                onSubmit({...d, address: d.formatted_address}, data => {
+                  setLocation(data.address || data.description);
+                });
+              }
+            },
           });
         }}>
         <Container flexDirection="row" gap={5}>

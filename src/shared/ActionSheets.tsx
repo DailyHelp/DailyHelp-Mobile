@@ -14,8 +14,10 @@ import CustomSelect from '../components/customInput/customSelectInput/CustomSele
 import ConfirmDeleteActionSheet from '../screens/app/more/deleteAccount/ConfirmDeleteAccount';
 import DeleteAddress from '../screens/app/more/components/DeleteAddress';
 import FullChatActivated from '../screens/app/chat/components/FullChatActivated';
+import ChatDisclaimer from '../screens/app/chat/components/ChatDisclaimer';
 import WithdrawalModal from '../screens/app/more/bankAccount/components/WithdrawalModal';
 import FundWalletDto from '../screens/app/more/dto/FundWallet.dto';
+import {IHomeRoute, Navigate} from '../@types/routes';
 
 registerSheet('AllCategory', AllCategory);
 registerSheet('Rating', Rating);
@@ -32,6 +34,7 @@ registerSheet('CustomSelect', CustomSelect);
 registerSheet('ConfirmDelete', ConfirmDeleteActionSheet);
 registerSheet('DeleteAddress', DeleteAddress);
 registerSheet('FullChatActivated', FullChatActivated);
+registerSheet('ChatDisclaimer', ChatDisclaimer);
 registerSheet('Withdrawal', WithdrawalModal);
 
 export type ActionSheetLoader = {
@@ -90,14 +93,35 @@ declare module 'react-native-actions-sheet' {
       };
     }>;
     Gallery: SheetDefinition<{}>;
-    FaceMatch: SheetDefinition<{}>;
-    CancelJob: SheetDefinition<{}>;
-    WorkerSuggestion: SheetDefinition<{}>;
+    FaceMatch: SheetDefinition<{
+      payload: {
+        image: any;
+        navigation?: any;
+        verificationPinParams?: {
+          uuid: string;
+        };
+      };
+    }>;
+    CancelJob: SheetDefinition<{
+      payload: {
+        navigation?: any;
+        verificationPinParams?: {
+          uuid: string;
+        };
+      };
+    }>;
+    WorkerSuggestion: SheetDefinition<{
+      payload: {
+        uuid: string;
+        navigation: Navigate<IHomeRoute>;
+      };
+    }>;
     RateService: SheetDefinition<{
       payload: {
         uuid: string;
         providerImage: string;
         tier: string;
+        name: string;
       };
     }>;
     AddressOptions: SheetDefinition<{
@@ -130,6 +154,11 @@ declare module 'react-native-actions-sheet' {
       payload?: {
         onContinue?: () => void;
         onClose?: () => void;
+      };
+    }>;
+    ChatDisclaimer: SheetDefinition<{
+      payload?: {
+        onAgree?: () => void;
       };
     }>;
     Withdrawal: SheetDefinition<{

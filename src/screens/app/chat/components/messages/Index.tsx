@@ -13,8 +13,7 @@ const Messages: IMessages = props => {
   const {data} = props;
 
   const position = props.position || 'left';
-  const type = data?.type?.toLowerCase();
-  const status = data?.offer.status.toLowerCase() || 'accepted';
+  const status = data!?.offer!?.status?.toLowerCase() || 'accepted';
   const time = dayjs(data?.createdAt).format('h:mm A'); // fallback time
 
   let attachment = data?.offer?.pictures.split(',');
@@ -24,7 +23,7 @@ const Messages: IMessages = props => {
     backgroundColor = position === 'left' ? '#CCFFE8' : 'white';
   }
 
-  const rejected = ['cancelled', 'declined'];
+  const rejected = ['cancelled', 'declined', 'countered'];
 
   return (
     <View style={{flexDirection: 'row', alignItems: 'flex-end'}}>
@@ -42,20 +41,21 @@ const Messages: IMessages = props => {
         style={{
           flexShrink: 1,
           width: position === 'right' ? '97%' : undefined,
-          alignItems: position === 'right' ? 'flex-start' : undefined,
+          alignItems: position === 'right' ? 'flex-end' : 'flex-start',
         }}>
         <View
           style={{
             ...chatStyle.chatMessageContainer,
             backgroundColor,
-            width: status ? '93%' : undefined,
+            width: status && data?.offer ? '93%' : undefined,
             borderBottomLeftRadius: position === 'right' ? 30 : 10,
             borderBottomRightRadius: position === 'left' ? 30 : 10,
+            margin: position === 'left' ? 10 : 7,
           }}>
-          {status && (
+          {status && data?.offer && (
             <React.Fragment>
               {rejected.includes(status) ? (
-                <OfferRejected {...props} data={data} />
+                <OfferRejected {...props} data={data}  />
               ) : (
                 <OfferAction {...props} data={data} userType={props.userType} />
               )}
@@ -67,11 +67,16 @@ const Messages: IMessages = props => {
           </Typography>
 
           {attachment?.length! > 0 && (
-            <AttachmentContainer allowUpload={false} data={attachment} />
+            <AttachmentContainer
+              allowUpload={false}
+              data={attachment}
+              canClose={false}
+            />
           )}
         </View>
 
         {position === 'left' && <Typography color="gray">{time}</Typography>}
+        {position === 'right' && <Typography color="gray">{time}</Typography>}
       </View>
     </View>
   );

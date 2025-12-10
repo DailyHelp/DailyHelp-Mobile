@@ -1,17 +1,19 @@
-import { View } from 'react-native';
+import {View} from 'react-native';
 import Assets from '../../../../../../assets/Assets';
 import MainButton from '../../../../../../components/button/MainButton';
 import Typography from '../../../../../../components/Typography';
-import { scale } from '../../../../../../shared/Scaling';
+import {scale} from '../../../../../../shared/Scaling';
 
 const ProviderAction: IMessages = props => {
   const {data} = props;
 
   const type = data?.type.toLowerCase();
-  const status = data?.offer.status.toLowerCase();
+  const status = data!?.offer!?.status?.toLowerCase();
 
   const hasActiveJob = false;
   const isAccepted = status === 'accepted';
+  const isCountered = status === 'countered';
+  const isCounteredOffered = !!data?.offer.currentOffer;
 
   const isAcceptDisabled = hasActiveJob && status !== 'accepted';
   const isCounterDisabled = hasActiveJob && status !== 'accepted';
@@ -48,7 +50,7 @@ const ProviderAction: IMessages = props => {
       </View>
 
       <Typography fontWeight="bold" size="xlg" textAlign="center" color="black">
-        NGN {data?.offer.price?.toLocaleString() || '0'}
+        NGN {data!?.offer!?.price!?.toLocaleString() || '0'}
       </Typography>
 
       {hasActiveJob && status !== 'accepted' && (
@@ -69,7 +71,7 @@ const ProviderAction: IMessages = props => {
         </View>
       )}
 
-      {!isAccepted && (
+      {!isAccepted && !isCountered && !isCounteredOffered && (
         <View style={{gap: 12}}>
           <MainButton
             color={isAcceptDisabled ? 'disabled' : 'white'}

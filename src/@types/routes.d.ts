@@ -326,6 +326,7 @@ type IReport = Props<
 
 type IJobsRoute = {
   Jobs?: undefined;
+  Chat?: undefined;
   JobsIndex?: undefined;
   ViewDetails?: JobsDto;
   VerificationPin?: {uuid: string};

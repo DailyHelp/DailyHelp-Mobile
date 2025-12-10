@@ -5,7 +5,11 @@ import {verticalScale} from '../../../../../shared/Scaling';
 
 const OfferRejected: IMessages = ({data}) => {
   let type = 'canceled';
-  if (data?.status === 'rejected') type = 'rejected';
+
+  const status = data?.offer.status.toLowerCase();
+
+  if (status === 'rejected') type = 'rejected';
+  if (status === 'countered') type = 'countered';
 
   return (
     <View

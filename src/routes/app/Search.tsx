@@ -1,16 +1,11 @@
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {IHomeRoute} from '../../@types/routes';
-import AppStorage from '../../shared/AppStorage';
-import {UserTypes} from '../../shared/Constant';
-import {SearchStackRoutes} from './UserRoutes';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { IHomeRoute } from '../../@types/routes';
+import { SearchStackRoutes } from './UserRoutes';
 
 const SearchStack = createNativeStackNavigator<IHomeRoute>();
 
 const SearchRoute: Props = () => {
-  const userType = AppStorage.find('userType');
-  const isUser = userType === UserTypes.CUSTOMER;
-
-  const route = isUser ? SearchStackRoutes : SearchStackRoutes;
+  const route = SearchStackRoutes;
 
   return (
     <SearchStack.Navigator

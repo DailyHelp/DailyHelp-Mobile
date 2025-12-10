@@ -82,7 +82,7 @@ export default class ChatApi extends Http {
   protected async agoraTokens(uuid: string) {
     const res = await this.fetchHandler({
       path: Endpoints.agoraTokens(uuid!),
-      method: 'GET',
+      method: 'POST',
     });
     const data = await this.handleResponse<{
       appId: string;
@@ -92,8 +92,6 @@ export default class ChatApi extends Http {
       expiresAt: string;
       ttlSeconds: number;
     }>(res);
-
-    this.success(data?.message);
 
     return data;
   }

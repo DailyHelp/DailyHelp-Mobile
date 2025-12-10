@@ -322,8 +322,6 @@ class HomeService extends HomeApi {
     const {mutateAsync, isPending} = useMutation({
       mutationKey: ['helper-details'],
       mutationFn: async (body: SaveHelpersDetailsDTO) => {
-        console.log(body);
-
         return await this.saveHelpersDetails(body);
       },
       onError: error => new CatchError(error, true),
@@ -337,7 +335,7 @@ class HomeService extends HomeApi {
   }
 
   useOffer() {
-    const {upload, isLoading} = utils.useUploadImage();
+    const {isLoading, uploadBatch} = utils.useUploadImage();
     const router = useRoute<RouteProp<IHomeRoute, 'ServiceProfile'>>();
     const client = useQueryClient();
 
@@ -350,7 +348,7 @@ class HomeService extends HomeApi {
       mutationFn: async (body: SendOfferDto) => {
         return await this.sendOffer(router.params?.uuid!, body);
       },
-      onSuccess: (data, body) => {
+      onSuccess: () => {
         client.invalidateQueries({queryKey: ['conversation', 'conversations']});
       },
       onError: error => new CatchError(error, true),
@@ -365,7 +363,7 @@ class HomeService extends HomeApi {
       mutationFn: async (body: SendOfferDto) => {
         return await this.updateOffer(body.uuid!, body);
       },
-      onSuccess: (data, body) => {
+      onSuccess: () => {
         client.invalidateQueries({queryKey: ['conversation']});
       },
       onError: error => new CatchError(error, true),
@@ -376,7 +374,7 @@ class HomeService extends HomeApi {
       mutationFn: async (body: DeclineOfferDto) => {
         return await this.declineOffer(body.uuid!, body);
       },
-      onSuccess: (data, body) => {
+      onSuccess: () => {
         client.invalidateQueries({queryKey: ['conversation']});
       },
       onError: error => new CatchError(error, true),
@@ -387,7 +385,7 @@ class HomeService extends HomeApi {
       mutationFn: async (body: DeclineOfferDto) => {
         return await this.cancelOffer(body.uuid!, body);
       },
-      onSuccess: (data, body) => {
+      onSuccess: () => {
         client.invalidateQueries({queryKey: ['conversation']});
       },
       onError: error => new CatchError(error, true),
@@ -395,12 +393,10 @@ class HomeService extends HomeApi {
 
     const onSendOffer = async (body: SendOfferDto, callBack?: () => void) => {
       try {
-        const attachments = [];
+        const {attachments, errors} = await uploadBatch(body.attachments!);
 
-        if (typeof body.attachments === 'string') {
-          for (const att of JSON.parse(body.attachments! as string)) {
-            attachments.push(await upload(att));
-          }
+        if (errors.length > 0) {
+          console.log(errors);
         }
 
         body.attachments = attachments;
@@ -413,81 +409,10 @@ class HomeService extends HomeApi {
       }
     };
 
-    const parseAttachments = React.useCallback(
-      (raw?: SendOfferDto['attachments']) => {
-        if (!raw) {
-          return [];
-        }
-
-        if (Array.isArray(raw)) {
-          return raw.filter(Boolean).filter(item => {
-            // Filter out the string '[]' which represents an empty array
-            if (item === '[]') {
-              return false;
-            }
-            // If item is a stringified array, try to parse it
-            if (typeof item === 'string' && item.trim().startsWith('[')) {
-              try {
-                const parsed = JSON.parse(item);
-                // If it's an empty array, filter it out
-                return Array.isArray(parsed) && parsed.length > 0;
-              } catch {
-                // If parsing fails, keep the item as is
-                return true;
-              }
-            }
-            return true;
-          }) as string[];
-        }
-
-        try {
-          const parsed = JSON.parse(raw);
-          if (Array.isArray(parsed)) {
-            return parsed
-              .filter(Boolean)
-              .filter(item => item !== '[]' && item !== '');
-          }
-        } catch (error) {
-          console.warn('Attachment parse error:', error);
-        }
-
-        return [];
-      },
-      [],
-    );
-
-    const buildAttachmentPayload = React.useCallback(
-      async (raw?: SendOfferDto['attachments']) => {
-        const attachments = parseAttachments(raw);
-
-        if (!attachments.length) return undefined;
-
-        const remoteAttachments: string[] = [];
-        for (const uri of attachments) {
-          if (!uri) continue;
-
-          if (/^https?:\/\//i.test(uri)) {
-            remoteAttachments.push(uri);
-            continue;
-          }
-
-          try {
-            const uploaded = await upload(uri);
-            remoteAttachments.push(uploaded);
-          } catch (error) {
-            console.error('Offer attachment upload failed:', error);
-            throw error;
-          }
-        }
-
-        return remoteAttachments.length ? remoteAttachments : undefined;
-      },
-      [parseAttachments, upload],
-    );
-
     const handleUpdateOffer = React.useCallback(
       async (payload: SendOfferDto, close: () => void) => {
-        const attachments = await buildAttachmentPayload(payload.attachments);
+        const {attachments} = await uploadBatch(payload.attachments!);
+
         const normalizedAmount = payload.amount || 0;
 
         const body: SendOfferDto = {
@@ -502,7 +427,7 @@ class HomeService extends HomeApi {
           },
         });
       },
-      [updateOffer, buildAttachmentPayload],
+      [],
     );
 
     return {
@@ -594,6 +519,15 @@ class HomeService extends HomeApi {
     });
 
     return {data: data?.data, isLoading, error};
+  }
+
+  useAvailability() {
+    const {data, isPending, error, mutate} = useMutation({
+      mutationKey: ['availability'],
+      mutationFn: async (a: boolean) => await this.availability(a),
+    });
+
+    return {data: data?.data.availability, isPending, error, mutate};
   }
 }
 

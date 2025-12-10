@@ -1,7 +1,8 @@
+import ProvidersDto from '../../screens/app/user/home/dto/providersDto';
+import Review from '../../screens/app/user/home/dto/reviews.dto';
 import DeclineOfferDto from '../../screens/app/user/jobs/dto/DeclineOffer.dto';
 import Jobs from '../../screens/app/user/jobs/dto/job.dto';
-import SendOfferDto from '../../screens/app/user/jobs/dto/SendOffer.dto';
-import ThrowError from '../errors/throwError';
+import JobTimelineDto from '../../screens/app/user/jobs/dto/JobTimeline.dto';
 import Endpoints from './Endpoints';
 import Http from './Http';
 
@@ -21,7 +22,11 @@ export default class JobsApi extends Http {
       path: Endpoints.jobDetails(uuid),
       method: 'GET',
     });
-    const data = await this.handleResponse<{job: Jobs; timelines: any[]}>(res);
+    const data = await this.handleResponse<{
+      job: Jobs;
+      timelines: JobTimelineDto[];
+      review: Review;
+    }>(res);
 
     return data;
   }
@@ -29,7 +34,7 @@ export default class JobsApi extends Http {
   protected async verifyJobPin(uuid: string, pin: string) {
     const res = await this.fetchHandler({
       path: Endpoints.verifyJobPin(uuid),
-      method: 'PATCH',
+      method: 'POST',
       body: {pin},
     });
     const data = await this.handleResponse<any>(res);
@@ -44,7 +49,17 @@ export default class JobsApi extends Http {
       path: Endpoints.jobTimeline(uuid),
       method: 'GET',
     });
-    const data = await this.handleResponse<any>(res);
+    const data = await this.handleResponse<JobTimelineDto[]>(res);
+
+    return data;
+  }
+
+  protected async alternateProviders(uuid: string) {
+    const res = await this.fetchHandler({
+      path: Endpoints.alternateProviders(uuid),
+      method: 'GET',
+    });
+    const data = await this.handleResponse<ProvidersDto[]>(res);
 
     return data;
   }
@@ -116,6 +131,21 @@ export default class JobsApi extends Http {
       body,
     });
     const data = await this.handleResponse<any>(res);
+
+    this.success(data?.message);
+
+    return data;
+  }
+
+  protected async identifyVerification(uuid: string, verified: boolean) {
+    const res = await this.fetchHandler({
+      path: Endpoints.identityVerification(uuid),
+      method: 'PATCH',
+      body: {verified},
+    });
+    const data = await this.handleResponse<{
+      providerIdentityVerified: boolean;
+    }>(res);
 
     this.success(data?.message);
 

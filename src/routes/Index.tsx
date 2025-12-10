@@ -1,4 +1,3 @@
-import '../shared/ActionSheets';
 import {
   NavigationContainer,
   useNavigationContainerRef,
@@ -12,11 +11,18 @@ import {toastConfig} from '../shared/Toast';
 import {PaperProvider} from 'react-native-paper';
 import {theme} from '../shared/themes/Index';
 import {observer, Observer} from 'mobx-react-lite';
-import {appStore} from '../shared/stores/appStore';
 import AppRouter from './app/Index';
 import {EventRegister} from 'react-native-event-listeners';
 import {ERRORS, EVENTS} from '../shared/Constant';
-import GlobalCallHandler from '../components/callNotification/GlobalCallHandler';
+import {appStore} from '../shared/stores/appStore';
+import '../shared/ActionSheets';
+import utils from '../shared/Utils';
+
+// Component to handle notification badge - only active when authenticated
+const NotificationBadgeHandler = observer(() => {
+  utils.useNotificationBadgeHandler();
+  return null;
+});
 
 const Routes: Props = () => {
   const navigationRef = useNavigationContainerRef();
@@ -43,27 +49,21 @@ const Routes: Props = () => {
   }, []);
 
   return (
-    <SheetProvider>
-      <NavigationContainer ref={navigationRef}>
-        <PaperProvider theme={theme}>
+    <NavigationContainer ref={navigationRef}>
+      <PaperProvider theme={theme}>
+        <SheetProvider context='global'>
           <Observer>
             {() => (
               <React.Fragment>
-                {appStore.isAuthenticated ? (
-                  <>
-                    <AppRouter />
-                    <GlobalCallHandler navigationRef={navigationRef} />
-                  </>
-                ) : (
-                  <AuthRouter />
-                )}
+                {appStore.isAuthenticated ? <AppRouter /> : <AuthRouter />}
               </React.Fragment>
             )}
           </Observer>
+          <NotificationBadgeHandler />
           <Toast config={toastConfig} />
-        </PaperProvider>
-      </NavigationContainer>
-    </SheetProvider>
+        </SheetProvider>
+      </PaperProvider>
+    </NavigationContainer>
   );
 };
 

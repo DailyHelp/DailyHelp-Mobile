@@ -1,7 +1,8 @@
 import React from 'react';
-import {Image, ScrollView, Text, TouchableOpacity, View} from 'react-native';
+import {Image, Text, TouchableOpacity, View} from 'react-native';
 import ActionSheet, {
   ActionSheetRef,
+  ScrollView,
   SheetManager,
 } from 'react-native-actions-sheet';
 import Collapsible from 'react-native-collapsible';
@@ -137,7 +138,8 @@ const CategoryActionSheet = React.forwardRef<
       id="AllCategory"
       closeOnPressBack={false}
       gestureEnabled={true}
-      backgroundInteractionEnabled={true}
+      overlayColor="black"
+      defaultOverlayOpacity={0.5}
       initialSnapIndex={0}
       closable={false}
       containerStyle={{
@@ -184,7 +186,7 @@ const CategoryActionSheet = React.forwardRef<
           </View>
         )}
 
-        <ScrollView style={{maxHeight: 500}}>
+        <ScrollView style={{flex: 1}} showsVerticalScrollIndicator={true}>
           {(filteredCategories || []).map(
             ({image, name, subCategories, uuid}: InternalCategory) => {
               const isCollapse: boolean = openSections.includes(uuid);

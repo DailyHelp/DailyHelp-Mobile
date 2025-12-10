@@ -1,15 +1,12 @@
+import {CommonActions} from '@react-navigation/native';
 import dayjs from 'dayjs';
 import React from 'react';
 import {ScrollView, View} from 'react-native';
-import {SheetManager} from 'react-native-actions-sheet';
 import Icon from 'react-native-vector-icons/AntDesign';
-import IconF from 'react-native-vector-icons/FontAwesome';
-import SwipeButton from 'rn-swipe-button';
 import {IViewDetails} from '../../../../@types/routes';
 import Assets from '../../../../assets/Assets';
 import AttachmentContainer from '../../../../components/AttachmentContainer';
 import MainButton from '../../../../components/button/MainButton';
-import OutlineButton from '../../../../components/button/OutlineButton';
 import Container from '../../../../components/container/Index';
 import CustomAvatar from '../../../../components/CustomAvatar';
 import CustomHeader from '../../../../components/customHeader/Index';
@@ -17,19 +14,17 @@ import Offer from '../../../../components/offers/Index';
 import Typography from '../../../../components/Typography';
 import {scale, verticalScale} from '../../../../shared/Scaling';
 import {ColorKeys} from '../../../../shared/themes/Index';
-import {customFontSize, fonts} from '../../../../shared/themes/Typography';
 import utils from '../../../../shared/Utils';
-import jobService from '../../user/jobs/service/Jobs.service';
-import jobStyle from '../../user/jobs/jobStyle';
 import JobTimeline from '../../user/jobs/components/JobTimeline';
+import jobStyle from '../../user/jobs/jobStyle';
+import jobService from '../../user/jobs/service/Jobs.service';
 import CodeContainer from './components/CodeContainer';
+import ReviewsCard from '../../../../components/ReviewsCard';
 
 const JobDetails: IViewDetails = ({navigation, route}) => {
-  const {startJob, endJob} = jobService.useJobsActions();
-
   const {jobDetails} = jobService.useGetJobDetails(route.params?.uuid!);
   const {timeline, isLoading: timelineLoading} = jobService.useJobTimeline(
-    route.params?.uuid || '',
+    route.params?.uuid!,
   );
 
   const {declineJob, declinePending} = jobService.useJobsActions();
@@ -37,32 +32,23 @@ const JobDetails: IViewDetails = ({navigation, route}) => {
   const [isOfferCancel, setIsOfferCancel] = React.useState(false);
 
   utils.useHideBottomTab(navigation);
-  const [swipeSuccess, setSwipeSuccess] = React.useState(false);
+
   const [type, setType] = React.useState(
     (jobDetails?.data.job.status || route.params?.status)?.toLowerCase(),
   );
 
   React.useEffect(() => {
-    const timer = setTimeout(() => setSwipeSuccess(false), 1200);
-
-    return () => clearTimeout(timer);
-  }, []);
-
-  React.useEffect(() => {
     setType(jobDetails?.data.job.status?.toLowerCase());
   }, [jobDetails]);
 
-  let headerText = 'Have they arrived? Tap “Confirm face” to verify.';
-  let headerBgColor = '#95D21A';
-  let railBackgroundColor = type === 'in_progress' ? '#FEF7F7' : '#DEF7E1';
-  let railFillBackgroundColor = type === 'in_progress' ? '#F0443A' : '#2BBA3C';
-  let title = 'Slide to START job';
+  let headerText = 'Waiting to start';
+  let headerBgColor = '#FF6B01';
 
-  let headerColor: ColorKeys = 'lightBlack';
+  let headerColor: ColorKeys = 'white';
 
-  if (type === 'in_progress') headerBgColor = '#FF6B01';
-  if (type === 'in_progress') headerText = 'Waiting to start';
-  if (type === 'in_progress') headerColor = 'white';
+  if (type === 'pending') headerBgColor = '#FF6B01';
+  if (type === 'pending') headerText = 'Waiting to start';
+  if (type === 'pending') headerColor = 'white';
 
   if (type === 'completed') headerBgColor = '#27A535';
   if (type === 'completed') headerText = 'Job Completed';
@@ -71,6 +57,12 @@ const JobDetails: IViewDetails = ({navigation, route}) => {
   if (type === 'canceled') headerBgColor = '#27A535';
   if (type === 'canceled') headerText = 'Job Canceled';
   if (type === 'completed') headerColor = 'white';
+
+  const picture = jobDetails?.data.job.providerPicture;
+
+  let timelines = timeline?.data;
+
+  if (!timelines) timelines = jobDetails?.data.timelines;
 
   return (
     <View style={{flex: 1, backgroundColor: 'white'}}>
@@ -87,7 +79,9 @@ const JobDetails: IViewDetails = ({navigation, route}) => {
           <CustomAvatar
             avatarSize={50}
             badgeSize={20}
-            data={{image: route?.params?.providerPicture || Assets.Worker1}}
+            data={{
+              image: picture,
+            }}
           />
           <Typography size="md" fontWeight="bold">
             {route.params?.providerFirstname} {route.params?.providerLastname}
@@ -96,24 +90,6 @@ const JobDetails: IViewDetails = ({navigation, route}) => {
             {route.params?.providerPrimaryJobRole}
           </Typography>
         </View>
-      )}
-
-      {jobDetails?.data.job.code && (
-        <Container gap={10}>
-          <Container
-            flexDirection="row"
-            gap={4}
-            padding={3}
-            borderRadius={4}
-            backgroundColor="lemonGreen"
-            borderColor="primary"
-            borderStyle="dashed"
-            borderWidth={1}>
-            <Assets.Info />
-            <Typography>Remind the client to start once you arrive.</Typography>
-          </Container>
-          <CodeContainer code={jobDetails.data.job.code} />
-        </Container>
       )}
 
       <View
@@ -135,7 +111,7 @@ const JobDetails: IViewDetails = ({navigation, route}) => {
           style={{
             flex: 1,
             flexDirection: 'column',
-            backgroundColor: '#f9f9fb',
+            backgroundColor: 'white',
             borderTopEndRadius: 20,
             borderTopStartRadius: 20,
           }}>
@@ -148,27 +124,36 @@ const JobDetails: IViewDetails = ({navigation, route}) => {
                 <CustomAvatar
                   avatarSize={50}
                   badgeSize={20}
-                  data={{image: Assets.Worker1}}
+                  data={{image: jobDetails?.data.job.serviceRequestor.picture}}
                 />
                 <Typography size="md" fontWeight="bold">
-                  {route.params?.providerFirstname}{' '}
-                  {route.params?.providerLastname}
+                  {jobDetails?.data.job.serviceRequestor.firstname}{' '}
+                  {jobDetails?.data.job.serviceRequestor.lastname}
                 </Typography>
-                <Typography size="md" color="gray">
-                  {route.params?.providerPrimaryJobRole}
-                </Typography>
-
-                {type !== 'completed' && (
-                  <React.Fragment>
-                    <OutlineButton
-                      height={verticalScale(50)}
-                      onPress={() => SheetManager.show('FaceMatch')}
-                      icon={() => <Assets.ConfirmFace />}>
-                      Confirm face
-                    </OutlineButton>
-                  </React.Fragment>
-                )}
               </View>
+            )}
+
+            {jobDetails?.data.job.code && (
+              <Container gap={7} width={'90'} alignSelf="center">
+                <Container
+                  flexDirection="row"
+                  gap={4}
+                  padding={10}
+                  borderRadius={16}
+                  backgroundColor="lightPrimary"
+                  borderColor="lightGreen"
+                  borderStyle="dashed"
+                  alignItems="center"
+                  borderWidth={1}>
+                  <Assets.Info />
+                  <Typography size="md" fontWeight="medium" color="green2">
+                    Remind the client to start once you arrive.
+                  </Typography>
+                </Container>
+                {type === 'pending' && (
+                  <CodeContainer code={jobDetails.data.job.code} />
+                )}
+              </Container>
             )}
 
             <View
@@ -206,7 +191,7 @@ const JobDetails: IViewDetails = ({navigation, route}) => {
                     onPress={() => {
                       navigation.navigate('Dispute');
                     }}>
-                    Dispute job
+                    Report client
                   </MainButton>
                 </View>
               ) : (
@@ -239,6 +224,13 @@ const JobDetails: IViewDetails = ({navigation, route}) => {
                       enableButtonColor="lightGrey"
                       color="black"
                       width={'45%'}
+                      onPress={() => {
+                        navigation.dispatch(
+                          CommonActions.navigate({
+                            name: 'ChatIndex',
+                          }),
+                        );
+                      }}
                       icon={() => <Assets.SendOffer />}>
                       Chat
                     </MainButton>
@@ -266,14 +258,14 @@ const JobDetails: IViewDetails = ({navigation, route}) => {
 
             <View style={{marginTop: verticalScale(10)}}>
               <JobTimeline
-                timeline={timeline?.data}
+                timeline={timelines}
                 isLoading={timelineLoading}
                 status={type!}
               />
             </View>
           </ScrollView>
 
-          {type !== 'completed' && (
+          {type === 'completed' && (
             <View
               style={{
                 padding: scale(20),
@@ -283,46 +275,7 @@ const JobDetails: IViewDetails = ({navigation, route}) => {
                 flexDirection: 'column',
                 gap: 10,
               }}>
-              <Typography fontWeight="bold" color="lightBlack">
-                Ready to start the job?
-              </Typography>
-
-              <SwipeButton
-                railBackgroundColor={railBackgroundColor}
-                railFillBackgroundColor={railFillBackgroundColor}
-                railBorderColor="transparent"
-                railFillBorderColor="transparent"
-                title={title}
-                onSwipeSuccess={() => {
-                  if (type === 'in_progress') {
-                    endJob(route.params?.uuid!, {
-                      onSuccess: () => setSwipeSuccess(true),
-                    });
-                  } else {
-                    startJob(route.params?.uuid!, {
-                      onSuccess: () => setSwipeSuccess(true),
-                    });
-                  }
-                }}
-                shouldResetAfterSuccess={true}
-                titleColor={railFillBackgroundColor}
-                thumbIconBorderColor="transparent"
-                thumbIconComponent={() =>
-                  swipeSuccess ? (
-                    <Assets.GreenMark />
-                  ) : (
-                    <Assets.DoubleRightArrow />
-                  )
-                }
-                thumbIconBackgroundColor={
-                  swipeSuccess ? 'white' : railFillBackgroundColor
-                }
-                titleStyles={{
-                  fontFamily: fonts.GeistBold,
-                  fontSize: customFontSize.md,
-                }}
-                height={60}
-              />
+              <ReviewsCard data={jobDetails?.data.review} />
             </View>
           )}
         </View>

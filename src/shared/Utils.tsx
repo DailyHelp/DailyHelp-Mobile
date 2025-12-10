@@ -1,8 +1,10 @@
 import {CameraRoll} from '@react-native-camera-roll/camera-roll';
+import messaging from '@react-native-firebase/messaging';
 import {ParamListBase} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {useQueryClient} from '@tanstack/react-query';
 import React from 'react';
-import {Alert, Linking, PermissionsAndroid, Platform} from 'react-native';
+import {PermissionsAndroid, Platform} from 'react-native';
 import ReactNativeBiometrics, {
   BiometryType,
   BiometryTypes,
@@ -22,7 +24,6 @@ import CatchError from './errors/catchError';
 import ThrowError from './errors/throwError';
 import {scale, verticalScale} from './Scaling';
 import {http} from './services/Http';
-import UserDTO from '../screens/auth/dto/UserDto';
 
 class Utils {
   private static instance: Utils;
@@ -219,41 +220,123 @@ class Utils {
   }
 
   badge = async (count: number) => {
-    const permission = await getNotificationBadgeSetting();
-    if (permission === 'enabled') {
-      await setBadgeCount(count);
-    } else {
-      console.log(
-        "Badge permission has not yet been granted. I'll ask the user later",
-      );
+    try {
+      if (Platform.OS === 'ios') {
+        const permission = await getNotificationBadgeSetting();
+        if (permission === 'enabled') {
+          await setBadgeCount(count);
+        } else {
+          console.log(
+            "Badge permission has not yet been granted. I'll ask the user later",
+          );
+        }
+      } else {
+        await setBadgeCount(count);
+      }
+    } catch (error) {
+      console.log('Badge setting not supported on this platform');
     }
   };
 
-  // useNotificationBadgeHandler(notificationCount: number, query: QueryClient) {
-  //   const {isSignedIn} = useAuthentication();
+  useNotificationBadgeHandler() {
+    const query = useQueryClient();
 
-  //   query.invalidateQueries({queryKey: ['notifications']});
+    const calculateUnreadCount = React.useCallback(async () => {
+      try {
+        const isAuthenticated = AppStorage.find('isAuthenticated');
+        if (!isAuthenticated) {
+          await this.badge(0);
+          return 0;
+        }
 
-  //   React.useEffect(() => {
-  //     if (notificationCount) this.badge(notificationCount!);
-  //   }, [isSignedIn]);
+        const conversationsData = query.getQueryData(['conversations']) as any;
+        let totalUnread = 0;
 
-  //   React.useEffect(() => {
-  //     const unsubscribe = messaging().onMessage(async () => {
-  //       if (notificationCount) this.badge(notificationCount!);
-  //     });
+        if (conversationsData?.data && Array.isArray(conversationsData.data)) {
+          totalUnread = conversationsData.data.reduce(
+            (sum: number, conv: any) => {
+              const count = parseInt(conv.unreadCount || '0', 10);
+              return sum + (isNaN(count) ? 0 : count);
+            },
+            0,
+          );
+        }
 
-  //     return () => {
-  //       unsubscribe();
-  //     };
-  //   }, [isSignedIn]);
+        await this.badge(totalUnread);
+        return totalUnread;
+      } catch (error) {
+        console.error('Error calculating unread count:', error);
+        await this.badge(0);
+        return 0;
+      }
+    }, [query]);
 
-  //   React.useEffect(() => {
-  //     messaging().setBackgroundMessageHandler(async () => {
-  //       if (notificationCount) this.badge(notificationCount!);
-  //     });
-  //   }, [isSignedIn]);
-  // }
+    React.useEffect(() => {
+      calculateUnreadCount();
+    }, [calculateUnreadCount]);
+
+    React.useEffect(() => {
+      const unsubscribe = query.getQueryCache().subscribe(event => {
+        if (event?.query?.queryKey?.[0] === 'conversations') {
+          setTimeout(() => {
+            calculateUnreadCount();
+          }, 100);
+        }
+      });
+
+      return () => {
+        unsubscribe();
+      };
+    }, [query, calculateUnreadCount]);
+
+    React.useEffect(() => {
+      const unsubscribe = messaging().onMessage(async remoteMessage => {
+        query.invalidateQueries({queryKey: ['conversations']});
+
+        setTimeout(() => {
+          calculateUnreadCount();
+        }, 500);
+      });
+
+      return () => {
+        unsubscribe();
+      };
+    }, [query, calculateUnreadCount]);
+
+    React.useEffect(() => {
+      const {websocketService} = require('./services/WebSocket');
+
+      const handler = (message: any) => {
+        const eventType = message.event || message.type;
+
+        if (eventType === 'message:created') {
+          query.invalidateQueries({queryKey: ['conversations']});
+          setTimeout(() => {
+            calculateUnreadCount();
+          }, 500);
+        }
+
+        if (eventType === 'conversation:read' || eventType === 'message:read') {
+          query.invalidateQueries({queryKey: ['conversations']});
+          setTimeout(() => {
+            calculateUnreadCount();
+          }, 500);
+        }
+      };
+
+      websocketService.on({onMessage: handler});
+
+      return () => {
+        websocketService.off(['onMessage']);
+      };
+    }, [query, calculateUnreadCount]);
+
+    React.useEffect(() => {
+      messaging().setBackgroundMessageHandler(async remoteMessage => {
+        query.invalidateQueries({queryKey: ['conversations']});
+      });
+    }, [query]);
+  }
 
   async hasAndroidPermission() {
     const getCheckPermissionPromise = () => {
@@ -345,9 +428,43 @@ class Utils {
       }
     };
 
+    const uploadBatch = async (attachment: string | string[]) => {
+      let attachmentsArray: string[] = [];
+
+      if (typeof attachment === 'string') {
+        attachmentsArray = JSON.parse(attachment);
+      } else {
+        attachmentsArray = attachment;
+      }
+
+      const uploadPromises = attachmentsArray.map(att => upload(att));
+      const results = await Promise.allSettled(uploadPromises);
+
+      const attachments: string[] = [];
+      const errors: any[] = [];
+
+      results.forEach((result, index) => {
+        if (result.status === 'fulfilled') {
+          attachments.push(result.value);
+        } else {
+          errors.push({
+            index,
+            uri: attachmentsArray[index],
+            error: result.reason,
+          });
+        }
+      });
+
+      return {
+        attachments,
+        errors,
+      };
+    };
+
     return {
       isLoading,
       upload,
+      uploadBatch,
     };
   }
 

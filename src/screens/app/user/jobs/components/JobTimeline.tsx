@@ -18,7 +18,6 @@ const JobTimeline: React.FC<JobTimelineProps> = ({
   status,
 }) => {
   // Default timeline if no data is provided
-  console.log(timeline);
 
   const timelineData = timeline || [];
 
@@ -86,7 +85,7 @@ const JobTimeline: React.FC<JobTimelineProps> = ({
                   {showLine && (
                     <View
                       style={{
-                        height: verticalScale(20),
+                        height: verticalScale(24),
                         width: scale(1),
                         borderStyle: isPending ? 'dashed' : 'solid',
                         borderWidth: scale(0.5),

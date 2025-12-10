@@ -48,13 +48,17 @@ const SendOffer: IOffer<Message> = ({
   }, [data]);
 
   React.useEffect(() => {
-    if (data) {
-      const attachment = data?.offer?.pictures.split(',');
+    if (data?.offer?.pictures) {
+      const attachment = data.offer.pictures.split(',');
       if (attachment?.length !== appStore?.selectedGalleryImages?.length) {
         attachment?.map(img => appStore.setSelectedGalleryImages(img));
       }
     }
   }, [data]);
+
+  React.useEffect(() => {
+    if (!isVisible) appStore.clearOffer();
+  }, [isVisible]);
 
   return (
     <Portal>
@@ -62,12 +66,23 @@ const SendOffer: IOffer<Message> = ({
         <Formik
           enableReinitialize
           initialValues={{
-            ...appStore.offerDto,
+            amount: appStore.offerDto?.amount || '',
+            description: appStore.offerDto?.description || '',
+            attachments: appStore.offerDto?.attachments || '',
           }}
-          onSubmit={data => onSendOffer?.(data)}>
+          onSubmit={values => {
+            const submitData = {
+              ...values,
+              amount: values.amount,
+              attachments:
+                appStore.offerDto?.attachments ||
+                JSON.stringify(appStore.selectedGalleryImages),
+            };
+            onSendOffer?.(submitData);
+          }}>
           {({values, handleChange, handleSubmit}) => {
             const maskedInputProps = useMaskedInputProps({
-              value: values.amount || '0',
+              value: appStore.offerDto?.amount || '',
               onChangeText: (masked: string, text: string) => {
                 handleChange('amount')(text);
                 appStore.setOffer({amount: text});
@@ -176,14 +191,14 @@ const SendOffer: IOffer<Message> = ({
                           fontWeight="regular"
                           height={120}
                           placeholder="Describe what you need e.g I want a deep cleaning of my 2 bedroom apartment."
-                          value={values.description}
+                          value={values.description || ''}
                           onChangeText={description => {
                             handleChange('description')(description);
                             appStore.setOffer({description});
                           }}
                         />
                       </View>
-                      <AttachmentContainer openGallery={openGallery} />
+                      <AttachmentContainer openGallery={openGallery} canClose />
                     </View>
                   </View>
                 </Container>

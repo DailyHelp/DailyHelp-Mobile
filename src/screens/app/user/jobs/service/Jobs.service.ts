@@ -6,6 +6,7 @@ import JobsDto from '../dto/job.dto';
 import AppStorage from '../../../../../shared/AppStorage';
 import DeclineOfferDto from '../dto/DeclineOffer.dto';
 import {websocketService} from '../../../../../shared/services/WebSocket';
+import CatchError from '../../../../../shared/errors/catchError';
 
 class JobService extends JobsApi {
   private static instance: JobService;
@@ -127,7 +128,7 @@ class JobService extends JobsApi {
       mutationFn: async (data: {uuid: string; pin: string}) => {
         return await this.verifyJobPin(data.uuid, data.pin);
       },
-      onError: error => this.error(error.message),
+      onError: error => new CatchError(error, true),
     });
 
     return {job, isLoading: isPending, error, mutate};
@@ -149,7 +150,7 @@ class JobService extends JobsApi {
       onSuccess: () => {
         query.invalidateQueries({queryKey: ['jobs', 'job-details']});
       },
-      onError: error => this.error(error.message),
+      onError: error => new CatchError(error, true),
     });
 
     const {
@@ -165,7 +166,7 @@ class JobService extends JobsApi {
       onSuccess: () => {
         query.invalidateQueries({queryKey: ['jobs', 'job-details']});
       },
-      onError: error => this.error(error.message),
+      onError: error => new CatchError(error, true),
     });
 
     const {
@@ -181,7 +182,7 @@ class JobService extends JobsApi {
       onSuccess: () => {
         query.invalidateQueries({queryKey: ['jobs', 'job-details']});
       },
-      onError: error => this.error(error.message),
+      onError: error => new CatchError(error),
     });
 
     return {
@@ -231,7 +232,7 @@ class JobService extends JobsApi {
       onSuccess: () => {
         query.invalidateQueries({queryKey: ['jobs']});
       },
-      onError: error => this.error(error.message),
+      onError: error => new CatchError(error),
     });
 
     return {
@@ -258,7 +259,7 @@ class JobService extends JobsApi {
       onSuccess: () => {
         query.invalidateQueries({queryKey: ['jobs']});
       },
-      onError: error => this.error(error.message),
+      onError: error => new CatchError(error),
     });
 
     return {
@@ -352,7 +353,9 @@ class JobService extends JobsApi {
                 console.log('Job created:', uuid);
 
                 queryClient.invalidateQueries({queryKey: ['jobs']});
-                queryClient.invalidateQueries({queryKey: ['job-details', uuid]});
+                queryClient.invalidateQueries({
+                  queryKey: ['job-details', uuid],
+                });
                 if (conversationUuid) {
                   queryClient.invalidateQueries({
                     queryKey: ['conversation', conversationUuid],
@@ -374,8 +377,12 @@ class JobService extends JobsApi {
                 console.log('Job updated:', uuid);
 
                 queryClient.invalidateQueries({queryKey: ['jobs']});
-                queryClient.invalidateQueries({queryKey: ['job-details', uuid]});
-                queryClient.invalidateQueries({queryKey: ['job-timeline', uuid]});
+                queryClient.invalidateQueries({
+                  queryKey: ['job-details', uuid],
+                });
+                queryClient.invalidateQueries({
+                  queryKey: ['job-timeline', uuid],
+                });
                 if (conversationUuid) {
                   queryClient.invalidateQueries({
                     queryKey: ['conversation', conversationUuid],
@@ -396,7 +403,9 @@ class JobService extends JobsApi {
                   code,
                 });
                 queryClient.invalidateQueries({queryKey: ['jobs']});
-                queryClient.invalidateQueries({queryKey: ['job-details', uuid]});
+                queryClient.invalidateQueries({
+                  queryKey: ['job-details', uuid],
+                });
               }
               break;
             }
@@ -405,7 +414,9 @@ class JobService extends JobsApi {
               const {jobUuid, at} = message.data || {};
               console.log('Code share success:', {jobUuid, at});
               this.success('Job code shared successfully');
-              queryClient.invalidateQueries({queryKey: ['job-details', jobUuid]});
+              queryClient.invalidateQueries({
+                queryKey: ['job-details', jobUuid],
+              });
               break;
             }
 
@@ -441,6 +452,34 @@ class JobService extends JobsApi {
 
     return {
       shareJobCode,
+    };
+  }
+
+  useIdentityVerification() {
+    const {data, isPending, mutate} = useMutation({
+      mutationKey: ['identity-verification'],
+      mutationFn: (data: {uuid: string; verified: boolean}) => {
+        return this.identifyVerification(data.uuid, data.verified);
+      },
+      onError: error => new CatchError(error),
+    });
+
+    return {
+      data,
+      isPending,
+      mutate,
+    };
+  }
+
+  useAlternateProviders(uuid: string) {
+    const {data, isLoading} = useQuery({
+      queryKey: ['alternateProvider', uuid],
+      queryFn: async () => await this.alternateProviders(uuid),
+    });
+
+    return {
+      data: data?.data,
+      isLoading,
     };
   }
 }
