@@ -3,14 +3,20 @@ import Assets from '../../../../../../assets/Assets';
 import MainButton from '../../../../../../components/button/MainButton';
 import Typography from '../../../../../../components/Typography';
 import {Colors} from '../../../../../../shared/themes/Index';
+import {observer} from 'mobx-react-lite';
+import {appStore} from '../../../../../../shared/stores/appStore';
+import {UserTypes} from '../../../../../../shared/Constant';
 
 const UserAction: IMessages = props => {
   const {data} = props;
 
   const type = data?.type.toLowerCase();
   const status = data?.offer.status.toLowerCase();
-  const isCountered = status === 'countered';
-  const isCounteredOffered = !!data?.offer.currentOffer;
+  const isPending = status === 'pending';
+  const isCountered = !!data?.offer.currentOffer;
+  const isPaid = status === 'paid';
+  const isUser = appStore.user_types === UserTypes.CUSTOMER;
+  const isAccepted = status === 'accepted';
 
   let backgroundColor = props.backgroundColor || Colors.lightGrey;
   let borderColor = '#FDE9E7';
@@ -20,9 +26,14 @@ const UserAction: IMessages = props => {
     borderColor = '#02CA71';
   }
 
-  const payment = type === 'offer' && status !== 'accepted';
+  const isOfferAccepted = type === 'offer' && status === 'accepted';
 
-  const shouldCancel = payment && isCountered;
+  // Show action buttons when user is a customer and offer is not accepted yet
+  const showActions = !isPaid && !isAccepted;
+
+  console.log(isPaid, status);
+
+  console.log(!isPaid);
 
   return (
     <View
@@ -45,7 +56,7 @@ const UserAction: IMessages = props => {
         }}>
         {status === 'accepted' ? <Assets.GreenMark /> : <Assets.OfferLetter />}
         <Typography color="gray" size="md">
-          Offer {status === 'accepted' && 'Accepted'}
+          Offer {isOfferAccepted && 'Accepted'}
         </Typography>
       </View>
 
@@ -53,7 +64,7 @@ const UserAction: IMessages = props => {
         {data?.offer.price}
       </Typography>
 
-      {payment && (
+      {showActions && (
         <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
           <MainButton
             mode="outlined"
@@ -61,21 +72,25 @@ const UserAction: IMessages = props => {
             color="danger"
             width={'45%'}
             onPress={() => {
-              shouldCancel ? props?.cancel?.(data) : props?.decline?.(data);
+              isPaid ? props?.decline?.(data) : props?.cancel?.(data);
             }}>
-            {shouldCancel ? 'Cancel offer' : 'Decline'}
+            {showActions ? 'Decline' : 'Cancel offer'}
           </MainButton>
           <MainButton
             color="secondary"
             width={'45%'}
             onPress={() => {
-              shouldCancel ? props?.edit?.(data) : props?.accept?.(data);
+              isPaid ? props?.accept?.(data) : props?.edit?.(data);
             }}>
-            {shouldCancel ? 'Edit offer' : ' Accept & Pay'}
+            {isPaid
+              ? 'Make Payment'
+              : isPending && isCountered
+              ? 'Accept & Pay'
+              : 'Edit offer '}
           </MainButton>
         </View>
       )}
     </View>
   );
 };
-export default UserAction;
+export default observer(UserAction);

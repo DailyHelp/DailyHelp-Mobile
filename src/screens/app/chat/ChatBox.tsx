@@ -23,6 +23,8 @@ const ChatBox: IChatBox = ({navigation, route}) => {
   const galleryBottomSheetRef = React.useRef<ActionSheetRef | null>(null);
   const userType = AppStorage.find('userType') as UserTypes;
   const isCustomer = userType === UserTypes.CUSTOMER;
+  console.log(route.params);
+  
   const isPaymentMade = route.params?.hasActiveJob;
   const conversationUuid = route.params?.uuid!;
 
@@ -134,6 +136,7 @@ const ChatBox: IChatBox = ({navigation, route}) => {
     onSendOffer,
     updatePending,
     handleUpdateOffer,
+    sendingPending,
   } = homeService.useOffer();
 
   const {data: message, isPending, mutate} = chatService.useSendMessage();
@@ -147,7 +150,7 @@ const ChatBox: IChatBox = ({navigation, route}) => {
   const [offer, setOffer] = React.useState<{
     visible: boolean;
     type?: 'send' | 'cancel' | 'decline' | 'edit' | 'negotiate';
-    data?: Message;
+    data?: Message<UserDTO>;
   }>({
     visible: false,
     type: isCustomer ? 'cancel' : 'decline',
@@ -178,6 +181,10 @@ const ChatBox: IChatBox = ({navigation, route}) => {
 
   const edit = (data?: Message) => {
     setOffer({...offer, visible: true, type: 'edit', data});
+  };
+
+  const send = (data?: Message) => {
+    setOffer({...offer, visible: true, type: 'send', data});
   };
 
   const negotiate = (data?: Message) => {
@@ -251,7 +258,7 @@ const ChatBox: IChatBox = ({navigation, route}) => {
             showOffer={false}
           />
         ) : (
-          <CustomFlatList<Message>
+          <CustomFlatList<Message<UserDTO>>
             data={data}
             inverted
             renderItem={renderItem}
@@ -261,7 +268,7 @@ const ChatBox: IChatBox = ({navigation, route}) => {
         <ChatFooter
           navigation={navigation}
           canSendOffer={canSendOffer!}
-          sendOffer={edit}
+          sendOffer={send}
           sendMessage={msg => {
             mutate({message: msg, uuid: conversationUuid});
           }}
@@ -290,13 +297,17 @@ const ChatBox: IChatBox = ({navigation, route}) => {
             if (offer.type === 'negotiate') {
               handleCounterOffer(data);
             } else if (offer.type === 'edit') {
-              (data.uuid = offer?.data?.offer.uuid),
-                handleUpdateOffer(data, close);
+              data.uuid = offer?.data?.offer.uuid;
+              handleUpdateOffer(data, close);
             } else {
+              data.uuid = route.params?.serviceProviderId;
+
               onSendOffer(data, close);
             }
           }}
-          isLoading={declinePending || cancelPending || updatePending}
+          isLoading={
+            declinePending || cancelPending || updatePending || sendingPending
+          }
         />
 
         <Gallery

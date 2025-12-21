@@ -9,7 +9,7 @@ import Typography from '../../../../components/Typography';
 import Container from '../../../../components/container/Index';
 import MainButton from '../../../../components/button/MainButton';
 import {appStore} from '../../../../shared/stores/appStore';
-import { observer } from 'mobx-react-lite';
+import {observer} from 'mobx-react-lite';
 
 const DeleteAddress = React.forwardRef<
   ActionSheetRef,
@@ -19,15 +19,17 @@ const DeleteAddress = React.forwardRef<
     <ActionSheet
       ref={ref}
       id="DeleteAddress"
-      closeOnPressBack={false}
+      closeOnPressBack={true}
       gestureEnabled={true}
-      closable={false}
-      overlayColor="black"
-      defaultOverlayOpacity={0.5}
+      backgroundInteractionEnabled={true}
       containerStyle={{
         borderTopLeftRadius: 16,
         borderTopRightRadius: 16,
-      }}>
+        backgroundColor: 'white',
+      }}
+      initialSnapIndex={0}
+      overlayColor="black"
+      defaultOverlayOpacity={0.5}>
       <View
         style={{
           padding: 16,

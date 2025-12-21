@@ -1,15 +1,15 @@
-import {View} from 'react-native';
+import dayjs from 'dayjs';
+import React from 'react';
+import { View } from 'react-native';
+import AttachmentContainer from '../../../../../components/AttachmentContainer';
+import CustomAvatar from '../../../../../components/CustomAvatar';
+import Typography from '../../../../../components/Typography';
+import UserDTO from '../../../../auth/dto/UserDto';
+import chatStyle from '../../chatStyle';
 import OfferRejected from './OfferRejected';
 import OfferAction from './offerAction/Index';
-import Typography from '../../../../../components/Typography';
-import React from 'react';
-import chatStyle from '../../chatStyle';
-import CustomAvatar from '../../../../../components/CustomAvatar';
-import Assets from '../../../../../assets/Assets';
-import AttachmentContainer from '../../../../../components/AttachmentContainer';
-import dayjs from 'dayjs';
 
-const Messages: IMessages = props => {
+const Messages: IMessages<UserDTO> = props => {
   const {data} = props;
 
   const position = props.position || 'left';
@@ -33,14 +33,14 @@ const Messages: IMessages = props => {
           <CustomAvatar
             avatarSize={30}
             showBadge={false}
-            data={{image: Assets.Worker1}}
+            data={{image: data?.from.picture}}
           />
         </View>
       )}
       <View
         style={{
           flexShrink: 1,
-          width: position === 'right' ? '97%' : undefined,
+          width: '97%',
           alignItems: position === 'right' ? 'flex-end' : 'flex-start',
         }}>
         <View
@@ -55,7 +55,7 @@ const Messages: IMessages = props => {
           {status && data?.offer && (
             <React.Fragment>
               {rejected.includes(status) ? (
-                <OfferRejected {...props} data={data}  />
+                <OfferRejected {...props} data={data} />
               ) : (
                 <OfferAction {...props} data={data} userType={props.userType} />
               )}
@@ -63,7 +63,7 @@ const Messages: IMessages = props => {
           )}
 
           <Typography size="md" fontWeight="medium">
-            {data?.message || data?.offer.description}
+            {data?.message || data?.offer?.description}
           </Typography>
 
           {attachment?.length! > 0 && (

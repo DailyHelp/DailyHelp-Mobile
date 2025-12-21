@@ -1,8 +1,9 @@
 import UserDTO from '../../../auth/dto/UserDto';
+import JobsDto from '../../user/jobs/dto/job.dto';
 
 export default class DisputesDto {
   'uuid': string;
-  'job': string;
+  'job': JobsDto;
   'category': string;
   'description': string;
   'pictures': string;
@@ -13,4 +14,5 @@ export default class DisputesDto {
   'createdAt': string;
   'updatedAt': string;
   'deletedAt': string;
+  code?: string;
 }

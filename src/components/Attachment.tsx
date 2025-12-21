@@ -5,7 +5,7 @@ import Video from 'react-native-video';
 import {appStore} from '../shared/stores/appStore';
 import offerStyle from './offers/offerStyle';
 
-const Attachment: IAttachment = ({data, canClose = true}) => {
+const Attachment: IAttachment = ({data, canClose = true, onClose}) => {
   const [playingVideoUri, setPlayingVideoUri] = React.useState<string | null>(
     null,
   );
@@ -21,7 +21,9 @@ const Attachment: IAttachment = ({data, canClose = true}) => {
         const isPlaying = playingVideoUri === uri;
 
         return (
-          <View key={key} style={offerStyle.videoContainer}>
+          <View
+            key={key + new Date().toISOString()}
+            style={offerStyle.videoContainer}>
             {/* Show video if playing, else show image */}
             {isVideo && isPlaying ? (
               <Video
@@ -67,6 +69,7 @@ const Attachment: IAttachment = ({data, canClose = true}) => {
                 onPress={() => {
                   appStore.toggleGalleryImageSelection(uri);
                   if (playingVideoUri === uri) setPlayingVideoUri(null); // stop playing if removed
+                  onClose?.(uri);
                 }}
                 style={offerStyle.cancelButton}>
                 <Icon name="closecircle" size={18} color="#F00" />

@@ -2,11 +2,11 @@ import React from 'react';
 import CustomTextInput from './CustomTextInput';
 import CustomPhoneInput from './CustomPhoneInput';
 import CustomPasswordInput from './CustomPasswordInput';
-import CustomDateInput from './CustomDateInput';
 import CustomAddressInput from './CustomAddressInput';
 import CustomSelectInput from './customSelectInput/Index';
 import CustomSwitchInput from './CustomSwitch';
 import {createNumberMask, useMaskedInputProps} from 'react-native-mask-input';
+import CustomDateInput from './CustomDateInput';
 
 const amount = createNumberMask({
   prefix: [],

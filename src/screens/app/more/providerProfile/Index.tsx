@@ -1,27 +1,136 @@
 import React from 'react';
-import {TouchableOpacity} from 'react-native';
+import {TouchableOpacity, View} from 'react-native';
+import {ActionSheetRef} from 'react-native-actions-sheet';
 import {ProgressBar} from 'react-native-paper';
 import {IProviderProfile} from '../../../../@types/routes';
 import Assets from '../../../../assets/Assets';
+import AttachmentContainer from '../../../../components/AttachmentContainer';
+import MainButton from '../../../../components/button/MainButton';
 import Container from '../../../../components/container/Index';
 import CustomAvatar from '../../../../components/CustomAvatar';
 import CustomFlatList from '../../../../components/CustomFlatList';
 import CustomHeader from '../../../../components/customHeader/Index';
+import Gallery from '../../../../components/Gallery';
 import ReviewsCard from '../../../../components/ReviewsCard';
 import Typography from '../../../../components/Typography';
-import {verticalScale} from '../../../../shared/Scaling';
+import {scale, verticalScale} from '../../../../shared/Scaling';
 import utils from '../../../../shared/Utils';
 import homeService from '../../user/home/services/Home.service';
 
 const ProviderProfile: IProviderProfile = ({navigation}) => {
-  const {data} = homeService.useUser();
+  const {
+    data,
+    refetch: refetchUser,
+    isLoading: isLoadingUser,
+  } = homeService.useUser();
+  const {saveHelpersDetails, isPending: isSaving} =
+    homeService.useSaveHelpersDetails();
+  const {uploadBatch, isLoading: isUploading} = utils.useUploadImage();
 
-  const {data: reviews, total} = homeService.useReviews(3);
+  const [serviceImages, setServiceImages] = React.useState<string[]>([]);
+  const [selectedGalleryImages, setSelectedGalleryImages] = React.useState<
+    string[]
+  >([]);
+  const galleryBottomSheetRef = React.useRef<ActionSheetRef | null>(null);
+
+  const {
+    data: reviews,
+    total,
+    refetch: refetchReviews,
+    isLoading: isLoadingReviews,
+  } = homeService.useReviews(3);
   const [progress, setProgress] = React.useState(data?.ratedCompletedJobs);
+
+  React.useEffect(() => {
+    if (data?.serviceImages) {
+      const images =
+        typeof data.serviceImages === 'string'
+          ? data.serviceImages.split(',').filter(Boolean)
+          : Array.isArray(data.serviceImages)
+          ? data.serviceImages
+          : [];
+      setServiceImages(images);
+    }
+  }, [data?.serviceImages]);
 
   React.useEffect(() => {
     setProgress(data?.ratedCompletedJobs);
   }, [data?.ratedCompletedJobs]);
+
+  const handleImageSelection = React.useCallback(
+    async (images: string[] | string) => {
+      const imageArray = Array.isArray(images) ? images : [images];
+      setSelectedGalleryImages(imageArray);
+    },
+    [],
+  );
+
+  const toggleGalleryImageSelection = React.useCallback((uri: string) => {
+    setSelectedGalleryImages(prev => {
+      if (prev.includes(uri)) {
+        return prev.filter(img => img !== uri);
+      }
+      if (prev.length >= 10) {
+        return prev; // Max 10 images
+      }
+      return [...prev, uri];
+    });
+  }, []);
+
+  const handleRemoveImage = React.useCallback(
+    async (imageUri: string) => {
+      const updatedImages = serviceImages.filter(img => img !== imageUri);
+      console.log(imageUri);
+
+      setServiceImages(updatedImages);
+
+      // Save to backend
+      try {
+        await saveHelpersDetails({
+          serviceImages: updatedImages,
+        });
+      } catch (error) {
+        console.error('Failed to remove image:', error);
+        // Revert on error
+        setServiceImages(serviceImages);
+      }
+    },
+    [serviceImages, saveHelpersDetails],
+  );
+
+  const handleSaveImages = React.useCallback(async () => {
+    try {
+      if (selectedGalleryImages.length === 0) {
+        galleryBottomSheetRef.current?.hide();
+        return;
+      }
+
+      let uploadedImages: string[] = [];
+      const newImages = selectedGalleryImages.filter(
+        img => !img.startsWith('http') && !img.startsWith('https'),
+      );
+
+      if (newImages.length > 0) {
+        const uploadResult = await uploadBatch(newImages);
+        uploadedImages = uploadResult.attachments || [];
+      }
+
+      const existingImages = serviceImages.filter(
+        img => img.startsWith('http') || img.startsWith('https'),
+      );
+      const allImages = [...existingImages, ...uploadedImages];
+
+      await saveHelpersDetails({
+        serviceImages: allImages,
+      });
+
+      setServiceImages(allImages);
+      setSelectedGalleryImages([]);
+      galleryBottomSheetRef.current?.hide();
+    } catch (error) {
+      console.error('Failed to save images:', error);
+    }
+  }, [selectedGalleryImages, serviceImages, uploadBatch, saveHelpersDetails]);
 
   const tierColor: {[x: string]: string} = {
     bronze: '#E27C00',
@@ -37,12 +146,21 @@ const ProviderProfile: IProviderProfile = ({navigation}) => {
     platinum: Assets.DiamondBadge,
   };
 
-  const progressColor = tierColor[data?.tier?.toLowerCase()!];
-  const TierBadge = tierBadge[data?.tier?.toLowerCase()!];
+  const tier = data?.tier?.toLowerCase();
+  const progressColor = tier ? tierColor[tier] : tierColor.bronze;
+  const TierBadge = tier ? tierBadge[tier] : tierBadge.bronze;
+
+  const handleRefresh = React.useCallback(async () => {
+    await Promise.all([refetchUser(), refetchReviews()]);
+  }, [refetchUser, refetchReviews]);
+
+  const isRefreshing = isLoadingUser || isLoadingReviews;
 
   return (
     <Container flex={1}>
       <CustomFlatList
+        refreshing={isRefreshing}
+        onRefresh={handleRefresh}
         ListHeaderComponent={() => (
           <Container>
             <CustomHeader
@@ -62,7 +180,7 @@ const ProviderProfile: IProviderProfile = ({navigation}) => {
               borderRadius={20}>
               <Container flexDirection="row" gap={5} alignItems="center">
                 <CustomAvatar
-                  data={{image: Assets.WorkerAvatar1}}
+                  data={{image: data?.picture}}
                   badgeSize={20}
                   avatarSize={45}
                 />
@@ -197,12 +315,19 @@ const ProviderProfile: IProviderProfile = ({navigation}) => {
               padding={10}
               borderRadius={20}
               gap={9}>
-              <Container>
+              <Container flexDirection="row" justifyContent="space-between">
                 <Typography color="gray" fontWeight="medium">
                   GALLERY
                 </Typography>
               </Container>
-              <Container padding={3} gap={10}></Container>
+              <Container padding={3} gap={10}>
+                <AttachmentContainer
+                  data={serviceImages}
+                  canClose={true}
+                  onClose={handleRemoveImage}
+                  openGallery={() => galleryBottomSheetRef.current?.show()}
+                />
+              </Container>
             </Container>
 
             <Container
@@ -225,8 +350,32 @@ const ProviderProfile: IProviderProfile = ({navigation}) => {
 
               <Container type="scroll" padding={3} gap={10}>
                 {reviews.map(rate => (
-                  <ReviewsCard data={rate} />
+                  <ReviewsCard data={rate} key={rate.uuid} />
                 ))}
+
+                <Container
+                  backgroundColor="white"
+                  borderRadius={20}
+                  flexDirection="column"
+                  gap={15}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      navigation.navigate('Reviews', {
+                        uuid: data?.uuid!,
+                      });
+                    }}
+                    style={{
+                      padding: scale(20),
+                      backgroundColor: '#F9F9FB',
+                      borderRadius: 10,
+                      width: '95%',
+                      alignSelf: 'center',
+                    }}>
+                    <Typography textAlign="center" fontWeight="bold">
+                      View all
+                    </Typography>
+                  </TouchableOpacity>
+                </Container>
               </Container>
             </Container>
           </Container>
@@ -234,6 +383,56 @@ const ProviderProfile: IProviderProfile = ({navigation}) => {
         data={['']}
         keyExtractor={(item, ind) => ind.toString()}
       />
+
+      <Gallery
+        ref={galleryBottomSheetRef}
+        maxSelect={10}
+        close={() => {
+          galleryBottomSheetRef.current?.hide();
+          setSelectedGalleryImages([]);
+        }}
+        selectedImages={selectedGalleryImages}
+        toggleGalleryImageSelection={toggleGalleryImageSelection}
+        selectImages={handleImageSelection}
+        onClose={(uri: string) => {
+          // Remove from selectedGalleryImages when deselected in gallery
+          setSelectedGalleryImages(prev => prev.filter(img => img !== uri));
+        }}
+      />
+
+      {selectedGalleryImages.length > 0 && (
+        <View
+          style={{
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            right: 0,
+            backgroundColor: 'white',
+            padding: scale(16),
+            borderTopWidth: 1,
+            borderTopColor: '#F1F2F4',
+            flexDirection: 'row',
+            gap: 10,
+          }}>
+          <MainButton
+            mode="outlined"
+            borderColor="lightGrey"
+            color="danger"
+            width={'48%'}
+            onPress={() => {
+              setSelectedGalleryImages([]);
+              galleryBottomSheetRef.current?.hide();
+            }}>
+            Cancel
+          </MainButton>
+          <MainButton
+            width={'48%'}
+            loading={isUploading || isSaving}
+            onPress={handleSaveImages}>
+            {isUploading ? 'Uploading...' : 'Save'}
+          </MainButton>
+        </View>
+      )}
     </Container>
   );
 };

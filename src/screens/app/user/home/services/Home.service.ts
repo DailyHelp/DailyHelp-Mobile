@@ -346,7 +346,7 @@ class HomeService extends HomeApi {
     } = useMutation({
       mutationKey: ['send-offer'],
       mutationFn: async (body: SendOfferDto) => {
-        return await this.sendOffer(router.params?.uuid!, body);
+        return await this.sendOffer(body.uuid!, body);
       },
       onSuccess: () => {
         client.invalidateQueries({queryKey: ['conversation', 'conversations']});
@@ -400,7 +400,7 @@ class HomeService extends HomeApi {
         }
 
         body.attachments = attachments;
-        body.uuid = router.params?.uuid;
+        body.uuid = body.uuid || router.params?.uuid;
         body.amount = +body.amount!;
 
         sendOffer(body, {onSuccess: callBack});
@@ -445,46 +445,69 @@ class HomeService extends HomeApi {
   }
 
   useReviews(size = 10) {
-    const {query, appendPageData, data, fetchMore} = utils.usePagination<
-      Review[]
-    >({
-      pagination: {
-        limit: size,
-        orderBy: 'DESC',
-      },
-    });
+    const {query, appendPageData, data, fetchMore, resetHistory} =
+      utils.usePagination<Review[]>({
+        pagination: {
+          limit: size,
+          orderBy: 'DESC',
+          page: 1,
+        },
+      });
 
     const {
       data: reviews,
       isLoading,
       error,
+      refetch,
     } = useQuery({
-      queryKey: ['reviews'],
+      queryKey: ['reviews', query],
       queryFn: async () => await this.getReviews(query),
       enabled: Boolean(AppStorage.find('isAuthenticated')),
     });
 
     React.useEffect(() => {
-      if (reviews?.data) appendPageData(reviews?.data!);
-    }, [reviews?.data]);
+      if (reviews?.data) {
+        if (query.pagination?.page === 1) {
+          resetHistory();
+          appendPageData(reviews.data);
+        } else if (
+          reviews.data &&
+          data.length <= (reviews.pagination?.total || 0)
+        ) {
+          appendPageData(reviews.data);
+        }
+      }
+    }, [reviews?.data, query.pagination?.page]);
+
+    const controlledFetchMore = () => {
+      if (reviews?.pagination && !isLoading) {
+        const currentPage = reviews.pagination.page;
+        const totalPages = reviews.pagination.pages;
+
+        if (currentPage < totalPages) {
+          fetchMore();
+        }
+      }
+    };
 
     return {
       data: data as Review[],
       isLoading,
       error,
-      fetchMore,
-      total: reviews?.pagination.total,
+      fetchMore: controlledFetchMore,
+      refetch,
+      total: reviews?.pagination?.total,
     };
   }
 
   useUser() {
-    const {data, isLoading, error} = useQuery({
+    const {data, isLoading, error, refetch} = useQuery({
       queryKey: ['user'],
       queryFn: async () => await this.getUser(),
       enabled: Boolean(AppStorage.find('isAuthenticated')),
     });
 
-    return {data: data?.data, isLoading, error};
+    return {data: data?.data, isLoading, error, refetch};
   }
 
   useListCategory(type: ReasonType) {

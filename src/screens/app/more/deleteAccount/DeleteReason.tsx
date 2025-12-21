@@ -1,19 +1,26 @@
+import React from 'react';
 import {SheetManager} from 'react-native-actions-sheet';
+import {RadioButton} from 'react-native-paper';
 import {IDeleteReason} from '../../../../@types/routes';
 import Assets from '../../../../assets/Assets';
 import MainButton from '../../../../components/button/MainButton';
 import Container from '../../../../components/container/Index';
 import Typography from '../../../../components/Typography';
+import moreService from '../services/More.service';
+
+const consequences = [
+  'Not finding the right service',
+  'I have safety or trust concerns',
+  "I'm switching platforms",
+  'I have a second account',
+  "I'm just taking a break",
+  'Other',
+];
 
 const DeleteReason: IDeleteReason = ({navigation}) => {
-  const consequences = [
-    'Not finding the right service',
-    'I have safety or trust concerns',
-    "I'm switching platforms",
-    'I have a second account',
-    "I'm just taking a break",
-    'Other',
-  ];
+  const [value, setValue] = React.useState(consequences[0]);
+
+  const {mutate, isPending} = moreService.useDeletionRequest();
 
   return (
     <Container
@@ -32,22 +39,33 @@ const DeleteReason: IDeleteReason = ({navigation}) => {
         </Typography>
 
         <Container flexDirection="column" gap={10} padding={7}>
-          {consequences.map((con, ind) => (
-            <Container flexDirection="row" key={ind} gap={4}>
-              <Typography color="darkGray" fontWeight="bold">
-                .
-              </Typography>
-              <Typography color="darkGray" size="md">
-                {con}
-              </Typography>
-            </Container>
-          ))}
+          <RadioButton.Group
+            onValueChange={newValue => setValue(newValue)}
+            value={value}>
+            {consequences.map((con, ind) => (
+              <Container
+                flexDirection="row"
+                key={ind}
+                gap={4}
+                alignItems="center">
+                <RadioButton value={con} />
+                <Typography color="darkGray" size="md">
+                  {con}
+                </Typography>
+              </Container>
+            ))}
+          </RadioButton.Group>
         </Container>
       </Container>
 
       <Container gap={10}>
         <MainButton
-          onPress={() => SheetManager.show('ConfirmDelete')}
+          loading={isPending}
+          onPress={() => {
+            mutate(value, {
+              onSuccess: () => SheetManager.show('ConfirmDelete'),
+            });
+          }}
           icon={Assets.Trash}
           enableButtonColor="danger"
           color="white">

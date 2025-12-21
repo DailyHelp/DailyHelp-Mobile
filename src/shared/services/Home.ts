@@ -355,7 +355,7 @@ export default class HomeApi extends Http {
 
   protected async availability(availability: boolean) {
     const res = await this.fetchHandler({
-      path: Endpoints.availability,
+      path: Endpoints.availability(),
       method: 'PATCH',
       body: {availability},
     });

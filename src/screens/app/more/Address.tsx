@@ -1,5 +1,5 @@
 import React from 'react';
-import {TouchableOpacity} from 'react-native';
+import {TouchableOpacity, View} from 'react-native';
 import {SheetManager} from 'react-native-actions-sheet';
 import Icon from 'react-native-vector-icons/Feather';
 import {IAddress} from '../../../@types/routes';
@@ -43,9 +43,11 @@ const Address: IAddress = ({navigation, route}) => {
         width={'97'}
         justifyContent="space-between"
         marginTop={16}>
-        <Container width={'95'} flexDirection="row" gap={10}>
+        <Container flex={1} flexDirection="row" gap={10}>
           <Assets.SearchResult width={20} height={20} />
-          <Typography size="sm">{utils.ellipseText(name, 50)}</Typography>
+          <View style={{flex: 1, flexShrink: 1}}>
+            <Typography size="sm">{name}</Typography>
+          </View>
         </Container>
 
         <Container flexDirection="row" alignItems="center">
@@ -72,7 +74,7 @@ const Address: IAddress = ({navigation, route}) => {
 
   return (
     <Container flex={1} width={'full'} backgroundColor="white">
-      <Container width={'97'} alignSelf='center'>
+      <Container width={'97'} alignSelf="center">
         <CustomInput
           type="text"
           placeholder="Search address"
@@ -88,7 +90,7 @@ const Address: IAddress = ({navigation, route}) => {
             onClose(data) {
               try {
                 if (data) {
-                  onSubmit({...data, address: data.formatted_address});
+                  onSubmit({...data, address: data.address});
                 }
               } catch (error) {
                 console.error('Error in onClose callback:', error);
@@ -107,19 +109,21 @@ const Address: IAddress = ({navigation, route}) => {
         </Typography>
       </Container>
 
-      {isLoading ? (
-        <AddressSkeleton count={3} />
-      ) : (
-        <CustomFlatList<SaveLocationDto>
-          data={data}
-          refreshing={defaultLoading || deleteLoading}
-          onRefresh={refetch}
-          renderItem={({item}) => (
-            <Results name={item.description!} uuid={item.uuid!} />
-          )}
-          keyExtractor={(item, ind) => ind.toString()}
-        />
-      )}
+      <Container flex={1}>
+        {isLoading ? (
+          <AddressSkeleton count={3} />
+        ) : (
+          <CustomFlatList<SaveLocationDto>
+            data={data}
+            refreshing={defaultLoading || deleteLoading}
+            onRefresh={refetch}
+            renderItem={({item}) => (
+              <Results name={item.description!} uuid={item.uuid!} />
+            )}
+            keyExtractor={(item, ind) => ind.toString()}
+          />
+        )}
+      </Container>
     </Container>
   );
 };

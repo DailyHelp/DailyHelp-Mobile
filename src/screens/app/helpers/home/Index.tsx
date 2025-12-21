@@ -96,7 +96,12 @@ const Home: IHome = () => {
         borderTopRightRadius={20}>
         <HelperDetails data={data?.user} />
 
-        <BadgeContainer />
+        <BadgeContainer
+          data={{
+            count: data?.user.progressToNextTier!,
+            tier: data?.user.nextTier!,
+          }}
+        />
 
         <Container
           width={'95'}

@@ -72,12 +72,6 @@ type ICategoryActionSheet = {
   onClose: () => void;
   onCategoriesSelected?: (categories: string[]) => void;
 };
-
-type IConfirmDeleteActionSheet = {
-  onClose: () => void;
-  onCategoriesSelected?: (categories: string[]) => void;
-};
-
 type IFundWallet = {};
 
 type IDeleteAddress = {};
@@ -311,6 +305,7 @@ type IGallery = {
   selectImages?: (images: string[] | string) => void;
   selectedImages?: string[];
   toggleGalleryImageSelection?: (uri: string) => void;
+  onClose?: (uri: string) => void;
 };
 
 type ICategoryCard<D = any> = Props<
@@ -370,13 +365,13 @@ type IChatFooter<N = any> = Props<
   {uuid: string}
 >;
 
-type IMessages = Props<
+type IMessages<U = any> = Props<
   {
-    decline?: (value?: Message) => void;
-    cancel?: (value?: Message) => void;
-    accept?: (value?: Message) => void;
-    edit?: (value?: Message) => void;
-    negotiate?: (value?: Message) => void;
+    decline?: (value?: Message<U>) => void;
+    cancel?: (value?: Message<U>) => void;
+    accept?: (value?: Message<U>) => void;
+    edit?: (value?: Message<U>) => void;
+    negotiate?: (value?: Message<U>) => void;
     backgroundColor?: string;
     position?: 'left' | 'right';
     userType?: string;
@@ -387,10 +382,13 @@ type IMessages = Props<
     isNegotiating?: boolean;
     isPaymentMade?: boolean;
   },
-  Message
+  Message<U>
 >;
 
-type IAttachment = Props<{canClose?: boolean}, {attachment: string[]}>;
+type IAttachment = Props<
+  {canClose?: boolean; onClose?: (string: string) => void},
+  {attachment: string[]}
+>;
 
 type IEmptyState<N = any> = Props<{
   navigation?: N;
@@ -516,11 +514,12 @@ type IAttachmentContainer = Props<
     allowUpload?: boolean;
     Icon?: React.FunctionComponent<React.SVGAttributes<SVGElement>>;
     canClose?: boolean;
+    onClose?: (string: string) => void;
   },
   string[]
 >;
 
-type IBadgeContainer = Props<{}>;
+type IBadgeContainer = Props<{}, {count: string; tier: string}>;
 
 type IHelperDetails<D = any> = Props<{}, D>;
 
@@ -629,3 +628,18 @@ type IServiceImageGalleryProps = Props<{
   initialIndex?: number;
   onClose: () => void;
 }>;
+
+type VoiceCallParams = {
+  token?: string;
+  channelName?: string;
+  peerName?: string;
+  peerAvatar?: string;
+  isIncoming?: boolean;
+  autoJoin?: boolean;
+};
+
+type GlobalCallHandlerProps<N> = {
+  navigationRef: React.RefObject<N | null> | React.RefObject<N>;
+};
+
+type CallStatus = 'idle' | 'ringing' | 'connecting' | 'in-call' | 'ended';

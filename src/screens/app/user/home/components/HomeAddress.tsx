@@ -1,5 +1,10 @@
 import React from 'react';
-import {ScrollView, TouchableOpacity, View} from 'react-native';
+import {
+  ActivityIndicator,
+  ScrollView,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import ActionSheet, {
   ActionSheetRef,
   SheetManager,
@@ -18,12 +23,17 @@ const HomeAddress = React.forwardRef<
   SheetProps<'HomeAddress'>
 >((props, ref) => {
   const [search, setSearch] = React.useState('');
+  const [isLoadingLocation, setIsLoadingLocation] = React.useState(false);
+  const [loadingAddressUuid, setLoadingAddressUuid] = React.useState<
+    string | null
+  >(null);
 
   const {currentLocation, locations} = homeService.useLocation(search);
-  const {data, setAsDefault} = homeService.useSavedLocation();
+  const {data, setAsDefault, defaultLoading} = homeService.useSavedLocation();
 
   const getLocation = async () => {
     try {
+      setIsLoadingLocation(true);
       if (typeof currentLocation === 'function') {
         await currentLocation((address, metadata) => {
           SheetManager.hide('HomeAddress', {
@@ -39,6 +49,8 @@ const HomeAddress = React.forwardRef<
       }
     } catch (error) {
       console.error('Error in getLocation:', error);
+    } finally {
+      setIsLoadingLocation(false);
     }
   };
 
@@ -86,31 +98,61 @@ const HomeAddress = React.forwardRef<
             {/* Use current location */}
             <List.Item
               title="Use current location"
-              left={() => (
-                <Assets.CurrentLocation style={{marginTop: verticalScale(7)}} />
-              )}
+              left={() =>
+                isLoadingLocation ? (
+                  <ActivityIndicator size="small" color="#3CBF4E" />
+                ) : (
+                  <Assets.CurrentLocation
+                    style={{marginTop: verticalScale(7)}}
+                  />
+                )
+              }
               titleStyle={{color: '#3CBF4E', fontWeight: '600'}}
               onPress={getLocation}
+              disabled={isLoadingLocation}
             />
 
             {props.payload?.showCurrent && (
               <React.Fragment>
                 {/* Saved locations */}
-                {data?.slice(0, 3)?.map((address, idx) => (
-                  <List.Item
-                    key={address.uuid || idx}
-                    title={address.address || address.description}
-                    left={() => <Assets.SearchResult />}
-                    onPress={() => {
-                      let location = address.address;
-                      if (!location) location = address.description!;
+                {data?.slice(0, 3)?.map((address, idx) => {
+                  const isLoading = loadingAddressUuid === address.uuid;
+                  return (
+                    <List.Item
+                      key={address.uuid || idx}
+                      title={address.address || address.description}
+                      left={() =>
+                        isLoading ? (
+                          <ActivityIndicator
+                            size="small"
+                            color="#3CBF4E"
+                            style={{marginTop: verticalScale(7)}}
+                          />
+                        ) : (
+                          <Assets.SearchResult />
+                        )
+                      }
+                      onPress={() => {
+                        if (isLoading || defaultLoading) return;
 
-                      setAsDefault(address.uuid!, {
-                        onSuccess: () => SheetManager.hide('HomeAddress'),
-                      });
-                    }}
-                  />
-                ))}
+                        let location = address.address;
+                        if (!location) location = address.description!;
+
+                        setLoadingAddressUuid(address.uuid!);
+                        setAsDefault(address.uuid!, {
+                          onSuccess: () => {
+                            setLoadingAddressUuid(null);
+                            SheetManager.hide('HomeAddress');
+                          },
+                          onError: () => {
+                            setLoadingAddressUuid(null);
+                          },
+                        });
+                      }}
+                      disabled={isLoading || defaultLoading}
+                    />
+                  );
+                })}
               </React.Fragment>
             )}
 

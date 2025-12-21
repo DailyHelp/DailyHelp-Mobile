@@ -10,7 +10,9 @@ import moreService from '../more/services/More.service';
 import utils from '../../../shared/Utils';
 
 const Checkout: ICheckout = ({route, navigation}) => {
-  const [selectedPayment, setSelectedPayment] = React.useState('online');
+  const [selectedPayment, setSelectedPayment] = React.useState<
+    'PAYSTACK' | 'WALLET'
+  >('PAYSTACK');
   const [description, setDescription] = React.useState('');
 
   const {data, isPending, mutate} = moreService.useFundWallet();
@@ -113,16 +115,16 @@ const Checkout: ICheckout = ({route, navigation}) => {
             id="online"
             icon="🌐"
             title="Pay online"
-            selected={selectedPayment === 'online'}
-            onPress={id => setSelectedPayment(id.toString())}
+            selected={selectedPayment === 'PAYSTACK'}
+            onPress={id => setSelectedPayment('PAYSTACK')}
           />
           <PaymentOption
             id="wallet"
             icon="💳"
             title="Pay with wallet balance"
             subtitle="₦40,000"
-            selected={selectedPayment === 'wallet'}
-            onPress={id => setSelectedPayment(id.toString())}
+            selected={selectedPayment === 'WALLET'}
+            onPress={id => setSelectedPayment('WALLET')}
           />
         </View>
       </View>
@@ -144,6 +146,7 @@ const Checkout: ICheckout = ({route, navigation}) => {
               conversationUuid: route.params?.conversationUuid!,
               offerUuid: route.params?.offerUuid!,
               purpose: route.params?.purpose!,
+              paymentMethod: selectedPayment,
             });
           }}>
           Make payment

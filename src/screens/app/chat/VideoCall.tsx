@@ -1,3 +1,5 @@
+import {useFocusEffect} from '@react-navigation/native';
+import React from 'react';
 import {
   PermissionsAndroid,
   Platform,
@@ -5,52 +7,39 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React from 'react';
-import Icon from 'react-native-vector-icons/AntDesign';
-import {useFocusEffect} from '@react-navigation/native';
 import {
   ChannelProfileType,
   ClientRoleType,
   IRtcEngine,
   IRtcEngineEventHandler,
-  RtcConnection,
   RenderModeType,
+  RtcConnection,
   RtcSurfaceView,
   createAgoraRtcEngine,
 } from 'react-native-agora';
-import Typography from '../../../components/Typography';
-import Container from '../../../components/container/Index';
+import Icon from 'react-native-vector-icons/AntDesign';
+import {IVideoCall} from '../../../@types/routes';
 import CustomAvatar from '../../../components/CustomAvatar';
+import Typography from '../../../components/Typography';
 import MainButton from '../../../components/button/MainButton';
 import OutlineButton from '../../../components/button/OutlineButton';
+import Container from '../../../components/container/Index';
 import {scale, verticalScale} from '../../../shared/Scaling';
-import Assets from '../../../assets/Assets';
-import homeService from '../user/home/services/Home.service';
 import chatService from './services/Chat.service';
-import {IVideoCall} from '../../../@types/routes';
-
-type VideoCallParams = {
-  token?: string;
-  channelName?: string;
-  peerAvatar?: string;
-  isIncoming?: boolean;
-  autoJoin?: boolean;
-};
 
 const VideoCall: IVideoCall = ({navigation, route}) => {
-  const user = homeService.useUser();
   const {config} = chatService.useAgoraToken(route.params?.conversationUuid!);
-  const params = (route?.params || {}) as Partial<VideoCallParams>;
+  const params = route?.params as Partial<VoiceCallParams>;
 
   const agoraEngineRef = React.useRef<IRtcEngine | null>(null);
   const eventHandler = React.useRef<IRtcEngineEventHandler | null>(null);
   const ringtoneIntervalRef = React.useRef<NodeJS.Timeout | null>(null);
   const isMountedRef = React.useRef(false);
+  const joinTimeoutRef = React.useRef<NodeJS.Timeout | null>(null);
 
   const [isJoined, setIsJoined] = React.useState(false);
-  const [callStatus, setCallStatus] = React.useState<
-    'idle' | 'ringing' | 'connecting' | 'in-call' | 'ended'
-  >('ringing');
+  const [isEngineReady, setIsEngineReady] = React.useState(false);
+  const [callStatus, setCallStatus] = React.useState<CallStatus>('ringing');
   const [isIncoming] = React.useState<boolean>(Boolean(params?.isIncoming));
   const [peerAvatar] = React.useState<string | undefined>(params?.peerAvatar);
 
@@ -100,44 +89,75 @@ const VideoCall: IVideoCall = ({navigation, route}) => {
   }, [isIncoming, callStatus, playRingtone, stopRingtone]);
 
   const setupEventHandler = React.useCallback(() => {
-    if (!agoraEngineRef.current) {
-      return;
+    if (!agoraEngineRef.current) return;
+
+    // Unregister any existing handler first
+    if (eventHandler.current) {
+      agoraEngineRef.current.unregisterEventHandler(eventHandler.current);
+    }
+
+    // Clear any existing join timeout
+    if (joinTimeoutRef.current) {
+      clearTimeout(joinTimeoutRef.current);
+      joinTimeoutRef.current = null;
     }
 
     eventHandler.current = {
-      onJoinChannelSuccess: (_connection: RtcConnection) => {
+      onJoinChannelSuccess: (_connection: RtcConnection, elapsed: number) => {
+        console.log('Successfully joined video channel, elapsed:', elapsed);
         setIsJoined(true);
         setCallStatus('in-call');
+
+        // Clear join timeout on success
+        if (joinTimeoutRef.current) {
+          clearTimeout(joinTimeoutRef.current);
+          joinTimeoutRef.current = null;
+        }
+
         stopRingtone();
       },
       onUserJoined: (_connection: RtcConnection, uid: number) => {
+        console.log('Remote user ' + uid + ' joined video channel');
         setRemoteUid(uid);
       },
-      onUserOffline: (_connection: RtcConnection, uid: number) => {
+      onUserOffline: (
+        _connection: RtcConnection,
+        uid: number,
+        reason: number,
+      ) => {
+        console.log('Remote user ' + uid + ' left the video channel');
         if (remoteUid === uid) {
           setRemoteUid(null);
         }
-        setCallStatus('ended');
         stopRingtone();
+        setCallStatus('ended');
         setTimeout(() => {
           navigation?.goBack();
         }, 1000);
       },
       onError: (err: number, msg: string) => {
         console.error('Agora error:', err, msg);
-        setCallStatus('ended');
         stopRingtone();
+
+        // Clear join timeout on error
+        if (joinTimeoutRef.current) {
+          clearTimeout(joinTimeoutRef.current);
+          joinTimeoutRef.current = null;
+        }
+
+        // Reset status so UI can recover from errors
+        setCallStatus('ended');
       },
-      onLeaveChannel: () => {
+      onLeaveChannel: (_connection: RtcConnection, stats: any) => {
         setIsJoined(false);
         setRemoteUid(null);
-        setCallStatus('ended');
         stopRingtone();
+        setCallStatus('ended');
       },
     };
-
     agoraEngineRef.current.registerEventHandler(eventHandler.current);
-  }, [navigation, remoteUid, stopRingtone]);
+    setIsEngineReady(true);
+  }, [navigation, stopRingtone]);
 
   const getPermission = React.useCallback(async () => {
     if (Platform.OS === 'android') {
@@ -166,6 +186,7 @@ const VideoCall: IVideoCall = ({navigation, route}) => {
       agoraEngine.startPreview();
     } catch (error) {
       console.error('Failed to initialize Agora video engine:', error);
+      setIsEngineReady(false);
       setCallStatus('ended');
     }
   }, [config?.appId, getPermission]);
@@ -173,9 +194,19 @@ const VideoCall: IVideoCall = ({navigation, route}) => {
   const cleanupAgoraEngine = React.useCallback(() => {
     stopRingtone();
 
+    // Clear join timeout
+    if (joinTimeoutRef.current) {
+      clearTimeout(joinTimeoutRef.current);
+      joinTimeoutRef.current = null;
+    }
+
+    setIsEngineReady(false);
+
     if (agoraEngineRef.current) {
       try {
-        agoraEngineRef.current.unregisterEventHandler(eventHandler.current!);
+        if (eventHandler.current) {
+          agoraEngineRef.current.unregisterEventHandler(eventHandler.current);
+        }
         agoraEngineRef.current.leaveChannel();
         agoraEngineRef.current.stopPreview();
         agoraEngineRef.current.release();
@@ -188,14 +219,25 @@ const VideoCall: IVideoCall = ({navigation, route}) => {
 
   React.useEffect(() => {
     if (!config?.appId) {
+      setIsEngineReady(false);
       return;
     }
 
-    const init = async () => {
-      await setupVideoSDKEngine();
-      setupEventHandler();
-    };
+    setIsEngineReady(false);
 
+    const init = async () => {
+      try {
+        await setupVideoSDKEngine();
+        // Only setup event handler if engine was successfully created
+        if (agoraEngineRef.current) {
+          setupEventHandler();
+        }
+      } catch (error) {
+        console.error('Failed to initialize Agora video engine:', error);
+        setIsEngineReady(false);
+        setCallStatus('ended');
+      }
+    };
     init();
 
     return cleanupAgoraEngine;
@@ -209,20 +251,51 @@ const VideoCall: IVideoCall = ({navigation, route}) => {
   React.useEffect(() => {
     const autoJoin = params?.autoJoin;
     if (!isIncoming && (autoJoin ?? true)) {
+      // Wait for engine to be ready before attempting to join
       if (
         config?.token &&
         config?.channel &&
         agoraEngineRef.current &&
-        !isJoined
+        isEngineReady &&
+        !isJoined &&
+        callStatus === 'ringing'
       ) {
+        console.log('Auto-joining video channel with engine ready');
         join(config.token, config.channel);
       }
     }
-  }, [isIncoming, config?.token, config?.channel, params?.autoJoin, isJoined]);
+  }, [
+    isIncoming,
+    config?.token,
+    config?.channel,
+    params?.autoJoin,
+    isEngineReady,
+    isJoined,
+    callStatus,
+  ]);
 
   const join = async (token?: string, channel?: string) => {
-    if (isJoined || !agoraEngineRef.current) {
+    if (isJoined || !agoraEngineRef.current || !isEngineReady) {
+      console.warn(
+        'Cannot join video: isJoined=',
+        isJoined,
+        'engine=',
+        !!agoraEngineRef.current,
+        'ready=',
+        isEngineReady,
+      );
       return;
+    }
+
+    // Ensure event handler is registered before joining
+    if (!eventHandler.current && agoraEngineRef.current) {
+      setupEventHandler();
+    }
+
+    // Clear any existing timeout
+    if (joinTimeoutRef.current) {
+      clearTimeout(joinTimeoutRef.current);
+      joinTimeoutRef.current = null;
     }
 
     try {
@@ -232,11 +305,21 @@ const VideoCall: IVideoCall = ({navigation, route}) => {
       setLocalUid(resolvedUid);
 
       if (!resolvedToken || !resolvedChannel) {
-        console.error('Missing call credentials');
+        console.error('Missing video call credentials');
+        setCallStatus('ringing');
         return;
       }
 
       setCallStatus('connecting');
+      console.log('Attempting to join video channel:', resolvedChannel);
+
+      // Set a timeout to prevent infinite connecting state
+      joinTimeoutRef.current = setTimeout(() => {
+        console.warn('Join video channel timeout - resetting to ringing state');
+        // Always reset back to ringing on timeout so user can retry/cancel
+        setCallStatus('ringing');
+        joinTimeoutRef.current = null;
+      }, 15000); // 15 second timeout
 
       await agoraEngineRef.current.joinChannel(
         resolvedToken,
@@ -253,6 +336,13 @@ const VideoCall: IVideoCall = ({navigation, route}) => {
       );
     } catch (error) {
       console.error('Failed to join video channel:', error);
+
+      // Clear timeout on error
+      if (joinTimeoutRef.current) {
+        clearTimeout(joinTimeoutRef.current);
+        joinTimeoutRef.current = null;
+      }
+
       setCallStatus('ringing');
     }
   };
@@ -275,28 +365,25 @@ const VideoCall: IVideoCall = ({navigation, route}) => {
 
   const onAccept = async () => {
     stopRingtone();
-    if (config?.token && config?.channel && agoraEngineRef.current) {
+    if (
+      (route.params?.token || config?.token) &&
+      (route.params?.channelName || config?.channel) &&
+      agoraEngineRef.current &&
+      isEngineReady
+    ) {
       try {
-        const resolvedUid = config?.uid ? parseInt(config.uid, 10) : 0;
-        setLocalUid(resolvedUid);
-        setCallStatus('connecting');
-
-        await agoraEngineRef.current.joinChannel(
-          config.token,
-          config.channel,
-          resolvedUid,
-          {
-            channelProfile: ChannelProfileType.ChannelProfileCommunication,
-            clientRoleType: ClientRoleType.ClientRoleBroadcaster,
-            publishCameraTrack: true,
-            publishMicrophoneTrack: true,
-            autoSubscribeAudio: true,
-            autoSubscribeVideo: true,
-          },
+        await join(
+          route.params?.token || config?.token,
+          route.params?.channelName || config?.channel,
         );
-      } catch (error) {
-        console.error('Failed to accept video call:', error);
+      } catch (e) {
+        console.error('Failed to accept video call:', e);
+        setCallStatus('ringing');
       }
+    } else {
+      console.warn(
+        'Cannot accept video call: engine not ready or missing config',
+      );
     }
   };
 
@@ -370,7 +457,7 @@ const VideoCall: IVideoCall = ({navigation, route}) => {
         <CustomAvatar
           showBadge={false}
           avatarSize={180}
-          data={{image: peerAvatar || Assets.Worker1}}
+          data={{image: peerAvatar}}
         />
         <Typography
           fontWeight="italics"

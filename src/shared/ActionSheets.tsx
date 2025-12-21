@@ -16,6 +16,7 @@ import DeleteAddress from '../screens/app/more/components/DeleteAddress';
 import FullChatActivated from '../screens/app/chat/components/FullChatActivated';
 import ChatDisclaimer from '../screens/app/chat/components/ChatDisclaimer';
 import WithdrawalModal from '../screens/app/more/bankAccount/components/WithdrawalModal';
+import CustomDateFilter from '../screens/app/more/components/CustomDateFilter';
 import FundWalletDto from '../screens/app/more/dto/FundWallet.dto';
 import {IHomeRoute, Navigate} from '../@types/routes';
 
@@ -36,6 +37,7 @@ registerSheet('DeleteAddress', DeleteAddress);
 registerSheet('FullChatActivated', FullChatActivated);
 registerSheet('ChatDisclaimer', ChatDisclaimer);
 registerSheet('Withdrawal', WithdrawalModal);
+registerSheet('CustomDateFilter', CustomDateFilter);
 
 export type ActionSheetLoader = {
   isDefaultLoading?: boolean;
@@ -163,6 +165,16 @@ declare module 'react-native-actions-sheet' {
     }>;
     Withdrawal: SheetDefinition<{
       payload?: Partial<FundWalletDto>;
+    }>;
+    CustomDateFilter: SheetDefinition<{
+      payload?: {
+        startDate?: Date;
+        endDate?: Date;
+      };
+      returnValue?: {
+        startDate?: Date;
+        endDate?: Date;
+      };
     }>;
   }
 }

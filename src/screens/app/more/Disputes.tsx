@@ -11,17 +11,19 @@ import DisputesDto from './dto/Disputes.dto';
 
 const Disputes: IDisputes = ({navigation, route}) => {
   utils.useHideBottomTab(navigation);
-  const [index, setIndex] = React.useState('ongoing');
+  const [index, setIndex] = React.useState('PENDING');
   const {data, isLoading, fetchMore} = moreService.useDisputes(index);
+  console.log(data);
+  
   const tabs = [
-    {title: 'Ongoing', slug: 'ongoing'},
-    {title: 'Resolved', slug: 'resolved'},
+    {title: 'Ongoing', slug: 'PENDING'},
+    {title: 'Resolved', slug: 'RESOLVED'},
   ];
 
   return (
     <View style={{flex: 1}}>
       <View style={{backgroundColor: 'white', padding: scale(16)}}>
-        <Tabs tabs={tabs} initialTab={index} onPress={setIndex} />
+        <Tabs tabs={tabs} initialTab={'PENDING'} onPress={setIndex} />
       </View>
 
       <CustomFlatList<DisputesDto>

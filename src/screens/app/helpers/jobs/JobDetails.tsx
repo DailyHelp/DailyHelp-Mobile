@@ -133,7 +133,7 @@ const JobDetails: IViewDetails = ({navigation, route}) => {
               </View>
             )}
 
-            {jobDetails?.data.job.code && (
+            {jobDetails?.data.job.code && type === 'pending' && (
               <Container gap={7} width={'90'} alignSelf="center">
                 <Container
                   flexDirection="row"
@@ -150,9 +150,7 @@ const JobDetails: IViewDetails = ({navigation, route}) => {
                     Remind the client to start once you arrive.
                   </Typography>
                 </Container>
-                {type === 'pending' && (
-                  <CodeContainer code={jobDetails.data.job.code} />
-                )}
+                <CodeContainer code={jobDetails.data.job.code} />
               </Container>
             )}
 

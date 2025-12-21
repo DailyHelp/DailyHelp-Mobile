@@ -5,7 +5,7 @@ import {scale, verticalScale} from '../../../../../shared/Scaling';
 import {ProgressBar} from 'react-native-paper';
 import React from 'react';
 
-const BadgeContainer: IBadgeContainer = ({marginTop}) => {
+const BadgeContainer: IBadgeContainer = ({marginTop, data}) => {
   return (
     <LinearGradient
       style={{
@@ -25,10 +25,10 @@ const BadgeContainer: IBadgeContainer = ({marginTop}) => {
           width={'75'}>
           <Container flexDirection="row">
             <Typography size="sm" color="black" fontWeight="semibold">
-              Become silver rated
+              Become {data?.tier?.toLowerCase()} rated
             </Typography>
           </Container>
-          <Typography>0% completed</Typography>
+          <Typography>{data?.count} completed</Typography>
         </Container>
 
         <ProgressBar

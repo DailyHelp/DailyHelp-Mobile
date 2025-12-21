@@ -7,11 +7,14 @@ import MainButton from '../../components/button/MainButton';
 import Container from '../../components/container/Index';
 import Typography from '../../components/Typography';
 import {appStore} from '../../shared/stores/appStore';
+import {UserTypes} from '../../shared/Constant';
 
 const VerifyIdentity: IVerifyIdentity = ({route, navigation}) => {
   React.useEffect(() => {
     BackHandler.addEventListener('hardwareBackPress', () => false);
   }, []);
+
+  const isCustomer = appStore.user_types === UserTypes.CUSTOMER;
 
   return (
     <Container width={'full'} flex={1}>
@@ -44,20 +47,24 @@ const VerifyIdentity: IVerifyIdentity = ({route, navigation}) => {
               onPress={() => {
                 navigation.navigate('PersonalInformation', {
                   userType: route.params?.userType,
+                  first_name: route.params?.first_name,
+                  last_name: route.params?.last_name,
                 });
               }}>
               Verify identity
             </MainButton>
-            <MainButton
-              mode="text"
-              enableButtonColor="offWhite"
-              color="black"
-              width={'95'}
-              onPress={() => {
-                appStore.setIsAuthenticated(true, route.params?.userType);
-              }}>
-              Do this later
-            </MainButton>
+            {isCustomer && (
+              <MainButton
+                mode="text"
+                enableButtonColor="offWhite"
+                color="black"
+                width={'95'}
+                onPress={() => {
+                  appStore.setIsAuthenticated(true, route.params?.userType);
+                }}>
+                Do this later
+              </MainButton>
+            )}
           </Container>
         </Container>
       </Container>

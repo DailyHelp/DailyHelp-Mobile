@@ -8,4 +8,5 @@ export default class FundWalletDto {
   amount?: number;
   purpose?: string;
   bankAccountUuid?: string;
+  paymentMethod?: 'PAYSTACK' | 'WALLET' = 'PAYSTACK';
 }

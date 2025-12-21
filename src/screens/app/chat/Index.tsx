@@ -93,6 +93,7 @@ const Chat: IChat = ({navigation}) => {
           picture,
           hasActiveJob: item.hasActiveJob,
           isOnline: item.spOnline,
+          serviceProviderId: item.serviceProviderId,
         });
       };
 
@@ -122,7 +123,7 @@ const Chat: IChat = ({navigation}) => {
             }}>
             <View style={{flexDirection: 'row', gap: 10}}>
               <CustomAvatar
-                data={{image: picture || Assets.Worker1, badge: item.spTier}}
+                data={{image: picture, badge: item.spTier}}
                 avatarSize={50}
               />
 
@@ -170,22 +171,24 @@ const Chat: IChat = ({navigation}) => {
               </View>
             </View>
 
-            <View
-              style={{
-                flexDirection: 'row',
-                gap: 3,
-                alignItems: 'center',
-                justifyContent: 'space-between',
-              }}>
-              <Assets.GreenMark style={{marginTop: verticalScale(3)}} />
-              <Typography
-                currency
-                color="lightGreen"
-                fontWeight="medium"
-                fontType="CabinetGrotesk">
-                {item.offerPrice}
-              </Typography>
-            </View>
+            {item.offerPrice && (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  gap: 3,
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                }}>
+                <Assets.GreenMark style={{marginTop: verticalScale(3)}} />
+                <Typography
+                  currency
+                  color="lightGreen"
+                  fontWeight="medium"
+                  fontType="CabinetGrotesk">
+                  {item.offerPrice}
+                </Typography>
+              </View>
+            )}
           </View>
           <Divider style={{width: '80%', alignSelf: 'flex-end'}} />
         </TouchableOpacity>

@@ -47,18 +47,26 @@ export class MoreService extends MoreApi {
         filter: {status},
       });
 
+    const statusRef = React.useRef(status);
+    const isInitialMount = React.useRef(true);
+
     useFocusEffect(
       React.useCallback(() => {
-        resetHistory();
-        setQuery(prev => ({
-          ...prev,
-          filter: {status},
-          pagination: {
-            ...prev.pagination,
-            page: 1,
-          },
-        }));
-      }, [status]),
+        // Only reset on mount or when status changes
+        if (isInitialMount.current || statusRef.current !== status) {
+          statusRef.current = status;
+          isInitialMount.current = false;
+          resetHistory();
+          setQuery(prev => ({
+            ...prev,
+            filter: {status},
+            pagination: {
+              ...prev.pagination,
+              page: 1,
+            },
+          }));
+        }
+      }, [status, resetHistory, setQuery]),
     );
 
     const {
@@ -75,14 +83,35 @@ export class MoreService extends MoreApi {
       if (disputes?.data) {
         if (query.pagination?.page === 1) {
           resetHistory();
-          appendPageData(disputes.data.disputes || []);
-        } else {
-          appendPageData(disputes.data.disputes || []);
+          appendPageData(disputes.data || []);
+        } else if (
+          disputes?.pagination &&
+          data.length < (disputes.pagination?.total || 0)
+        ) {
+          appendPageData(disputes.data || []);
         }
       }
-    }, [disputes?.data, query?.pagination?.page, resetHistory, appendPageData]);
+    }, [
+      disputes?.data,
+      disputes?.pagination,
+      query?.pagination?.page,
+      resetHistory,
+      appendPageData,
+      data.length,
+    ]);
 
-    return {data, isLoading, error, fetchMore};
+    const controlledFetchMore = React.useCallback(() => {
+      if (disputes?.pagination && !isLoading) {
+        const currentPage = query.pagination?.page!;
+        const totalPages = disputes.pagination?.pages!;
+
+        if (currentPage < totalPages) {
+          fetchMore();
+        }
+      }
+    }, [disputes?.pagination, isLoading, query.pagination?.page, fetchMore]);
+
+    return {data, isLoading, error, fetchMore: controlledFetchMore};
   }
 
   useWalletBalance() {
@@ -183,15 +212,24 @@ export class MoreService extends MoreApi {
     };
   }
 
-  useAnalytics() {
+  useAnalytics(startDate?: Date, endDate?: Date) {
+    // Format dates to ISO 8601 strings for the API
+    const startDateString = startDate?.toISOString();
+    const endDateString = endDate?.toISOString();
+
     const {
       data: analytics,
       isLoading,
       error,
       refetch,
     } = useQuery({
-      queryKey: ['analytics'],
-      queryFn: async () => await this.analytics(),
+      queryKey: ['analytics', startDateString, endDateString],
+      queryFn: async () => {
+        return await this.analytics({
+          startDate: startDateString,
+          endDate: endDateString,
+        });
+      },
       enabled: Boolean(AppStorage.find('isAuthenticated')),
     });
 
@@ -306,6 +344,40 @@ export class MoreService extends MoreApi {
       mutationKey: ['add-bank'],
       mutationFn: async (dto: ResolveBankDto) => {
         return await this.resolveBankAccount(dto);
+      },
+      onError: err => new CatchError(err, true),
+    });
+
+    return {
+      data,
+      isPending,
+      mutate,
+      isSuccess,
+    };
+  }
+
+  useConfirmDelete() {
+    const {data, isPending, isSuccess, mutate} = useMutation({
+      mutationKey: ['confirm-delete'],
+      mutationFn: async (dto: {uuid: string; password: string}) => {
+        return await this.confirmDelete(dto.uuid, dto.password);
+      },
+      onError: err => new CatchError(err, true),
+    });
+
+    return {
+      data,
+      isPending,
+      mutate,
+      isSuccess,
+    };
+  }
+
+  useDeletionRequest() {
+    const {data, isPending, isSuccess, mutate} = useMutation({
+      mutationKey: ['delete-request'],
+      mutationFn: async (reason: string) => {
+        return await this.deletionRequest(reason);
       },
       onError: err => new CatchError(err, true),
     });

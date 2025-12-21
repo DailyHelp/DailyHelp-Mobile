@@ -1,5 +1,7 @@
-import React, {useState} from 'react';
+import dayjs from 'dayjs';
+import React, {useMemo, useState} from 'react';
 import {ScrollView, TouchableOpacity, View} from 'react-native';
+import {SheetManager} from 'react-native-actions-sheet';
 import {IAnalytics} from '../../../../@types/routes';
 import Container from '../../../../components/container/Index';
 import Typography from '../../../../components/Typography';
@@ -16,11 +18,63 @@ import moreService from '../services/More.service';
 const Analytics: IAnalytics = ({navigation}) => {
   utils.useHideBottomTab(navigation);
 
-  const {analytics} = moreService.useAnalytics();
-
   const [selectedDateFilter, setSelectedDateFilter] = useState('Today');
+  const [customStartDate, setCustomStartDate] = useState<Date | undefined>();
+  const [customEndDate, setCustomEndDate] = useState<Date | undefined>();
+
+  // Calculate date ranges for predefined filters
+  const getDateRangeForFilter = (filter: string): {startDate?: Date; endDate?: Date} => {
+    const now = dayjs();
+    
+    switch (filter) {
+      case 'Today': {
+        const start = now.startOf('day').toDate();
+        const end = now.endOf('day').toDate();
+        return {startDate: start, endDate: end};
+      }
+      case 'Current week': {
+        const start = now.startOf('week').toDate();
+        const end = now.endOf('week').toDate();
+        return {startDate: start, endDate: end};
+      }
+      case 'Last week': {
+        const lastWeek = now.subtract(1, 'week');
+        const start = lastWeek.startOf('week').toDate();
+        const end = lastWeek.endOf('week').toDate();
+        return {startDate: start, endDate: end};
+      }
+      case 'This month': {
+        const start = now.startOf('month').toDate();
+        const end = now.endOf('month').toDate();
+        return {startDate: start, endDate: end};
+      }
+      case 'This Year': {
+        const start = now.startOf('year').toDate();
+        const end = now.endOf('year').toDate();
+        return {startDate: start, endDate: end};
+      }
+      case 'All time':
+        return {}; // No date range for all time
+      default:
+        return {};
+    }
+  };
+
+  // Calculate dates based on selected filter
+  const {startDate, endDate} = useMemo(() => {
+    if (selectedDateFilter === 'Custom date') {
+      return {
+        startDate: customStartDate,
+        endDate: customEndDate,
+      };
+    }
+    return getDateRangeForFilter(selectedDateFilter);
+  }, [selectedDateFilter, customStartDate, customEndDate]);
+
+  const {analytics} = moreService.useAnalytics(startDate, endDate);
 
   const dateFilters = [
+    'Custom date',
     'Today',
     'Current week',
     'Last week',
@@ -28,6 +82,27 @@ const Analytics: IAnalytics = ({navigation}) => {
     'This Year',
     'All time',
   ];
+
+  const handleDateFilterPress = async (filter: string) => {
+    if (filter === 'Custom date') {
+      const result = await SheetManager.show('CustomDateFilter', {
+        payload: {
+          startDate: customStartDate,
+          endDate: customEndDate,
+        },
+      });
+      if (result?.startDate || result?.endDate) {
+        setSelectedDateFilter('Custom date');
+        setCustomStartDate(result?.startDate);
+        setCustomEndDate(result?.endDate);
+      }
+    } else {
+      setSelectedDateFilter(filter);
+      // Clear custom dates when selecting a predefined filter
+      setCustomStartDate(undefined);
+      setCustomEndDate(undefined);
+    }
+  };
 
   // Revenue data and progress (0-1) for rings to match mock
   const revenueProgress = {
@@ -67,39 +142,36 @@ const Analytics: IAnalytics = ({navigation}) => {
   return (
     <View style={{flex: 1, backgroundColor: '#F9F9FB'}}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        {/* Date Filter - EXACTLY as in image */}
-        <View style={{padding: scale(16), backgroundColor: 'white'}}>
+        {/* Date Filter */}
+        <View style={{padding: scale(16), backgroundColor: Colors.lightGrey}}>
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            <View style={{flexDirection: 'row', gap: 5}}>
-              {dateFilters.map((filter, index) => (
-                <TouchableOpacity
-                  key={index}
-                  style={{
-                    flexDirection: 'column',
-                    borderRadius: 15,
-                    alignItems: 'center',
-                    padding: scale(13),
-                    borderWidth: 1,
-                    borderColor:
-                      selectedDateFilter === filter
-                        ? Colors['primary']
-                        : 'transparent',
-                    backgroundColor:
-                      selectedDateFilter === filter
-                        ? Colors['lightPrimary']
-                        : 'transparent',
-                  }}
-                  onPress={() => setSelectedDateFilter(filter)}>
-                  <Typography
-                    textAlign="center"
-                    color={'gray'}
-                    fontWeight={
-                      selectedDateFilter === filter ? 'bold' : 'regular'
-                    }>
-                    {filter}
-                  </Typography>
-                </TouchableOpacity>
-              ))}
+            <View style={{flexDirection: 'row', gap: 8}}>
+              {dateFilters.map((filter, index) => {
+                const isActive = selectedDateFilter === filter;
+                return (
+                  <TouchableOpacity
+                    key={index}
+                    style={{
+                      borderRadius: 15,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      paddingVertical: scale(10),
+                      paddingHorizontal: scale(16),
+                      borderWidth: isActive ? .5 : 0,
+                      borderColor: isActive ? Colors.lemonGreen : 'transparent',
+                      backgroundColor: isActive ? Colors.lightPrimary : Colors.white,
+                    }}
+                    onPress={() => handleDateFilterPress(filter)}>
+                    <Typography
+                      textAlign="center"
+                      color={'gray'}
+                      fontWeight={isActive ? 'bold' : 'regular'}
+                      size="sm">
+                      {filter}
+                    </Typography>
+                  </TouchableOpacity>
+                );
+              })}
             </View>
           </ScrollView>
         </View>

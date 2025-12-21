@@ -47,10 +47,7 @@ export default class MoreApi extends Http {
       path: Endpoints.disputes(query),
       method: 'GET',
     });
-    const data = await this.handleResponse<
-      {disputes: DisputesDto[]; totalDisputes: number},
-      true
-    >(res);
+    const data = await this.handleResponse<DisputesDto[], true>(res);
 
     return data;
   }
@@ -65,9 +62,9 @@ export default class MoreApi extends Http {
     return data;
   }
 
-  protected async analytics() {
+  protected async analytics(query?: {startDate?: string; endDate?: string}) {
     const res = await this.fetchHandler({
-      path: Endpoints.analytics(),
+      path: Endpoints.analytics(query),
       method: 'GET',
     });
     const data = await this.handleResponse<AnalyticsDto>(res);
@@ -166,6 +163,28 @@ export default class MoreApi extends Http {
       body,
     });
     const data = await this.handleResponse<{data: {account_name: string}}>(res);
+
+    return data;
+  }
+
+  protected async confirmDelete(uuid: string, password: string) {
+    const res = await this.fetchHandler({
+      path: Endpoints.confirmDelete(uuid),
+      method: 'DELETE',
+      body: {password},
+    });
+    const data = await this.handleResponse(res);
+
+    return data;
+  }
+
+  protected async deletionRequest(reason: string) {
+    const res = await this.fetchHandler({
+      path: Endpoints.deletionRequest(),
+      method: 'POST',
+      body: {reason},
+    });
+    const data = await this.handleResponse(res);
 
     return data;
   }

@@ -28,7 +28,7 @@ const More: IMore = ({navigation}) => {
     ) {
       appStore.setIsIdentityVerified(false);
     }
-  }, [data]);
+  }, [data, user_type]);
 
   let verificationUrl = utils.getVerificationRoutes(
     {
@@ -147,6 +147,7 @@ const More: IMore = ({navigation}) => {
                 backgroundColor: isVerified ? '#FDE9E7' : '#FDE9E7',
                 padding: scale(10),
                 borderRadius: 15,
+                alignItems: 'center',
               }}>
               <View
                 style={{
@@ -239,4 +240,4 @@ const More: IMore = ({navigation}) => {
     </View>
   );
 };
-export default React.memo(observer(More));
+export default observer(More);

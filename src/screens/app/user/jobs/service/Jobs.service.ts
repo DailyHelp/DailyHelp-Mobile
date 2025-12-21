@@ -182,7 +182,7 @@ class JobService extends JobsApi {
       onSuccess: () => {
         query.invalidateQueries({queryKey: ['jobs', 'job-details']});
       },
-      onError: error => new CatchError(error),
+      onError: error => new CatchError(error, true),
     });
 
     return {
@@ -232,7 +232,7 @@ class JobService extends JobsApi {
       onSuccess: () => {
         query.invalidateQueries({queryKey: ['jobs']});
       },
-      onError: error => new CatchError(error),
+      onError: error => new CatchError(error, true),
     });
 
     return {
@@ -254,12 +254,15 @@ class JobService extends JobsApi {
     } = useMutation({
       mutationKey: ['rate-provider'],
       mutationFn: async (data: {uuid: string; body: any}) => {
+        data.body.rating = +data.body.rating;
+        data.body.tip = +data.body.tip;
+
         return await this.rateProvider(data.uuid, data.body);
       },
       onSuccess: () => {
         query.invalidateQueries({queryKey: ['jobs']});
       },
-      onError: error => new CatchError(error),
+      onError: error => new CatchError(error, true),
     });
 
     return {

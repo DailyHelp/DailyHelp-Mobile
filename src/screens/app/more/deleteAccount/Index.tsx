@@ -1,10 +1,20 @@
+import {observer} from 'mobx-react-lite';
 import {IDeleteAccount} from '../../../../@types/routes';
 import Assets from '../../../../assets/Assets';
 import MainButton from '../../../../components/button/MainButton';
 import Container from '../../../../components/container/Index';
 import Typography from '../../../../components/Typography';
+import moreService from '../services/More.service';
+import {appStore} from '../../../../shared/stores/appStore';
+import {UserTypes} from '../../../../shared/Constant';
 
 const DeleteAccount: IDeleteAccount = ({navigation}) => {
+  const {onSwitch, isLoading} = moreService.useSwitchUser();
+
+  const user_type = appStore.user_types;
+
+  const isCustomer = user_type === UserTypes.CUSTOMER;
+
   const consequences = [
     'Permanently remove your profile and chat history',
     'Cancel all ongoing jobs and offers',
@@ -50,7 +60,14 @@ const DeleteAccount: IDeleteAccount = ({navigation}) => {
       </Container>
 
       <Container gap={10}>
-        <MainButton icon={Assets.Refresh}>Switch to customer mode</MainButton>
+        <MainButton
+          loading={isLoading}
+          onPress={() => {
+            onSwitch(isCustomer ? UserTypes.PROVIDER : UserTypes.CUSTOMER);
+          }}
+          icon={Assets.Refresh}>
+          Switch to customer mode
+        </MainButton>
         <MainButton
           enableButtonColor="lightGrey"
           color="black"
@@ -68,4 +85,4 @@ const DeleteAccount: IDeleteAccount = ({navigation}) => {
     </Container>
   );
 };
-export default DeleteAccount;
+export default observer(DeleteAccount);

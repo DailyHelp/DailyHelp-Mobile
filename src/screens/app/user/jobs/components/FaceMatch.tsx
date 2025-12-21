@@ -17,6 +17,9 @@ const FaceMatch = React.forwardRef<ActionSheetRef, SheetProps<'FaceMatch'>>(
   (props, ref) => {
     const {isPending, mutate} = jobService.useIdentityVerification();
     const payload = props.payload;
+    const [loadingButton, setLoadingButton] = React.useState<
+      'yes' | 'no' | null
+    >(null);
 
     return (
       <ActionSheet
@@ -79,8 +82,9 @@ const FaceMatch = React.forwardRef<ActionSheetRef, SheetProps<'FaceMatch'>>(
           }}>
           <MainButton
             color="white"
-            loading={isPending}
+            loading={isPending && loadingButton === 'yes'}
             onPress={() => {
+              setLoadingButton('yes');
               mutate(
                 {
                   uuid: payload?.verificationPinParams?.uuid!,
@@ -88,6 +92,11 @@ const FaceMatch = React.forwardRef<ActionSheetRef, SheetProps<'FaceMatch'>>(
                 },
                 {
                   onSuccess: () => {
+                    setLoadingButton(null);
+                    SheetManager.hide('FaceMatch');
+                  },
+                  onError: () => {
+                    setLoadingButton(null);
                     SheetManager.hide('FaceMatch');
                     const timer = setTimeout(() => {
                       SheetManager.show('CancelJob', {
@@ -107,14 +116,23 @@ const FaceMatch = React.forwardRef<ActionSheetRef, SheetProps<'FaceMatch'>>(
             Yes, it is them
           </MainButton>
           <MainButton
-            loading={isPending}
+            loading={isPending && loadingButton === 'no'}
             onPress={() => {
+              setLoadingButton('no');
               mutate(
                 {
                   uuid: payload?.verificationPinParams?.uuid!,
                   verified: false,
                 },
-                {onSuccess: () => SheetManager.hide('FaceMatch')},
+                {
+                  onSuccess: () => {
+                    setLoadingButton(null);
+                    SheetManager.hide('FaceMatch');
+                  },
+                  onError: () => {
+                    setLoadingButton(null);
+                  },
+                },
               );
             }}
             icon={() => <Icon name="close" color={'#F0443A'} size={15} />}

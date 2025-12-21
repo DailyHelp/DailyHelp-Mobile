@@ -24,6 +24,7 @@ import CatchError from './errors/catchError';
 import ThrowError from './errors/throwError';
 import {scale, verticalScale} from './Scaling';
 import {http} from './services/Http';
+import {MMKV} from 'react-native-mmkv';
 
 class Utils {
   private static instance: Utils;
@@ -630,6 +631,38 @@ class Utils {
     }
 
     return verificationUrl;
+  }
+
+  // Navigation state persistence using MMKV
+  private navigationStorage = new MMKV({
+    id: 'navigation-storage',
+  });
+
+  getNavigationStatePersistence() {
+    return {
+      persist: (state: any) => {
+        try {
+          const stateString = JSON.stringify(state);
+          this.navigationStorage.set('NAVIGATION_STATE', stateString);
+        } catch (error) {
+          console.error('Failed to persist navigation state:', error);
+        }
+      },
+      restore: () => {
+        try {
+          const stateString = this.navigationStorage.getString('NAVIGATION_STATE');
+          if (stateString) {
+            return JSON.parse(stateString);
+          }
+        } catch (error) {
+          console.error('Failed to restore navigation state:', error);
+        }
+        return undefined;
+      },
+      clear: () => {
+        this.navigationStorage.delete('NAVIGATION_STATE');
+      },
+    };
   }
 }
 

@@ -52,13 +52,20 @@ const Gallery = React.forwardRef<ActionSheetRef, IGallery>(
 
     const toggleSelection = React.useCallback(
       (uri: string) => {
+        const wasSelected = selectedImages.includes(uri);
+        
         if (props.toggleGalleryImageSelection) {
           props.toggleGalleryImageSelection(uri);
         } else {
           appStore.toggleGalleryImageSelection(uri);
         }
+
+        // If image was deselected, call onClose callback
+        if (wasSelected && props.onClose) {
+          props.onClose(uri);
+        }
       },
-      [props.toggleGalleryImageSelection],
+      [props.toggleGalleryImageSelection, props.onClose, selectedImages],
     );
 
     const renderItem = ({item}: {item: any}) => {

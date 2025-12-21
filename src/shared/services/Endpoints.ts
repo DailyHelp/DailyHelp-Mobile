@@ -26,7 +26,16 @@ export default {
   acceptOffer: (uuid: string) => `/${bases()}/offer/${uuid}/accept`,
   counterOffer: (uuid: string) => `/${bases()}/offer/${uuid}/counter`,
   jobDetails: (uuid: string) => `/${base()}/jobs/${uuid}`,
-  analytics: () => `/${bases()}/analytics`,
+  analytics: (query?: {startDate?: string; endDate?: string}) => {
+    const basePath = `/${bases()}/analytics`;
+    if (query?.startDate || query?.endDate) {
+      const params = new URLSearchParams();
+      if (query.startDate) params.append('startDate', query.startDate);
+      if (query.endDate) params.append('endDate', query.endDate);
+      return `${basePath}?${params.toString()}`;
+    }
+    return basePath;
+  },
   addBankAccount: () => `/${bases()}/bank-account`,
   getBankAccount: () => `/${bases()}/bank-account`,
   saveDetails: () => `/${bases()}/save-details`,
@@ -36,7 +45,6 @@ export default {
   savePrice: () => `/${bases()}/save-prices`,
   saveHelpersDetails: () => `/${bases()}/save-details`,
   providerDashboard: '/providers/dashboard',
-  providerReviews: (uuid: string) => `/${bases()}/${uuid}/reviews`,
   user: () => `/${bases()}`,
   sendMessage: (uuid: string) =>
     `/${bases()}/conversation/${uuid}/send-message`,
@@ -68,20 +76,20 @@ export default {
   wallet: () => `/${bases()}/wallet`,
   withdraw: () => `/${bases()}/wallet/withdraw`,
   reasons: (type: ReasonType) => `/lists/reason-category?type=${type}`,
-  deletionRequest: (uuid: string) =>
-    `/${bases()}/deletion-request/${uuid}/confirm-deletion`,
+  deletionRequest: () => `/${bases()}/deletion-request`,
   switchUser: () => `/${bases()}/switch-user-type`,
   initializePayment: () => `/${bases()}/initialize-paystack-payment`,
   listBanks: '/lists/banks',
-  providerReview: '/providers/reviews/summary',
   customerProviderReview: (uuid: string) =>
-    `/customers/providers/${uuid}/reviews/summary`,
+    `/${bases()}/${uuid}/reviews/summary`,
   walletTransactions: (query: PaginationQuery) =>
     `/wallets/transactions?${utils.flattenQuery(query)}`,
   agoraTokens: (uuid: string) => `/${base()}/jobs/${uuid}/call-token`,
-  availability: `/${bases()}/availability`,
+  availability: () => `/${bases()}/availability`,
   identityVerification: (uuid: string) =>
     `/${base()}/jobs/${uuid}/provider-identity-verification`,
   alternateProviders: (uuid: string) =>
     `/customer/jobs/${uuid}/alternate-providers`,
+  confirmDelete: (uuid: string) =>
+    `/${bases()}/deletion-request/${uuid}/confirm-deletion`,
 };

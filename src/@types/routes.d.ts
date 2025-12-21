@@ -269,6 +269,7 @@ type IChatRoute = {
   SearchIndex?: undefined;
   ChatBox?: {
     uuid: string;
+    serviceProviderId: string;
     title: string;
     cancellationChances?: number;
     badge?: string;
@@ -284,9 +285,19 @@ type IChatRoute = {
   };
   VoiceCall?: {
     conversationUuid: string;
+    isIncoming?: boolean;
+    peerName?: string;
+    peerAvatar?: string;
+    channelName?: string;
+    token?: string;
   };
   VideoCall?: {
     conversationUuid: string;
+    isIncoming?: boolean;
+    peerName?: string;
+    peerAvatar?: string;
+    channelName?: string;
+    token?: string;
   };
   Report?: {
     uuid: string;
@@ -331,12 +342,30 @@ type IJobsRoute = {
   ViewDetails?: JobsDto;
   VerificationPin?: {uuid: string};
   WebViewComponent?: {url: string; title: string};
-  Dispute?: undefined;
+  Dispute?: {
+    uuid: string;
+  };
+  DisputeSubmitted?: undefined;
 };
 
 type IJobs = Props<NativeStackScreenProps<IJobsRoute, 'Jobs'>>;
 
 type IViewDetails = Props<NativeStackScreenProps<IJobsRoute, 'ViewDetails'>>;
+
+type IDispute = Props<
+  {
+    scroll?: (title: string) => void;
+    onChangeDescription?: (dto: string) => void;
+    onAttachment?: (dto: string) => void;
+    handleSubmit?: () => void;
+    values?: ReportConversationDto;
+    isPending?: boolean;
+  } & NativeStackScreenProps<IJobsRoute, 'Dispute'>
+>;
+
+type IReportSubmitted = Props<
+  NativeStackScreenProps<IChatRoute, 'DisputeSubmitted'>
+>;
 
 type IVerificationPin = Props<
   NativeStackScreenProps<IJobsRoute, 'VerificationPin'>
@@ -435,6 +464,7 @@ type IMoreRoute = {
   };
   UpdateAbout?: {about?: string};
   SelectBank?: {amount: number; bankAccountUuid: string};
+  Reviews?: {uuid: string};
 };
 
 type IMore = Props<NativeStackScreenProps<IMoreRoute, 'More'>>;

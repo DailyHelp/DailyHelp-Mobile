@@ -50,6 +50,8 @@ import SearchRoute from './Search';
 import {BottomTabBarButtonProps} from '@react-navigation/bottom-tabs';
 import {TouchableOpacity} from 'react-native';
 import Typography from '../../components/Typography';
+import Dispute from '../../screens/app/user/jobs/disputeJob/Index';
+import DisputeSubmitted from '../../screens/app/user/jobs/disputeJob/DisputeSubmitted';
 
 type LabelPosition = 'beside-icon' | 'below-icon';
 
@@ -402,6 +404,20 @@ export const UserJobsStackRoutes = [
     },
   },
   {
+    name: 'DisputeSubmitted',
+    component: DisputeSubmitted,
+    options: {
+      headerShown: false,
+    },
+  },
+  {
+    name: 'Dispute',
+    component: Dispute,
+    options: {
+      headerShown: false,
+    },
+  },
+  {
     name: 'VerificationPin',
     component: VerificationPin,
     options: {
@@ -564,8 +580,21 @@ export const MoreStackRoutes = [
           title="Select account"
           {...props}
           textMiddle
+          rightAction={
+            <TouchableOpacity
+              onPress={() => props.navigation.navigate('AddBankAccount')}>
+              <Assets.GreenPlus width={scale(25)} height={verticalScale(25)} />
+            </TouchableOpacity>
+          }
         />
       ),
+    },
+  },
+  {
+    name: 'Reviews',
+    component: Reviews,
+    options: {
+      headerShown: false,
     },
   },
   {

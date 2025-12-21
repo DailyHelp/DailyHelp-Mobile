@@ -12,6 +12,7 @@ import {scale, verticalScale} from '../../../../shared/Scaling';
 import Container from '../../../../components/container/Index';
 import UserDTO from '../../../auth/dto/UserDto';
 import {appStore} from '../../../../shared/stores/appStore';
+import {observer} from 'mobx-react-lite';
 
 const UserDataCard: IUserDataCard<UserDTO, UserTypes> = ({
   isVerified,
@@ -114,4 +115,4 @@ const UserDataCard: IUserDataCard<UserDTO, UserTypes> = ({
     </View>
   );
 };
-export default React.memo(UserDataCard);
+export default React.memo(observer(UserDataCard));

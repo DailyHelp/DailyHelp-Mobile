@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableOpacity, View } from 'react-native';
+import {TouchableOpacity, View} from 'react-native';
 import ActionSheet, {
   ActionSheetRef,
   ScrollView,
@@ -10,7 +10,7 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import MainButton from '../../../../components/button/MainButton';
 import Container from '../../../../components/container/Index';
 import Typography from '../../../../components/Typography';
-import { scale, verticalScale } from '../../../../shared/Scaling';
+import {scale, verticalScale} from '../../../../shared/Scaling';
 
 const ChatDisclaimer = React.forwardRef<
   ActionSheetRef<'ChatDisclaimer'>,
@@ -27,15 +27,17 @@ const ChatDisclaimer = React.forwardRef<
     <ActionSheet
       ref={ref}
       id="ChatDisclaimer"
-      closeOnPressBack={false}
+      closeOnPressBack={true}
       gestureEnabled={true}
-      overlayColor="black"
-      defaultOverlayOpacity={0.5}
-      initialSnapIndex={0}
+      backgroundInteractionEnabled={true}
       containerStyle={{
         borderTopLeftRadius: 16,
         borderTopRightRadius: 16,
-      }}>
+        backgroundColor: 'white',
+      }}
+      initialSnapIndex={0}
+      overlayColor="black"
+      defaultOverlayOpacity={0.5}>
       <View
         style={{
           padding: scale(16),

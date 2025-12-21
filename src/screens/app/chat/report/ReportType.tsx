@@ -3,10 +3,14 @@ import Typography from '../../../../components/Typography';
 import {IReport} from '../../../../@types/routes';
 import {scale} from '../../../../shared/Scaling';
 import Icon from 'react-native-vector-icons/AntDesign';
+import {observer} from 'mobx-react-lite';
+import {appStore} from '../../../../shared/stores/appStore';
+import {UserTypes} from '../../../../shared/Constant';
 
 const ReportType: IReport = ({scroll}) => {
+  const isProvider = appStore.user_types === UserTypes.PROVIDER;
   const {width} = Dimensions.get('window');
-  const reports = [
+  let reports = [
     'Fake identity or impersonation',
     'Overcharged or changed price',
     'Scammed or misled',
@@ -19,11 +23,26 @@ const ReportType: IReport = ({scroll}) => {
     'Other',
   ];
 
+  if (isProvider) {
+    reports = [
+      'Abusive or Inappropriate Language',
+      'Attempts to Move Outside the Platform',
+      'Fraudulent Activity',
+      'False Job Information',
+      'Unreasonable or Excessive Demands',
+      'Repeated Cancellations',
+      'Non-Payment or Payment Refusal',
+      'Harassment or Threats',
+      'Suspicious or Illegal Requests',
+      'Other',
+    ];
+  }
+
   return (
     <View style={{backgroundColor: 'white', width}}>
       <View style={{flexDirection: 'column', gap: 10, padding: scale(20)}}>
         <Typography fontWeight="bold" size="xlg">
-          Report service provider
+          {isProvider ? 'Report client' : 'Report service provider'}
         </Typography>
         <Typography fontWeight="regular" size="md" color="gray">
           Help us understand what went wrong. Your report stays private.
@@ -50,4 +69,4 @@ const ReportType: IReport = ({scroll}) => {
     </View>
   );
 };
-export default ReportType;
+export default observer(ReportType);

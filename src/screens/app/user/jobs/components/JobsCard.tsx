@@ -50,7 +50,7 @@ const JobsCard: IJobsCard<UserTypes, JobsDto> = ({
 
           <Container flexDirection="column" gap={3}>
             <Typography size="m2d">{name}</Typography>
-            <Typography size="md" color="gray" limit={30}>
+            <Typography size="md" color="gray" limit={20}>
               {data?.providerPrimaryJobRole}
             </Typography>
           </Container>
@@ -91,13 +91,17 @@ const JobsCard: IJobsCard<UserTypes, JobsDto> = ({
             <Typography color="gray">Ended</Typography>
           </Container>
           <Container flexDirection="row" justifyContent="space-between">
-            <Typography color="lightBlack">
-              {dayjs(data?.createdAt).format('DD MMM, YYYY, hh:mm')}
-            </Typography>
-            {type === 'completed' ? (
+            {data?.createdAt && (
               <Typography color="lightBlack">
-                {dayjs(data?.endDate).format('DD MMM, YYYY, hh:mm')}
+                {dayjs(data?.createdAt).format('DD MMM, YYYY, hh:mm')}
               </Typography>
+            )}
+            {type === 'completed' ? (
+              data?.endDate && (
+                <Typography color="lightBlack">
+                  {dayjs(data?.endDate).format('DD MMM, YYYY, hh:mm')}
+                </Typography>
+              )
             ) : (
               <Assets.JobsHourGlass />
             )}

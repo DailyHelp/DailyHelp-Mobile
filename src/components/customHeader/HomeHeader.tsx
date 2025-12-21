@@ -45,7 +45,7 @@ const HomeHeader: ICustomHeader<NativeStackHeaderProps, ColorKeys> = ({
             payload: {showCurrent: true},
             onClose: d => {
               if (d) {
-                onSubmit({...d, address: d.formatted_address}, data => {
+                onSubmit({...d, address: d.address}, data => {
                   setLocation(data.address || data.description);
                 });
               }

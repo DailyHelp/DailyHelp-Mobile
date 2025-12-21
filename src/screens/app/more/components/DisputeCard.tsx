@@ -36,7 +36,7 @@ const DisputeCard: IDisputeCard<DisputesDto> = ({type, data}) => {
           <CustomAvatar
             avatarSize={50}
             badgeSize={20}
-            data={{image: Assets.Worker1}}
+            data={{image: data?.disputes?.submittedBy.picture}}
           />
 
           <View style={{flexDirection: 'column', gap: 3}}>
@@ -46,7 +46,9 @@ const DisputeCard: IDisputeCard<DisputesDto> = ({type, data}) => {
             </Typography>
             <View style={{flexDirection: 'row', alignItems: 'center', gap: 5}}>
               <Typography size="xs" color="gray">
-                {data?.disputes?.createdAt ? dayjs(data.disputes.createdAt).format('DD, MMM, YYYY') : 'N/A'}
+                {data?.disputes?.createdAt
+                  ? dayjs(data.disputes.createdAt).format('DD, MMM, YYYY')
+                  : 'N/A'}
               </Typography>
               <View
                 style={{
@@ -56,14 +58,14 @@ const DisputeCard: IDisputeCard<DisputesDto> = ({type, data}) => {
                 }}
               />
               <Typography size="xs" color="gray">
-                Dispute ID #{data?.disputes?.uuid || 'N/A'}
+                Dispute ID #{data?.disputes?.code || 'N/A'}
               </Typography>
             </View>
           </View>
         </View>
 
-        <Typography color="secondary" fontWeight="bold">
-          ₦32,000
+        <Typography fontWeight="bold" currency>
+          {data?.disputes?.job.price}
         </Typography>
       </View>
       <View style={{flexDirection: 'column', gap: 12}}>
@@ -78,7 +80,7 @@ const DisputeCard: IDisputeCard<DisputesDto> = ({type, data}) => {
         {type === 'resolved' && (
           <View style={{padding: scale(10), backgroundColor, borderRadius: 10}}>
             <Typography fontWeight="semibold" color={color} textAlign="center">
-              Service Provider Paid - ₦32,000
+              Service Provider Paid - ₦{data?.disputes?.job.price}
             </Typography>
           </View>
         )}

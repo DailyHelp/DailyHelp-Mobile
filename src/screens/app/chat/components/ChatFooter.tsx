@@ -5,6 +5,8 @@ import MainButton from '../../../../components/button/MainButton';
 import Typography from '../../../../components/Typography';
 import chatStyle from '../chatStyle';
 import React from 'react';
+import AppStorage from '../../../../shared/AppStorage';
+import {UserTypes} from '../../../../shared/Constant';
 
 const ChatFooter: IChatFooter<Navigate<IChatRoute>> = ({
   navigation,
@@ -26,7 +28,6 @@ const ChatFooter: IChatFooter<Navigate<IChatRoute>> = ({
           style={{color: '#A9AFC2', height: 50, width: '90%'}}
           onChangeText={setMessage}
           value={message}
-          
           placeholder={
             !canSendMessage ? 'Type a message' : 'You cannot send messages'
           }
@@ -35,20 +36,22 @@ const ChatFooter: IChatFooter<Navigate<IChatRoute>> = ({
 
       <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
         <View style={{flexDirection: 'row', gap: 8}}>
-          <TouchableOpacity onPress={sendOffer}>
-            <View style={chatStyle.chatFooterButton}>
-              {canSendOffer ? (
-                <Assets.ChatOffer style={{marginTop: 2}} />
-              ) : (
-                <Assets.ChatOfferInactive style={{marginTop: 2}} />
-              )}
-              <Typography
-                size="md"
-                color={canSendOffer ? 'lightBlack' : 'gray'}>
-                Send offer
-              </Typography>
-            </View>
-          </TouchableOpacity>
+          {AppStorage.find('userType') === UserTypes.CUSTOMER && (
+            <TouchableOpacity onPress={sendOffer}>
+              <View style={chatStyle.chatFooterButton}>
+                {canSendOffer ? (
+                  <Assets.ChatOffer style={{marginTop: 2}} />
+                ) : (
+                  <Assets.ChatOfferInactive style={{marginTop: 2}} />
+                )}
+                <Typography
+                  size="md"
+                  color={canSendOffer ? 'lightBlack' : 'gray'}>
+                  Send offer
+                </Typography>
+              </View>
+            </TouchableOpacity>
+          )}
           <TouchableOpacity
             onPress={() => navigation.navigate('Report', {uuid: data?.uuid!})}>
             <View style={chatStyle.chatFooterButton}>
@@ -60,7 +63,9 @@ const ChatFooter: IChatFooter<Navigate<IChatRoute>> = ({
 
         <MainButton
           loading={isSending}
-          onPress={() => sendMessage?.(message)}
+          onPress={() => {
+            if (message) sendMessage?.(message);
+          }}
           height={40}
           paddingTop={3}
           color="white"

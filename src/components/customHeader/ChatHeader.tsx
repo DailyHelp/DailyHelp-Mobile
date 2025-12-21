@@ -91,7 +91,7 @@ const ChatHeader: ICustomHeader<NativeStackHeaderProps, ColorKeys> = ({
       <Container flexDirection="row" gap={7}>
         <CustomAvatar
           avatarSize={40}
-          data={{image: image || Assets.Worker1, badge}}
+          data={{image, badge}}
         />
         <Container>
           <Typography fontWeight="bold" size="md">

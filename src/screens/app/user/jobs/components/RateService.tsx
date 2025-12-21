@@ -29,11 +29,6 @@ const RateService = React.forwardRef<
   const {wallet, refetch, isLoading} = moreService.useWalletBalance();
   const [refreshing, setRefreshing] = React.useState(false);
 
-  React.useEffect(() => {
-    if (ratingResponse?.data && ratingResponse?.status) {
-      SheetManager.hide('RateService');
-    }
-  }, [ratingResponse]);
 
   const ratingOptions = [
     {
@@ -157,7 +152,7 @@ const RateService = React.forwardRef<
             </View>
           </View>
           <Formik
-            initialValues={{rate: '', tip: '', review: ''}}
+            initialValues={{rating: '', tip: '', review: ''}}
             onSubmit={data => {
               rateProvider(
                 {
@@ -184,14 +179,14 @@ const RateService = React.forwardRef<
                     {ratingOptions.map(({emoji}, ind) => (
                       <TouchableOpacity
                         key={ind}
-                        onPress={() => handleChange('rate')(ind.toString())}>
+                        onPress={() => handleChange('rating')(ind.toString())}>
                         <View
                           style={{
                             padding: scale(16),
                             backgroundColor:
-                              v.rate === ind.toString() ? '#F9FFEB' : '#F9F9FB',
+                              v.rating === ind.toString() ? '#F9FFEB' : '#F9F9FB',
                             borderRadius: 10,
-                            borderWidth: v.rate === ind.toString() ? 1 : 0,
+                            borderWidth: v.rating === ind.toString() ? 1 : 0,
                             borderColor: '#95D21A',
                           }}>
                           <Typography>{emoji}</Typography>
@@ -200,14 +195,14 @@ const RateService = React.forwardRef<
                     ))}
                   </View>
 
-                  {v.rate && (
+                  {v.rating && (
                     <Typography
                       textAlign="center"
                       size="md"
                       fontWeight="semibold"
                       paddingBottom={verticalScale(15)}
-                      color={ratingOptions[+v.rate].color as ColorKeys}>
-                      {ratingOptions[+v.rate].title}
+                      color={ratingOptions[+v.rating].color as ColorKeys}>
+                      {ratingOptions[+v.rating].title}
                     </Typography>
                   )}
                 </View>

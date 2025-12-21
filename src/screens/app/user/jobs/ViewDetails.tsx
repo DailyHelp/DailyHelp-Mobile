@@ -50,8 +50,8 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
   }, []);
 
   React.useEffect(() => {
-    setType(jobDetails?.data.job.status?.toLowerCase());
-  }, [jobDetails]);
+    setType(route.params?.status || jobDetails?.data.job.status?.toLowerCase());
+  }, [jobDetails, route]);
 
   let headerText = 'Have they arrived? Tap “Confirm face” to verify.';
   let headerBgColor = '#95D21A';
@@ -93,7 +93,7 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
           <CustomAvatar
             avatarSize={50}
             badgeSize={20}
-            data={{image: route?.params?.providerPicture || Assets.Worker1}}
+            data={{image: route?.params?.providerPicture}}
           />
           <Typography size="md" fontWeight="bold">
             {route.params?.providerFirstname} {route.params?.providerLastname}
@@ -217,7 +217,9 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
                     enableButtonColor="lightGrey"
                     color="danger"
                     onPress={() => {
-                      navigation.navigate('Dispute');
+                      navigation.navigate('Dispute', {
+                        uuid: route.params?.uuid!,
+                      });
                     }}>
                     Dispute job
                   </MainButton>
@@ -347,7 +349,8 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
               />
             </View>
           ) : (
-            type !== 'canceled' && (
+            type !== 'canceled' &&
+            !!jobDetails?.data.review && (
               <OutlineButton
                 icon={() => (
                   <IconF

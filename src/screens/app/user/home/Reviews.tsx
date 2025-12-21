@@ -55,7 +55,7 @@ const Reviews: IReviews = ({navigation, route}) => {
   );
 
   return (
-    <View style={{backgroundColor: '#e6fff4'}}>
+    <View style={{backgroundColor: '#e6fff4', flex: 1}}>
       <Icon2
         onPress={() => navigation.goBack()}
         name="close"
@@ -137,6 +137,7 @@ const Reviews: IReviews = ({navigation, route}) => {
           padding: scale(20),
           flexDirection: 'column',
           gap: 10,
+          flex: 1,
         }}>
         <CustomFlatList<Review>
           data={data}

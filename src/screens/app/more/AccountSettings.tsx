@@ -32,7 +32,7 @@ const AccountSettings: IAccountSettings = ({navigation}) => {
       value: data?.phone,
       end: () =>
         !data?.phoneVerified && (
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('VerifyPhone')}>
             <Typography fontWeight="bold" color="secondary">
               Verify
             </Typography>

@@ -81,7 +81,7 @@ const WalletBalance: IWalletBalance = ({navigation}) => {
                 data={{
                   amount: item.amount,
                   date: dayjs(item.createdAt).format('DD MMM, YYYY'),
-                  title: 'Wallet top up',
+                  title: item.remark,
                 }}
               />
             )}

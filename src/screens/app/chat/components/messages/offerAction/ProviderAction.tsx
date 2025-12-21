@@ -12,11 +12,13 @@ const ProviderAction: IMessages = props => {
 
   const hasActiveJob = false;
   const isAccepted = status === 'accepted';
-  const isCountered = status === 'countered';
-  const isCounteredOffered = !!data?.offer.currentOffer;
+  const isPaid = status === 'paid';
 
   const isAcceptDisabled = hasActiveJob && status !== 'accepted';
   const isCounterDisabled = hasActiveJob && status !== 'accepted';
+
+  // Show action buttons when offer is pending or paid (not accepted yet)
+  const showActions = !isPaid
 
   const backgroundColor = isAccepted ? '#F3FCF4' : 'white';
   const borderColor = isAccepted ? '#02CA71' : '#E5F7E5';
@@ -71,7 +73,7 @@ const ProviderAction: IMessages = props => {
         </View>
       )}
 
-      {!isAccepted && !isCountered && !isCounteredOffered && (
+      {showActions && (
         <View style={{gap: 12}}>
           <MainButton
             color={isAcceptDisabled ? 'disabled' : 'white'}

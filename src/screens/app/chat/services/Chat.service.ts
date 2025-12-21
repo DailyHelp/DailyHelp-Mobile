@@ -349,10 +349,9 @@ export class ChatService extends ChatApi {
             } = message.data || {};
             if (uuid && conversationUuid) {
               console.log('Message created:', uuid);
-              // Invalidate conversation list to update last message
+
               queryClient.invalidateQueries({queryKey: ['conversations']});
-              // Invalidate specific conversation to show new message
-              // This will automatically trigger a refetch in ChatBox if it's mounted
+
               queryClient.invalidateQueries({
                 queryKey: ['conversation', conversationUuid],
               });
