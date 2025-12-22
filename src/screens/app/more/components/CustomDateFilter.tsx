@@ -13,8 +13,9 @@ import {scale, verticalScale} from '../../../../shared/Scaling';
 import {Colors} from '../../../../shared/themes/Index';
 import {customFontSize, fonts} from '../../../../shared/themes/Typography';
 import Container from '../../../../components/container/Index';
+import CustomDragDateInput from '../../../../components/customInput/CustomDragDateInput';
 
-const CustomDragDateFilter = React.forwardRef<
+const CustomDateFilter = React.forwardRef<
   ActionSheetRef,
   SheetProps<'CustomDateFilter'>
 >((props, ref) => {
@@ -27,6 +28,11 @@ const CustomDragDateFilter = React.forwardRef<
   const [activeField, setActiveField] = useState<'start' | 'end'>('start');
 
   const handleApply = () => {
+    // Validate that end date is not before start date using dayjs for accurate comparison
+    if (startDate && endDate && dayjs(endDate).isBefore(dayjs(startDate), 'day')) {
+      // Don't apply if end date is before start date
+      return;
+    }
     SheetManager.hide('CustomDateFilter', {
       payload: {
         startDate,
@@ -39,33 +45,42 @@ const CustomDragDateFilter = React.forwardRef<
     SheetManager.hide('CustomDateFilter');
   };
 
-  const handleDateChange = (date: Date) => {
+  const handleDateChange = (dateString: string) => {
+    const date = dayjs(dateString).toDate();
     if (activeField === 'start') {
       setStartDate(date);
       // If end date exists and is before new start date, clear it
-      if (endDate && date > endDate) {
+      if (endDate && dayjs(date).isAfter(dayjs(endDate))) {
         setEndDate(undefined);
       }
     } else {
+      // Prevent setting end date before start date using dayjs for accurate comparison
+      if (startDate && dayjs(date).isBefore(dayjs(startDate), 'day')) {
+        // Don't allow end date to be set before start date
+        return;
+      }
       setEndDate(date);
     }
   };
 
-  const getCurrentDate = () => {
-    if (activeField === 'start') {
-      return startDate || new Date();
+  const getCurrentDateString = () => {
+    const currentDate = activeField === 'start' ? startDate : endDate;
+    if (currentDate) {
+      return dayjs(currentDate).format('YYYY-MM-DD');
     }
-    return endDate || startDate || new Date();
+    // For end date, if start date exists, default to start date instead of today
+    if (activeField === 'end' && startDate) {
+      return dayjs(startDate).format('YYYY-MM-DD');
+    }
+    return dayjs().format('YYYY-MM-DD');
   };
-
-  const currentDate = getCurrentDate();
 
   return (
     <ActionSheet
       ref={ref}
       id="CustomDateFilter"
       closeOnPressBack={false}
-      gestureEnabled={true}
+      gestureEnabled={false}
       backgroundInteractionEnabled={true}
       containerStyle={{
         borderTopLeftRadius: 16,
@@ -179,9 +194,9 @@ const CustomDragDateFilter = React.forwardRef<
 
           {/* Date Picker - Inline Wheel Picker */}
           <Container flex={1}>
-            <CustomDragDateFilter
-              sheetId="CustomDragDateFilter"
-              payload={{endDate, startDate}}
+            <CustomDragDateInput
+              value={getCurrentDateString()}
+              onChangeText={handleDateChange}
             />
           </Container>
         </View>
@@ -190,4 +205,4 @@ const CustomDragDateFilter = React.forwardRef<
   );
 });
 
-export default CustomDragDateFilter;
+export default CustomDateFilter;

@@ -1,13 +1,12 @@
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
-import ChatApi from '../../../../shared/services/Chat';
-import utils from '../../../../shared/Utils';
-import {appStore} from '../../../../shared/stores/appStore';
 import React from 'react';
 import AppStorage from '../../../../shared/AppStorage';
-import ReportConversationDto from '../dto/report-conversation.dto';
 import CatchError from '../../../../shared/errors/catchError';
-import CounterOfferDto from '../dto/counter-offer.dto';
+import ChatApi from '../../../../shared/services/Chat';
 import {websocketService} from '../../../../shared/services/WebSocket';
+import utils from '../../../../shared/Utils';
+import CounterOfferDto from '../dto/counter-offer.dto';
+import ReportConversationDto from '../dto/report-conversation.dto';
 
 export class ChatService extends ChatApi {
   private static instance: ChatService;
@@ -43,14 +42,12 @@ export class ChatService extends ChatApi {
     React.useEffect(() => {
       if (conversations?.data) {
         if (query?.pagination?.page === 1) {
-          // First page - reset data
           resetHistory();
           appendPageData(conversations.data);
         } else if (
           conversations?.data &&
           data.length < (conversations.pagination?.total || 0)
         ) {
-          // Subsequent pages - append data only if we haven't reached total
           appendPageData(conversations.data);
         }
       }
@@ -61,9 +58,8 @@ export class ChatService extends ChatApi {
         const currentPage = conversations.pagination.page;
         const totalPages = conversations.pagination.pages;
 
-        // Only fetch more if current page is less than total pages
         if (currentPage < totalPages) {
-          fetchMore(); // Use the original fetchMore from usePagination
+          fetchMore();
         }
       }
     };
@@ -133,10 +129,18 @@ export class ChatService extends ChatApi {
   }
 
   useSendMessage() {
+    const queryClient = useQueryClient();
     const {data, isPending, mutate} = useMutation({
       mutationKey: ['send-message'],
       mutationFn: async (dto: {uuid: string; message: string}) => {
         return await this.sendMessage(dto.uuid, dto.message);
+      },
+      onSuccess: (response, variables) => {
+        queryClient.invalidateQueries({
+          queryKey: ['conversation', variables.uuid],
+        });
+
+        queryClient.invalidateQueries({queryKey: ['conversations']});
       },
       onError: error => new CatchError(error, true),
     });
@@ -268,13 +272,11 @@ export class ChatService extends ChatApi {
       }
     }, []);
 
-    // Set up WebSocket event listeners for incoming events
     React.useEffect(() => {
       websocketService.on({
         onMessage: (message: any) => {
           const eventType = message.event || message.type;
 
-          // Handle conversation:joined event
           if (eventType === 'conversation:joined') {
             const {conversationUuid} = message.data || {};
             if (conversationUuid) {
@@ -283,7 +285,6 @@ export class ChatService extends ChatApi {
             }
           }
 
-          // Handle conversation:left event
           if (eventType === 'conversation:left') {
             const {conversationUuid} = message.data || {};
             if (conversationUuid) {
@@ -292,7 +293,6 @@ export class ChatService extends ChatApi {
             }
           }
 
-          // Handle conversation:created event
           if (eventType === 'conversation:created') {
             const {
               uuid,
@@ -307,7 +307,6 @@ export class ChatService extends ChatApi {
             }
           }
 
-          // Handle conversation:updated event
           if (eventType === 'conversation:updated') {
             const {
               uuid,
@@ -323,7 +322,6 @@ export class ChatService extends ChatApi {
             }
           }
 
-          // Handle conversation:read event
           if (eventType === 'conversation:read') {
             const {conversationUuid, readerUuid, unreadCount, readAt} =
               message.data || {};
@@ -336,7 +334,6 @@ export class ChatService extends ChatApi {
             }
           }
 
-          // Handle message:created event
           if (eventType === 'message:created') {
             const {
               uuid,
@@ -358,13 +355,12 @@ export class ChatService extends ChatApi {
             }
           }
 
-          // Handle message:read event
           if (eventType === 'message:read') {
             const {conversationUuid, messageUuid, readerUuid, readAt} =
               message.data || {};
             if (conversationUuid && messageUuid) {
               console.log('Message read:', messageUuid);
-              // Invalidate to update read status
+
               queryClient.invalidateQueries({queryKey: ['conversations']});
               queryClient.invalidateQueries({
                 queryKey: ['conversation', conversationUuid],
@@ -372,27 +368,24 @@ export class ChatService extends ChatApi {
             }
           }
 
-          // Handle presence:update event
           if (eventType === 'presence:update') {
             const {userUuid, online, at} = message.data || {};
             if (userUuid) {
               console.log('Presence updated:', {userUuid, online, at});
-              // Invalidate conversations to update online status
+
               queryClient.invalidateQueries({queryKey: ['conversations']});
-              // Also invalidate any active conversation with this user
+
               queryClient.invalidateQueries({queryKey: ['conversation']});
             }
           }
         },
       });
 
-      // Cleanup: remove event listeners on unmount
       return () => {
         websocketService.off(['onMessage']);
       };
     }, [queryClient]);
 
-    // Auto-read conversations when list is loaded
     React.useEffect(() => {
       if (
         conversations &&
@@ -410,7 +403,6 @@ export class ChatService extends ChatApi {
       }
     }, [conversations]);
 
-    // Functions to send WebSocket events
     const joinConversation = React.useCallback((conversationUuid: string) => {
       if (websocketService.isConnected() && conversationUuid) {
         websocketService.send({

@@ -41,9 +41,15 @@ const CustomDragDateInput: IInput = ({
   }, [value]);
 
   const handleDateChanged = React.useCallback(
-    ({date}: {date: string}) => {
-      setDateString(date);
-      onChangeText?.(date);
+    (params: {date: string} | string) => {
+      // Handle both callback signatures: object with date property or direct string
+      const newDate = typeof params === 'string' ? params : params.date;
+      
+      if (newDate) {
+        setDateString(newDate);
+        // Always call onChangeText to notify parent of date change
+        onChangeText?.(newDate);
+      }
     },
     [onChangeText],
   );

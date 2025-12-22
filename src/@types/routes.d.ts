@@ -8,6 +8,7 @@ import {UserTypes} from '../shared/Constant';
 import ProvidersDto from '../screens/app/user/home/dto/providersDto';
 import ReportConversationDto from '../screens/app/chat/dto/report-conversation.dto';
 import JobsDto from '../screens/app/user/jobs/dto/job.dto';
+import DisputesDto from '../screens/app/more/dto/Disputes.dto';
 
 /**
  * Routes for `AuthStackRoute`
@@ -465,6 +466,7 @@ type IMoreRoute = {
   UpdateAbout?: {about?: string};
   SelectBank?: {amount: number; bankAccountUuid: string};
   Reviews?: {uuid: string};
+  DisputeDetails?: {dispute?: DisputesDto; uuid?: string};
 };
 
 type IMore = Props<NativeStackScreenProps<IMoreRoute, 'More'>>;
@@ -482,6 +484,10 @@ type IWalletBalance = Props<
 >;
 
 type IDisputes = Props<NativeStackScreenProps<IMoreRoute, 'Disputes'>>;
+
+type IDisputeDetails = Props<
+  NativeStackScreenProps<IMoreRoute, 'DisputeDetails'>
+>;
 
 type IAddress = Props<NativeStackScreenProps<IMoreRoute, 'Address'>>;
 

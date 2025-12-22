@@ -1,4 +1,6 @@
-import {View} from 'react-native';
+import {TouchableOpacity, View} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import Assets from '../../../../assets/Assets';
 import CustomAvatar from '../../../../components/CustomAvatar';
 import Typography from '../../../../components/Typography';
@@ -6,8 +8,11 @@ import {scale, verticalScale} from '../../../../shared/Scaling';
 import {ColorKeys} from '../../../../shared/themes/Index';
 import DisputesDto from '../dto/Disputes.dto';
 import dayjs from 'dayjs';
+import {IMoreRoute} from '../../../../@types/routes';
 
 const DisputeCard: IDisputeCard<DisputesDto> = ({type, data}) => {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<IMoreRoute, 'DisputeDetails'>>();
   let color: ColorKeys = 'gray';
   let backgroundColor = '#F3F4F6';
 
@@ -21,8 +26,18 @@ const DisputeCard: IDisputeCard<DisputesDto> = ({type, data}) => {
     backgroundColor = '#FFF3EB';
   }
 
+  const handlePress = () => {
+    if (data?.disputes) {
+      navigation.navigate('DisputeDetails', {
+        dispute: data.disputes,
+      });
+    }
+  };
+
   return (
-    <View
+    <TouchableOpacity
+      activeOpacity={0.7}
+      onPress={handlePress}
       style={{
         padding: scale(15),
         backgroundColor: 'white',
@@ -85,7 +100,7 @@ const DisputeCard: IDisputeCard<DisputesDto> = ({type, data}) => {
           </View>
         )}
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 export default DisputeCard;

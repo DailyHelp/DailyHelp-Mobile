@@ -1,18 +1,17 @@
 import Geolocation, {
   GeolocationResponse,
 } from '@react-native-community/geolocation';
-import {RouteProp, useRoute} from '@react-navigation/native';
+import { RouteProp, useRoute } from '@react-navigation/native';
 import {
-  QueryClient,
   useMutation,
   useQuery,
-  useQueryClient,
+  useQueryClient
 } from '@tanstack/react-query';
 import React from 'react';
-import {SheetManager} from 'react-native-actions-sheet';
-import {IHomeRoute} from '../../../../../@types/routes';
+import { SheetManager } from 'react-native-actions-sheet';
+import { IHomeRoute } from '../../../../../@types/routes';
 import AppStorage from '../../../../../shared/AppStorage';
-import {ReasonType} from '../../../../../shared/Constant';
+import { ReasonType } from '../../../../../shared/Constant';
 import CatchError from '../../../../../shared/errors/catchError';
 import HomeApi from '../../../../../shared/services/Home';
 import utils from '../../../../../shared/Utils';
@@ -25,7 +24,6 @@ import SavePriceDTO from '../dto/SavePriceDto';
 
 class HomeService extends HomeApi {
   private static instance: HomeService;
-  queryClient = new QueryClient();
 
   static getInstance() {
     if (!this.instance) {
@@ -58,6 +56,8 @@ class HomeService extends HomeApi {
       mutationFn: async (uuid: string) => await this.setDefaultLocation(uuid),
       onSuccess: data => {
         query.invalidateQueries({queryKey: ['user']});
+
+        query.refetchQueries({queryKey: ['get-saved-location']});
         SheetManager.hide('AddressOptions');
       },
       onError: err => new CatchError(err, true),
@@ -67,7 +67,9 @@ class HomeService extends HomeApi {
       mutationKey: ['delete-location'],
       mutationFn: async (uuid: string) => await this.deleteLocation(uuid),
       onSuccess: () => {
-        query.invalidateQueries({queryKey: ['user', 'get-saved-location']});
+        query.invalidateQueries({queryKey: ['user']});
+
+        query.refetchQueries({queryKey: ['get-saved-location']});
         SheetManager.hide('AddressOptions');
       },
       onError: err => new CatchError(err, true),
@@ -98,6 +100,8 @@ class HomeService extends HomeApi {
       onError: error => new CatchError(error, true),
       onSuccess: data => {
         query.invalidateQueries({queryKey: ['user']});
+
+        query.refetchQueries({queryKey: ['get-saved-location']});
         SheetManager.hide('HomeAddress');
       },
     });
@@ -199,7 +203,6 @@ class HomeService extends HomeApi {
           });
         }
 
-        // 4. Success callback
         if (onSuccess) onSuccess(formattedAddress, metadata);
       } catch (error) {
         console.error('Location process failed:', error);
@@ -232,13 +235,16 @@ class HomeService extends HomeApi {
   }
 
   useSavePrice() {
+    const queryClient = useQueryClient();
     const {mutateAsync, isPending} = useMutation({
       mutationKey: ['save-price'],
       mutationFn: async (body: SavePriceDTO) => {
         return await this.savePrice(body);
       },
       onError: error => new CatchError(error, true),
-      onSuccess: () => this.queryClient.invalidateQueries({queryKey: ['user']}),
+      onSuccess: () => {
+        queryClient.refetchQueries({queryKey: ['user']});
+      },
     });
 
     return {
@@ -319,13 +325,16 @@ class HomeService extends HomeApi {
   }
 
   useSaveHelpersDetails() {
+    const queryClient = useQueryClient();
     const {mutateAsync, isPending} = useMutation({
       mutationKey: ['helper-details'],
       mutationFn: async (body: SaveHelpersDetailsDTO) => {
         return await this.saveHelpersDetails(body);
       },
       onError: error => new CatchError(error, true),
-      onSuccess: () => this.queryClient.invalidateQueries({queryKey: ['user']}),
+      onSuccess: () => {
+        queryClient.refetchQueries({queryKey: ['user']});
+      },
     });
 
     return {

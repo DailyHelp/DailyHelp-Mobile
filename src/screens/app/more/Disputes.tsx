@@ -13,7 +13,6 @@ const Disputes: IDisputes = ({navigation, route}) => {
   utils.useHideBottomTab(navigation);
   const [index, setIndex] = React.useState('PENDING');
   const {data, isLoading, fetchMore} = moreService.useDisputes(index);
-  console.log(data);
   
   const tabs = [
     {title: 'Ongoing', slug: 'PENDING'},

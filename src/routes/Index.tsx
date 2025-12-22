@@ -1,29 +1,26 @@
 import {
   NavigationContainer,
-  NavigationContainerRef,
   useNavigationContainerRef,
 } from '@react-navigation/native';
+import {observer, Observer} from 'mobx-react-lite';
 import React from 'react';
 import {SheetManager, SheetProvider} from 'react-native-actions-sheet';
+import {EventRegister} from 'react-native-event-listeners';
+import {PaperProvider} from 'react-native-paper';
 import SplashScreen from 'react-native-splash-screen';
 import Toast from 'react-native-toast-message';
-import AuthRouter from './auth/Index';
-import {toastConfig} from '../shared/Toast';
-import {PaperProvider} from 'react-native-paper';
-import {theme} from '../shared/themes/Index';
-import {observer, Observer} from 'mobx-react-lite';
-import AppRouter from './app/Index';
-import {EventRegister} from 'react-native-event-listeners';
+import GlobalCallHandler from '../components/GlobalCallHandler';
+import '../shared/ActionSheets';
 import {ERRORS, EVENTS} from '../shared/Constant';
 import {appStore} from '../shared/stores/appStore';
-import '../shared/ActionSheets';
+import {theme} from '../shared/themes/Index';
+import {toastConfig} from '../shared/Toast';
 import utils from '../shared/Utils';
-import GlobalCallHandler from '../components/GlobalCallHandler';
+import AppRouter from './app/Index';
+import AuthRouter from './auth/Index';
 
-// Get navigation state persistence functions from utils
 const navigationStatePersistence = utils.getNavigationStatePersistence();
 
-// Component to handle notification badge - only active when authenticated
 const NotificationBadgeHandler = observer(() => {
   utils.useNotificationBadgeHandler();
   return null;
@@ -51,14 +48,13 @@ const Routes: Props = () => {
     EventRegister.addEventListener(ERRORS.UNAUTHENTICATED, user => {
       appStore.setIsAuthenticated(!user);
       SheetManager.hideAll();
-      // Clear navigation state on logout
+
       if (!user) {
         navigationStatePersistence.clear();
       }
     });
   }, []);
 
-  // Persist navigation state on change (only when authenticated)
   const onStateChange = React.useCallback(
     (state: any) => {
       if (state && appStore.isAuthenticated) {
@@ -68,8 +64,7 @@ const Routes: Props = () => {
     [appStore.isAuthenticated],
   );
 
-  // Restore navigation state on mount (only when authenticated)
-  const [initialState, setInitialState] = React.useState(() => {
+  const [initialState] = React.useState(() => {
     if (appStore.isAuthenticated) {
       return navigationStatePersistence.restore();
     }
@@ -87,12 +82,13 @@ const Routes: Props = () => {
             {() => (
               <React.Fragment>
                 {appStore.isAuthenticated ? <AppRouter /> : <AuthRouter />}
+                {appStore.isAuthenticated && (
+                  <GlobalCallHandler navigationRef={navigationRef} />
+                )}
               </React.Fragment>
             )}
           </Observer>
-          {appStore.isAuthenticated && (
-            <GlobalCallHandler navigationRef={navigationRef} />
-          )}
+
           <NotificationBadgeHandler />
         </SheetProvider>
       </PaperProvider>
@@ -101,4 +97,4 @@ const Routes: Props = () => {
   );
 };
 
-export default observer(Routes);
+export default Routes;

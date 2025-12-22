@@ -1,13 +1,18 @@
+import {
+  CommonActions,
+  NavigationContainerRef
+} from '@react-navigation/native';
 import React from 'react';
-import {NavigationContainerRef, CommonActions} from '@react-navigation/native';
-import {websocketService} from '../shared/services/WebSocket';
 import AppStorage from '../shared/AppStorage';
+import { websocketService } from '../shared/services/WebSocket';
 
 const GlobalCallHandler: React.FC<
   GlobalCallHandlerProps<NavigationContainerRef<any>>
 > = ({navigationRef}) => {
-  React.useEffect(() => {
-    const handler = (message: any) => {
+  const handlerRef = React.useRef<((message: any) => void) | null>(null);
+
+  const createHandler = React.useCallback(() => {
+    return (message: any) => {
       const eventType = message.event || message.type;
 
       // Handle incoming call notifications
@@ -65,6 +70,8 @@ const GlobalCallHandler: React.FC<
           peerAvatar,
         } = message.data || {};
 
+        console.log(message);
+
         const currentUserId = AppStorage.find('user_id');
 
         // Only handle if we're not the caller and navigation is available
@@ -75,16 +82,13 @@ const GlobalCallHandler: React.FC<
           navigationRef.current
         ) {
           try {
-            // Check if user is currently in Chat stack
             const state = navigationRef.current?.getState();
             if (!state) return;
 
             const currentRoute = state.routes[state.index || 0];
 
-            // Check if we're in the ChatIndex tab
             const isInChatTab = currentRoute?.name === 'ChatIndex';
 
-            // If in ChatIndex, check if we're in the Chat stack (not just the tab)
             let isInChatStack = true;
             if (isInChatTab && currentRoute?.state) {
               const chatStackState = currentRoute.state;
@@ -131,11 +135,52 @@ const GlobalCallHandler: React.FC<
         }
       }
     };
-
-    websocketService.on({onMessage: handler});
   }, [navigationRef]);
 
-  return null; // This component doesn't render anything
+  React.useEffect(() => {
+    if (!handlerRef.current) {
+      handlerRef.current = createHandler();
+    }
+
+    if (handlerRef.current) {
+      websocketService.on({onMessage: handlerRef.current});
+    }
+  }, [createHandler]);
+
+  React.useEffect(() => {
+    const ensureConnection = () => {
+      if (!websocketService.isConnected()) {
+        websocketService
+          .connect(
+            undefined,
+            handlerRef.current ? {onMessage: handlerRef.current} : undefined,
+          )
+          .catch(error => {
+            console.error(
+              'Failed to connect WebSocket in GlobalCallHandler:',
+              error,
+            );
+          });
+      } else if (handlerRef.current) {
+        websocketService.on({onMessage: handlerRef.current});
+      }
+    };
+
+    ensureConnection();
+
+    const interval = setInterval(() => {
+      if (handlerRef.current) {
+        websocketService.on({onMessage: handlerRef.current});
+        ensureConnection();
+      }
+    }, 3000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
+
+  return null;
 };
 
 export default GlobalCallHandler;

@@ -497,6 +497,13 @@ type IContainer<C> = Props<{
   scrollsToTop?: boolean;
   gradientColors?: (string | number)[];
   onPress?: () => void;
+  zIndex?: number;
+  elevation?: number;
+  shadowColor?: string;
+  shadowOpacity?: number;
+  shadowRadius?: number;
+  shadowOffset?: {width: number; height: number};
+  overflow?: 'hidden' | 'scroll' | 'visible';
 }>;
 
 type IUploadContainer = Props<{
@@ -643,3 +650,52 @@ type GlobalCallHandlerProps<N> = {
 };
 
 type CallStatus = 'idle' | 'ringing' | 'connecting' | 'in-call' | 'ended';
+
+interface UseVoiceCallParams {
+  conversationUuid?: string;
+  isIncoming: boolean;
+  routeParams?: Partial<VoiceCallParams>;
+  navigation: NativeStackNavigationProp<IChatRoute, 'VoiceCall'>;
+  getPermission: () => Promise<void>;
+  handleGoBack: () => void;
+  hasVibratePermission: boolean;
+}
+
+interface UseVoiceCallRingtoneParams {
+  isIncoming: boolean;
+  callStatus: CallStatus;
+  hasVibratePermission: boolean;
+}
+
+type ICallActions = Props<{onAccept: () => void; onDecline: () => void}>;
+
+type ICallControls = Props<{
+  isAudioMuted?: boolean;
+  isVideoMuted?: boolean;
+  onToggleMute?: () => void;
+  onToggleVideo?: () => void;
+  onSwitchCamera?: () => void;
+  onEnd?: () => void;
+  isSpeakerOn?: boolean;
+  onToggleSpeaker?: () => void;
+}>;
+
+type ICallLocalView = Props<{
+  localUid: number;
+  isVideoMuted: boolean;
+}>;
+
+type IVoiceCallAvatar = Props<{
+  peerAvatar?: string;
+  callStatus: CallStatus;
+  isIncoming: boolean;
+}>;
+
+type ICallEndButton = Props<{onEnd: () => void}>;
+
+type IVideoCallRemoteView = Props<{
+  remoteUid: number | null;
+  peerAvatar?: string;
+  callStatus: CallStatus;
+  isIncoming: boolean;
+}>;

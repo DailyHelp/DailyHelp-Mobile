@@ -1,6 +1,7 @@
 import {observer} from 'mobx-react-lite';
 import React from 'react';
 import {ScrollView, TouchableOpacity, View} from 'react-native';
+import {useFocusEffect} from '@react-navigation/native';
 import {IMore} from '../../../@types/routes';
 import Assets from '../../../assets/Assets';
 import Container from '../../../components/container/Index';
@@ -15,16 +16,22 @@ import utils from '../../../shared/Utils';
 
 const More: IMore = ({navigation}) => {
   const {onSwitch, isLoading, data} = moreService.useSwitchUser();
-  const {data: user} = homeService.useUser();
+  const {data: user, refetch: refetchUser} = homeService.useUser();
 
   const user_type = appStore.user_types as UserTypes;
 
   const isVerified = appStore.isIdentityVerified;
 
+  useFocusEffect(
+    React.useCallback(() => {
+      refetchUser();
+    }, [refetchUser]),
+  );
+
   React.useEffect(() => {
     if (
       !data?.data.user?.onboardingCompleted &&
-      user_type.toUpperCase() === UserTypes.PROVIDER
+      user_type?.toUpperCase() === UserTypes.PROVIDER
     ) {
       appStore.setIsIdentityVerified(false);
     }
@@ -211,7 +218,9 @@ const More: IMore = ({navigation}) => {
                   gap={16}
                   borderRadius={10}>
                   {child
-                    .filter(({access}) => access.includes(user_type))
+                    .filter(
+                      ({access}) => user_type && access.includes(user_type),
+                    )
                     .map(({name, Icon, navigate}, key) => (
                       <TouchableOpacity key={name + key} onPress={navigate}>
                         <View

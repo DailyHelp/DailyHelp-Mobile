@@ -1,13 +1,12 @@
 import React from 'react';
-import {View} from 'react-native';
-import {ICheckout} from '../../../@types/routes';
+import { View } from 'react-native';
+import { ICheckout } from '../../../@types/routes';
 import MainButton from '../../../components/button/MainButton';
 import CustomInput from '../../../components/customInput/Index';
 import Typography from '../../../components/Typography';
-import {verticalScale} from '../../../shared/Scaling';
-import PaymentOption from './components/PaymentOption';
+import { verticalScale } from '../../../shared/Scaling';
 import moreService from '../more/services/More.service';
-import utils from '../../../shared/Utils';
+import PaymentOption from './components/PaymentOption';
 
 const Checkout: ICheckout = ({route, navigation}) => {
   const [selectedPayment, setSelectedPayment] = React.useState<

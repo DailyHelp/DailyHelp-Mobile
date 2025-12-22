@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 import React, {useMemo, useState} from 'react';
 import {ScrollView, TouchableOpacity, View} from 'react-native';
+import {useFocusEffect} from '@react-navigation/native';
 import {SheetManager} from 'react-native-actions-sheet';
 import {IAnalytics} from '../../../../@types/routes';
 import Container from '../../../../components/container/Index';
@@ -21,6 +22,16 @@ const Analytics: IAnalytics = ({navigation}) => {
   const [selectedDateFilter, setSelectedDateFilter] = useState('Today');
   const [customStartDate, setCustomStartDate] = useState<Date | undefined>();
   const [customEndDate, setCustomEndDate] = useState<Date | undefined>();
+
+  // Close the date filter sheet when user navigates away from analytics page
+  useFocusEffect(
+    React.useCallback(() => {
+      return () => {
+        // Cleanup: close the sheet when screen loses focus
+        SheetManager.hide('CustomDateFilter');
+      };
+    }, []),
+  );
 
   // Calculate date ranges for predefined filters
   const getDateRangeForFilter = (filter: string): {startDate?: Date; endDate?: Date} => {
@@ -72,6 +83,9 @@ const Analytics: IAnalytics = ({navigation}) => {
   }, [selectedDateFilter, customStartDate, customEndDate]);
 
   const {analytics} = moreService.useAnalytics(startDate, endDate);
+
+  console.log(analytics);
+  
 
   const dateFilters = [
     'Custom date',

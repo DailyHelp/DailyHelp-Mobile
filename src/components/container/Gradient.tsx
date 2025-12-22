@@ -2,7 +2,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import {ColorKeys, Colors} from '../../shared/themes/Index';
 import utils from '../../shared/Utils';
 import {StyleProp, ViewStyle} from 'react-native';
-import { scale, verticalScale } from '../../shared/Scaling';
+import {scale, verticalScale} from '../../shared/Scaling';
 
 const Gradient: IContainer<ColorKeys> = props => {
   let {
@@ -37,8 +37,8 @@ const Gradient: IContainer<ColorKeys> = props => {
     marginBottom,
     borderBottomWidth,
     marginVertical,
-    gradientColors
-    
+    gradientColors,
+    overflow,
   } = props;
 
   const isNumber = (value?: any) => typeof value === 'number';
@@ -53,7 +53,8 @@ const Gradient: IContainer<ColorKeys> = props => {
   if (isNumber(margin)) margin = scale(margin);
   if (isNumber(marginTop)) marginTop = verticalScale(marginTop);
   if (isNumber(marginBottom)) marginBottom = verticalScale(marginBottom);
-  if (isNumber(borderBottomWidth)) borderBottomWidth = verticalScale(borderBottomWidth);
+  if (isNumber(borderBottomWidth))
+    borderBottomWidth = verticalScale(borderBottomWidth);
   if (isNumber(marginVertical)) marginVertical = verticalScale(marginVertical);
 
   if (typeof width === 'string') {
@@ -96,6 +97,7 @@ const Gradient: IContainer<ColorKeys> = props => {
     marginBottom,
     borderBottomWidth,
     marginVertical,
+    overflow
   };
   return (
     <LinearGradient style={style} colors={gradientColors!}>

@@ -37,6 +37,7 @@ export const Box: IContainer<ColorKeys> = ({children, ...props}) => {
     borderBottomWidth,
     marginVertical,
     flexShrink,
+    overflow
   } = props;
 
   const isNumber = (value?: any) => typeof value === 'number';
@@ -96,6 +97,7 @@ export const Box: IContainer<ColorKeys> = ({children, ...props}) => {
     borderBottomWidth,
     marginVertical,
     flexShrink,
+    overflow
   };
 
   return <View style={style}>{children}</View>;

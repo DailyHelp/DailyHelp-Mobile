@@ -10,8 +10,8 @@ import Checkout from '../../screens/app/chat/Checkout';
 import Chat from '../../screens/app/chat/Index';
 import Report from '../../screens/app/chat/report/Index';
 import ReportSubmitted from '../../screens/app/chat/report/ReportSubmitted';
-import VoiceCall from '../../screens/app/chat/VoiceCall';
-import VideoCall from '../../screens/app/chat/VideoCall';
+import VoiceCall from '../../screens/app/chat/voiceCall/Index';
+import VideoCall from '../../screens/app/chat/videoCall/Index';
 import AccountSettings from '../../screens/app/more/AccountSettings';
 import Address from '../../screens/app/more/Address';
 import Analytics from '../../screens/app/more/analytics/Index';
@@ -21,6 +21,7 @@ import SelectBank from '../../screens/app/more/bankAccount/Index';
 import DeleteReason from '../../screens/app/more/deleteAccount/DeleteReason';
 import DeleteAccount from '../../screens/app/more/deleteAccount/Index';
 import Disputes from '../../screens/app/more/Disputes';
+import DisputeDetails from '../../screens/app/more/DisputeDetails';
 import Feedback from '../../screens/app/more/Feedback';
 import More from '../../screens/app/more/Index';
 import ProviderProfile from '../../screens/app/more/providerProfile/Index';
@@ -507,6 +508,13 @@ export const MoreStackRoutes = [
       header: (props: NativeStackHeaderProps) => (
         <CustomHeader type="back" title="Disputes" {...props} textMiddle />
       ),
+    },
+  },
+  {
+    name: 'DisputeDetails',
+    component: DisputeDetails,
+    options: {
+      headerShown: false,
     },
   },
   {
