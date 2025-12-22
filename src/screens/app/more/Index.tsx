@@ -16,9 +16,7 @@ import utils from '../../../shared/Utils';
 
 const More: IMore = ({navigation}) => {
   const {onSwitch, isLoading, data} = moreService.useSwitchUser();
-  const {data: user, refetch: refetchUser} = homeService.useUser();
-
-  const user_type = appStore.user_types as UserTypes;
+  const {data: user, refetch: refetchUser, user_type} = homeService.useUser();
 
   const isVerified = appStore.isIdentityVerified;
 
@@ -27,15 +25,6 @@ const More: IMore = ({navigation}) => {
       refetchUser();
     }, [refetchUser]),
   );
-
-  React.useEffect(() => {
-    if (
-      !data?.data.user?.onboardingCompleted &&
-      user_type?.toUpperCase() === UserTypes.PROVIDER
-    ) {
-      appStore.setIsIdentityVerified(false);
-    }
-  }, [data, user_type]);
 
   let verificationUrl = utils.getVerificationRoutes(
     {

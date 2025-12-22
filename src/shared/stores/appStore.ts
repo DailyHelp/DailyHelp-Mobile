@@ -111,6 +111,16 @@ class AppStore {
     this.isIdentityVerified = dto;
   }
 
+  setUserTypes(userType: UserTypes | string) {
+    if (userType) {
+      const normalizedType = typeof userType === 'string' 
+        ? userType.toUpperCase() as UserTypes 
+        : userType;
+      this.user_types = normalizedType;
+      AppStorage.save('userType', normalizedType);
+    }
+  }
+
   setOffer(dto: {amount?: string; description?: string; attachments?: string}) {
     this.offerDto = {...this.offerDto, ...dto};
   }

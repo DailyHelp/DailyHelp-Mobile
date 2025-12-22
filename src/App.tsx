@@ -17,12 +17,9 @@ import {Colors} from 'react-native/Libraries/NewAppScreen';
 import 'reflect-metadata';
 import PushNotification from './components/pushNotification/Index';
 import Routes from './routes/Index';
-import utils from './shared/Utils';
 
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
-
-  utils.useBoot();
 
   const queryClient = new QueryClient();
 

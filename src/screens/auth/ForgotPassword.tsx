@@ -28,13 +28,11 @@ const ForgotPassword: IForgotPassword = ({navigation}) => {
         validateOnBlur={false}
         validate={createValidator(ForgotPasswordDTO)}>
         {({values, errors, handleSubmit, handleChange}) => (
-          <View
-            style={{
-              marginTop: verticalScale(20),
-              flexDirection: 'column',
-              justifyContent: 'space-between',
-              height: verticalScale(600),
-            }}>
+          <Container
+            marginTop={20}
+            flexDirection="column"
+            justifyContent="space-between"
+            height={600}>
             <CustomInput
               leftIcon={<Assets.EmailInput />}
               placeholder="e.g. adebayoada@gmail.com"
@@ -47,7 +45,7 @@ const ForgotPassword: IForgotPassword = ({navigation}) => {
             <MainButton loading={loading} onPress={handleSubmit}>
               Send code
             </MainButton>
-          </View>
+          </Container>
         )}
       </Formik>
     </Container>

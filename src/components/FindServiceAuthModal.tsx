@@ -1,15 +1,14 @@
-import {View} from 'react-native';
-import {Button, Modal, Portal, Text} from 'react-native-paper';
-import {customFontSize, fonts} from '../shared/themes/Typography';
+import { useNavigation } from '@react-navigation/native';
+import { View } from 'react-native';
+import { Button, Modal, Portal, Text } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/AntDesign';
-import {scale, verticalScale} from '../shared/Scaling';
+import { IAuthRoute, Navigate } from '../@types/routes';
 import Assets from '../assets/Assets';
-import {useNavigation} from '@react-navigation/native';
-import {IAuthRoute, Navigate} from '../@types/routes';
-import AppStorage from '../shared/AppStorage';
-import {UserTypes} from '../shared/Constant';
-import ScreenHeader from './ScreenHeader';
 import authService from '../screens/auth/services/Auth.service';
+import { UserTypes } from '../shared/Constant';
+import { scale, verticalScale } from '../shared/Scaling';
+import { customFontSize, fonts } from '../shared/themes/Typography';
+import ScreenHeader from './ScreenHeader';
 
 const FindServiceAuthModal: IFindServiceAuthModal<UserTypes> = ({
   isVisible,

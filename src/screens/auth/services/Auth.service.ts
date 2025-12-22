@@ -21,6 +21,8 @@ import VerifyOtpDTO, {
   VerifyOtpResponse,
 } from '../dto/VerifyOtpDto';
 import UpdatePasswordDto from '../../app/more/dto/UpdatePassword.dto';
+import utils from '../../../shared/Utils';
+import {UserTypes} from '../../../shared/Constant';
 
 export class AuthService extends AuthApi {
   private static instance: AuthService;
@@ -74,6 +76,8 @@ export class AuthService extends AuthApi {
       mutationFn: async (body: LoginDto) => await this.login(body),
       onSuccess: (data, body) => {
         if (data?.status) {
+          const userType = utils.getUserType(data.data.user?.userTypes)[0];
+
           if (data.data.pinId && data.data.uuid) {
             navigation.navigate('VerifyAccount', {
               email: body.email!,
@@ -84,26 +88,46 @@ export class AuthService extends AuthApi {
               payload: {
                 first_name: data.data.user?.firstname,
                 last_name: data.data.user?.lastname,
-                userType: data.data.user?.userTypes?.split(',')[0],
+                userType,
               },
             });
 
             return;
           }
 
-          if (!data.data.user?.identityVerified) {
+          let verificationUrl = utils.getVerificationRoutes(
+            {
+              ...data.data.user?.providerOnboarding,
+              onboardingCompleted: data.data.user?.onboardingCompleted,
+            },
+            userType,
+          );
+
+          if (
+            !data.data.user?.identityVerified &&
+            userType === UserTypes.CUSTOMER
+          ) {
             navigation.navigate('VerifyIdentity', {
               first_name: data.data.user?.firstname,
               last_name: data.data.user?.lastname,
-              userType: data.data.user?.userTypes?.split(',')[0],
+              userType,
             });
             return;
           }
 
-          appStore.setIsAuthenticated(
-            true,
-            data.data.user?.userTypes?.split(',')[0] as any,
-          );
+          if (
+            !data.data.user?.onboardingCompleted &&
+            userType === UserTypes.PROVIDER
+          ) {
+            navigation.navigate(verificationUrl, {
+              first_name: data.data.user?.firstname,
+              last_name: data.data.user?.lastname,
+              userType,
+            });
+            return;
+          }
+
+          appStore.setIsAuthenticated(true, userType);
         }
       },
       onError: error => new CatchError(error, true),

@@ -22,6 +22,7 @@ class AppStorageData {
   isIdentityVerified: boolean = false;
   recent_search: string = '[]';
   messagePermissionCount: number = 0;
+  navigationState: string = '';
 }
 
 export default class AppStorage {

@@ -1,19 +1,16 @@
 import Geolocation, {
   GeolocationResponse,
 } from '@react-native-community/geolocation';
-import { RouteProp, useRoute } from '@react-navigation/native';
-import {
-  useMutation,
-  useQuery,
-  useQueryClient
-} from '@tanstack/react-query';
+import {RouteProp, useRoute} from '@react-navigation/native';
+import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 import React from 'react';
-import { SheetManager } from 'react-native-actions-sheet';
-import { IHomeRoute } from '../../../../../@types/routes';
+import {SheetManager} from 'react-native-actions-sheet';
+import {IHomeRoute} from '../../../../../@types/routes';
 import AppStorage from '../../../../../shared/AppStorage';
-import { ReasonType } from '../../../../../shared/Constant';
+import {ReasonType, UserTypes} from '../../../../../shared/Constant';
 import CatchError from '../../../../../shared/errors/catchError';
 import HomeApi from '../../../../../shared/services/Home';
+import {appStore} from '../../../../../shared/stores/appStore';
 import utils from '../../../../../shared/Utils';
 import DeclineOfferDto from '../../jobs/dto/DeclineOffer.dto';
 import SendOfferDto from '../../jobs/dto/SendOffer.dto';
@@ -515,8 +512,34 @@ class HomeService extends HomeApi {
       queryFn: async () => await this.getUser(),
       enabled: Boolean(AppStorage.find('isAuthenticated')),
     });
+    const user = data?.data;
 
-    return {data: data?.data, isLoading, error, refetch};
+    React.useEffect(() => {
+      if (user?.userTypes) {
+        const userTypeFromApi = utils.getUserType(user.userTypes);
+        if (userTypeFromApi && userTypeFromApi[0] !== appStore.user_types) {
+          appStore.setUserTypes(userTypeFromApi[0]);
+        }
+      }
+    }, [user?.userTypes]);
+
+    const user_type = React.useMemo(() => {
+      if (user?.userTypes) {
+        return utils.getUserType(user.userTypes)?.[0];
+      }
+      return appStore.user_types as UserTypes;
+    }, [user?.userTypes, appStore.user_types]);
+
+    React.useEffect(() => {
+      if (
+        !user?.onboardingCompleted &&
+        user_type?.toUpperCase() === UserTypes.PROVIDER
+      ) {
+        appStore.setIsIdentityVerified(false);
+      }
+    }, [data, user_type]);
+
+    return {data: data?.data, isLoading, error, refetch, user_type};
   }
 
   useListCategory(type: ReasonType) {

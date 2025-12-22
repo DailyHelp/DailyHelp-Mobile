@@ -1,17 +1,17 @@
-import { createValidator } from 'class-validator-formik';
-import { Formik } from 'formik';
-import { observer } from 'mobx-react-lite';
+import {createValidator} from 'class-validator-formik';
+import {Formik} from 'formik';
+import {observer} from 'mobx-react-lite';
 import React from 'react';
-import { TouchableOpacity, View } from 'react-native';
-import { Button, Text } from 'react-native-paper';
-import { ILogin } from '../../@types/routes';
+import {TouchableOpacity, View} from 'react-native';
+import {Button, Text} from 'react-native-paper';
+import {ILogin} from '../../@types/routes';
 import Assets from '../../assets/Assets';
 import MainButton from '../../components/button/MainButton';
 import Container from '../../components/container/Index';
 import CustomInput from '../../components/customInput/Index';
 import ScreenHeader from '../../components/ScreenHeader';
-import { scale, verticalScale } from '../../shared/Scaling';
-import { customFontSize, fonts } from '../../shared/themes/Typography';
+import {verticalScale} from '../../shared/Scaling';
+import {customFontSize, fonts} from '../../shared/themes/Typography';
 import LoginDto from './dto/LoginDto';
 import authService from './services/Auth.service';
 
@@ -63,20 +63,12 @@ const Login: ILogin = ({navigation}) => {
         )}
       </Formik>
 
-      <View
-        style={{
-          alignItems: 'center',
-          gap: scale(12),
-          marginTop: verticalScale(32),
-          flexDirection: 'row',
-        }}>
-        <View
-          style={{
-            flex: 1,
-            height: verticalScale(1),
-            backgroundColor: '#D6DBE7',
-          }}
-        />
+      <Container
+        alignItems="center"
+        gap={12}
+        marginTop={32}
+        flexDirection="row">
+        <Container flex={1} height={1} backgroundColor="lightDeepGrey" />
         <View>
           <Text
             style={{
@@ -88,21 +80,13 @@ const Login: ILogin = ({navigation}) => {
             Or continue with
           </Text>
         </View>
-        <View
-          style={{
-            flex: 1,
-            height: verticalScale(1),
-            backgroundColor: '#DDDFE4',
-          }}
-        />
-      </View>
+        <Container flex={1} height={1} backgroundColor="lightDeepGrey" />
+      </Container>
 
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          marginTop: verticalScale(20),
-        }}>
+      <Container
+        flexDirection="row"
+        justifyContent="space-between"
+        marginTop={20}>
         <Button
           icon={() => <Assets.GoogleColored />}
           mode="outlined"
@@ -131,7 +115,7 @@ const Login: ILogin = ({navigation}) => {
           style={{borderRadius: 10, borderColor: '#DDDFE4', width: '48%'}}>
           Apple
         </Button>
-      </View>
+      </Container>
 
       <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
         <Text

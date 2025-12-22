@@ -1,19 +1,16 @@
+import { observer } from 'mobx-react-lite';
 import React from 'react';
-import {View, Text} from 'react-native';
-import {observer} from 'mobx-react-lite';
-import {appStore} from '../shared/stores/appStore';
-import {scale, verticalScale} from '../shared/Scaling';
+import { View } from 'react-native';
+import { scale } from '../shared/Scaling';
+import { appStore } from '../shared/stores/appStore';
+import Container from './container/Index';
+import Typography from './Typography';
 
-interface TabBadgeProps {
-  tabName: string;
-  children: React.ReactNode;
-}
-
-const TabBadge: React.FC<TabBadgeProps> = observer(({tabName, children}) => {
+const TabBadge: ITabBadge = observer(({tabName, children}) => {
   const badgeCount = appStore.tabBadges[tabName] || 0;
 
   return (
-    <View style={{position: 'relative'}}>
+    <Container position="relative">
       {children}
       {badgeCount > 0 && (
         <View
@@ -29,18 +26,16 @@ const TabBadge: React.FC<TabBadgeProps> = observer(({tabName, children}) => {
             alignItems: 'center',
             paddingHorizontal: scale(4),
           }}>
-          <Text
-            style={{
-              color: 'white',
-              fontSize: scale(12),
-              fontWeight: 'bold',
-              textAlign: 'center',
-            }}>
+          <Typography
+            color="white"
+            size="sm"
+            fontWeight="bold"
+            textAlign="center">
             {badgeCount > 99 ? '99+' : badgeCount}
-          </Text>
+          </Typography>
         </View>
       )}
-    </View>
+    </Container>
   );
 });
 

@@ -410,15 +410,7 @@ type IJobsCard<U, D> = Props<
   D
 >;
 
-type IFaceMatch = {
-  image: a;
-};
-
-type ICancelJob = {};
-
 type IJobTimeline = Props<{}>;
-
-type IWorkerSuggestion = {};
 
 type ICustomKeyPad = Props<{
   onPress?: (key: string) => void;
@@ -698,4 +690,9 @@ type IVideoCallRemoteView = Props<{
   peerAvatar?: string;
   callStatus: CallStatus;
   isIncoming: boolean;
+}>;
+
+type ITabBadge = Props<{
+  tabName: string;
+  children: React.ReactNode;
 }>;

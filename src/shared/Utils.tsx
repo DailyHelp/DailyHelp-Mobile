@@ -1,6 +1,9 @@
 import {CameraRoll} from '@react-native-camera-roll/camera-roll';
 import messaging from '@react-native-firebase/messaging';
-import {ParamListBase} from '@react-navigation/native';
+import {
+  ParamListBase,
+  useNavigationContainerRef,
+} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useQueryClient} from '@tanstack/react-query';
 import React from 'react';
@@ -19,12 +22,15 @@ import {
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
 import AppStorage from './AppStorage';
-import {UserTypes} from './Constant';
+import {ERRORS, EVENTS, UserTypes} from './Constant';
 import CatchError from './errors/catchError';
 import ThrowError from './errors/throwError';
 import {scale, verticalScale} from './Scaling';
 import {http} from './services/Http';
-import {MMKV} from 'react-native-mmkv';
+import {EventRegister} from 'react-native-event-listeners';
+import {appStore} from './stores/appStore';
+import {SheetManager} from 'react-native-actions-sheet';
+import SplashScreen from 'react-native-splash-screen';
 
 class Utils {
   private static instance: Utils;
@@ -395,9 +401,58 @@ class Utils {
   }
 
   useBoot() {
+    const navigationStatePersistence = this.getNavigationStatePersistence();
+
     React.useEffect(() => {
       this.hasAndroidPermission().then(console.log);
     }, []);
+
+    React.useEffect(() => {
+      const timer = setTimeout(() => SplashScreen.hide(), 2000);
+
+      return () => {
+        clearTimeout(timer);
+      };
+    });
+
+    React.useEffect(() => {
+      EventRegister.addEventListener(EVENTS.SWITCH_USER, user => {
+        appStore.setIsAuthenticated(true, user.userType);
+        appStore.setIsIdentityVerified(user.isVerified);
+      });
+    }, []);
+
+    React.useEffect(() => {
+      EventRegister.addEventListener(ERRORS.UNAUTHENTICATED, user => {
+        appStore.setIsAuthenticated(!user);
+        SheetManager.hideAll();
+
+        if (!user) {
+          navigationStatePersistence.clear();
+        }
+      });
+    }, []);
+
+    const onStateChange = React.useCallback(
+      (state: any) => {
+        if (state && appStore.isAuthenticated) {
+          navigationStatePersistence.persist(state);
+        }
+      },
+      [appStore.isAuthenticated],
+    );
+
+    const [initialState] = React.useState(() => {
+      if (appStore.isAuthenticated) {
+        return navigationStatePersistence.restore();
+      }
+      return undefined;
+    });
+
+    return {
+      onStateChange,
+      initialState,
+    };
   }
 
   useUploadImage() {
@@ -469,10 +524,10 @@ class Utils {
     };
   }
 
-  getUserType(userTypes?: string | string[]) {
-    if (Array.isArray(userTypes)) return userTypes;
+  getUserType(userTypes?: string | string[]): UserTypes[] {
+    if (Array.isArray(userTypes)) return userTypes as UserTypes[];
 
-    return userTypes?.split(',');
+    return userTypes?.split(',') as UserTypes[];
   }
 
   getDimensions(value: Dimensions) {
@@ -608,8 +663,9 @@ class Utils {
       onboardingCompleted?: boolean;
     },
     userType: UserTypes = UserTypes.PROVIDER,
-  ) {
+  ): any {
     let verificationUrl = 'PersonalInformation';
+
     if (!steps?.step1) {
       verificationUrl = 'PersonalInformation';
     }
@@ -633,34 +689,41 @@ class Utils {
     return verificationUrl;
   }
 
-  // Navigation state persistence using MMKV
-  private navigationStorage = new MMKV({
-    id: 'navigation-storage',
-  });
+  saveNavigationState(state: any) {
+    try {
+      const stateString = JSON.stringify(state);
+      AppStorage.save('navigationState', stateString);
+    } catch (error) {
+      console.error('Failed to persist navigation state:', error);
+    }
+  }
+
+  getNavigationState() {
+    try {
+      const stateString = AppStorage.find('navigationState') as string;
+      if (stateString) {
+        return JSON.parse(stateString);
+      }
+    } catch (error) {
+      console.error('Failed to restore navigation state:', error);
+    }
+    return undefined;
+  }
+
+  clearNavigationState() {
+    AppStorage.remove('navigationState');
+  }
 
   getNavigationStatePersistence() {
     return {
       persist: (state: any) => {
-        try {
-          const stateString = JSON.stringify(state);
-          this.navigationStorage.set('NAVIGATION_STATE', stateString);
-        } catch (error) {
-          console.error('Failed to persist navigation state:', error);
-        }
+        this.saveNavigationState(state);
       },
       restore: () => {
-        try {
-          const stateString = this.navigationStorage.getString('NAVIGATION_STATE');
-          if (stateString) {
-            return JSON.parse(stateString);
-          }
-        } catch (error) {
-          console.error('Failed to restore navigation state:', error);
-        }
-        return undefined;
+        return this.getNavigationState();
       },
       clear: () => {
-        this.navigationStorage.delete('NAVIGATION_STATE');
+        this.clearNavigationState();
       },
     };
   }

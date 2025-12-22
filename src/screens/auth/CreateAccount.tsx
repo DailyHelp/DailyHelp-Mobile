@@ -1,14 +1,12 @@
 import { createValidator } from 'class-validator-formik';
 import { Formik } from 'formik';
 import React from 'react';
-import { View } from 'react-native';
 import { ICreateAccount } from '../../@types/routes';
 import Assets from '../../assets/Assets';
 import MainButton from '../../components/button/MainButton';
 import Container from '../../components/container/Index';
 import CustomInput from '../../components/customInput/Index';
 import ScreenHeader from '../../components/ScreenHeader';
-import { verticalScale } from '../../shared/Scaling';
 import RegisterDTO from './dto/RegisterDto';
 import authService from './services/Auth.service';
 
@@ -72,11 +70,11 @@ const CreateAccount: ICreateAccount = ({}) => {
               error={errors.password}
             />
 
-            <View style={{marginBottom: verticalScale(25)}}>
+            <Container marginBottom={25}>
               <MainButton loading={loading} onPress={() => handleSubmit()}>
                 Sign up
               </MainButton>
-            </View>
+            </Container>
           </React.Fragment>
         )}
       </Formik>
