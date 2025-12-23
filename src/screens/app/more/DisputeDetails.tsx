@@ -1,29 +1,23 @@
 import dayjs from 'dayjs';
 import React from 'react';
-import {ScrollView, TouchableOpacity, View} from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
-import AttachmentContainer from '../../../components/AttachmentContainer';
-import Container from '../../../components/container/Index';
-import CustomAvatar from '../../../components/CustomAvatar';
+import {ScrollView, View} from 'react-native';
+import {IDisputeDetails} from '../../../@types/routes';
 import CustomHeader from '../../../components/customHeader/Index';
 import Typography from '../../../components/Typography';
-import Assets from '../../../assets/Assets';
-import {scale, verticalScale} from '../../../shared/Scaling';
+import {scale} from '../../../shared/Scaling';
 import utils from '../../../shared/Utils';
-import DisputesDto from './dto/Disputes.dto';
+import JobTimeline from '../user/jobs/components/JobTimeline';
 import jobService from '../user/jobs/service/Jobs.service';
-import {IDisputeDetails} from '../../../@types/routes';
+import DisputeDetailsCard from './components/DisputeDetailsCard';
+import DisputeJobInfo from './components/DisputeJobInfo';
+import DisputeResolutionCard from './components/DisputeResolutionCard';
 
 const DisputeDetails: IDisputeDetails = ({navigation, route}) => {
   utils.useHideBottomTab(navigation);
 
-  // Get dispute data from route params
   const dispute = route.params?.dispute;
 
-  // Only fetch timeline if we have a job UUID
-  const {timeline, isLoading: timelineLoading} = jobService.useJobTimeline(
-    dispute?.job?.uuid || '',
-  );
+  const {timeline} = jobService.useJobTimeline(dispute?.job?.uuid || '');
 
   if (!dispute) {
     return (
@@ -42,286 +36,167 @@ const DisputeDetails: IDisputeDetails = ({navigation, route}) => {
     );
   }
 
-  // Determine the other user (the one the dispute is against)
-  const otherUser =
-    dispute.submittedFor ||
-    dispute.job?.serviceProvider ||
-    dispute.job?.serviceRequestor;
-
   const jobPrice = dispute.job?.price || 0;
 
-  // Format dispute status for resolution display
+  const acceptedDate = dayjs(dispute.job.acceptedAt).format(
+    'DD MMM, YYYY, hh:mm',
+  );
+
+  // Resolution logic
   const resolutionStatus = dispute.status?.toLowerCase();
+  const hasResolution = Boolean(
+    dispute?.resolvedAt || dispute?.resolutionAction,
+  );
+  const resolutionRefundAmount = dispute?.resolutionRefundAmount || 0;
+  const resolutionProviderAmount = dispute?.resolutionProviderAmount || 0;
+  const resolutionAction = dispute?.resolutionAction?.toLowerCase();
+
   const isResolved =
+    hasResolution ||
     resolutionStatus === 'resolved' ||
     resolutionStatus === 'full' ||
-    resolutionStatus === 'partial';
+    resolutionStatus === 'partial' ||
+    resolutionStatus === 'full_payment';
 
-  // Get resolution text and refund amount
-  let resolutionText = 'Pending resolution';
-  let refundAmount = 0;
-  if (isResolved) {
-    if (resolutionStatus === 'full') {
-      resolutionText = 'Full refund';
-      refundAmount = jobPrice;
-    } else if (resolutionStatus === 'partial') {
-      resolutionText = 'Partial refund';
-      // In a real scenario, you'd get this from the API
-      refundAmount = Math.round(jobPrice * 0.5); // Mock: 50% refund
-    } else {
-      resolutionText = 'Resolved';
+  const {resolutionText, refundAmount, resolutionType} = React.useMemo(() => {
+    let text = 'Pending resolution';
+    let amount = 0;
+    let type: 'refund' | 'payment' = 'refund';
+
+    if (isResolved) {
+      if (resolutionProviderAmount > 0 && resolutionRefundAmount === 0) {
+        text = 'Full Payment';
+        amount = jobPrice;
+        type = 'payment';
+      } else if (resolutionRefundAmount > 0) {
+        if (resolutionRefundAmount >= jobPrice) {
+          text = 'Full refund';
+          amount = resolutionRefundAmount;
+          type = 'refund';
+        } else {
+          text = 'Partial refund';
+          amount = resolutionRefundAmount;
+          type = 'refund';
+        }
+      } else if (
+        resolutionStatus === 'full_payment' ||
+        resolutionAction === 'full_payment'
+      ) {
+        text = 'Full Payment';
+        amount = jobPrice;
+        type = 'payment';
+      } else if (resolutionStatus === 'full' || resolutionAction === 'full') {
+        text = 'Full refund';
+        amount = jobPrice;
+        type = 'refund';
+      } else if (
+        resolutionStatus === 'partial' ||
+        resolutionAction === 'partial'
+      ) {
+        text = 'Partial refund';
+        amount = Math.round(jobPrice * 0.5);
+        type = 'refund';
+      } else {
+        text = 'Resolved';
+      }
     }
-  }
 
-  // Format accepted date
-  const acceptedDate = dispute.job?.acceptedAt
-    ? dayjs(dispute.job.acceptedAt).format('DD MMM, YYYY, hh:mm')
-    : 'N/A';
+    return {resolutionText: text, refundAmount: amount, resolutionType: type};
+  }, [
+    isResolved,
+    resolutionRefundAmount,
+    resolutionProviderAmount,
+    resolutionAction,
+    resolutionStatus,
+    jobPrice,
+  ]);
 
-  // Timeline data - combine job timeline with dispute events
-  const timelineData = timeline?.data || [];
-  const disputeTimeline = [
-    ...timelineData,
-    {
-      event: 'Dispute',
-      createdAt: dispute.createdAt,
-    },
-    ...(isResolved
-      ? [
-          {
-            event: 'Resolution',
-            createdAt: dispute.updatedAt || dispute.createdAt,
-          },
-        ]
-      : []),
-  ];
+  const disputeTimeline = React.useMemo(() => {
+    const timelineData = timeline?.data || [];
+    return [
+      ...timelineData,
+      {
+        event: 'Dispute',
+        createdAt: dispute.createdAt,
+      },
+      ...(isResolved
+        ? [
+            {
+              event: 'Resolution',
+              createdAt: dispute.updatedAt || dispute.createdAt,
+            },
+          ]
+        : []),
+    ];
+  }, [timeline, dispute, isResolved]);
 
-  // Format dispute category/description
-  const disputeCategory =
-    dispute.category || "Provider didn't complete the work";
-  const disputeDescription =
-    dispute.description || 'No additional details provided.';
+  const disputeCategory = dispute.category;
+  const disputeDescription = dispute.description;
+
+  const disputeCode = dispute.code;
+
+  const otherUser = React.useMemo(() => {
+    if (dispute.submittedFor && typeof dispute.submittedFor === 'object') {
+      return dispute.submittedFor;
+    }
+
+    if (
+      dispute.job?.serviceProvider &&
+      typeof dispute.job.serviceProvider === 'object' &&
+      'firstname' in dispute.job.serviceProvider
+    ) {
+      return dispute.job.serviceProvider;
+    }
+
+    if (
+      dispute.job?.serviceRequestor &&
+      typeof dispute.job.serviceRequestor === 'object' &&
+      'firstname' in dispute.job.serviceRequestor
+    ) {
+      return dispute.job.serviceRequestor;
+    }
+    return null;
+  }, [
+    dispute.submittedFor,
+    dispute.job?.serviceProvider,
+    dispute.job?.serviceRequestor,
+  ]);
 
   return (
     <View style={{flex: 1, backgroundColor: '#F2F4F7'}}>
       <CustomHeader
         type="back"
-        title={`Dispute #${
-          dispute.code || dispute.uuid?.slice(0, 8).toUpperCase() || 'N/A'
-        }`}
+        title={`Dispute #${disputeCode}`}
         navigation={navigation}
         route={route}
         textMiddle
       />
 
-      <ScrollView
-        style={{flex: 1}}
-        contentContainerStyle={{
-          padding: scale(16),
-          paddingBottom: scale(40),
-        }}
-        showsVerticalScrollIndicator={false}>
-        {/* Service Provider/User Information Card */}
-        <Container
-          backgroundColor="white"
-          borderRadius={10}
-          padding={scale(16)}
-          marginBottom={verticalScale(20)}
-          flexDirection="column"
-          alignItems="center"
-          gap={scale(12)}>
-          <CustomAvatar
-            avatarSize={scale(60)}
-            badgeSize={scale(24)}
-            data={{image: otherUser?.picture}}
-          />
-          <View
-            style={{flexDirection: 'row', alignItems: 'center', gap: scale(8)}}>
-            <Typography size="lg" fontWeight="bold">
-              {otherUser?.firstname} {otherUser?.lastname}
-            </Typography>
-            <Typography size="lg" fontWeight="bold" currency>
-              {jobPrice}
-            </Typography>
-          </View>
-          <View
-            style={{flexDirection: 'row', alignItems: 'center', gap: scale(6)}}>
-            <Assets.Accepted style={{marginTop: verticalScale(2)}} />
-            <Typography size="sm" color="gray">
-              Accepted on {acceptedDate}
-            </Typography>
-          </View>
-        </Container>
+      <ScrollView style={{flex: 1}} showsVerticalScrollIndicator={false}>
+        <DisputeJobInfo
+          otherUser={otherUser!}
+          jobPrice={jobPrice}
+          acceptedDate={acceptedDate}
+          jobDescription={dispute.job?.description}
+          jobPictures={dispute.job?.pictures}
+        />
 
-        {/* Job Description Section */}
-        <Container
-          backgroundColor="white"
-          borderRadius={10}
-          padding={scale(16)}
-          marginBottom={verticalScale(20)}
-          flexDirection="column"
-          gap={scale(16)}>
-          <Typography
-            size="md"
-            color="lightBlack"
-            lineHeight={verticalScale(24)}>
-            {dispute.job?.description || 'No description available.'}
-          </Typography>
-          {dispute.job?.pictures &&
-            dispute.job.pictures.split(',').filter(Boolean).length > 0 && (
-              <AttachmentContainer
-                allowUpload={false}
-                data={dispute.job.pictures.split(',').filter(Boolean)}
-              />
-            )}
-        </Container>
+        <DisputeDetailsCard
+          category={disputeCategory}
+          description={disputeDescription}
+          pictures={dispute.pictures}
+        />
 
-        {/* Dispute Details Section */}
-        <Container
-          backgroundColor="white"
-          borderRadius={10}
-          padding={scale(16)}
-          marginBottom={verticalScale(20)}
-          flexDirection="column"
-          gap={scale(16)}>
-          <Typography size="md" fontWeight="bold" color="lightBlack">
-            DISPUTE DETAILS
-          </Typography>
-          <Typography size="md" fontWeight="semibold" color="lightBlack">
-            {disputeCategory}
-          </Typography>
-          <TouchableOpacity activeOpacity={0.7}>
-            <Typography
-              size="sm"
-              color="secondary"
-              textDecorationLine="underline">
-              {disputeDescription}
-            </Typography>
-          </TouchableOpacity>
-          {dispute.pictures &&
-            dispute.pictures.split(',').filter(Boolean).length > 0 && (
-              <AttachmentContainer
-                allowUpload={false}
-                data={dispute.pictures.split(',').filter(Boolean)}
-              />
-            )}
-        </Container>
-
-        {/* Dispute Resolution Section */}
         {isResolved && (
-          <Container
-            backgroundColor="white"
-            borderRadius={10}
-            padding={scale(16)}
-            marginBottom={verticalScale(20)}
-            flexDirection="column"
-            gap={scale(12)}>
-            <Typography size="md" fontWeight="bold" color="lightBlack">
-              DISPUTE RESOLUTION
-            </Typography>
-            <Typography
-              size="lg"
-              fontWeight="bold"
-              color={resolutionStatus === 'partial' ? 'orange' : 'lightGreen'}>
-              {resolutionText}
-            </Typography>
-            {refundAmount > 0 && (
-              <Typography size="lg" fontWeight="bold" currency>
-                {refundAmount}
-              </Typography>
-            )}
-            <Typography size="sm" color="gray" lineHeight={verticalScale(22)}>
-              {dispute.status === 'full'
-                ? 'Full refund approved due to incomplete work.'
-                : dispute.status === 'partial'
-                ? 'The service provider acknowledged a delay and offered to reschedule, but the user declined. Partial refund approved due to incomplete work.'
-                : 'The dispute has been resolved.'}
-            </Typography>
-          </Container>
+          <DisputeResolutionCard
+            resolutionText={resolutionText}
+            refundAmount={refundAmount}
+            status={dispute.status}
+            resolutionType={resolutionType}
+          />
         )}
 
-        {/* Job Timeline Section */}
-        <Container
-          backgroundColor="white"
-          borderRadius={10}
-          padding={scale(16)}
-          marginBottom={verticalScale(20)}
-          flexDirection="column"
-          gap={scale(16)}>
-          <Typography size="md" fontWeight="bold" color="lightBlack">
-            JOB TIMELINE
-          </Typography>
-          <View style={{flexDirection: 'column', gap: verticalScale(21)}}>
-            {disputeTimeline.map((item, index) => {
-              const isLast = index === disputeTimeline.length - 1;
-              const showLine = !isLast;
-              // All timeline items in resolved disputes are completed
-              const isCompleted = true;
-
-              return (
-                <View
-                  key={index}
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'flex-start',
-                    justifyContent: 'space-between',
-                  }}>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      alignItems: 'flex-start',
-                      gap: scale(8),
-                      flex: 1,
-                    }}>
-                    <View
-                      style={{
-                        width: scale(20),
-                        alignItems: 'center',
-                        paddingTop: scale(2),
-                      }}>
-                      <View
-                        style={{
-                          width: scale(20),
-                          height: scale(20),
-                          borderRadius: scale(10),
-                          backgroundColor: isCompleted ? '#27A535' : '#E5E7EB',
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                        }}>
-                        {isCompleted && (
-                          <Icon
-                            name="checkmark"
-                            size={scale(12)}
-                            color="#FFFFFF"
-                          />
-                        )}
-                      </View>
-                      {showLine && (
-                        <View
-                          style={{
-                            height: verticalScale(24),
-                            width: scale(1),
-                            borderWidth: scale(0.5),
-                            borderColor: isCompleted ? '#27A535' : '#E5E7EB',
-                            position: 'absolute',
-                            top: verticalScale(22),
-                            left: scale(10),
-                          }}
-                        />
-                      )}
-                    </View>
-                    <Typography size="md" color="gray">
-                      {item.event}
-                    </Typography>
-                  </View>
-                  <Typography size="sm" color="gray">
-                    {dayjs(item.createdAt).format('DD MMM, YYYY, hh:mm')}
-                  </Typography>
-                </View>
-              );
-            })}
-          </View>
-        </Container>
+        <JobTimeline timeline={disputeTimeline} status={resolutionStatus} />
       </ScrollView>
     </View>
   );

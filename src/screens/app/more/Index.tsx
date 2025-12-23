@@ -26,6 +26,15 @@ const More: IMore = ({navigation}) => {
     }, [refetchUser]),
   );
 
+  React.useEffect(() => {
+    if (
+      !data?.data.user?.onboardingCompleted &&
+      user_type?.toUpperCase() === UserTypes.PROVIDER
+    ) {
+      appStore.setIsIdentityVerified(false);
+    }
+  }, [data, user_type]);
+
   let verificationUrl = utils.getVerificationRoutes(
     {
       ...user?.providerOnboarding,
@@ -41,6 +50,9 @@ const More: IMore = ({navigation}) => {
     middlename: user?.middlename || '',
     gender: user?.gender,
   };
+
+  console.log(params);
+  
 
   const menus = [
     {

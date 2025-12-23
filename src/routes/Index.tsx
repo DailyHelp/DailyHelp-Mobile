@@ -2,16 +2,16 @@ import {
   NavigationContainer,
   useNavigationContainerRef,
 } from '@react-navigation/native';
-import { observer } from 'mobx-react-lite';
+import {observer} from 'mobx-react-lite';
 import React from 'react';
-import { SheetProvider } from 'react-native-actions-sheet';
-import { PaperProvider } from 'react-native-paper';
+import {SheetProvider} from 'react-native-actions-sheet';
+import {PaperProvider} from 'react-native-paper';
 import Toast from 'react-native-toast-message';
 import GlobalCallHandler from '../components/GlobalCallHandler';
 import '../shared/ActionSheets';
-import { appStore } from '../shared/stores/appStore';
-import { theme } from '../shared/themes/Index';
-import { toastConfig } from '../shared/Toast';
+import {appStore} from '../shared/stores/appStore';
+import {theme} from '../shared/themes/Index';
+import {toastConfig} from '../shared/Toast';
 import utils from '../shared/Utils';
 import AppRouter from './app/Index';
 import AuthRouter from './auth/Index';
@@ -47,4 +47,4 @@ const Routes: Props = () => {
   );
 };
 
-export default Routes;
+export default observer(Routes);

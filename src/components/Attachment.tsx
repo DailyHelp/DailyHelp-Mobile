@@ -11,23 +11,26 @@ const Attachment: IAttachment = ({data, canClose = true, onClose}) => {
   );
   return (
     <React.Fragment>
-      {data?.attachment.map((uri, key) => {
-        const isVideo =
-          uri.endsWith('.mp4') ||
-          uri.endsWith('.mov') ||
-          uri.endsWith('.avi') ||
-          uri.includes('video');
+      {data?.attachment
+        .filter(uri => uri && typeof uri === 'string' && uri.trim().length > 0)
+        .map((uri, key) => {
+          const trimmedUri = uri.trim();
+          const isVideo =
+            trimmedUri.endsWith('.mp4') ||
+            trimmedUri.endsWith('.mov') ||
+            trimmedUri.endsWith('.avi') ||
+            trimmedUri.includes('video');
 
-        const isPlaying = playingVideoUri === uri;
+          const isPlaying = playingVideoUri === trimmedUri;
 
-        return (
+          return (
           <View
             key={key + new Date().toISOString()}
             style={offerStyle.videoContainer}>
             {/* Show video if playing, else show image */}
             {isVideo && isPlaying ? (
               <Video
-                source={{uri}}
+                source={{uri: trimmedUri}}
                 style={{
                   width: '100%',
                   height: '100%',
@@ -42,7 +45,7 @@ const Attachment: IAttachment = ({data, canClose = true, onClose}) => {
             ) : (
               <>
                 <Image
-                  source={{uri}}
+                  source={{uri: trimmedUri}}
                   style={{
                     width: '100%',
                     height: '100%',
@@ -54,7 +57,7 @@ const Attachment: IAttachment = ({data, canClose = true, onClose}) => {
                 {/* Play Icon Overlay */}
                 {isVideo && (
                   <TouchableOpacity
-                    onPress={() => setPlayingVideoUri(uri)}
+                    onPress={() => setPlayingVideoUri(trimmedUri)}
                     activeOpacity={0.7}
                     style={offerStyle.playButton}>
                     <Icon name="playcircleo" size={24} color="#FFF" />
@@ -67,9 +70,9 @@ const Attachment: IAttachment = ({data, canClose = true, onClose}) => {
             {canClose && (
               <TouchableOpacity
                 onPress={() => {
-                  appStore.toggleGalleryImageSelection(uri);
-                  if (playingVideoUri === uri) setPlayingVideoUri(null); // stop playing if removed
-                  onClose?.(uri);
+                  appStore.toggleGalleryImageSelection(trimmedUri);
+                  if (playingVideoUri === trimmedUri) setPlayingVideoUri(null); // stop playing if removed
+                  onClose?.(trimmedUri);
                 }}
                 style={offerStyle.cancelButton}>
                 <Icon name="closecircle" size={18} color="#F00" />

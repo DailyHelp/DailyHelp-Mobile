@@ -114,7 +114,7 @@ class JobService extends JobsApi {
       enabled: Boolean(AppStorage.find('isAuthenticated')),
     });
 
-    return {isLoading, jobDetails, error, refetch};
+    return {isLoading, data: jobDetails?.data, error, refetch};
   }
 
   useVerifyJob() {

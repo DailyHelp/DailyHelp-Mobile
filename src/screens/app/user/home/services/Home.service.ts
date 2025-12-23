@@ -502,7 +502,6 @@ class HomeService extends HomeApi {
       error,
       fetchMore: controlledFetchMore,
       refetch,
-      total: reviews?.pagination?.total,
     };
   }
 
@@ -512,23 +511,25 @@ class HomeService extends HomeApi {
       queryFn: async () => await this.getUser(),
       enabled: Boolean(AppStorage.find('isAuthenticated')),
     });
-    const user = data?.data;
 
-    React.useEffect(() => {
-      if (user?.userTypes) {
-        const userTypeFromApi = utils.getUserType(user.userTypes);
-        if (userTypeFromApi && userTypeFromApi[0] !== appStore.user_types) {
-          appStore.setUserTypes(userTypeFromApi[0]);
-        }
-      }
-    }, [user?.userTypes]);
+    const user = data?.data;
 
     const user_type = React.useMemo(() => {
       if (user?.userTypes) {
-        return utils.getUserType(user.userTypes)?.[0];
+        return utils
+          .getUserType(user.userTypes)?.[0]
+          .toUpperCase() as UserTypes;
       }
       return appStore.user_types as UserTypes;
     }, [user?.userTypes, appStore.user_types]);
+
+    React.useEffect(() => {
+      if (user?.userTypes) {
+        if (user_type && user_type !== appStore.user_types) {
+          appStore.setUserTypes(user_type);
+        }
+      }
+    }, [user?.userTypes]);
 
     React.useEffect(() => {
       if (

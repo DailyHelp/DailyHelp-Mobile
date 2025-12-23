@@ -15,4 +15,11 @@ export default class DisputesDto {
   'updatedAt': string;
   'deletedAt': string;
   code?: string;
+  'resolutionAction'?: string | null;
+  'resolutionNote'?: string | null;
+  'resolutionRefundAmount'?: number | null;
+  'resolutionProviderAmount'?: number | null;
+  'resolutionCommissionAmount'?: number | null;
+  'resolvedAt'?: string | null;
+  'resolvedBy'?: string | null;
 }

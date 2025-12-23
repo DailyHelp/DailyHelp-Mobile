@@ -26,12 +26,7 @@ const Login: ILogin = ({navigation}) => {
       />
 
       <Formik
-        initialValues={
-          new LoginDto({
-            email: 'emmanuelcox39@gmail.com',
-            password: 'Password@1',
-          })
-        }
+        initialValues={new LoginDto()}
         onSubmit={onSubmit}
         validateOnChange={false}
         validateOnBlur={false}

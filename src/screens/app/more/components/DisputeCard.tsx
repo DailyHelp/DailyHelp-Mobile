@@ -1,35 +1,150 @@
-import {TouchableOpacity, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import Assets from '../../../../assets/Assets';
+import dayjs from 'dayjs';
+import React from 'react';
+import {TouchableOpacity, View} from 'react-native';
+import {IMoreRoute} from '../../../../@types/routes';
 import CustomAvatar from '../../../../components/CustomAvatar';
 import Typography from '../../../../components/Typography';
 import {scale, verticalScale} from '../../../../shared/Scaling';
 import {ColorKeys} from '../../../../shared/themes/Index';
+import utils from '../../../../shared/Utils';
 import DisputesDto from '../dto/Disputes.dto';
-import dayjs from 'dayjs';
-import {IMoreRoute} from '../../../../@types/routes';
 
 const DisputeCard: IDisputeCard<DisputesDto> = ({type, data}) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<IMoreRoute, 'DisputeDetails'>>();
+
+  const dispute = data?.disputes;
+  const disputeStatus = dispute?.status?.toLowerCase();
+  const jobPrice = dispute?.job?.price || 0;
+  const isResolved = type === 'resolved';
+
+  const hasResolution = Boolean(
+    dispute?.resolvedAt || dispute?.resolutionAction,
+  );
+  const resolutionRefundAmount = dispute?.resolutionRefundAmount || 0;
+  const resolutionProviderAmount = dispute?.resolutionProviderAmount || 0;
+  const resolutionAction = dispute?.resolutionAction?.toLowerCase();
+
+  const {statusText, refundAmount} = React.useMemo(() => {
+    if (!isResolved) {
+      return {statusText: '', refundAmount: 0};
+    }
+
+    if (resolutionProviderAmount > 0 && resolutionRefundAmount === 0) {
+      return {
+        statusText: 'Service Provider Paid',
+        refundAmount: jobPrice,
+      };
+    }
+
+    if (resolutionRefundAmount > 0) {
+      if (resolutionRefundAmount >= jobPrice) {
+        return {
+          statusText: 'Full refund',
+          refundAmount: resolutionRefundAmount,
+        };
+      } else {
+        return {
+          statusText: 'Partial refund',
+          refundAmount: resolutionRefundAmount,
+        };
+      }
+    }
+
+    if (resolutionAction) {
+      if (resolutionAction === 'full_payment') {
+        return {
+          statusText: 'Service Provider Paid',
+          refundAmount: jobPrice,
+        };
+      } else if (resolutionAction === 'full') {
+        return {
+          statusText: 'Full refund',
+          refundAmount: jobPrice,
+        };
+      } else if (resolutionAction === 'partial') {
+        return {
+          statusText: 'Partial refund',
+          refundAmount: Math.round(jobPrice * 0.5),
+        };
+      }
+    }
+
+    if (disputeStatus === 'full_payment') {
+      return {
+        statusText: 'Service Provider Paid',
+        refundAmount: jobPrice,
+      };
+    }
+
+    if (disputeStatus === 'full') {
+      return {
+        statusText: 'Full refund',
+        refundAmount: jobPrice,
+      };
+    }
+
+    if (disputeStatus === 'partial') {
+      return {
+        statusText: 'Partial refund',
+        refundAmount: Math.round(jobPrice * 0.5),
+      };
+    }
+
+    if (hasResolution || disputeStatus === 'resolved') {
+      return {
+        statusText: 'Resolved',
+        refundAmount: 0,
+      };
+    }
+
+    return {statusText: '', refundAmount: 0};
+  }, [
+    isResolved,
+    hasResolution,
+    resolutionRefundAmount,
+    resolutionProviderAmount,
+    resolutionAction,
+    disputeStatus,
+    jobPrice,
+  ]);
+
   let color: ColorKeys = 'gray';
   let backgroundColor = '#F3F4F6';
 
-  if (data?.status === 'full') {
+  // Determine resolution type from refund amount
+  const isFullPayment =
+    resolutionProviderAmount > 0 && resolutionRefundAmount === 0;
+  const isFullRefund =
+    resolutionRefundAmount > 0 && resolutionRefundAmount >= jobPrice;
+  const isPartialRefund =
+    resolutionRefundAmount > 0 && resolutionRefundAmount < jobPrice;
+
+  if (isFullRefund || disputeStatus === 'full' || resolutionAction === 'full') {
     color = 'lightGreen';
     backgroundColor = '#E6FFF4';
-  }
-
-  if (data?.status === 'partial') {
+  } else if (
+    isPartialRefund ||
+    disputeStatus === 'partial' ||
+    resolutionAction === 'partial'
+  ) {
     color = 'orange';
     backgroundColor = '#FFF3EB';
+  } else if (
+    isFullPayment ||
+    disputeStatus === 'full_payment' ||
+    resolutionAction === 'full_payment'
+  ) {
+    color = 'gray';
+    backgroundColor = '#F3F4F6';
   }
 
   const handlePress = () => {
-    if (data?.disputes) {
+    if (dispute) {
       navigation.navigate('DisputeDetails', {
-        dispute: data.disputes,
+        dispute: dispute,
       });
     }
   };
@@ -85,17 +200,24 @@ const DisputeCard: IDisputeCard<DisputesDto> = ({type, data}) => {
       </View>
       <View style={{flexDirection: 'column', gap: 12}}>
         <Typography fontWeight="bold">
-          Provider didn’t complete the work
+          {dispute?.category || "Provider didn't complete the work"}
         </Typography>
         <Typography color="darkGray" lineHeight={20}>
-          I want to try making Bantu knots with my hair. Can you share a picture
-          of what I'm hoping to create?
+          {dispute?.description ||
+            "I want to try making Bantu knots with my hair. Can you share a picture of what I'm hoping to create?"}
         </Typography>
 
-        {type === 'resolved' && (
-          <View style={{padding: scale(10), backgroundColor, borderRadius: 10}}>
+        {isResolved && statusText && (
+          <View
+            style={{
+              padding: scale(10),
+              backgroundColor,
+              borderRadius: 10,
+            }}>
             <Typography fontWeight="semibold" color={color} textAlign="center">
-              Service Provider Paid - ₦{data?.disputes?.job.price}
+              {statusText}
+              {refundAmount > 0 &&
+                ` - ₦${utils.numberWithCommas(refundAmount)}`}
             </Typography>
           </View>
         )}

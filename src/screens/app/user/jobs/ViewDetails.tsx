@@ -25,11 +25,12 @@ import jobStyle from './jobStyle';
 import jobService from './service/Jobs.service';
 
 const ViewDetails: IViewDetails = ({navigation, route}) => {
+  const jobs = route.params;
   jobService.useWebSocketListeners();
 
   const {startJob, endJob} = jobService.useJobsActions();
 
-  const {jobDetails} = jobService.useGetJobDetails(route.params?.uuid!);
+  const {data} = jobService.useGetJobDetails(route.params?.uuid!);
   const {timeline, isLoading: timelineLoading} = jobService.useJobTimeline(
     route.params?.uuid || '',
   );
@@ -40,7 +41,7 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
   utils.useHideBottomTab(navigation);
   const [swipeSuccess, setSwipeSuccess] = React.useState(false);
   const [type, setType] = React.useState(
-    (jobDetails?.data.job.status || route.params?.status)?.toLowerCase(),
+    (data?.job.status || route.params?.status)?.toLowerCase(),
   );
 
   React.useEffect(() => {
@@ -50,8 +51,11 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
   }, []);
 
   React.useEffect(() => {
-    setType(route.params?.status || jobDetails?.data.job.status?.toLowerCase());
-  }, [jobDetails, route]);
+    const status =
+      jobs?.status.toLowerCase() || data?.job.status?.toLowerCase();
+
+    setType(status);
+  }, [data, route]);
 
   let headerText = 'Have they arrived? Tap “Confirm face” to verify.';
   let headerBgColor = '#95D21A';
@@ -76,7 +80,7 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
 
   let timelines = timeline?.data;
 
-  if (!timelines) timelines = jobDetails?.data.timelines;
+  if (!timelines) timelines = data?.timelines;
 
   return (
     <View style={{flex: 1, backgroundColor: 'white'}}>
@@ -136,7 +140,7 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
                 <CustomAvatar
                   avatarSize={50}
                   badgeSize={20}
-                  data={{image: jobDetails?.data.job.providerPicture}}
+                  data={{image: data?.job.providerPicture}}
                 />
                 <Typography size="md" fontWeight="bold">
                   {route.params?.providerFirstname}{' '}
@@ -146,7 +150,7 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
                   {route.params?.providerPrimaryJobRole}
                 </Typography>
 
-                {jobDetails?.data.job.cancellationCategory && (
+                {data?.job.cancellationCategory && (
                   <Container
                     flexDirection="row"
                     backgroundColor="pink"
@@ -156,7 +160,7 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
                     alignItems="center"
                     borderWidth={1}>
                     <Typography size="md" fontWeight="medium" color="danger">
-                      {jobDetails?.data.job.cancellationCategory}
+                      {data?.job.cancellationCategory}
                     </Typography>
                   </Container>
                 )}
@@ -168,7 +172,7 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
                       onPress={() =>
                         SheetManager.show('FaceMatch', {
                           payload: {
-                            image: jobDetails?.data.job.providerPicture,
+                            image: data?.job.providerPicture,
                             navigation: navigation,
                             verificationPinParams: {
                               uuid: route.params?.uuid!,
@@ -350,7 +354,7 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
             </View>
           ) : (
             type !== 'canceled' &&
-            !!jobDetails?.data.review && (
+            !!data?.review && (
               <OutlineButton
                 icon={() => (
                   <IconF

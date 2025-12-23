@@ -23,23 +23,28 @@ const ProviderProfile: IProviderProfile = ({navigation}) => {
     refetch: refetchUser,
     isLoading: isLoadingUser,
   } = homeService.useUser();
-  const {saveHelpersDetails, isPending: isSaving} =
-    homeService.useSaveHelpersDetails();
+
+  const {saveHelpersDetails} = homeService.useSaveHelpersDetails();
+
   const {uploadBatch, isLoading: isUploading} = utils.useUploadImage();
 
   const [serviceImages, setServiceImages] = React.useState<string[]>([]);
+
   const [selectedGalleryImages, setSelectedGalleryImages] = React.useState<
     string[]
   >([]);
+
   const galleryBottomSheetRef = React.useRef<ActionSheetRef | null>(null);
 
   const {
     data: reviews,
-    total,
     refetch: refetchReviews,
     isLoading: isLoadingReviews,
   } = homeService.useReviews(3);
+
   const [progress, setProgress] = React.useState(data?.ratedCompletedJobs);
+
+  const {data: metrics} = homeService.useGetReviewRatingMetrics(data?.uuid!);
 
   React.useEffect(() => {
     if (data?.serviceImages) {
@@ -57,21 +62,13 @@ const ProviderProfile: IProviderProfile = ({navigation}) => {
     setProgress(data?.ratedCompletedJobs);
   }, [data?.ratedCompletedJobs]);
 
-  const handleImageSelection = React.useCallback(
-    async (images: string[] | string) => {
-      const imageArray = Array.isArray(images) ? images : [images];
-      setSelectedGalleryImages(imageArray);
-    },
-    [],
-  );
-
   const toggleGalleryImageSelection = React.useCallback((uri: string) => {
     setSelectedGalleryImages(prev => {
       if (prev.includes(uri)) {
         return prev.filter(img => img !== uri);
       }
       if (prev.length >= 10) {
-        return prev; // Max 10 images
+        return prev;
       }
       return [...prev, uri];
     });
@@ -84,14 +81,13 @@ const ProviderProfile: IProviderProfile = ({navigation}) => {
 
       setServiceImages(updatedImages);
 
-      // Save to backend
       try {
         await saveHelpersDetails({
           serviceImages: updatedImages,
         });
       } catch (error) {
         console.error('Failed to remove image:', error);
-        // Revert on error
+
         setServiceImages(serviceImages);
       }
     },
@@ -125,12 +121,21 @@ const ProviderProfile: IProviderProfile = ({navigation}) => {
       });
 
       setServiceImages(allImages);
+
+      refetchUser();
+
       setSelectedGalleryImages([]);
       galleryBottomSheetRef.current?.hide();
     } catch (error) {
       console.error('Failed to save images:', error);
     }
-  }, [selectedGalleryImages, serviceImages, uploadBatch, saveHelpersDetails]);
+  }, [
+    selectedGalleryImages,
+    serviceImages,
+    uploadBatch,
+    saveHelpersDetails,
+    refetchUser,
+  ]);
 
   const tierColor: {[x: string]: string} = {
     bronze: '#E27C00',
@@ -341,9 +346,11 @@ const ProviderProfile: IProviderProfile = ({navigation}) => {
                 </Typography>
                 <Container flexDirection="row" alignItems="center" gap={5}>
                   <Assets.Star width={15} />
-                  <Typography fontWeight="bold">4.5</Typography>
+                  <Typography fontWeight="bold">
+                    {metrics?.averageRating}
+                  </Typography>
                   <Typography color="gray" fontWeight="bold">
-                    {`(${total || 0})`}
+                    ({metrics?.totalReviews})
                   </Typography>
                 </Container>
               </Container>
@@ -393,46 +400,12 @@ const ProviderProfile: IProviderProfile = ({navigation}) => {
         }}
         selectedImages={selectedGalleryImages}
         toggleGalleryImageSelection={toggleGalleryImageSelection}
-        selectImages={handleImageSelection}
         onClose={(uri: string) => {
-          // Remove from selectedGalleryImages when deselected in gallery
           setSelectedGalleryImages(prev => prev.filter(img => img !== uri));
+
+          handleSaveImages();
         }}
       />
-
-      {selectedGalleryImages.length > 0 && (
-        <View
-          style={{
-            position: 'absolute',
-            bottom: 0,
-            left: 0,
-            right: 0,
-            backgroundColor: 'white',
-            padding: scale(16),
-            borderTopWidth: 1,
-            borderTopColor: '#F1F2F4',
-            flexDirection: 'row',
-            gap: 10,
-          }}>
-          <MainButton
-            mode="outlined"
-            borderColor="lightGrey"
-            color="danger"
-            width={'48%'}
-            onPress={() => {
-              setSelectedGalleryImages([]);
-              galleryBottomSheetRef.current?.hide();
-            }}>
-            Cancel
-          </MainButton>
-          <MainButton
-            width={'48%'}
-            loading={isUploading || isSaving}
-            onPress={handleSaveImages}>
-            {isUploading ? 'Uploading...' : 'Save'}
-          </MainButton>
-        </View>
-      )}
     </Container>
   );
 };

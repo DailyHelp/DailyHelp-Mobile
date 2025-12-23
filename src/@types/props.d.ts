@@ -696,3 +696,26 @@ type ITabBadge = Props<{
   tabName: string;
   children: React.ReactNode;
 }>;
+
+type IDisputeTimeline = Props<{status: string}, JobTimelineDto[]>;
+
+type IDisputeJobInfo<U> = Props<{
+  otherUser?: U;
+  jobPrice: number;
+  acceptedDate: string;
+  jobDescription?: string;
+  jobPictures?: string;
+}>;
+
+type IDisputeDetailsCard = Props<{
+  category: string;
+  description: string;
+  pictures?: string;
+}>;
+
+type IDisputeResolutionCard = Props<{
+  resolutionText: string;
+  refundAmount: number;
+  status: string;
+  resolutionType: 'refund' | 'payment';
+}>;

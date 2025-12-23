@@ -18,7 +18,10 @@ const UpdatePrices: IUpdatePrices = ({navigation, route}) => {
         minimumOfferPrice: route.params?.minimumOfferPrice || 0,
       }}
       onSubmit={({offerStartingPrice, minimumOfferPrice}) => {
-        savePrice({offerStartingPrice, minimumOfferPrice});
+        savePrice({
+          offerStartingPrice: +offerStartingPrice,
+          minimumOfferPrice: +minimumOfferPrice,
+        });
       }}>
       {({values, errors, handleChange, handleSubmit}) => (
         <Container
@@ -29,10 +32,14 @@ const UpdatePrices: IUpdatePrices = ({navigation, route}) => {
           <Container gap={20}>
             <Container gap={3}>
               <CustomInput
+                keyboardType="number-pad"
                 value={values.offerStartingPrice.toString()}
                 label="Starting price"
                 onChangeText={handleChange('offerStartingPrice')}
                 error={errors.offerStartingPrice}
+                type="text"
+                maskType="amount"
+                mask
               />
               <Typography color="gray">
                 This is your starting rate for all offers.
@@ -44,6 +51,10 @@ const UpdatePrices: IUpdatePrices = ({navigation, route}) => {
                 label="Minimum Acceptable Offer"
                 onChangeText={handleChange('minimumOfferPrice')}
                 error={errors.minimumOfferPrice}
+                type="text"
+                maskType="amount"
+                mask
+                keyboardType="decimal-pad"
               />
               <Typography color="gray">
                 This is the lowest amount you can accept for a job.

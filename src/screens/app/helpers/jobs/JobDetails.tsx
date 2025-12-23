@@ -22,7 +22,7 @@ import CodeContainer from './components/CodeContainer';
 import ReviewsCard from '../../../../components/ReviewsCard';
 
 const JobDetails: IViewDetails = ({navigation, route}) => {
-  const {jobDetails} = jobService.useGetJobDetails(route.params?.uuid!);
+  const {data} = jobService.useGetJobDetails(route.params?.uuid!);
   const {timeline, isLoading: timelineLoading} = jobService.useJobTimeline(
     route.params?.uuid!,
   );
@@ -34,12 +34,12 @@ const JobDetails: IViewDetails = ({navigation, route}) => {
   utils.useHideBottomTab(navigation);
 
   const [type, setType] = React.useState(
-    (jobDetails?.data.job.status || route.params?.status)?.toLowerCase(),
+    (data?.job.status.toLowerCase() || route.params?.status)?.toLowerCase(),
   );
 
   React.useEffect(() => {
-    setType(jobDetails?.data.job.status?.toLowerCase());
-  }, [jobDetails]);
+    setType(data?.job.status?.toLowerCase());
+  }, [data]);
 
   let headerText = 'Waiting to start';
   let headerBgColor = '#FF6B01';
@@ -58,11 +58,11 @@ const JobDetails: IViewDetails = ({navigation, route}) => {
   if (type === 'canceled') headerText = 'Job Canceled';
   if (type === 'completed') headerColor = 'white';
 
-  const picture = jobDetails?.data.job.providerPicture;
+  const picture = data?.job.providerPicture;
 
   let timelines = timeline?.data;
 
-  if (!timelines) timelines = jobDetails?.data.timelines;
+  if (!timelines) timelines = data?.timelines;
 
   return (
     <View style={{flex: 1, backgroundColor: 'white'}}>
@@ -124,16 +124,16 @@ const JobDetails: IViewDetails = ({navigation, route}) => {
                 <CustomAvatar
                   avatarSize={50}
                   badgeSize={20}
-                  data={{image: jobDetails?.data.job.serviceRequestor.picture}}
+                  data={{image: data?.job.serviceRequestor.picture}}
                 />
                 <Typography size="md" fontWeight="bold">
-                  {jobDetails?.data.job.serviceRequestor.firstname}{' '}
-                  {jobDetails?.data.job.serviceRequestor.lastname}
+                  {data?.job.serviceRequestor.firstname}{' '}
+                  {data?.job.serviceRequestor.lastname}
                 </Typography>
               </View>
             )}
 
-            {jobDetails?.data.job.code && type === 'pending' && (
+            {data?.job.code && type === 'pending' && (
               <Container gap={7} width={'90'} alignSelf="center">
                 <Container
                   flexDirection="row"
@@ -150,7 +150,7 @@ const JobDetails: IViewDetails = ({navigation, route}) => {
                     Remind the client to start once you arrive.
                   </Typography>
                 </Container>
-                <CodeContainer code={jobDetails.data.job.code} />
+                <CodeContainer code={data.job.code} />
               </Container>
             )}
 
@@ -250,6 +250,7 @@ const JobDetails: IViewDetails = ({navigation, route}) => {
                 <AttachmentContainer
                   allowUpload={false}
                   data={route.params?.pictures.split(',')}
+                  canClose={false}
                 />
               )}
             </Container>
@@ -273,7 +274,7 @@ const JobDetails: IViewDetails = ({navigation, route}) => {
                 flexDirection: 'column',
                 gap: 10,
               }}>
-              <ReviewsCard data={jobDetails?.data.review} />
+              <ReviewsCard data={data?.review} />
             </View>
           )}
         </View>
