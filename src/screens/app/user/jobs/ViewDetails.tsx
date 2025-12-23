@@ -78,6 +78,10 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
   if (type === 'canceled') headerText = 'Job Canceled';
   if (type === 'canceled') headerColor = 'white';
 
+  if (type === 'engaged') headerBgColor = '#F0443A';
+  if (type === 'engaged') headerText = 'Currently engaged in a job';
+  if (type === 'engaged') headerColor = 'white';
+
   let timelines = timeline?.data;
 
   if (!timelines) timelines = data?.timelines;

@@ -14,9 +14,12 @@ import {observer} from 'mobx-react-lite';
 import {appStore} from '../../../shared/stores/appStore';
 import {UserTypes} from '../../../shared/Constant';
 import Container from '../../../components/container/Index';
+import WalletFunded from './components/WalletFunded';
+import React from 'react';
 
 const WalletBalance: IWalletBalance = ({navigation}) => {
   utils.useHideBottomTab(navigation);
+  const [walletFunded, setWalletFunded] = React.useState(false);
 
   const {wallet} = moreService.useWalletBalance();
   const {data} = moreService.useWalletTransactions();
@@ -25,14 +28,11 @@ const WalletBalance: IWalletBalance = ({navigation}) => {
 
   return (
     <Container flex={1}>
-      <View
-        style={{
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-          marginTop: verticalScale(20),
-          gap: 10,
-        }}>
+      <Container
+        justifyContent="center"
+        alignItems="center"
+        marginTop={20}
+        gap={10}>
         <Typography color="gray" size="md">
           Available balance
         </Typography>
@@ -50,20 +50,18 @@ const WalletBalance: IWalletBalance = ({navigation}) => {
                 type: userType === UserTypes.CUSTOMER ? 'FUND' : 'WITHDRAW',
                 navigation,
               },
+              onClose: res => {
+                if (res?.type === 'FUND' && res.success) {
+                  setWalletFunded(res?.success!);
+                }
+              },
             });
           }}>
           {userType === UserTypes.CUSTOMER ? 'Fund wallet' : 'Withdraw'}
         </MainButton>
-      </View>
+      </Container>
 
-      <View
-        style={{
-          flex: 1,
-          flexDirection: 'column',
-          marginTop: verticalScale(40),
-          width: '95%',
-          alignSelf: 'center',
-        }}>
+      <Container flex={1} marginTop={40} width={'95'} alignSelf="center">
         <Typography
           color="gray"
           size="md"
@@ -88,7 +86,15 @@ const WalletBalance: IWalletBalance = ({navigation}) => {
             keyExtractor={(item, index) => index.toString()}
           />
         </View>
-      </View>
+      </Container>
+
+      <WalletFunded
+        isVisible={walletFunded}
+        onClose={() => setWalletFunded(!walletFunded)}
+        header="Wallet funded"
+        description="Your wallet has been topped up successfully. You're all set to make payments!"
+        onPress={() => setWalletFunded(!walletFunded)}
+      />
     </Container>
   );
 };

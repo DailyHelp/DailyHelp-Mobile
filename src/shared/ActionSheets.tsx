@@ -70,7 +70,9 @@ declare module 'react-native-actions-sheet' {
         navigation?: any;
       };
       returnValue: {
-        amount: number;
+        amount?: number;
+        type?: 'FUND' | 'WITHDRAW';
+        success?: boolean;
       };
     }>;
     HomeAddress: SheetDefinition<{

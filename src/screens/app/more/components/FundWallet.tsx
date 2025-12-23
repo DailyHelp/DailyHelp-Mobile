@@ -28,7 +28,6 @@ const FundedWallet = React.forwardRef<ActionSheetRef, SheetProps<'FundWallet'>>(
     const isPending = fund?.isPending;
     const navigation = props.payload?.navigation || useNavigationContainerRef();
 
-    // Constants for withdrawal validation (only for providers)
     const MINIMUM_WITHDRAWAL = 20000;
     const PAYOUT_FEE = 50;
 
@@ -59,7 +58,19 @@ const FundedWallet = React.forwardRef<ActionSheetRef, SheetProps<'FundWallet'>>(
         );
         SheetManager.hide('FundWallet');
       } else {
-        fund.mutate({...d, amount: +d.amount!});
+        fund.mutate(
+          {...d, amount: +d.amount!},
+          {
+            onSuccess: res => {
+              SheetManager.hide('FundWallet', {
+                payload: {
+                  type: props.payload?.type,
+                  success: res?.status,
+                },
+              });
+            },
+          },
+        );
       }
     };
 
@@ -163,7 +174,6 @@ const FundedWallet = React.forwardRef<ActionSheetRef, SheetProps<'FundWallet'>>(
                   error={errorMessage}
                 />
 
-                {/* Payment Fee and Minimum Withdrawal Info - Only for Providers */}
                 {isWithdraw && isProvider && amount > 0 && (
                   <View
                     style={{

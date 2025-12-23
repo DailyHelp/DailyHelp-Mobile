@@ -42,6 +42,7 @@ const More: IMore = ({navigation}) => {
     },
     user_type,
   );
+  
   let params = {
     firstname: user?.firstname,
     lastname: user?.lastname,
@@ -105,13 +106,13 @@ const More: IMore = ({navigation}) => {
         {
           name: 'Help & Support',
           Icon: Assets.HelpAndSupport,
-          navigate: () => navigation.navigate('AccountSettings'),
+          navigate: () => {},
           access: [UserTypes.CUSTOMER, UserTypes.PROVIDER],
         },
         {
           name: 'Terms of use',
           Icon: Assets.TermsOfUse,
-          navigate: () => navigation.navigate('AccountSettings'),
+          navigate: () => {},
           access: [UserTypes.CUSTOMER, UserTypes.PROVIDER],
         },
       ],

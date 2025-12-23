@@ -213,7 +213,6 @@ export class MoreService extends MoreApi {
   }
 
   useAnalytics(startDate?: Date, endDate?: Date) {
-    // Format dates to ISO 8601 strings for the API
     const startDateString = startDate?.toISOString();
     const endDateString = endDate?.toISOString();
 

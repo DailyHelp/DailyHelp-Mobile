@@ -17,6 +17,7 @@ import authService from './services/Auth.service';
 
 const Login: ILogin = ({navigation}) => {
   const {loading, onSubmit} = authService.useLogin();
+  const {signIn, isGooglePending} = authService.useGoogleSignAuth();
 
   return (
     <Container type="scroll" padding={10} gap={20}>
@@ -83,6 +84,8 @@ const Login: ILogin = ({navigation}) => {
         justifyContent="space-between"
         marginTop={20}>
         <Button
+          loading={isGooglePending}
+          onPress={() => signIn()}
           icon={() => <Assets.GoogleColored />}
           mode="outlined"
           labelStyle={{

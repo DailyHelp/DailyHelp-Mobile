@@ -1,5 +1,5 @@
 import {WEB_CLIENT_ID} from '@env';
-import messaging from '@react-native-firebase/messaging';
+import messaging, {getToken} from '@react-native-firebase/messaging';
 import {
   GoogleSignin,
   statusCodes,
@@ -73,7 +73,10 @@ export class AuthService extends AuthApi {
 
     const {mutateAsync, isPending} = useMutation({
       mutationKey: ['login'],
-      mutationFn: async (body: LoginDto) => await this.login(body),
+      mutationFn: async (body: LoginDto) => {
+        body.deviceToken = await getToken(messaging());
+        return await this.login(body);
+      },
       onSuccess: (data, body) => {
         if (data?.status) {
           const userType = utils.getUserType(data.data.user?.userTypes)[0];
@@ -134,7 +137,7 @@ export class AuthService extends AuthApi {
     });
 
     const onSubmit = async (body: LoginDto) => {
-      body.deviceToken = await messaging().getToken();
+      body.deviceToken = await getToken(messaging());
       return await mutateAsync(body);
     };
 
@@ -206,7 +209,7 @@ export class AuthService extends AuthApi {
   }
 
   useGoogleSignAuth() {
-    const {tokenUpdate} = this.useUpdateFcmToken();
+    const navigation = useNavigation<Navigate<IAuthRoute>>();
 
     React.useEffect(() => {
       GoogleSignin.configure({webClientId: WEB_CLIENT_ID});
@@ -215,15 +218,67 @@ export class AuthService extends AuthApi {
     const {mutate, isPending} = useMutation({
       mutationKey: ['googleAuth'],
       mutationFn: async (body: GoogleAuthDto) => await this.googleAuth(body),
-      onSuccess: async data => {
-        tokenUpdate(await messaging().getToken());
+      onSuccess: (data, body) => {
+        if (data?.status) {
+          const userType = utils.getUserType(data.data.user?.userTypes)[0];
+
+          if (data.data.pinId && data.data.uuid) {
+            navigation.navigate('VerifyAccount', {
+              email: body.email!,
+              pin: data.data.pinId,
+              type: OtpActionType.VERIFY_ACCOUNT,
+              user_id: data.data.uuid,
+              to: 'VerifyIdentity',
+              payload: {
+                first_name: data.data.user?.firstname,
+                last_name: data.data.user?.lastname,
+                userType,
+              },
+            });
+
+            return;
+          }
+
+          let verificationUrl = utils.getVerificationRoutes(
+            {
+              ...data.data.user?.providerOnboarding,
+              onboardingCompleted: data.data.user?.onboardingCompleted,
+            },
+            userType,
+          );
+
+          if (
+            !data.data.user?.identityVerified &&
+            userType === UserTypes.CUSTOMER
+          ) {
+            navigation.navigate('VerifyIdentity', {
+              first_name: data.data.user?.firstname,
+              last_name: data.data.user?.lastname,
+              userType,
+            });
+            return;
+          }
+
+          if (
+            !data.data.user?.onboardingCompleted &&
+            userType === UserTypes.PROVIDER
+          ) {
+            navigation.navigate(verificationUrl, {
+              first_name: data.data.user?.firstname,
+              last_name: data.data.user?.lastname,
+              userType,
+            });
+            return;
+          }
+
+          appStore.setIsAuthenticated(true, userType);
+        }
       },
       onError: error => {
         new CatchError(error, true);
       },
     });
 
-    // Somewhere in your code
     const signIn = async () => {
       GoogleSignin.signOut();
       try {
@@ -235,6 +290,7 @@ export class AuthService extends AuthApi {
             familyName: response.data.user.familyName!,
             givenName: response.data.user.givenName!,
             id: response.data.user.id,
+            idToken: response.data.idToken!,
           });
         }
       } catch (error: any) {

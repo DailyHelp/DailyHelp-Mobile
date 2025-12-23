@@ -1,20 +1,20 @@
-import dayjs from 'dayjs';
+import {useFocusEffect} from '@react-navigation/native';
 import React, {useMemo, useState} from 'react';
 import {ScrollView, TouchableOpacity, View} from 'react-native';
-import {useFocusEffect} from '@react-navigation/native';
 import {SheetManager} from 'react-native-actions-sheet';
 import {IAnalytics} from '../../../../@types/routes';
+import {tipsData} from '../../../../app_data';
 import Container from '../../../../components/container/Index';
+import SectionBorderSeparatedCard from '../../../../components/SectionBorderSeparatedCard';
 import Typography from '../../../../components/Typography';
 import {scale} from '../../../../shared/Scaling';
 import {Colors} from '../../../../shared/themes/Index';
 import utils from '../../../../shared/Utils';
+import moreService from '../services/More.service';
 import MultipleProgressBar from './MultipleProgressBar';
 import RevenueLabel from './RevenueLabel';
 import RevenueRings from './RevenueRings';
 import TipsContainer from './TipsContainer';
-import SectionBorderSeparatedCard from '../../../../components/SectionBorderSeparatedCard';
-import moreService from '../services/More.service';
 
 const Analytics: IAnalytics = ({navigation}) => {
   utils.useHideBottomTab(navigation);
@@ -23,57 +23,14 @@ const Analytics: IAnalytics = ({navigation}) => {
   const [customStartDate, setCustomStartDate] = useState<Date | undefined>();
   const [customEndDate, setCustomEndDate] = useState<Date | undefined>();
 
-  // Close the date filter sheet when user navigates away from analytics page
   useFocusEffect(
     React.useCallback(() => {
       return () => {
-        // Cleanup: close the sheet when screen loses focus
         SheetManager.hide('CustomDateFilter');
       };
     }, []),
   );
 
-  // Calculate date ranges for predefined filters
-  const getDateRangeForFilter = (
-    filter: string,
-  ): {startDate?: Date; endDate?: Date} => {
-    const now = dayjs();
-
-    switch (filter) {
-      case 'Today': {
-        const start = now.startOf('day').toDate();
-        const end = now.endOf('day').toDate();
-        return {startDate: start, endDate: end};
-      }
-      case 'Current week': {
-        const start = now.startOf('week').toDate();
-        const end = now.endOf('week').toDate();
-        return {startDate: start, endDate: end};
-      }
-      case 'Last week': {
-        const lastWeek = now.subtract(1, 'week');
-        const start = lastWeek.startOf('week').toDate();
-        const end = lastWeek.endOf('week').toDate();
-        return {startDate: start, endDate: end};
-      }
-      case 'This month': {
-        const start = now.startOf('month').toDate();
-        const end = now.endOf('month').toDate();
-        return {startDate: start, endDate: end};
-      }
-      case 'This Year': {
-        const start = now.startOf('year').toDate();
-        const end = now.endOf('year').toDate();
-        return {startDate: start, endDate: end};
-      }
-      case 'All time':
-        return {}; // No date range for all time
-      default:
-        return {};
-    }
-  };
-
-  // Calculate dates based on selected filter
   const {startDate, endDate} = useMemo(() => {
     if (selectedDateFilter === 'Custom date') {
       return {
@@ -81,7 +38,7 @@ const Analytics: IAnalytics = ({navigation}) => {
         endDate: customEndDate,
       };
     }
-    return getDateRangeForFilter(selectedDateFilter);
+    return utils.getDateRangeForFilter(selectedDateFilter);
   }, [selectedDateFilter, customStartDate, customEndDate]);
 
   const {analytics} = moreService.useAnalytics(startDate, endDate);
@@ -111,13 +68,12 @@ const Analytics: IAnalytics = ({navigation}) => {
       }
     } else {
       setSelectedDateFilter(filter);
-      // Clear custom dates when selecting a predefined filter
+
       setCustomStartDate(undefined);
       setCustomEndDate(undefined);
     }
   };
 
-  // Revenue data and progress (0-1) for rings to match mock
   const revenueProgress = {
     earnings: analytics?.data.revenue.rings.earnings,
     tips: analytics?.data.revenue.rings.tips,
@@ -128,29 +84,6 @@ const Analytics: IAnalytics = ({navigation}) => {
     tips: `+ ₦${analytics?.data.revenue.rings.tips || 0}`,
     commission: `- ₦${analytics?.data.revenue.rings.commission || 0}`,
   };
-
-  const tipsData = [
-    {
-      title: 'Complete more jobs',
-      description: "The more jobs you finish, the more offers you'll get.",
-    },
-    {
-      title: 'Respond to offers quickly',
-      description: 'Fast replies help you appear more reliable to clients.',
-    },
-    {
-      title: 'Avoid last-minute cancellations',
-      description: 'Too many cancellations reduce your visibility.',
-    },
-    {
-      title: 'Keep your availability updated',
-      description: "This helps clients send offers when you're truly free.",
-    },
-    {
-      title: 'Maintain a high job rating',
-      description: 'Good ratings push your profile higher in search results.',
-    },
-  ];
 
   return (
     <View style={{flex: 1, backgroundColor: '#F9F9FB'}}>

@@ -16,6 +16,9 @@ import MainButton from '../../../../../components/button/MainButton';
 import {ColorKeys} from '../../../../../shared/themes/Index';
 import jobService from '../service/Jobs.service';
 import moreService from '../../../more/services/More.service';
+import Container from '../../../../../components/container/Index';
+import {useNavigation} from '@react-navigation/native';
+import {IHomeRoute, Navigate} from '../../../../../@types/routes';
 
 const RateService = React.forwardRef<
   ActionSheetRef,
@@ -29,6 +32,7 @@ const RateService = React.forwardRef<
   const {wallet, refetch, isLoading} = moreService.useWalletBalance();
   const [refreshing, setRefreshing] = React.useState(false);
 
+  const navigation = useNavigation<Navigate<IHomeRoute>>();
 
   const ratingOptions = [
     {
@@ -184,7 +188,9 @@ const RateService = React.forwardRef<
                           style={{
                             padding: scale(16),
                             backgroundColor:
-                              v.rating === ind.toString() ? '#F9FFEB' : '#F9F9FB',
+                              v.rating === ind.toString()
+                                ? '#F9FFEB'
+                                : '#F9F9FB',
                             borderRadius: 10,
                             borderWidth: v.rating === ind.toString() ? 1 : 0,
                             borderColor: '#95D21A',
@@ -265,19 +271,31 @@ const RateService = React.forwardRef<
                         </TouchableOpacity>
                       ))}
                     </View>
-
-                    <View
-                      style={{
-                        flexDirection: 'column',
-                        gap: 5,
-                      }}>
-                      <Typography size="md">Wallet balance</Typography>
-                      <View>
-                        <Typography currency fontWeight="bold" size="md">
-                          {wallet?.data.totalBalance || 0}
-                        </Typography>
+                    <Container justifyContent="space-between">
+                      <View
+                        style={{
+                          flexDirection: 'column',
+                          gap: 5,
+                        }}>
+                        <Typography size="md">Wallet balance</Typography>
+                        <View>
+                          <Typography currency fontWeight="bold" size="md">
+                            {wallet?.data.totalBalance || 0}
+                          </Typography>
+                        </View>
                       </View>
-                    </View>
+
+                      <MainButton
+                        onPress={() => {
+                          SheetManager.show('FundWallet', {
+                            payload: {type: 'FUND', navigation},
+                          });
+                        }}
+                        enableButtonColor="secondary"
+                        color="white">
+                        Fund wallet
+                      </MainButton>
+                    </Container>
                   </View>
                 </View>
                 <View style={{padding: scale(10), paddingBottom: scale(30)}}>

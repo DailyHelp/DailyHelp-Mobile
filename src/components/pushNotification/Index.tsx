@@ -1,6 +1,8 @@
 // Core packages
 import messaging, {
   FirebaseMessagingTypes,
+  getToken,
+  setBackgroundMessageHandler,
 } from '@react-native-firebase/messaging';
 import React, {useEffect, useRef} from 'react';
 import NotificationPopup, {
@@ -47,7 +49,7 @@ const PushNotification = () => {
   const getFCMToken = async () => {
     try {
       if (!fcmToken) {
-        const newToken = await messaging().getToken();
+        const newToken = await getToken(messaging());
         return newToken;
       }
     } catch (err: any) {
@@ -92,8 +94,8 @@ const PushNotification = () => {
   };
 
   const backgroundNotification = () => {
-    return messaging().setBackgroundMessageHandler(async remoteMessage => {
-      notifee.displayNotification({
+    return setBackgroundMessageHandler(messaging(), async remoteMessage => {
+      await notifee.displayNotification({
         title: remoteMessage?.notification?.title,
         body: remoteMessage?.notification?.body,
         android: {

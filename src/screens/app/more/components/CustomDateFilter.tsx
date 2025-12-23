@@ -26,13 +26,23 @@ const CustomDateFilter = React.forwardRef<
     props.payload?.endDate,
   );
   const [activeField, setActiveField] = useState<'start' | 'end'>('start');
+  const [error, setError] = useState<string | null>(null);
 
   const handleApply = () => {
     // Validate that end date is not before start date using dayjs for accurate comparison
-    if (startDate && endDate && dayjs(endDate).isBefore(dayjs(startDate), 'day')) {
-      // Don't apply if end date is before start date
+    if (
+      startDate &&
+      endDate &&
+      dayjs(endDate).isBefore(dayjs(startDate), 'day')
+    ) {
+      // Show input error and prevent applying
+      setError('End date cannot be before the start date.');
       return;
     }
+
+    // Clear any previous error on successful apply
+    setError(null);
+
     SheetManager.hide('CustomDateFilter', {
       payload: {
         startDate,
@@ -42,6 +52,7 @@ const CustomDateFilter = React.forwardRef<
   };
 
   const handleCancel = () => {
+    setError(null);
     SheetManager.hide('CustomDateFilter');
   };
 
@@ -49,6 +60,8 @@ const CustomDateFilter = React.forwardRef<
     const date = dayjs(dateString).toDate();
     if (activeField === 'start') {
       setStartDate(date);
+      // Clear any previous error when adjusting start date
+      setError(null);
       // If end date exists and is before new start date, clear it
       if (endDate && dayjs(date).isAfter(dayjs(endDate))) {
         setEndDate(undefined);
@@ -56,10 +69,12 @@ const CustomDateFilter = React.forwardRef<
     } else {
       // Prevent setting end date before start date using dayjs for accurate comparison
       if (startDate && dayjs(date).isBefore(dayjs(startDate), 'day')) {
-        // Don't allow end date to be set before start date
+        // Show input error and don't allow end date to be set before start date
+        setError('End date cannot be before the start date.');
         return;
       }
       setEndDate(date);
+      setError(null);
     }
   };
 
@@ -123,7 +138,7 @@ const CustomDateFilter = React.forwardRef<
 
         <View style={{flexDirection: 'column'}}>
           {/* Start Date Input */}
-          <View style={{marginBottom: 24}}>
+          <View style={{marginBottom: 24, gap: 7}}>
             <Typography
               size="md"
               fontWeight="semibold"
@@ -158,7 +173,7 @@ const CustomDateFilter = React.forwardRef<
           </View>
 
           {/* End Date Input */}
-          <View style={{marginBottom: 24}}>
+          <View style={{marginBottom: 24, gap: 7}}>
             <Typography
               size="md"
               fontWeight="semibold"
@@ -190,6 +205,17 @@ const CustomDateFilter = React.forwardRef<
               </Text>
               <Assets.Calendar />
             </TouchableOpacity>
+            {!!error && (
+              <Text
+                style={{
+                  marginTop: verticalScale(4),
+                  fontFamily: fonts.GeistRegular,
+                  fontSize: customFontSize.sm,
+                  color: '#F04438',
+                }}>
+                {error}
+              </Text>
+            )}
           </View>
 
           {/* Date Picker - Inline Wheel Picker */}

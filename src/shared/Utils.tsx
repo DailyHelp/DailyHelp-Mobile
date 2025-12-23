@@ -31,6 +31,7 @@ import {EventRegister} from 'react-native-event-listeners';
 import {appStore} from './stores/appStore';
 import {SheetManager} from 'react-native-actions-sheet';
 import SplashScreen from 'react-native-splash-screen';
+import dayjs from 'dayjs';
 
 class Utils {
   private static instance: Utils;
@@ -727,6 +728,45 @@ class Utils {
       },
     };
   }
+
+  getDateRangeForFilter = (
+    filter: string,
+  ): {startDate?: Date; endDate?: Date} => {
+    const now = dayjs();
+
+    switch (filter) {
+      case 'Today': {
+        const start = now.startOf('day').toDate();
+        const end = now.endOf('day').toDate();
+        return {startDate: start, endDate: end};
+      }
+      case 'Current week': {
+        const start = now.startOf('week').toDate();
+        const end = now.endOf('week').toDate();
+        return {startDate: start, endDate: end};
+      }
+      case 'Last week': {
+        const lastWeek = now.subtract(1, 'week');
+        const start = lastWeek.startOf('week').toDate();
+        const end = lastWeek.endOf('week').toDate();
+        return {startDate: start, endDate: end};
+      }
+      case 'This month': {
+        const start = now.startOf('month').toDate();
+        const end = now.endOf('month').toDate();
+        return {startDate: start, endDate: end};
+      }
+      case 'This Year': {
+        const start = now.startOf('year').toDate();
+        const end = now.endOf('year').toDate();
+        return {startDate: start, endDate: end};
+      }
+      case 'All time':
+        return {}; // No date range for all time
+      default:
+        return {};
+    }
+  };
 }
 
 const utils = Utils.getInstance();

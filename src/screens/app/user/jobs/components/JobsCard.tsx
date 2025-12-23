@@ -1,19 +1,18 @@
-import {SheetManager} from 'react-native-actions-sheet';
-import {Divider} from 'react-native-paper';
+import { CommonActions, useNavigation } from '@react-navigation/native';
+import dayjs from 'dayjs';
+import { SheetManager } from 'react-native-actions-sheet';
+import { Divider } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { IJobsRoute, Navigate } from '../../../../../@types/routes';
 import Assets from '../../../../../assets/Assets';
 import MainButton from '../../../../../components/button/MainButton';
-import OutlineButton from '../../../../../components/button/OutlineButton';
 import Container from '../../../../../components/container/Index';
 import CustomAvatar from '../../../../../components/CustomAvatar';
 import StatusChip from '../../../../../components/StatusChip';
 import Typography from '../../../../../components/Typography';
-import {UserTypes} from '../../../../../shared/Constant';
-import {verticalScale} from '../../../../../shared/Scaling';
+import { UserTypes } from '../../../../../shared/Constant';
+import { verticalScale } from '../../../../../shared/Scaling';
 import JobsDto from '../dto/job.dto';
-import dayjs from 'dayjs';
-import {useNavigation, CommonActions} from '@react-navigation/native';
-import {IJobsRoute, Navigate} from '../../../../../@types/routes';
 
 const JobsCard: IJobsCard<UserTypes, JobsDto> = ({
   type = 'in_progress',
@@ -114,7 +113,8 @@ const JobsCard: IJobsCard<UserTypes, JobsDto> = ({
       {type === 'completed' &&
         userType !== UserTypes.PROVIDER &&
         !data?.review && (
-          <OutlineButton
+          <MainButton
+            mode="outlined"
             onPress={() =>
               SheetManager.show('RateService', {
                 payload: {
@@ -128,7 +128,7 @@ const JobsCard: IJobsCard<UserTypes, JobsDto> = ({
             icon={() => <Icon name="star" size={15} color={'#FFD100'} />}
             color="black">
             Rate service provider
-          </OutlineButton>
+          </MainButton>
         )}
 
       {(type === 'in_progress' || type === 'pending') && (
