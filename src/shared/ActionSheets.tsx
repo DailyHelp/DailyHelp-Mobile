@@ -21,6 +21,7 @@ import FundWalletDto from '../screens/app/more/dto/FundWallet.dto';
 import {IHomeRoute, Navigate} from '../@types/routes';
 
 registerSheet('AllCategory', AllCategory);
+registerSheet('CustomSelect', CustomSelect);
 registerSheet('Rating', Rating);
 registerSheet('HomeAddress', HomeAddress);
 registerSheet('Gallery', Gallery);
@@ -31,7 +32,6 @@ registerSheet('WorkerSuggestion', WorkerSuggestions);
 registerSheet('RateService', RateService);
 registerSheet('FundWallet', FundedWallet);
 registerSheet('AddressOptions', AddressOptions);
-registerSheet('CustomSelect', CustomSelect);
 registerSheet('ConfirmDelete', ConfirmDeleteActionSheet);
 registerSheet('DeleteAddress', DeleteAddress);
 registerSheet('FullChatActivated', FullChatActivated);
@@ -42,6 +42,7 @@ registerSheet('CustomDateFilter', CustomDateFilter);
 export type ActionSheetLoader = {
   isDefaultLoading?: boolean;
   isDeletingAddress?: boolean;
+  isUploading?: boolean;
 };
 
 declare module 'react-native-actions-sheet' {

@@ -18,7 +18,7 @@ const ProviderAction: IMessages = props => {
   const isCounterDisabled = hasActiveJob && status !== 'accepted';
 
   // Show action buttons when offer is pending or paid (not accepted yet)
-  const showActions = !isPaid
+  const showActions = !isPaid && !isAccepted;
 
   const backgroundColor = isAccepted ? '#F3FCF4' : 'white';
   const borderColor = isAccepted ? '#02CA71' : '#E5F7E5';

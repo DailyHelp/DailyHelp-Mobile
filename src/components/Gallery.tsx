@@ -53,7 +53,7 @@ const Gallery = React.forwardRef<ActionSheetRef, IGallery>(
     const toggleSelection = React.useCallback(
       (uri: string) => {
         const wasSelected = selectedImages.includes(uri);
-        
+
         if (props.toggleGalleryImageSelection) {
           props.toggleGalleryImageSelection(uri);
         } else {
@@ -185,9 +185,9 @@ const Gallery = React.forwardRef<ActionSheetRef, IGallery>(
     }, [cursor, hasNextPage, loading]);
 
     return (
-      <ActionSheet 
-        ref={bottomSheetRef} 
-        gestureEnabled 
+      <ActionSheet
+        ref={bottomSheetRef}
+        gestureEnabled
         closable={false}
         overlayColor="black"
         defaultOverlayOpacity={0.5}>
@@ -209,14 +209,22 @@ const Gallery = React.forwardRef<ActionSheetRef, IGallery>(
             <Typography fontWeight="bold" size="md" color="darkGray">
               Image gallery
             </Typography>
-
             <TouchableOpacity
-              onPress={() => {
-                props?.close?.();
+              disabled={appStore.actionSheetLoading?.isUploading}
+              onPress={async () => {
+                if (props?.onAttach) {
+                  await props.onAttach();
+                } else {
+                  props?.close?.();
+                }
               }}>
-              <Typography fontWeight="bold" size="md" color="gray">
-                Attach
-              </Typography>
+              {appStore.actionSheetLoading?.isUploading ? (
+                <ActivityIndicator size="small" color="#999" />
+              ) : (
+                <Typography fontWeight="bold" size="md" color="gray">
+                  Attach
+                </Typography>
+              )}
             </TouchableOpacity>
           </View>
 

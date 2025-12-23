@@ -1,31 +1,35 @@
+import React from 'react';
+import {TouchableOpacity, View} from 'react-native';
 import ActionSheet, {
   ActionSheetRef,
+  FlatList,
   SheetManager,
   SheetProps,
 } from 'react-native-actions-sheet';
-import Container from '../../container/Index';
-import React from 'react';
-import {TouchableOpacity, View, TextInput} from 'react-native';
-import Typography from '../../Typography';
-import CustomFlatList from '../../CustomFlatList';
-import CustomInput from '../Index';
 import Icon from 'react-native-vector-icons/Feather';
+import Container from '../../container/Index';
+import CustomFlatList from '../../CustomFlatList';
+import Typography from '../../Typography';
+import CustomInput from '../Index';
 
 const CustomSelect = React.forwardRef<
   ActionSheetRef<'CustomSelect'>,
   SheetProps<'CustomSelect'>
 >((props, ref) => {
   const [searchQuery, setSearchQuery] = React.useState('');
-  const [filteredData, setFilteredData] = React.useState(props.payload?.data || []);
+  const [filteredData, setFilteredData] = React.useState(
+    props.payload?.data || [],
+  );
 
   const enableSearch = props.payload?.enableSearch || false;
   const searchPlaceholder = props.payload?.searchPlaceholder || 'Search...';
 
   React.useEffect(() => {
     if (enableSearch && searchQuery.trim()) {
-      const filtered = props.payload?.data?.filter(item =>
-        item.label?.toLowerCase().includes(searchQuery.toLowerCase())
-      ) || [];
+      const filtered =
+        props.payload?.data?.filter(item =>
+          item.label?.toLowerCase().includes(searchQuery.toLowerCase()),
+        ) || [];
       setFilteredData(filtered);
     } else {
       setFilteredData(props.payload?.data || []);
@@ -42,13 +46,16 @@ const CustomSelect = React.forwardRef<
       ref={ref}
       id="CustomSelect"
       closeOnPressBack={true}
-      overlayColor="black"
-      defaultOverlayOpacity={0.5}
+      gestureEnabled={true}
+      backgroundInteractionEnabled={true}
       containerStyle={{
         borderTopLeftRadius: 16,
         borderTopRightRadius: 16,
         backgroundColor: 'white',
-      }}>
+      }}
+      initialSnapIndex={0}
+      overlayColor="black"
+      defaultOverlayOpacity={0.5}>
       <Container padding={19} height={700}>
         {/* Header */}
         <View
@@ -60,7 +67,9 @@ const CustomSelect = React.forwardRef<
             marginBottom: 20,
           }}>
           <TouchableOpacity
-            onPress={() => SheetManager.hide('CustomSelect')}>
+            onPress={() =>
+              SheetManager.hide('CustomSelect', {context: 'global'})
+            }>
             <Typography fontWeight="semibold" size="md" color="gray">
               Cancel
             </Typography>
@@ -91,7 +100,7 @@ const CustomSelect = React.forwardRef<
           </Container>
         )}
 
-        <CustomFlatList<{label?: string; value: string}>
+        <FlatList<{label?: string; value: string}>
           data={filteredData}
           keyExtractor={(item, ind) => `${item.label + ind.toString()}`}
           renderItem={({item}) => (
@@ -100,6 +109,7 @@ const CustomSelect = React.forwardRef<
                 onPress={() => {
                   SheetManager.hide('CustomSelect', {
                     payload: {label: item.label, value: item.value, data: item},
+                    context: 'global',
                   });
                 }}
                 style={{

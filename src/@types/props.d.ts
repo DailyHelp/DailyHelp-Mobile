@@ -306,6 +306,8 @@ type IGallery = {
   selectedImages?: string[];
   toggleGalleryImageSelection?: (uri: string) => void;
   onClose?: (uri: string) => void;
+  /** Called when the user taps the Attach button in the gallery header */
+  onAttach?: () => Promise<void> | void;
 };
 
 type ICategoryCard<D = any> = Props<

@@ -41,7 +41,7 @@ const CustomSelectInput: IInput = ({
             if (disabled) return;
 
             SheetManager.show('CustomSelect', {
-              payload: {label, data: options},
+              payload: {label, data: options, enableSearch: true},
               onClose: onSelect,
             });
           } catch (error) {

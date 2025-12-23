@@ -135,7 +135,7 @@ class JobService extends JobsApi {
   }
 
   useJobsActions() {
-    const query = useQueryClient();
+    const queryClient = useQueryClient();
 
     const {
       data: accept,
@@ -147,8 +147,10 @@ class JobService extends JobsApi {
       mutationFn: async (uuid: string) => {
         return await this.startJob(uuid);
       },
-      onSuccess: () => {
-        query.invalidateQueries({queryKey: ['jobs', 'job-details']});
+      onSuccess: (response, uuid) => {
+        queryClient.refetchQueries({queryKey: ['jobs']});
+        queryClient.refetchQueries({queryKey: ['job-details', uuid]});
+        queryClient.refetchQueries({queryKey: ['job-timeline', uuid]});
       },
       onError: error => new CatchError(error, true),
     });
@@ -163,8 +165,10 @@ class JobService extends JobsApi {
       mutationFn: async (data: DeclineOfferDto) => {
         return await this.cancelJob(data);
       },
-      onSuccess: () => {
-        query.invalidateQueries({queryKey: ['jobs', 'job-details']});
+      onSuccess: (resp, uuid) => {
+        queryClient.refetchQueries({queryKey: ['jobs']});
+        queryClient.refetchQueries({queryKey: ['job-details', uuid]});
+        queryClient.refetchQueries({queryKey: ['job-timeline', uuid]});
       },
       onError: error => new CatchError(error, true),
     });
@@ -179,8 +183,10 @@ class JobService extends JobsApi {
       mutationFn: async (uuid: string) => {
         return await this.endJob(uuid);
       },
-      onSuccess: () => {
-        query.invalidateQueries({queryKey: ['jobs', 'job-details']});
+      onSuccess: (response, uuid) => {
+        queryClient.refetchQueries({queryKey: ['jobs']});
+        queryClient.refetchQueries({queryKey: ['job-details', uuid]});
+        queryClient.refetchQueries({queryKey: ['job-timeline', uuid]});
       },
       onError: error => new CatchError(error, true),
     });

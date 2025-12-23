@@ -1,9 +1,9 @@
-import { observer } from 'mobx-react-lite';
-import { View } from 'react-native';
+import {observer} from 'mobx-react-lite';
+import {View} from 'react-native';
 import Assets from '../../../../../../assets/Assets';
 import MainButton from '../../../../../../components/button/MainButton';
 import Typography from '../../../../../../components/Typography';
-import { Colors } from '../../../../../../shared/themes/Index';
+import {Colors} from '../../../../../../shared/themes/Index';
 
 const UserAction: IMessages = props => {
   const {data} = props;
@@ -25,7 +25,12 @@ const UserAction: IMessages = props => {
 
   const isOfferAccepted = type === 'offer' && status === 'accepted';
 
-  const showActions = !isPaid && !isAccepted;
+  // Determine which buttons to show based on offer state:
+  // 1. Countered offer → Decline Offer, Accept & Pay
+  // 2. Not paid and not accepted (pending) → Cancel, Edit Offer
+  // 3. Not paid but accepted → Cancel, Make Payment
+  // 4. Paid → No buttons (hide actions)
+  const showActions = !isPaid;
 
   return (
     <View
@@ -64,21 +69,34 @@ const UserAction: IMessages = props => {
             color="danger"
             width={'45%'}
             onPress={() => {
-              isPaid ? props?.decline?.(data) : props?.cancel?.(data);
+              if (isCountered) {
+                props?.decline?.(data);
+              } else {
+                props?.cancel?.(data);
+              }
             }}>
-            {showActions ? 'Decline' : 'Cancel offer'}
+            {isCountered ? 'Decline Offer' : 'Cancel'}
           </MainButton>
           <MainButton
             color="secondary"
             width={'45%'}
             onPress={() => {
-              isPaid ? props?.accept?.(data) : props?.edit?.(data);
+              if (isCountered) {
+                // Countered offer: Accept & Pay
+                props?.accept?.(data);
+              } else if (isAccepted) {
+                // Accepted but not paid: Make Payment
+                props?.accept?.(data);
+              } else {
+                // Pending (not paid, not accepted): Edit Offer
+                props?.edit?.(data);
+              }
             }}>
-            {isPaid
-              ? 'Make Payment'
-              : isPending && isCountered
+            {isCountered
               ? 'Accept & Pay'
-              : 'Edit offer '}
+              : isAccepted
+              ? 'Make Payment'
+              : 'Edit Offer'}
           </MainButton>
         </View>
       )}

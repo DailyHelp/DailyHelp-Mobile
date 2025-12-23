@@ -24,9 +24,12 @@ const FundedWallet = React.forwardRef<ActionSheetRef, SheetProps<'FundWallet'>>(
     const fund = moreService.useFundWallet('FUND_WALLET');
     const withdraw = moreService.useWithdraw();
     const {wallet} = moreService.useWalletBalance();
-    const {banks} = moreService.useListBanks();
+    const {bankAccounts} = moreService.useGetBankAccount();
     const isPending = fund?.isPending;
     const navigation = props.payload?.navigation || useNavigationContainerRef();
+
+    console.log(bankAccounts);
+    
 
     const MINIMUM_WITHDRAWAL = 20000;
     const PAYOUT_FEE = 50;
@@ -50,7 +53,7 @@ const FundedWallet = React.forwardRef<ActionSheetRef, SheetProps<'FundWallet'>>(
     const onSubmit = (d: FundWalletDto) => {
       if (isWithdraw) {
         navigation.navigate(
-          banks?.data.length! > 0 ? 'AddBankAccount' : 'SelectBank',
+          bankAccounts?.data.length! === 0 ? 'AddBankAccount' : 'SelectBank',
           {
             amount: +d.amount!,
             bankAccountUuid: d.bankAccountUuid,

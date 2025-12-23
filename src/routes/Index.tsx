@@ -32,7 +32,7 @@ const Routes: Props = () => {
       initialState={initialState}
       onStateChange={onStateChange}>
       <PaperProvider theme={theme}>
-        <SheetProvider context="global">
+        <SheetProvider>
           {appStore.isAuthenticated ? <AppRouter /> : <AuthRouter />}
 
           {appStore.isAuthenticated && (

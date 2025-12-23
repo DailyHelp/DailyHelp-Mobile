@@ -9,17 +9,27 @@ const Availability: IAvailability<HelpersStatus> = ({
   setAvailability,
   isAvailable,
 }) => {
-  const [isSwitch, setIsSwitch] = React.useState('false');
+  const [isSwitch, setIsSwitch] = React.useState(() => 
+    isAvailable ? 'true' : 'false'
+  );
 
   React.useEffect(() => {
+    // Only sync local state with prop, don't call setAvailability to avoid feedback loop
     if (isAvailable) {
       setIsSwitch('true');
-      setAvailability?.(true);
     } else {
       setIsSwitch('false');
-      setAvailability?.(false);
     }
   }, [isAvailable]);
+
+  const handleSwitchChange = React.useCallback((val: string) => {
+    setIsSwitch(val);
+    if (val === 'true') {
+      setAvailability?.(true);
+    } else {
+      setAvailability?.(false);
+    }
+  }, [setAvailability]);
 
   return (
     <Container
@@ -37,11 +47,7 @@ const Availability: IAvailability<HelpersStatus> = ({
       </Typography>
       <CustomInput
         type="switch"
-        onChangeText={val => {
-          setIsSwitch(val);
-          if (val === 'true') setAvailability?.(true);
-          else setAvailability?.(false);
-        }}
+        onChangeText={handleSwitchChange}
         value={isSwitch}
       />
     </Container>

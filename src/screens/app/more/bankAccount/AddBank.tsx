@@ -51,6 +51,7 @@ const AddBankAccount: IAddBankAccount = ({navigation}) => {
                 label="Account number"
                 onChangeText={handleChange('accountNumber')}
                 value={values.accountNumber}
+                keyboardType='number-pad'
                 error={(error as any)?.message}
               />
 

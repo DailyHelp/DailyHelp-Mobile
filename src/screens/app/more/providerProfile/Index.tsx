@@ -2,20 +2,22 @@ import React from 'react';
 import {TouchableOpacity, View} from 'react-native';
 import {ActionSheetRef} from 'react-native-actions-sheet';
 import {ProgressBar} from 'react-native-paper';
+import Icon from 'react-native-vector-icons/AntDesign';
 import {IProviderProfile} from '../../../../@types/routes';
 import Assets from '../../../../assets/Assets';
 import AttachmentContainer from '../../../../components/AttachmentContainer';
-import MainButton from '../../../../components/button/MainButton';
 import Container from '../../../../components/container/Index';
 import CustomAvatar from '../../../../components/CustomAvatar';
 import CustomFlatList from '../../../../components/CustomFlatList';
 import CustomHeader from '../../../../components/customHeader/Index';
 import Gallery from '../../../../components/Gallery';
+import offerStyle from '../../../../components/offers/offerStyle';
 import ReviewsCard from '../../../../components/ReviewsCard';
 import Typography from '../../../../components/Typography';
 import {scale, verticalScale} from '../../../../shared/Scaling';
 import utils from '../../../../shared/Utils';
 import homeService from '../../user/home/services/Home.service';
+import {appStore} from '../../../../shared/stores/appStore';
 
 const ProviderProfile: IProviderProfile = ({navigation}) => {
   const {
@@ -24,7 +26,8 @@ const ProviderProfile: IProviderProfile = ({navigation}) => {
     isLoading: isLoadingUser,
   } = homeService.useUser();
 
-  const {saveHelpersDetails} = homeService.useSaveHelpersDetails();
+  const {saveHelpersDetails, isPending: isSaving} =
+    homeService.useSaveHelpersDetails();
 
   const {uploadBatch, isLoading: isUploading} = utils.useUploadImage();
 
@@ -77,7 +80,6 @@ const ProviderProfile: IProviderProfile = ({navigation}) => {
   const handleRemoveImage = React.useCallback(
     async (imageUri: string) => {
       const updatedImages = serviceImages.filter(img => img !== imageUri);
-      console.log(imageUri);
 
       setServiceImages(updatedImages);
 
@@ -96,6 +98,7 @@ const ProviderProfile: IProviderProfile = ({navigation}) => {
 
   const handleSaveImages = React.useCallback(async () => {
     try {
+      appStore.setActionSheetLoaders({isUploading: isUploading || isSaving});
       if (selectedGalleryImages.length === 0) {
         galleryBottomSheetRef.current?.hide();
         return;
@@ -125,6 +128,7 @@ const ProviderProfile: IProviderProfile = ({navigation}) => {
       refetchUser();
 
       setSelectedGalleryImages([]);
+      appStore.setActionSheetLoaders({isUploading: isUploading || isSaving});
       galleryBottomSheetRef.current?.hide();
     } catch (error) {
       console.error('Failed to save images:', error);
@@ -166,16 +170,6 @@ const ProviderProfile: IProviderProfile = ({navigation}) => {
       <CustomFlatList
         refreshing={isRefreshing}
         onRefresh={handleRefresh}
-        ListHeaderComponent={() => (
-          <Container>
-            <CustomHeader
-              title="Service profile"
-              type="back"
-              textMiddle
-              navigation={navigation}
-            />
-          </Container>
-        )}
         renderItem={() => (
           <Container gap={16}>
             <Container
@@ -330,8 +324,11 @@ const ProviderProfile: IProviderProfile = ({navigation}) => {
                   data={serviceImages}
                   canClose={true}
                   onClose={handleRemoveImage}
-                  openGallery={() => galleryBottomSheetRef.current?.show()}
-                />
+                  openGallery={() => galleryBottomSheetRef.current?.show()}>
+                  <View style={offerStyle.plusContainer}>
+                    <Icon name="plus" size={24} color="#757C91" />
+                  </View>
+                </AttachmentContainer>
               </Container>
             </Container>
 
@@ -400,11 +397,7 @@ const ProviderProfile: IProviderProfile = ({navigation}) => {
         }}
         selectedImages={selectedGalleryImages}
         toggleGalleryImageSelection={toggleGalleryImageSelection}
-        onClose={(uri: string) => {
-          setSelectedGalleryImages(prev => prev.filter(img => img !== uri));
-
-          handleSaveImages();
-        }}
+        onAttach={handleSaveImages}
       />
     </Container>
   );

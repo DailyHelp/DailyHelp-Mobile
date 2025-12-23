@@ -1,7 +1,7 @@
-import { BottomTabBarButtonProps } from '@react-navigation/bottom-tabs';
-import { NativeStackHeaderProps } from '@react-navigation/native-stack';
+import {BottomTabBarButtonProps} from '@react-navigation/bottom-tabs';
+import {NativeStackHeaderProps} from '@react-navigation/native-stack';
 import React from 'react';
-import { TouchableOpacity } from 'react-native';
+import {TouchableOpacity} from 'react-native';
 import Assets from '../../assets/Assets';
 import CustomHeader from '../../components/customHeader/Index';
 import TabBadge from '../../components/TabBadge';
@@ -43,7 +43,7 @@ import ViewDetails from '../../screens/app/user/jobs/ViewDetails';
 import Search from '../../screens/app/user/search/Index';
 import ProfileSetup from '../../screens/auth/compliance/ProfileSetup';
 import VerifyAccount from '../../screens/auth/VerifyAccount';
-import { scale, verticalScale } from '../../shared/Scaling';
+import {scale, verticalScale} from '../../shared/Scaling';
 import IdentityVerificationRoute from '../auth/IdentityVerificationRoute';
 import ChatRoute from './Chat';
 import HomeRoute from './Home';
@@ -657,7 +657,15 @@ export const MoreStackRoutes = [
     name: 'ProviderProfile',
     component: ProviderProfile,
     options: {
-      headerShown: false,
+      headerShown: true,
+      header: (props: NativeStackHeaderProps) => (
+        <CustomHeader
+          title="Service profile"
+          type="back"
+          {...props}
+          textMiddle
+        />
+      ),
     },
   },
   {
