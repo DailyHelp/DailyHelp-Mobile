@@ -11,7 +11,7 @@ class AppStore {
 
   currentLocation: SaveLocationDto = new SaveLocationDto();
 
-  messagePermissionCount = AppStorage.find('messagePermissionCount') as number;
+  messagePermissionCount = (AppStorage.find('messagePermissionCount') as number) || 0;
 
   isIdentityVerified?: boolean = AppStorage.find(
     'isIdentityVerified',
@@ -141,7 +141,7 @@ class AppStore {
   setMessagePermissionCount() {
     if (this.messagePermissionCount >= 3) return;
 
-    this.messagePermissionCount = ++this.messagePermissionCount;
+    this.messagePermissionCount = this.messagePermissionCount + 1;
     AppStorage.save('messagePermissionCount', this.messagePermissionCount);
   }
 
