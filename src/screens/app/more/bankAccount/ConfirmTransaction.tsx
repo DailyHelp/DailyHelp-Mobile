@@ -5,8 +5,11 @@ import Typography from '../../../../components/Typography';
 import Assets from '../../../../assets/Assets';
 import MainButton from '../../../../components/button/MainButton';
 import {SheetManager} from 'react-native-actions-sheet';
+import moreService from '../services/More.service';
 
 const ConfirmTransaction: IConfirmTransaction = ({navigation, route}) => {
+  const {mutate, isPending} = moreService.useWithdraw();
+
   return (
     <Container flex={1} backgroundColor="white" justifyContent="space-between">
       <Container
@@ -57,7 +60,13 @@ const ConfirmTransaction: IConfirmTransaction = ({navigation, route}) => {
 
       <Container marginBottom={20} width={'95'} alignSelf="center">
         <MainButton
-          onPress={() => SheetManager.show('Withdrawal')}
+          loading={isPending}
+          onPress={() => {
+            mutate({
+              amount: route.params?.amount,
+              bankAccountUuid: route.params?.bankAccountUuid,
+            });
+          }}
           enableButtonColor="secondary"
           color="white">
           Confirm
@@ -68,8 +77,3 @@ const ConfirmTransaction: IConfirmTransaction = ({navigation, route}) => {
 };
 
 export default ConfirmTransaction;
-
-
-
-
-
