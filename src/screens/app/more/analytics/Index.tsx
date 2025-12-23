@@ -34,9 +34,11 @@ const Analytics: IAnalytics = ({navigation}) => {
   );
 
   // Calculate date ranges for predefined filters
-  const getDateRangeForFilter = (filter: string): {startDate?: Date; endDate?: Date} => {
+  const getDateRangeForFilter = (
+    filter: string,
+  ): {startDate?: Date; endDate?: Date} => {
     const now = dayjs();
-    
+
     switch (filter) {
       case 'Today': {
         const start = now.startOf('day').toDate();
@@ -83,9 +85,6 @@ const Analytics: IAnalytics = ({navigation}) => {
   }, [selectedDateFilter, customStartDate, customEndDate]);
 
   const {analytics} = moreService.useAnalytics(startDate, endDate);
-
-  console.log(analytics);
-  
 
   const dateFilters = [
     'Custom date',
@@ -171,9 +170,11 @@ const Analytics: IAnalytics = ({navigation}) => {
                       justifyContent: 'center',
                       paddingVertical: scale(10),
                       paddingHorizontal: scale(16),
-                      borderWidth: isActive ? .5 : 0,
+                      borderWidth: isActive ? 0.5 : 0,
                       borderColor: isActive ? Colors.lemonGreen : 'transparent',
-                      backgroundColor: isActive ? Colors.lightPrimary : Colors.white,
+                      backgroundColor: isActive
+                        ? Colors.lightPrimary
+                        : Colors.white,
                     }}
                     onPress={() => handleDateFilterPress(filter)}>
                     <Typography

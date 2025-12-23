@@ -64,7 +64,11 @@ const ChatFooter: IChatFooter<Navigate<IChatRoute>> = ({
         <MainButton
           loading={isSending}
           onPress={() => {
-            if (message) sendMessage?.(message);
+            const trimmedMessage = message.trim();
+            if (trimmedMessage) {
+              sendMessage?.(trimmedMessage);
+              setMessage('');
+            }
           }}
           height={40}
           paddingTop={3}

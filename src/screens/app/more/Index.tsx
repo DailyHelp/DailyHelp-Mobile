@@ -51,9 +51,6 @@ const More: IMore = ({navigation}) => {
     gender: user?.gender,
   };
 
-  console.log(params);
-  
-
   const menus = [
     {
       label: 'ACCOUNT',

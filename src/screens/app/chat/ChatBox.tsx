@@ -23,8 +23,7 @@ const ChatBox: IChatBox = ({navigation, route}) => {
   const galleryBottomSheetRef = React.useRef<ActionSheetRef | null>(null);
   const userType = AppStorage.find('userType') as UserTypes;
   const isCustomer = userType === UserTypes.CUSTOMER;
-  console.log(route.params);
-  
+
   const isPaymentMade = route.params?.hasActiveJob;
   const conversationUuid = route.params?.uuid!;
 

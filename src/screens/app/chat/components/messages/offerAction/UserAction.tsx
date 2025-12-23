@@ -1,11 +1,9 @@
-import {View} from 'react-native';
+import { observer } from 'mobx-react-lite';
+import { View } from 'react-native';
 import Assets from '../../../../../../assets/Assets';
 import MainButton from '../../../../../../components/button/MainButton';
 import Typography from '../../../../../../components/Typography';
-import {Colors} from '../../../../../../shared/themes/Index';
-import {observer} from 'mobx-react-lite';
-import {appStore} from '../../../../../../shared/stores/appStore';
-import {UserTypes} from '../../../../../../shared/Constant';
+import { Colors } from '../../../../../../shared/themes/Index';
 
 const UserAction: IMessages = props => {
   const {data} = props;
@@ -15,7 +13,6 @@ const UserAction: IMessages = props => {
   const isPending = status === 'pending';
   const isCountered = !!data?.offer.currentOffer;
   const isPaid = status === 'paid';
-  const isUser = appStore.user_types === UserTypes.CUSTOMER;
   const isAccepted = status === 'accepted';
 
   let backgroundColor = props.backgroundColor || Colors.lightGrey;
@@ -28,12 +25,7 @@ const UserAction: IMessages = props => {
 
   const isOfferAccepted = type === 'offer' && status === 'accepted';
 
-  // Show action buttons when user is a customer and offer is not accepted yet
   const showActions = !isPaid && !isAccepted;
-
-  console.log(isPaid, status);
-
-  console.log(!isPaid);
 
   return (
     <View
