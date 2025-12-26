@@ -26,14 +26,20 @@ import jobService from './service/Jobs.service';
 
 const ViewDetails: IViewDetails = ({navigation, route}) => {
   const jobs = route.params;
+
   jobService.useWebSocketListeners();
 
   const {startJob, endJob} = jobService.useJobsActions();
 
-  const {data} = jobService.useGetJobDetails(route.params?.uuid!);
-  const {timeline, isLoading: timelineLoading} = jobService.useJobTimeline(
-    route.params?.uuid || '',
+  const {data, refetch: refetchJobDetails} = jobService.useGetJobDetails(
+    route.params?.uuid!,
   );
+
+  const {
+    timeline,
+    isLoading: timelineLoading,
+    refetch: refetchTimeline,
+  } = jobService.useJobTimeline(route.params?.uuid || '');
   const {declineJob, declinePending} = jobService.useJobsActions();
 
   const [isOfferCancel, setIsOfferCancel] = React.useState(false);
@@ -51,11 +57,13 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
   }, []);
 
   React.useEffect(() => {
-    const status =
-      jobs?.status.toLowerCase() || data?.job.status?.toLowerCase();
-
-    setType(status);
-  }, [data, route]);
+    // Update type based on job status from fetched data (prioritized) or route params
+    if (data?.job?.status) {
+      setType(data.job.status.toLowerCase());
+    } else if (jobs?.status) {
+      setType(jobs.status.toLowerCase());
+    }
+  }, [data?.job?.status, jobs?.status]);
 
   let headerText = 'Have they arrived? Tap “Confirm face” to verify.';
   let headerBgColor = '#95D21A';
@@ -101,13 +109,13 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
           <CustomAvatar
             avatarSize={50}
             badgeSize={20}
-            data={{image: route?.params?.providerPicture}}
+            data={{image: jobs?.providerPicture}}
           />
           <Typography size="md" fontWeight="bold">
-            {route.params?.providerFirstname} {route.params?.providerLastname}
+            {jobs?.providerFirstname} {jobs?.providerLastname}
           </Typography>
           <Typography size="md" color="gray">
-            {route.params?.providerPrimaryJobRole}
+            {jobs?.providerPrimaryJobRole}
           </Typography>
         </View>
       )}
@@ -169,7 +177,7 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
                   </Container>
                 )}
 
-                {type !== 'completed' && type !== 'canceled' && (
+                {!data?.job.providerIdentifyVerified && (
                   <React.Fragment>
                     <OutlineButton
                       height={verticalScale(50)}
@@ -243,7 +251,16 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
                     borderColor="lightDeepGrey"
                     paddingBottom={20}>
                     <MainButton
-                      onPress={() => setIsOfferCancel(true)}
+                      onPress={() => {
+                        SheetManager.show('CancelJob', {
+                          payload: {
+                            navigation: navigation,
+                            verificationPinParams: {
+                              uuid: route.params?.uuid!,
+                            },
+                          },
+                        });
+                      }}
                       enableButtonColor="lightGrey"
                       color="black"
                       width={'45%'}
@@ -264,11 +281,50 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
                       color="black"
                       width={'45%'}
                       onPress={() => {
-                        navigation.dispatch(
-                          CommonActions.navigate({
-                            name: 'ChatIndex',
-                          }),
-                        );
+                        const conversation = data?.conversation;
+                        const conversationId = conversation?.conversationId;
+
+                        if (conversationId) {
+                          const provider = data?.job?.serviceProvider;
+                          const providerName = `${provider?.firstname} ${provider?.lastname}`;
+
+                          const serviceProviderId = provider?.uuid;
+
+                          if (serviceProviderId) {
+                            const cancel = conversation?.cancellationChances;
+
+                            navigation.dispatch(
+                              CommonActions.navigate({
+                                name: 'ChatIndex',
+                                params: {
+                                  screen: 'ChatBox',
+                                  params: {
+                                    uuid: conversationId,
+                                    title: providerName || 'Chat',
+                                    cancellationChances: cancel,
+                                    badge: provider?.tier,
+                                    picture: provider?.picture,
+                                    hasActiveJob: conversation?.hasActiveJob,
+                                    isOnline: conversation?.spOnline,
+                                    serviceProviderId,
+                                  },
+                                },
+                              }),
+                            );
+                          } else {
+                            navigation.dispatch(
+                              CommonActions.navigate({
+                                name: 'ChatIndex',
+                              }),
+                            );
+                          }
+                        } else {
+                          navigation.dispatch(
+                            CommonActions.navigate({
+                              name: 'ChatIndex',
+                            }),
+                          );
+                        }
                       }}
                       icon={() => <Assets.SendOffer />}>
                       Chat
@@ -326,13 +382,24 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
                 railFillBorderColor="transparent"
                 title={title}
                 onSwipeSuccess={() => {
+                  const jobUuid = route.params?.uuid!;
                   if (type === 'in_progress') {
-                    endJob(route.params?.uuid!, {
-                      onSuccess: () => setSwipeSuccess(true),
+                    endJob(jobUuid, {
+                      onSuccess: () => {
+                        setSwipeSuccess(true);
+                        // Explicitly refetch data to update UI immediately
+                        refetchJobDetails();
+                        refetchTimeline();
+                      },
                     });
                   } else {
-                    startJob(route.params?.uuid!, {
-                      onSuccess: () => setSwipeSuccess(true),
+                    startJob(jobUuid, {
+                      onSuccess: () => {
+                        setSwipeSuccess(true);
+                        // Explicitly refetch data to update UI immediately
+                        refetchJobDetails();
+                        refetchTimeline();
+                      },
                     });
                   }
                 }}
@@ -373,8 +440,8 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
                   SheetManager.show('RateService', {
                     payload: {
                       uuid: route.params?.uuid!,
-                      providerImage: route?.params?.providerPicture || '',
-                      tier: route?.params?.serviceProvider.tier || '',
+                      providerImage: jobs?.providerPicture || '',
+                      tier: jobs?.serviceProvider.tier || '',
                       name: `${route.params?.providerLastname}`,
                     },
                   })
@@ -389,6 +456,7 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
       <Offer
         type="cancel"
         isVisible={isOfferCancel}
+        bntText='Cancel Job'
         onClose={() => setIsOfferCancel(false)}
         isLoading={declinePending}
         onDeclineOffer={(reason, category) => {

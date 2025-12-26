@@ -31,7 +31,11 @@ const SendOffer: IOffer<Message> = ({
   isAvailable,
   data,
   type,
+  bntText,
 }) => {
+  const prevVisibleRef = React.useRef(false);
+  const prevDataUuidRef = React.useRef<string | undefined>(null);
+
   React.useEffect(() => {
     appStore.setOffer({
       attachments: JSON.stringify(appStore.selectedGalleryImages),
@@ -39,26 +43,36 @@ const SendOffer: IOffer<Message> = ({
   }, [appStore.selectedGalleryImages]);
 
   React.useEffect(() => {
-    if (data) {
+    const isOpening = isVisible && !prevVisibleRef.current;
+    const currentDataUuid = data?.offer?.uuid;
+    const dataUuidChanged = prevDataUuidRef.current !== currentDataUuid;
+
+    if (isOpening) {
+      appStore.clearOffer();
+      prevDataUuidRef.current = currentDataUuid;
+    }
+
+    prevVisibleRef.current = isVisible;
+  }, [isVisible, data]);
+
+  React.useEffect(() => {
+    if (isVisible && data) {
       appStore.setOffer({
         amount: data?.offer?.price?.toString(),
         description: data?.offer?.description!,
       });
     }
-  }, [data]);
+  }, [data, isVisible]);
 
   React.useEffect(() => {
-    if (data?.offer?.pictures) {
-      const attachment = data.offer.pictures.split(',');
+    if (isVisible && data?.offer?.pictures) {
+      const attachment = data.offer.pictures.split(',').filter(Boolean);
       if (attachment?.length !== appStore?.selectedGalleryImages?.length) {
-        attachment?.map(img => appStore.setSelectedGalleryImages(img));
+        appStore.clearSelectedGalleryImages();
+        attachment.forEach(img => appStore.setSelectedGalleryImages(img));
       }
     }
-  }, [data]);
-
-  React.useEffect(() => {
-    if (!isVisible) appStore.clearOffer();
-  }, [isVisible]);
+  }, [data, isVisible]);
 
   return (
     <Portal>
@@ -74,9 +88,7 @@ const SendOffer: IOffer<Message> = ({
             const submitData = {
               ...values,
               amount: values.amount,
-              attachments:
-                appStore.offerDto?.attachments ||
-                JSON.stringify(appStore.selectedGalleryImages),
+              attachments: appStore.offerDto?.attachments,
             };
             onSendOffer?.(submitData);
           }}>
@@ -205,7 +217,7 @@ const SendOffer: IOffer<Message> = ({
 
                 <View style={{padding: scale(10)}}>
                   <MainButton loading={isLoading} onPress={handleSubmit}>
-                    {type === 'edit' ? 'Update' : 'Send'} offer
+                    {bntText || type === 'edit' ? 'Update offer' : 'Send offer'}
                   </MainButton>
                 </View>
               </Container>

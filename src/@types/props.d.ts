@@ -291,6 +291,7 @@ type IOffer<D = any, S = any> = Props<
     isLoading?: boolean;
     isAvailable?: boolean;
     cancellationChances?: number;
+    bntText?: string;
   },
   D
 >;

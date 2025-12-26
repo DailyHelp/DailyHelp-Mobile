@@ -24,7 +24,7 @@ const SearchResults: ISearchResult = ({data, fetchMore}) => {
             <Typography size="md" color="gray" textAlign="center">
               No results found
             </Typography>
-            <Typography size="sm" color="gray" textAlign="center" style={{marginTop: 8}}>
+            <Typography size="sm" color="gray" textAlign="center">
               Try searching with different keywords
             </Typography>
           </Container>

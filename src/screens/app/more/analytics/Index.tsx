@@ -1,14 +1,14 @@
-import {useFocusEffect} from '@react-navigation/native';
-import React, {useMemo, useState} from 'react';
-import {ScrollView, TouchableOpacity, View} from 'react-native';
-import {SheetManager} from 'react-native-actions-sheet';
-import {IAnalytics} from '../../../../@types/routes';
-import {tipsData} from '../../../../app_data';
+import { useFocusEffect } from '@react-navigation/native';
+import React, { useMemo } from 'react';
+import { ScrollView, TouchableOpacity, View } from 'react-native';
+import { SheetManager } from 'react-native-actions-sheet';
+import { IAnalytics } from '../../../../@types/routes';
+import { tipsData } from '../../../../app_data';
 import Container from '../../../../components/container/Index';
 import SectionBorderSeparatedCard from '../../../../components/SectionBorderSeparatedCard';
 import Typography from '../../../../components/Typography';
-import {scale} from '../../../../shared/Scaling';
-import {Colors} from '../../../../shared/themes/Index';
+import { scale } from '../../../../shared/Scaling';
+import { Colors } from '../../../../shared/themes/Index';
 import utils from '../../../../shared/Utils';
 import moreService from '../services/More.service';
 import MultipleProgressBar from './MultipleProgressBar';
@@ -19,9 +19,11 @@ import TipsContainer from './TipsContainer';
 const Analytics: IAnalytics = ({navigation}) => {
   utils.useHideBottomTab(navigation);
 
-  const [selectedDateFilter, setSelectedDateFilter] = useState('Today');
-  const [customStartDate, setCustomStartDate] = useState<Date | undefined>();
-  const [customEndDate, setCustomEndDate] = useState<Date | undefined>();
+  const [selectedDateFilter, setSelectedDateFilter] = React.useState('Today');
+  const [customStartDate, setCustomStartDate] = React.useState<
+    Date | undefined
+  >();
+  const [customEndDate, setCustomEndDate] = React.useState<Date | undefined>();
 
   useFocusEffect(
     React.useCallback(() => {

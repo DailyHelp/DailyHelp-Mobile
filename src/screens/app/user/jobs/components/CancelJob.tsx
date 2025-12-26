@@ -16,9 +16,7 @@ import {scale, verticalScale} from '../../../../../shared/Scaling';
 
 const CancelJob = React.forwardRef<ActionSheetRef, SheetProps<'CancelJob'>>(
   (props, ref) => {
-    const navigation = props.payload?.navigation as
-      | Navigate<IJobsRoute>
-      | undefined;
+    const navigation = props.payload?.navigation as Navigate<IJobsRoute>;
 
     return (
       <ActionSheet
@@ -61,6 +59,7 @@ const CancelJob = React.forwardRef<ActionSheetRef, SheetProps<'CancelJob'>>(
           <MainButton
             onPress={() => {
               SheetManager.hide('CancelJob');
+              SheetManager.hide('FaceMatch');
               if (navigation) {
                 navigation.dispatch(
                   CommonActions.navigate({
@@ -75,7 +74,7 @@ const CancelJob = React.forwardRef<ActionSheetRef, SheetProps<'CancelJob'>>(
             Verify with PIN
           </MainButton>
           <MainButton
-            onPress={() => SheetManager.hide('CancelJob')}
+            onPress={() => {}}
             icon={() => <Icon name="close" color={'#F0443A'} size={15} />}
             color="danger"
             enableButtonColor="pink">

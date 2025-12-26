@@ -26,6 +26,7 @@ export default class JobsApi extends Http {
       job: Jobs;
       timelines: JobTimelineDto[];
       review: Review;
+      conversation: Conversation;
     }>(res);
 
     return data;

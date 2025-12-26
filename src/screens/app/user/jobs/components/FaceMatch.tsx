@@ -98,15 +98,6 @@ const FaceMatch = React.forwardRef<ActionSheetRef, SheetProps<'FaceMatch'>>(
                   onError: () => {
                     setLoadingButton(null);
                     SheetManager.hide('FaceMatch');
-                    const timer = setTimeout(() => {
-                      SheetManager.show('CancelJob', {
-                        payload: {
-                          navigation: payload?.navigation,
-                          verificationPinParams: payload?.verificationPinParams,
-                        },
-                      });
-                      clearTimeout(timer);
-                    }, 1000);
                   },
                 },
               );
@@ -127,10 +118,16 @@ const FaceMatch = React.forwardRef<ActionSheetRef, SheetProps<'FaceMatch'>>(
                 {
                   onSuccess: () => {
                     setLoadingButton(null);
-                    SheetManager.hide('FaceMatch');
+                    SheetManager.show('CancelJob', {
+                      payload: {
+                        navigation: payload?.navigation,
+                        verificationPinParams: payload?.verificationPinParams,
+                      },
+                    });
                   },
                   onError: () => {
                     setLoadingButton(null);
+                    SheetManager.hide('FaceMatch');
                   },
                 },
               );

@@ -121,9 +121,9 @@ class HomeService extends HomeApi {
         ...values,
         lat: values.lat || 0,
         lng: values.lng || 0,
-        address: values.address || '',
+        address: values.description || values.address,
         lga: values.lga || '',
-        description: values.description || '',
+        description: values.description || values.address || '',
         default: true,
       };
 

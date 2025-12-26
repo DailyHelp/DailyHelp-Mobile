@@ -5,6 +5,7 @@ export default class JobsDto {
   'serviceProvider': UserDTO;
   'serviceRequestor': UserDTO;
   'requestId': string;
+  providerIdentifyVerified?: boolean;
   'price': number;
   'status': string;
   'startDate': string;

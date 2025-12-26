@@ -10,6 +10,7 @@ import AddBankDto from '../bankAccount/dto/add.bank.dto';
 import ResolveBankDto from '../bankAccount/dto/reslove-bank.dto';
 import FeedbackDto from '../dto/FeedBack.dto';
 import FundWalletDto from '../dto/FundWallet.dto';
+import dayjs from 'dayjs';
 
 export class MoreService extends MoreApi {
   private static instance: MoreService;
@@ -213,8 +214,8 @@ export class MoreService extends MoreApi {
   }
 
   useAnalytics(startDate?: Date, endDate?: Date) {
-    const startDateString = startDate?.toISOString();
-    const endDateString = endDate?.toISOString();
+    const startDateString = startDate && dayjs(startDate).format('YYYY-MM-DD');
+    const endDateString = endDate && dayjs(endDate).format('YYYY-MM-DD');
 
     const {
       data: analytics,
