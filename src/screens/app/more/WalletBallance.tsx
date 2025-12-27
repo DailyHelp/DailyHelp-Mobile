@@ -1,28 +1,48 @@
-import {View} from 'react-native';
-import {IWalletBalance} from '../../../@types/routes';
-import MainButton from '../../../components/button/MainButton';
-import Typography from '../../../components/Typography';
-import {verticalScale} from '../../../shared/Scaling';
-import utils from '../../../shared/Utils';
-import CustomFlatList from '../../../components/CustomFlatList';
-import TransactionCard from './components/TransactionCard';
-import {SheetManager} from 'react-native-actions-sheet';
-import moreService from './services/More.service';
-import TransactionDto from './dto/Transaction.dto';
+import { useFocusEffect } from '@react-navigation/native';
+import { useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
-import {observer} from 'mobx-react-lite';
-import {appStore} from '../../../shared/stores/appStore';
-import {UserTypes} from '../../../shared/Constant';
-import Container from '../../../components/container/Index';
-import WalletFunded from './components/WalletFunded';
+import { observer } from 'mobx-react-lite';
 import React from 'react';
+import { View } from 'react-native';
+import { SheetManager } from 'react-native-actions-sheet';
+import { IWalletBalance } from '../../../@types/routes';
+import MainButton from '../../../components/button/MainButton';
+import Container from '../../../components/container/Index';
+import CustomFlatList from '../../../components/CustomFlatList';
+import Typography from '../../../components/Typography';
+import { UserTypes } from '../../../shared/Constant';
+import { appStore } from '../../../shared/stores/appStore';
+import utils from '../../../shared/Utils';
+import TransactionCard from './components/TransactionCard';
+import WalletFunded from './components/WalletFunded';
+import TransactionDto from './dto/Transaction.dto';
+import moreService from './services/More.service';
 
-const WalletBalance: IWalletBalance = ({navigation}) => {
+const WalletBalance: IWalletBalance = ({navigation, route}) => {
   utils.useHideBottomTab(navigation);
   const [walletFunded, setWalletFunded] = React.useState(false);
+  const queryClient = useQueryClient();
 
   const {wallet} = moreService.useWalletBalance();
   const {data} = moreService.useWalletTransactions();
+
+  // Check if we're returning from a successful payment
+  React.useEffect(() => {
+    if (route.params?.paymentSuccess) {
+      setWalletFunded(true);
+      // Clear the param to prevent showing it again
+      navigation.setParams({paymentSuccess: undefined});
+    }
+  }, [route.params?.paymentSuccess, navigation]);
+
+  // Refetch wallet and transactions when screen comes into focus
+  // This ensures data refreshes after returning from payment webview
+  useFocusEffect(
+    React.useCallback(() => {
+      queryClient.invalidateQueries({queryKey: ['wallet']});
+      queryClient.invalidateQueries({queryKey: ['transactions']});
+    }, [queryClient]),
+  );
 
   const userType = appStore.user_types;
 
@@ -49,11 +69,6 @@ const WalletBalance: IWalletBalance = ({navigation}) => {
               payload: {
                 type: userType === UserTypes.CUSTOMER ? 'FUND' : 'WITHDRAW',
                 navigation,
-              },
-              onClose: res => {
-                if (res?.type === 'FUND' && res.success) {
-                  setWalletFunded(res?.success!);
-                }
               },
             });
           }}>

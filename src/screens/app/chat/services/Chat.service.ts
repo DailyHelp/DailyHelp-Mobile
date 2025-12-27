@@ -153,10 +153,20 @@ export class ChatService extends ChatApi {
   }
 
   useReportConversation() {
+    const queryClient = useQueryClient();
     const {data, isPending, mutate} = useMutation({
       mutationKey: ['report-conversation'],
       mutationFn: async (dto: ReportConversationDto) => {
         return await this.reportConversation(dto);
+      },
+      onSuccess: (response, variables) => {
+        // Invalidate conversations as reporting may affect conversation state
+        queryClient.invalidateQueries({queryKey: ['conversations']});
+        if (variables.uuid) {
+          queryClient.invalidateQueries({
+            queryKey: ['conversation', variables.uuid],
+          });
+        }
       },
     });
 

@@ -28,9 +28,6 @@ const FundedWallet = React.forwardRef<ActionSheetRef, SheetProps<'FundWallet'>>(
     const isPending = fund?.isPending;
     const navigation = props.payload?.navigation || useNavigationContainerRef();
 
-    console.log(bankAccounts);
-    
-
     const MINIMUM_WITHDRAWAL = 20000;
     const PAYOUT_FEE = 50;
 
@@ -40,6 +37,7 @@ const FundedWallet = React.forwardRef<ActionSheetRef, SheetProps<'FundWallet'>>(
         SheetManager.hide('FundWallet');
         navigation.navigate('WebViewComponent', {
           url: data.data.authorizationUrl,
+          fromWalletFunding: true,
         });
       }
     }, [fund.data, isWithdraw]);

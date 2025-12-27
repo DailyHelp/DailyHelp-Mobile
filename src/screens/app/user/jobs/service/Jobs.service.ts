@@ -151,6 +151,9 @@ class JobService extends JobsApi {
         queryClient.refetchQueries({queryKey: ['jobs']});
         queryClient.refetchQueries({queryKey: ['job-details', uuid]});
         queryClient.refetchQueries({queryKey: ['job-timeline', uuid]});
+        // Invalidate conversations as job status affects conversation state
+        queryClient.invalidateQueries({queryKey: ['conversations']});
+        queryClient.invalidateQueries({queryKey: ['conversation']});
       },
       onError: error => new CatchError(error, true),
     });
@@ -165,10 +168,14 @@ class JobService extends JobsApi {
       mutationFn: async (data: DeclineOfferDto) => {
         return await this.cancelJob(data);
       },
-      onSuccess: (resp, uuid) => {
+      onSuccess: (resp, data) => {
+        const uuid = data.uuid;
         queryClient.refetchQueries({queryKey: ['jobs']});
         queryClient.refetchQueries({queryKey: ['job-details', uuid]});
         queryClient.refetchQueries({queryKey: ['job-timeline', uuid]});
+        // Invalidate conversations as job cancellation affects conversation state
+        queryClient.invalidateQueries({queryKey: ['conversations']});
+        queryClient.invalidateQueries({queryKey: ['conversation']});
       },
       onError: error => new CatchError(error, true),
     });
@@ -187,6 +194,9 @@ class JobService extends JobsApi {
         queryClient.refetchQueries({queryKey: ['jobs']});
         queryClient.refetchQueries({queryKey: ['job-details', uuid]});
         queryClient.refetchQueries({queryKey: ['job-timeline', uuid]});
+        // Invalidate conversations as job completion affects conversation state
+        queryClient.invalidateQueries({queryKey: ['conversations']});
+        queryClient.invalidateQueries({queryKey: ['conversation']});
       },
       onError: error => new CatchError(error, true),
     });
@@ -237,6 +247,9 @@ class JobService extends JobsApi {
       },
       onSuccess: () => {
         query.invalidateQueries({queryKey: ['jobs']});
+        // Invalidate conversations as disputes may affect conversation state
+        query.invalidateQueries({queryKey: ['conversations']});
+        query.invalidateQueries({queryKey: ['conversation']});
       },
       onError: error => new CatchError(error, true),
     });
@@ -267,6 +280,9 @@ class JobService extends JobsApi {
       },
       onSuccess: () => {
         query.invalidateQueries({queryKey: ['jobs']});
+        // Invalidate conversations as rating completion may affect conversation state
+        query.invalidateQueries({queryKey: ['conversations']});
+        query.invalidateQueries({queryKey: ['conversation']});
       },
       onError: error => new CatchError(error, true),
     });

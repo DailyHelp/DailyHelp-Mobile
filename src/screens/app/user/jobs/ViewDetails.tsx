@@ -16,20 +16,24 @@ import CustomAvatar from '../../../../components/CustomAvatar';
 import CustomHeader from '../../../../components/customHeader/Index';
 import Offer from '../../../../components/offers/Index';
 import Typography from '../../../../components/Typography';
-import {scale, verticalScale} from '../../../../shared/Scaling';
+import {verticalScale} from '../../../../shared/Scaling';
 import {ColorKeys} from '../../../../shared/themes/Index';
 import {customFontSize, fonts} from '../../../../shared/themes/Typography';
 import utils from '../../../../shared/Utils';
 import JobTimeline from './components/JobTimeline';
-import jobStyle from './jobStyle';
 import jobService from './service/Jobs.service';
 
 const ViewDetails: IViewDetails = ({navigation, route}) => {
   const jobs = route.params;
+  utils.useHideBottomTab(navigation);
 
   jobService.useWebSocketListeners();
 
   const {startJob, endJob} = jobService.useJobsActions();
+
+  const [isOfferCancel, setIsOfferCancel] = React.useState(false);
+
+  const [swipeSuccess, setSwipeSuccess] = React.useState(false);
 
   const {data, refetch: refetchJobDetails} = jobService.useGetJobDetails(
     route.params?.uuid!,
@@ -42,10 +46,6 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
   } = jobService.useJobTimeline(route.params?.uuid || '');
   const {declineJob, declinePending} = jobService.useJobsActions();
 
-  const [isOfferCancel, setIsOfferCancel] = React.useState(false);
-
-  utils.useHideBottomTab(navigation);
-  const [swipeSuccess, setSwipeSuccess] = React.useState(false);
   const [type, setType] = React.useState(
     (data?.job.status || route.params?.status)?.toLowerCase(),
   );
@@ -57,7 +57,6 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
   }, []);
 
   React.useEffect(() => {
-    // Update type based on job status from fetched data (prioritized) or route params
     if (data?.job?.status) {
       setType(data.job.status.toLowerCase());
     } else if (jobs?.status) {
@@ -86,6 +85,10 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
   if (type === 'canceled') headerText = 'Job Canceled';
   if (type === 'canceled') headerColor = 'white';
 
+  if (type === 'disputed') headerBgColor = '#F0443A';
+  if (type === 'disputed') headerText = 'Job Disputed';
+  if (type === 'disputed') headerColor = 'white';
+
   if (type === 'engaged') headerBgColor = '#F0443A';
   if (type === 'engaged') headerText = 'Currently engaged in a job';
   if (type === 'engaged') headerColor = 'white';
@@ -95,7 +98,7 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
   if (!timelines) timelines = data?.timelines;
 
   return (
-    <View style={{flex: 1, backgroundColor: 'white'}}>
+    <Container flex={1} backgroundColor="white">
       <CustomHeader
         type="back"
         title={`Job #${route.params?.requestId}`}
@@ -105,7 +108,14 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
       />
 
       {type === 'in_progress' && (
-        <View style={{...jobStyle.jobContainerCard}}>
+        <Container
+          flexDirection="column"
+          backgroundColor="white"
+          padding={15}
+          borderRadius={20}
+          justifyContent="center"
+          alignItems="center"
+          gap={10}>
           <CustomAvatar
             avatarSize={50}
             badgeSize={20}
@@ -117,7 +127,7 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
           <Typography size="md" color="gray">
             {jobs?.providerPrimaryJobRole}
           </Typography>
-        </View>
+        </Container>
       )}
 
       <View
@@ -135,20 +145,25 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
           {headerText}
         </Typography>
 
-        <View
-          style={{
-            flex: 1,
-            flexDirection: 'column',
-            backgroundColor: '#f9f9fb',
-            borderTopEndRadius: 20,
-            borderTopStartRadius: 20,
-          }}>
+        <Container
+          flex={1}
+          flexDirection="column"
+          backgroundColor="offWhite"
+          borderTopLeftRadius={20}
+          borderTopRightRadius={20}>
           <ScrollView
             showsVerticalScrollIndicator={false}
             style={{flex: 1}}
             contentContainerStyle={{paddingBottom: 20}}>
             {type !== 'in_progress' && (
-              <View style={{...jobStyle.jobContainerCard}}>
+              <Container
+                flexDirection="column"
+                backgroundColor="white"
+                padding={15}
+                borderRadius={20}
+                justifyContent="center"
+                alignItems="center"
+                gap={10}>
                 <CustomAvatar
                   avatarSize={50}
                   badgeSize={20}
@@ -177,7 +192,7 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
                   </Container>
                 )}
 
-                {!data?.job.providerIdentifyVerified && (
+                {data?.job.providerIdentifyVerified && (
                   <React.Fragment>
                     <OutlineButton
                       height={verticalScale(50)}
@@ -189,6 +204,9 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
                             verificationPinParams: {
                               uuid: route.params?.uuid!,
                             },
+                            onCancelJob: () => {
+                              setIsOfferCancel(true);
+                            },
                           },
                         })
                       }
@@ -197,18 +215,22 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
                     </OutlineButton>
                   </React.Fragment>
                 )}
-              </View>
+              </Container>
             )}
 
-            <View
-              style={{
-                ...jobStyle.jobContainerCard,
-                marginTop: verticalScale(10),
-              }}>
+            <Container
+              flexDirection="column"
+              backgroundColor="white"
+              padding={15}
+              borderRadius={20}
+              justifyContent="center"
+              alignItems="center"
+              gap={10}
+              marginTop={10}>
               <Typography size="lg" fontWeight="bold" currency>
                 {route.params?.price}
               </Typography>
-              <View style={{flexDirection: 'row', gap: 10}}>
+              <Container flexDirection="row" gap={10}>
                 <Assets.Accepted style={{marginTop: verticalScale(4)}} />
                 <Typography size="md" color="gray">
                   Accepted on{' '}
@@ -216,18 +238,16 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
                     'DD MMM, YYYY, hh:mm',
                   )}
                 </Typography>
-              </View>
+              </Container>
 
               {type === 'in_progress' ? (
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    gap: 10,
-                    borderBottomWidth: 1,
-                    borderStyle: 'dashed',
-                    borderColor: '#D6DBE7',
-                    paddingBottom: 20,
-                  }}>
+                <Container
+                  flexDirection="row"
+                  gap={10}
+                  borderBottomWidth={1}
+                  borderStyle="dashed"
+                  borderColor="lightDeepGrey"
+                  paddingBottom={20}>
                   <MainButton
                     width={'100%'}
                     enableButtonColor="lightGrey"
@@ -239,10 +259,11 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
                     }}>
                     Dispute job
                   </MainButton>
-                </View>
+                </Container>
               ) : (
                 type !== 'completed' &&
-                type !== 'canceled' && (
+                type !== 'canceled' &&
+                type !== 'disputed' && (
                   <Container
                     flexDirection="row"
                     gap={10}
@@ -332,7 +353,7 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
                   </Container>
                 )
               )}
-            </View>
+            </Container>
 
             <Container gap={3} backgroundColor="white" padding={7}>
               <Typography
@@ -352,25 +373,25 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
               )}
             </Container>
 
-            <View style={{marginTop: verticalScale(10)}}>
+            <Container marginTop={10}>
               <JobTimeline
                 timeline={timelines}
                 isLoading={timelineLoading}
                 status={type!}
               />
-            </View>
+            </Container>
           </ScrollView>
 
-          {type !== 'completed' && type !== 'canceled' ? (
-            <View
-              style={{
-                padding: scale(20),
-                paddingTop: 15,
-                paddingBottom: 35,
-                backgroundColor: 'white',
-                flexDirection: 'column',
-                gap: 10,
-              }}>
+          {type !== 'completed' &&
+          type !== 'canceled' &&
+          type !== 'disputed' ? (
+            <Container
+              padding={20}
+              paddingTop={15}
+              paddingBottom={35}
+              backgroundColor="white"
+              flexDirection="column"
+              gap={10}>
               <Typography fontWeight="bold" color="lightBlack">
                 Ready to start the job?
               </Typography>
@@ -387,7 +408,7 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
                     endJob(jobUuid, {
                       onSuccess: () => {
                         setSwipeSuccess(true);
-                        // Explicitly refetch data to update UI immediately
+
                         refetchJobDetails();
                         refetchTimeline();
                       },
@@ -396,7 +417,7 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
                     startJob(jobUuid, {
                       onSuccess: () => {
                         setSwipeSuccess(true);
-                        // Explicitly refetch data to update UI immediately
+
                         refetchJobDetails();
                         refetchTimeline();
                       },
@@ -422,7 +443,7 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
                 }}
                 height={60}
               />
-            </View>
+            </Container>
           ) : (
             type !== 'canceled' &&
             !!data?.review && (
@@ -450,13 +471,13 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
               </OutlineButton>
             )
           )}
-        </View>
+        </Container>
       </View>
 
       <Offer
         type="cancel"
         isVisible={isOfferCancel}
-        bntText='Cancel Job'
+        bntText="Cancel Job"
         onClose={() => setIsOfferCancel(false)}
         isLoading={declinePending}
         onDeclineOffer={(reason, category) => {
@@ -471,7 +492,7 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
           );
         }}
       />
-    </View>
+    </Container>
   );
 };
 export default ViewDetails;

@@ -1,4 +1,4 @@
-import {NativeStackHeaderProps} from '@react-navigation/native-stack';
+import {CommonActions, NativeStackHeaderProps} from '@react-navigation/native-stack';
 import React from 'react';
 import {TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -74,6 +74,10 @@ const ChatHeader: ICustomHeader<NativeStackHeaderProps, ColorKeys> = ({
     });
   }, [conversationUuid, navigation, title, image]);
 
+  const handleGoBack = React.useCallback(() => {
+    navigation?.goBack();
+  }, [navigation]);
+
   return (
     <Container
       flexDirection="row"
@@ -83,7 +87,7 @@ const ChatHeader: ICustomHeader<NativeStackHeaderProps, ColorKeys> = ({
       alignItems="center"
       backgroundColor="white">
       <Container flexDirection="row">
-        <TouchableOpacity onPress={() => navigation?.goBack()}>
+        <TouchableOpacity onPress={handleGoBack}>
           <Icon name="chevron-back" size={20} color={'#757C91'} />
         </TouchableOpacity>
       </Container>

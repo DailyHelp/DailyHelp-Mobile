@@ -74,13 +74,25 @@ const CancelJob = React.forwardRef<ActionSheetRef, SheetProps<'CancelJob'>>(
             Verify with PIN
           </MainButton>
           <MainButton
-            onPress={() => {}}
+            onPress={() => {
+              SheetManager.hide('CancelJob');
+              SheetManager.hide('FaceMatch');
+
+              if (props.payload?.onCancelJob) {
+                props.payload.onCancelJob();
+              }
+            }}
             icon={() => <Icon name="close" color={'#F0443A'} size={15} />}
             color="danger"
             enableButtonColor="pink">
             Cancel job
           </MainButton>
           <MainButton
+            onPress={() => {
+              SheetManager.hide('CancelJob');
+              SheetManager.hide('FaceMatch');
+              navigation.navigate('Dispute');
+            }}
             icon={() => <Assets.ChatAnnouncement style={{marginTop: 5}} />}
             color="black"
             enableButtonColor="lightGrey">

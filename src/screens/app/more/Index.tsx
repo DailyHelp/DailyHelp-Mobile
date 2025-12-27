@@ -27,8 +27,16 @@ const More: IMore = ({navigation}) => {
   );
 
   React.useEffect(() => {
+    if (user_type) {
+      if (user_type && user_type !== appStore.user_types) {
+        appStore.setUserTypes(user_type);
+      }
+    }
+  }, [user_type]);
+
+  React.useEffect(() => {
     if (
-      !data?.data.user?.onboardingCompleted &&
+      !user?.onboardingCompleted &&
       user_type?.toUpperCase() === UserTypes.PROVIDER
     ) {
       appStore.setIsIdentityVerified(false);
@@ -42,11 +50,11 @@ const More: IMore = ({navigation}) => {
     },
     user_type,
   );
-  
+
   let params = {
     firstname: user?.firstname,
     lastname: user?.lastname,
-    userType: appStore.user_types,
+    userType: user_type,
     ...user?.providerOnboarding,
     middlename: user?.middlename || '',
     gender: user?.gender,

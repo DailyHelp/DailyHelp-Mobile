@@ -1,5 +1,5 @@
 import {useFocusEffect} from '@react-navigation/native';
-import {useMutation, useQuery} from '@tanstack/react-query';
+import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 import React from 'react';
 import AppStorage from '../../../../shared/AppStorage';
 import {UserTypes} from '../../../../shared/Constant';
@@ -152,10 +152,16 @@ export class MoreService extends MoreApi {
   }
 
   useWithdraw() {
+    const queryClient = useQueryClient();
     const {data, isPending, mutate, isSuccess} = useMutation({
       mutationKey: ['withdraw'],
       mutationFn: async (dto: Partial<FundWalletDto>) => {
         return await this.withdraw(dto);
+      },
+      onSuccess: () => {
+        // Invalidate wallet and transactions queries after withdrawal
+        queryClient.invalidateQueries({queryKey: ['wallet']});
+        queryClient.invalidateQueries({queryKey: ['transactions']});
       },
       onError: err => new CatchError(err, true),
     });

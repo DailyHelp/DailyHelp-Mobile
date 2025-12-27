@@ -1,6 +1,7 @@
 import {observer} from 'mobx-react-lite';
 import React from 'react';
 import {ActionSheetRef} from 'react-native-actions-sheet';
+import {useQueryClient} from '@tanstack/react-query';
 import {IChatBox} from '../../../@types/routes';
 import Container from '../../../components/container/Index';
 import CustomFlatList from '../../../components/CustomFlatList';
@@ -23,13 +24,14 @@ const ChatBox: IChatBox = ({navigation, route}) => {
   const galleryBottomSheetRef = React.useRef<ActionSheetRef | null>(null);
   const userType = AppStorage.find('userType') as UserTypes;
   const isCustomer = userType === UserTypes.CUSTOMER;
+  const queryClient = useQueryClient();
 
   const isPaymentMade = route.params?.hasActiveJob;
   const conversationUuid = route.params?.uuid!;
 
   const userId = AppStorage.find('user_id');
 
-  const {data, canSendOffer, isLoading} =
+  const {data, canSendOffer, isLoading, fetchMore} =
     chatService.useGetSingleConversation(conversationUuid);
 
   const {readMessage, joinConversation, leaveConversation} =
@@ -168,6 +170,10 @@ const ChatBox: IChatBox = ({navigation, route}) => {
         acceptOffer(data.offer.uuid, {
           onSuccess: () => {
             setOffer({...offer, visible: false});
+            // Invalidate the specific conversation query to refresh the chat
+            queryClient.invalidateQueries({
+              queryKey: ['conversation', conversationUuid],
+            });
           },
         });
       }
@@ -201,6 +207,10 @@ const ChatBox: IChatBox = ({navigation, route}) => {
         {
           onSuccess: () => {
             setOffer({...offer, visible: false});
+            // Invalidate the specific conversation query to refresh the chat
+            queryClient.invalidateQueries({
+              queryKey: ['conversation', conversationUuid],
+            });
           },
         },
       );
@@ -262,6 +272,8 @@ const ChatBox: IChatBox = ({navigation, route}) => {
             inverted
             renderItem={renderItem}
             keyExtractor={(item, ind) => item.uuid + ind.toString()}
+            onEndReached={fetchMore}
+            onEndReachedThreshold={0.5}
           />
         )}
         <ChatFooter
@@ -287,9 +299,31 @@ const ChatBox: IChatBox = ({navigation, route}) => {
           }}
           onDeclineOffer={(reason, reasonCategory, uuid) => {
             if (offer.type === 'decline') {
-              declineOffer({reason, reasonCategory, uuid}, {onSuccess: close});
+              declineOffer(
+                {reason, reasonCategory, uuid},
+                {
+                  onSuccess: () => {
+                    close();
+                    // Invalidate the specific conversation query to refresh the chat
+                    queryClient.invalidateQueries({
+                      queryKey: ['conversation', conversationUuid],
+                    });
+                  },
+                },
+              );
             } else {
-              cancelOffer({reason, reasonCategory, uuid}, {onSuccess: close});
+              cancelOffer(
+                {reason, reasonCategory, uuid},
+                {
+                  onSuccess: () => {
+                    close();
+                    // Invalidate the specific conversation query to refresh the chat
+                    queryClient.invalidateQueries({
+                      queryKey: ['conversation', conversationUuid],
+                    });
+                  },
+                },
+              );
             }
           }}
           onSendOffer={data => {
@@ -297,11 +331,23 @@ const ChatBox: IChatBox = ({navigation, route}) => {
               handleCounterOffer(data);
             } else if (offer.type === 'edit') {
               data.uuid = offer?.data?.offer.uuid;
-              handleUpdateOffer(data, close);
+              handleUpdateOffer(data, () => {
+                close();
+                // Invalidate the specific conversation query to refresh the chat
+                queryClient.invalidateQueries({
+                  queryKey: ['conversation', conversationUuid],
+                });
+              });
             } else {
               data.uuid = route.params?.serviceProviderId;
 
-              onSendOffer(data, close);
+              onSendOffer(data, () => {
+                close();
+                // Invalidate the specific conversation query to refresh the chat
+                queryClient.invalidateQueries({
+                  queryKey: ['conversation', conversationUuid],
+                });
+              });
             }
           }}
           isLoading={

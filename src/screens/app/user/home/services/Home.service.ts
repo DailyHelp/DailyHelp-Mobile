@@ -355,7 +355,8 @@ class HomeService extends HomeApi {
         return await this.sendOffer(body.uuid!, body);
       },
       onSuccess: () => {
-        client.invalidateQueries({queryKey: ['conversation', 'conversations']});
+        client.invalidateQueries({queryKey: ['conversations']});
+        client.invalidateQueries({queryKey: ['conversation']});
       },
       onError: error => new CatchError(error, true),
     });
@@ -370,6 +371,7 @@ class HomeService extends HomeApi {
         return await this.updateOffer(body.uuid!, body);
       },
       onSuccess: () => {
+        client.invalidateQueries({queryKey: ['conversations']});
         client.invalidateQueries({queryKey: ['conversation']});
       },
       onError: error => new CatchError(error, true),
@@ -381,6 +383,7 @@ class HomeService extends HomeApi {
         return await this.declineOffer(body.uuid!, body);
       },
       onSuccess: () => {
+        client.invalidateQueries({queryKey: ['conversations']});
         client.invalidateQueries({queryKey: ['conversation']});
       },
       onError: error => new CatchError(error, true),
@@ -392,6 +395,7 @@ class HomeService extends HomeApi {
         return await this.cancelOffer(body.uuid!, body);
       },
       onSuccess: () => {
+        client.invalidateQueries({queryKey: ['conversations']});
         client.invalidateQueries({queryKey: ['conversation']});
       },
       onError: error => new CatchError(error, true),
@@ -522,23 +526,6 @@ class HomeService extends HomeApi {
       }
       return appStore.user_types as UserTypes;
     }, [user?.userTypes, appStore.user_types]);
-
-    React.useEffect(() => {
-      if (user?.userTypes) {
-        if (user_type && user_type !== appStore.user_types) {
-          appStore.setUserTypes(user_type);
-        }
-      }
-    }, [user?.userTypes]);
-
-    React.useEffect(() => {
-      if (
-        !user?.onboardingCompleted &&
-        user_type?.toUpperCase() === UserTypes.PROVIDER
-      ) {
-        appStore.setIsIdentityVerified(false);
-      }
-    }, [data, user_type]);
 
     return {data: data?.data, isLoading, error, refetch, user_type};
   }

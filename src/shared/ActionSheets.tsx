@@ -105,6 +105,7 @@ declare module 'react-native-actions-sheet' {
         verificationPinParams?: {
           uuid: string;
         };
+        onCancelJob?: () => void;
       };
     }>;
     CancelJob: SheetDefinition<{
@@ -113,6 +114,7 @@ declare module 'react-native-actions-sheet' {
         verificationPinParams?: {
           uuid: string;
         };
+        onCancelJob?: () => void;
       };
     }>;
     WorkerSuggestion: SheetDefinition<{

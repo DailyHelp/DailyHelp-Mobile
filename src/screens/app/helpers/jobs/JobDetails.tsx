@@ -12,11 +12,10 @@ import CustomAvatar from '../../../../components/CustomAvatar';
 import CustomHeader from '../../../../components/customHeader/Index';
 import Offer from '../../../../components/offers/Index';
 import Typography from '../../../../components/Typography';
-import {scale, verticalScale} from '../../../../shared/Scaling';
+import {verticalScale} from '../../../../shared/Scaling';
 import {ColorKeys} from '../../../../shared/themes/Index';
 import utils from '../../../../shared/Utils';
 import JobTimeline from '../../user/jobs/components/JobTimeline';
-import jobStyle from '../../user/jobs/jobStyle';
 import jobService from '../../user/jobs/service/Jobs.service';
 import CodeContainer from './components/CodeContainer';
 import ReviewsCard from '../../../../components/ReviewsCard';
@@ -65,7 +64,7 @@ const JobDetails: IViewDetails = ({navigation, route}) => {
   if (!timelines) timelines = data?.timelines;
 
   return (
-    <View style={{flex: 1, backgroundColor: 'white'}}>
+    <Container flex={1} backgroundColor="white">
       <CustomHeader
         type="back"
         title={`Job #${route.params?.requestId}`}
@@ -75,7 +74,14 @@ const JobDetails: IViewDetails = ({navigation, route}) => {
       />
 
       {type === 'in_progress' && (
-        <View style={{...jobStyle.jobContainerCard}}>
+        <Container
+          flexDirection="column"
+          backgroundColor="white"
+          padding={15}
+          borderRadius={20}
+          justifyContent="center"
+          alignItems="center"
+          gap={10}>
           <CustomAvatar
             avatarSize={50}
             badgeSize={20}
@@ -89,7 +95,7 @@ const JobDetails: IViewDetails = ({navigation, route}) => {
           <Typography size="md" color="gray">
             {route.params?.providerPrimaryJobRole}
           </Typography>
-        </View>
+        </Container>
       )}
 
       <View
@@ -107,20 +113,25 @@ const JobDetails: IViewDetails = ({navigation, route}) => {
           {headerText}
         </Typography>
 
-        <View
-          style={{
-            flex: 1,
-            flexDirection: 'column',
-            backgroundColor: 'white',
-            borderTopEndRadius: 20,
-            borderTopStartRadius: 20,
-          }}>
+        <Container
+          flex={1}
+          flexDirection="column"
+          backgroundColor="white"
+          borderTopLeftRadius={20}
+          borderTopRightRadius={20}>
           <ScrollView
             showsVerticalScrollIndicator={false}
             style={{flex: 1}}
             contentContainerStyle={{paddingBottom: 20}}>
             {type !== 'in_progress' && (
-              <View style={{...jobStyle.jobContainerCard}}>
+              <Container
+                flexDirection="column"
+                backgroundColor="white"
+                padding={15}
+                borderRadius={20}
+                justifyContent="center"
+                alignItems="center"
+                gap={10}>
                 <CustomAvatar
                   avatarSize={50}
                   badgeSize={20}
@@ -130,7 +141,7 @@ const JobDetails: IViewDetails = ({navigation, route}) => {
                   {data?.job.serviceRequestor.firstname}{' '}
                   {data?.job.serviceRequestor.lastname}
                 </Typography>
-              </View>
+              </Container>
             )}
 
             {data?.job.code && type === 'pending' && (
@@ -154,15 +165,19 @@ const JobDetails: IViewDetails = ({navigation, route}) => {
               </Container>
             )}
 
-            <View
-              style={{
-                ...jobStyle.jobContainerCard,
-                marginTop: verticalScale(10),
-              }}>
+            <Container
+              flexDirection="column"
+              backgroundColor="white"
+              padding={15}
+              borderRadius={20}
+              justifyContent="center"
+              alignItems="center"
+              gap={10}
+              marginTop={10}>
               <Typography size="lg" fontWeight="bold" currency>
                 {route.params?.price}
               </Typography>
-              <View style={{flexDirection: 'row', gap: 10}}>
+              <Container flexDirection="row" gap={10}>
                 <Assets.Accepted style={{marginTop: verticalScale(4)}} />
                 <Typography size="md" color="gray">
                   Accepted on{' '}
@@ -170,18 +185,16 @@ const JobDetails: IViewDetails = ({navigation, route}) => {
                     'DD MMM, YYYY, hh:mm',
                   )}
                 </Typography>
-              </View>
+              </Container>
 
               {type === 'in_progress' ? (
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    gap: 10,
-                    borderBottomWidth: 1,
-                    borderStyle: 'dashed',
-                    borderColor: '#D6DBE7',
-                    paddingBottom: 20,
-                  }}>
+                <Container
+                  flexDirection="row"
+                  gap={10}
+                  borderBottomWidth={1}
+                  borderStyle="dashed"
+                  borderColor="lightDeepGrey"
+                  paddingBottom={20}>
                   <MainButton
                     width={'100%'}
                     enableButtonColor="lightGrey"
@@ -191,7 +204,7 @@ const JobDetails: IViewDetails = ({navigation, route}) => {
                     }}>
                     Report client
                   </MainButton>
-                </View>
+                </Container>
               ) : (
                 type !== 'completed' && (
                   <Container
@@ -235,7 +248,7 @@ const JobDetails: IViewDetails = ({navigation, route}) => {
                   </Container>
                 )
               )}
-            </View>
+            </Container>
 
             <Container gap={3} backgroundColor="white" padding={7}>
               <Typography
@@ -255,29 +268,27 @@ const JobDetails: IViewDetails = ({navigation, route}) => {
               )}
             </Container>
 
-            <View style={{marginTop: verticalScale(10)}}>
+            <Container marginTop={10}>
               <JobTimeline
                 timeline={timelines}
                 isLoading={timelineLoading}
                 status={type!}
               />
-            </View>
+            </Container>
           </ScrollView>
 
           {type === 'completed' && (
-            <View
-              style={{
-                padding: scale(20),
-                paddingTop: 15,
-                paddingBottom: 35,
-                backgroundColor: 'white',
-                flexDirection: 'column',
-                gap: 10,
-              }}>
+            <Container
+              padding={20}
+              paddingTop={15}
+              paddingBottom={35}
+              backgroundColor="white"
+              flexDirection="column"
+              gap={10}>
               <ReviewsCard data={data?.review} />
-            </View>
+            </Container>
           )}
-        </View>
+        </Container>
       </View>
 
       <Offer
@@ -293,7 +304,7 @@ const JobDetails: IViewDetails = ({navigation, route}) => {
           });
         }}
       />
-    </View>
+    </Container>
   );
 };
 export default JobDetails;

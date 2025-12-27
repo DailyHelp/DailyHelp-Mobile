@@ -2,6 +2,7 @@ import React from 'react';
 import {IHome} from '../../../../@types/routes';
 import Assets from '../../../../assets/Assets';
 import Container from '../../../../components/container/Index';
+import HelperHomeSkeleton from '../../../../components/skeleton/HelperHomeSkeleton';
 import Typography from '../../../../components/Typography';
 import {HelpersStatus} from '../../../../shared/Constant';
 import {ColorKeys} from '../../../../shared/themes/Index';
@@ -17,7 +18,7 @@ const Home: IHome = () => {
     HelpersStatus.UNAVAILABLE,
   );
 
-  const {data} = homeService.useProviderDashboard();
+  const {data, isLoading} = homeService.useProviderDashboard();
   const {mutate} = homeService.useAvailability();
 
   React.useEffect(() => {
@@ -73,6 +74,20 @@ const Home: IHome = () => {
       },
     });
   };
+
+  if (isLoading || !data) {
+    return (
+      <Container
+        type="scroll"
+        width={'full'}
+        borderTopRightRadius={20}
+        borderTopLeftRadius={20}
+        backgroundColor="lightDeepGrey"
+        flex={1}>
+        <HelperHomeSkeleton />
+      </Container>
+    );
+  }
 
   return (
     <Container

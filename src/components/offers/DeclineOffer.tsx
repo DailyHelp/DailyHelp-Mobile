@@ -22,6 +22,7 @@ const DeclineOffer: IOffer<Message> = ({
   isLoading,
   data,
   cancellationChances,
+  bntText,
 }) => {
   const [id, setId] = React.useState<number | undefined>();
   const [reason, setReason] = React.useState('');
@@ -165,7 +166,7 @@ const DeclineOffer: IOffer<Message> = ({
                   data?.offer.uuid!,
                 );
               }}>
-              {utils.capitalizeFirstLetter(type)} offer
+              {bntText || utils.capitalizeFirstLetter(type) + ' Offer'}
             </MainButton>
           </View>
         </Container>

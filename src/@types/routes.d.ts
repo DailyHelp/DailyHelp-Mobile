@@ -304,7 +304,7 @@ type IChatRoute = {
     uuid: string;
   };
   ReportSubmitted?: undefined;
-  WebViewComponent?: {url: string};
+  WebViewComponent?: {url: string; title?: string; fromWalletFunding?: boolean};
 };
 
 type IChat = Props<NativeStackScreenProps<IChatRoute, 'Chat'>>;
@@ -342,7 +342,7 @@ type IJobsRoute = {
   JobsIndex?: undefined;
   ViewDetails?: JobsDto;
   VerificationPin?: {uuid: string};
-  WebViewComponent?: {url: string; title: string};
+  WebViewComponent?: {url: string; title?: string; fromWalletFunding?: boolean};
   Dispute?: {
     uuid: string;
   };
@@ -385,7 +385,7 @@ type IMoreRoute = {
   More?: undefined;
   AccountSettings?: undefined;
   UpdatePassword?: undefined;
-  WalletBalance?: undefined;
+  WalletBalance?: {paymentSuccess?: boolean};
   Disputes?: undefined;
   PersonalInformation?: {
     first_name?: string;

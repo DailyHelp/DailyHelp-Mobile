@@ -122,6 +122,7 @@ const FaceMatch = React.forwardRef<ActionSheetRef, SheetProps<'FaceMatch'>>(
                       payload: {
                         navigation: payload?.navigation,
                         verificationPinParams: payload?.verificationPinParams,
+                        onCancelJob: payload?.onCancelJob,
                       },
                     });
                   },

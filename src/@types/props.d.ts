@@ -573,6 +573,8 @@ type IConversationSkeleton = Props<{
   count?: number;
 }>;
 
+type IHelperHomeSkeleton = Props<{}>;
+
 type ISearchResult<D = any> = Props<{fetchMore?: () => void}, D>;
 
 type IRevenueRings = Props<{
