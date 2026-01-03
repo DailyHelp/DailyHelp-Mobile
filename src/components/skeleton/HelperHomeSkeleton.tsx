@@ -24,28 +24,31 @@ const HelperHomeSkeleton: IHelperHomeSkeleton = () => {
           </SkeletonPlaceholder.Item>
         </View>
 
-        {/* Main content container */}
+        {/* Main content container - matches Container with backgroundColor="offWhite", gap={20} */}
         <View
           style={{
             backgroundColor: '#F9F9FB',
             borderTopLeftRadius: 20,
             borderTopRightRadius: 20,
+            width: '100%',
             paddingTop: verticalScale(30),
             paddingBottom: verticalScale(20),
           }}>
-          {/* HelperDetails section - Avatar and name */}
+          {/* HelperDetails section - matches Container with paddingTop={30}, gap={6} */}
           <View
             style={{
               alignItems: 'center',
               justifyContent: 'center',
-              marginBottom: verticalScale(20),
+              alignSelf: 'center',
+              paddingTop: verticalScale(30),
+              marginBottom: scale(20), // gap from Container
             }}>
             {/* Avatar */}
             <SkeletonPlaceholder.Item
               width={70}
               height={70}
               borderRadius={35}
-              marginBottom={verticalScale(10)}
+              marginBottom={scale(6)}
             />
 
             {/* Name */}
@@ -53,20 +56,22 @@ const HelperHomeSkeleton: IHelperHomeSkeleton = () => {
               width={150}
               height={20}
               borderRadius={4}
-              marginBottom={verticalScale(8)}
+              marginBottom={scale(6)}
             />
 
             {/* Job role and tier */}
-            <View style={{flexDirection: 'row', alignItems: 'center', gap: scale(7)}}>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <SkeletonPlaceholder.Item
                 width={100}
                 height={16}
                 borderRadius={4}
+                marginRight={scale(7)}
               />
               <SkeletonPlaceholder.Item
                 width={5}
                 height={5}
                 borderRadius={2.5}
+                marginRight={scale(7)}
               />
               <SkeletonPlaceholder.Item
                 width={80}
@@ -76,25 +81,26 @@ const HelperHomeSkeleton: IHelperHomeSkeleton = () => {
             </View>
           </View>
 
-          {/* BadgeContainer section */}
+          {/* BadgeContainer section - matches width={'95'}, alignSelf="center" with gap={20} spacing */}
           <View
             style={{
               width: '95%',
               alignSelf: 'center',
-              marginBottom: verticalScale(20),
+              marginBottom: scale(20), // gap from Container
             }}>
             <SkeletonPlaceholder.Item
               width={'100%'}
               height={verticalScale(80)}
               borderRadius={10}
               padding={scale(15)}>
-              <View style={{gap: verticalScale(15)}}>
+              <View>
                 {/* Badge title and count */}
                 <View
                   style={{
                     flexDirection: 'row',
                     justifyContent: 'space-between',
                     width: '75%',
+                    marginBottom: verticalScale(15), // gap={15}
                   }}>
                   <SkeletonPlaceholder.Item
                     width={120}
@@ -118,76 +124,85 @@ const HelperHomeSkeleton: IHelperHomeSkeleton = () => {
             </SkeletonPlaceholder.Item>
           </View>
 
-          {/* StatsCard grid - 2x2 */}
+          {/* StatsCard grid - matches Container with width={'95'}, flexDirection="row", flexWrap="wrap", gap={10}, alignSelf="center" */}
           <View
             style={{
               width: '95%',
               alignSelf: 'center',
               flexDirection: 'row',
               flexWrap: 'wrap',
-              gap: scale(10),
-              marginBottom: verticalScale(20),
+              marginBottom: scale(20), // gap from Container
             }}>
             {Array.from({length: 4}).map((_, index) => (
-              <SkeletonPlaceholder.Item
+              <View
                 key={index}
-                width={'48%'}
-                height={120}
-                borderRadius={10}
-                padding={scale(15)}>
-                <View style={{gap: scale(8)}}>
-                  {/* Title */}
-                  <SkeletonPlaceholder.Item
-                    width={100}
-                    height={16}
-                    borderRadius={4}
-                  />
+                style={{
+                  width: '48%',
+                  marginRight: index % 2 === 0 ? scale(10) : 0,
+                  marginBottom: index < 2 ? scale(10) : 0,
+                }}>
+                <SkeletonPlaceholder.Item
+                  width={'100%'}
+                  height={120}
+                  borderRadius={10}
+                  padding={scale(15)}>
+                  <View>
+                    {/* Title */}
+                    <SkeletonPlaceholder.Item
+                      width={100}
+                      height={16}
+                      borderRadius={4}
+                      marginBottom={scale(8)}
+                    />
 
-                  {/* Stats value */}
-                  <SkeletonPlaceholder.Item
-                    width={80}
-                    height={20}
-                    borderRadius={4}
-                  />
+                    {/* Stats value */}
+                    <SkeletonPlaceholder.Item
+                      width={80}
+                      height={20}
+                      borderRadius={4}
+                      marginBottom={index >= 2 ? scale(8) : 0}
+                    />
 
-                  {/* Goal (for Jobs and Ratings cards) */}
-                  {index >= 2 && (
-                    <View style={{flexDirection: 'row', alignItems: 'center', gap: scale(4)}}>
-                      <SkeletonPlaceholder.Item
-                        width={40}
-                        height={14}
-                        borderRadius={4}
-                      />
-                      <SkeletonPlaceholder.Item
-                        width={60}
-                        height={14}
-                        borderRadius={4}
-                      />
-                    </View>
-                  )}
-                </View>
-              </SkeletonPlaceholder.Item>
+                    {/* Goal (for Jobs and Ratings cards) */}
+                    {index >= 2 && (
+                      <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                        <SkeletonPlaceholder.Item
+                          width={40}
+                          height={14}
+                          borderRadius={4}
+                          marginRight={scale(4)}
+                        />
+                        <SkeletonPlaceholder.Item
+                          width={60}
+                          height={14}
+                          borderRadius={4}
+                        />
+                      </View>
+                    )}
+                  </View>
+                </SkeletonPlaceholder.Item>
+              </View>
             ))}
           </View>
 
-          {/* Complete more jobs container */}
+          {/* Complete more jobs container - matches Container with width={'95'}, alignSelf="center", padding={15}, borderRadius={10}, gap={8} */}
           <View
             style={{
               width: '95%',
               alignSelf: 'center',
-              marginBottom: verticalScale(20),
             }}>
             <SkeletonPlaceholder.Item
               width={'100%'}
               height={100}
               borderRadius={10}
               padding={scale(15)}>
-              <View style={{gap: scale(8)}}>
+              <View>
                 {/* Title */}
                 <SkeletonPlaceholder.Item
                   width={150}
                   height={18}
                   borderRadius={4}
+                  marginBottom={scale(8)}
                 />
 
                 {/* Description */}
@@ -206,3 +221,5 @@ const HelperHomeSkeleton: IHelperHomeSkeleton = () => {
 };
 
 export default HelperHomeSkeleton;
+
+

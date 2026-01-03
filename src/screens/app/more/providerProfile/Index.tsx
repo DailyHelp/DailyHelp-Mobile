@@ -1,23 +1,22 @@
 import React from 'react';
-import {TouchableOpacity, View} from 'react-native';
-import {ActionSheetRef} from 'react-native-actions-sheet';
-import {ProgressBar} from 'react-native-paper';
+import { TouchableOpacity, View } from 'react-native';
+import { ActionSheetRef } from 'react-native-actions-sheet';
+import { ProgressBar } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/AntDesign';
-import {IProviderProfile} from '../../../../@types/routes';
+import { IProviderProfile } from '../../../../@types/routes';
 import Assets from '../../../../assets/Assets';
 import AttachmentContainer from '../../../../components/AttachmentContainer';
 import Container from '../../../../components/container/Index';
 import CustomAvatar from '../../../../components/CustomAvatar';
 import CustomFlatList from '../../../../components/CustomFlatList';
-import CustomHeader from '../../../../components/customHeader/Index';
 import Gallery from '../../../../components/Gallery';
 import offerStyle from '../../../../components/offers/offerStyle';
 import ReviewsCard from '../../../../components/ReviewsCard';
 import Typography from '../../../../components/Typography';
-import {scale, verticalScale} from '../../../../shared/Scaling';
+import { scale, verticalScale } from '../../../../shared/Scaling';
+import { appStore } from '../../../../shared/stores/appStore';
 import utils from '../../../../shared/Utils';
 import homeService from '../../user/home/services/Home.service';
-import {appStore} from '../../../../shared/stores/appStore';
 
 const ProviderProfile: IProviderProfile = ({navigation}) => {
   const {

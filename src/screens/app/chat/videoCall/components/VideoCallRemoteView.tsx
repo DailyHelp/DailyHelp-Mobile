@@ -61,3 +61,4 @@ export const VideoCallRemoteView: IVideoCallRemoteView = ({
     </Container>
   );
 };
+

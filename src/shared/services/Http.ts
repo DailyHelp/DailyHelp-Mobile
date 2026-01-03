@@ -44,11 +44,20 @@ export default class Http {
       ...headers,
     };
 
-    const resp = await fetch(url, {
-      body: type === 'json' ? JSON.stringify(body) : (body as any),
+    const fetchOptions: RequestInit = {
       method,
       headers,
-    }).catch(Promise.reject);
+    };
+
+    if (method !== 'GET' && body) {
+      if (type === 'json') {
+        fetchOptions.body = JSON.stringify(body);
+      } else {
+        fetchOptions.body = body as any;
+      }
+    }
+
+    const resp = await fetch(url, fetchOptions).catch(Promise.reject);
 
     return resp;
   }

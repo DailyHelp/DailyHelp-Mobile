@@ -72,3 +72,4 @@ const VoiceCall: IVoiceCall = ({navigation, route}) => {
 };
 
 export default VoiceCall;
+

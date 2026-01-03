@@ -231,12 +231,18 @@ export class MoreService extends MoreApi {
     } = useQuery({
       queryKey: ['analytics', startDateString, endDateString],
       queryFn: async () => {
-        return await this.analytics({
-          startDate: startDateString,
-          endDate: endDateString,
-        });
+        try {
+          return this.analytics({
+            startDate: startDateString,
+            endDate: endDateString,
+          });
+        } catch (error) {
+          // console.error('Analytics API error:', error);
+          throw error;
+        }
       },
       enabled: Boolean(AppStorage.find('isAuthenticated')),
+      retry: 1,
     });
 
     return {

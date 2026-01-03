@@ -61,3 +61,4 @@ const DisputeResolutionCard: IDisputeResolutionCard = ({
 };
 
 export default DisputeResolutionCard;
+

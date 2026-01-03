@@ -119,10 +119,12 @@ import ProfileSearchInActive from './svg/profile_search_inactive.svg';
 import ChatActivated from './svg/chat_activated.svg';
 import Bank from './svg/Bank.svg';
 import GreenPlus from './svg/green_plus.svg';
+import WalletIcon from './svg/walletIcon.svg';
 
 export default {
   ProfileEyeActive,
   Bank,
+  WalletIcon,
   GreenPlus,
   ChatActivated,
   ProfileSuitcaseInActive,

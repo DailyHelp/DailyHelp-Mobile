@@ -95,3 +95,4 @@ const VideoCall: IVideoCall = ({navigation, route}) => {
 };
 
 export default VideoCall;
+

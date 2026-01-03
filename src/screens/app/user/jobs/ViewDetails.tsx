@@ -44,6 +44,7 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
     isLoading: timelineLoading,
     refetch: refetchTimeline,
   } = jobService.useJobTimeline(route.params?.uuid || '');
+  
   const {declineJob, declinePending} = jobService.useJobsActions();
 
   const [type, setType] = React.useState(

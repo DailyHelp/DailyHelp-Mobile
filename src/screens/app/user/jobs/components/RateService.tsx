@@ -1,3 +1,4 @@
+import {useNavigation} from '@react-navigation/native';
 import {Formik} from 'formik';
 import React from 'react';
 import {RefreshControl, ScrollView, TouchableOpacity, View} from 'react-native';
@@ -7,18 +8,17 @@ import ActionSheet, {
   SheetManager,
 } from 'react-native-actions-sheet';
 import Icon from 'react-native-vector-icons/AntDesign';
-import Assets from '../../../../../assets/Assets';
+import {IHomeRoute, Navigate} from '../../../../../@types/routes';
+import MainButton from '../../../../../components/button/MainButton';
+import Container from '../../../../../components/container/Index';
 import CustomAvatar from '../../../../../components/CustomAvatar';
+import CustomInput from '../../../../../components/customInput/Index';
 import Typography from '../../../../../components/Typography';
 import {scale, verticalScale} from '../../../../../shared/Scaling';
-import CustomInput from '../../../../../components/customInput/Index';
-import MainButton from '../../../../../components/button/MainButton';
 import {ColorKeys} from '../../../../../shared/themes/Index';
-import jobService from '../service/Jobs.service';
 import moreService from '../../../more/services/More.service';
-import Container from '../../../../../components/container/Index';
-import {useNavigation} from '@react-navigation/native';
-import {IHomeRoute, Navigate} from '../../../../../@types/routes';
+import jobService from '../service/Jobs.service';
+import Assets from '../../../../../assets/Assets';
 
 const RateService = React.forwardRef<
   ActionSheetRef,
@@ -271,30 +271,41 @@ const RateService = React.forwardRef<
                         </TouchableOpacity>
                       ))}
                     </View>
-                    <Container justifyContent="space-between">
-                      <View
-                        style={{
-                          flexDirection: 'column',
-                          gap: 5,
-                        }}>
-                        <Typography size="md">Wallet balance</Typography>
-                        <View>
-                          <Typography currency fontWeight="bold" size="md">
-                            {wallet?.data.totalBalance || 0}
-                          </Typography>
-                        </View>
-                      </View>
+                    <Container>
+                      <Typography size="md">Wallet balance</Typography>
+                      <Container
+                        flexDirection="row"
+                        justifyContent="space-between"
+                        padding={5}
+                        alignItems='center'>
+                        <Container gap={5}>
+                          <Container flexDirection="row" gap={5}>
+                            <Assets.WalletIcon />
+                            <Container>
+                              <Typography currency size="md">
+                                {wallet?.data.totalBalance || 0}
+                              </Typography>
+                              {+v.tip > wallet?.data?.totalBalance! && (
+                                <Typography color="danger">
+                                  Insufficient balance
+                                </Typography>
+                              )}
+                            </Container>
+                          </Container>
+                        </Container>
 
-                      <MainButton
-                        onPress={() => {
-                          SheetManager.show('FundWallet', {
-                            payload: {type: 'FUND', navigation},
-                          });
-                        }}
-                        enableButtonColor="secondary"
-                        color="white">
-                        Fund wallet
-                      </MainButton>
+                        <MainButton
+                          width={'40'}
+                          onPress={() => {
+                            SheetManager.show('FundWallet', {
+                              payload: {type: 'FUND', navigation},
+                            });
+                          }}
+                          enableButtonColor="secondary"
+                          color="white">
+                          Fund wallet
+                        </MainButton>
+                      </Container>
                     </Container>
                   </View>
                 </View>
@@ -302,8 +313,8 @@ const RateService = React.forwardRef<
                   <MainButton
                     loading={ratePending}
                     onPress={handleSubmit}
-                    enableButtonColor="secondary"
-                    color="white">
+                    enableButtonColor="primary"
+                    color="secondary">
                     Rate service provider
                   </MainButton>
                 </View>

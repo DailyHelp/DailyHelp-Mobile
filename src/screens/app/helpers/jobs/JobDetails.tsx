@@ -21,6 +21,7 @@ import CodeContainer from './components/CodeContainer';
 import ReviewsCard from '../../../../components/ReviewsCard';
 
 const JobDetails: IViewDetails = ({navigation, route}) => {
+  const jobs = route.params;
   const {data} = jobService.useGetJobDetails(route.params?.uuid!);
   const {timeline, isLoading: timelineLoading} = jobService.useJobTimeline(
     route.params?.uuid!,
@@ -37,8 +38,12 @@ const JobDetails: IViewDetails = ({navigation, route}) => {
   );
 
   React.useEffect(() => {
-    setType(data?.job.status?.toLowerCase());
-  }, [data]);
+    if (data?.job?.status) {
+      setType(data.job.status.toLowerCase());
+    } else if (jobs?.status) {
+      setType(jobs.status.toLowerCase());
+    }
+  }, [data?.job?.status, jobs?.status]);
 
   let headerText = 'Waiting to start';
   let headerBgColor = '#FF6B01';
@@ -200,7 +205,9 @@ const JobDetails: IViewDetails = ({navigation, route}) => {
                     enableButtonColor="lightGrey"
                     color="danger"
                     onPress={() => {
-                      navigation.navigate('Dispute');
+                      navigation.navigate('Dispute', {
+                        uuid: route.params?.uuid!,
+                      });
                     }}>
                     Report client
                   </MainButton>
@@ -285,7 +292,7 @@ const JobDetails: IViewDetails = ({navigation, route}) => {
               backgroundColor="white"
               flexDirection="column"
               gap={10}>
-              <ReviewsCard data={data?.review} />
+              {data?.review && <ReviewsCard data={data?.review} />}
             </Container>
           )}
         </Container>

@@ -1,17 +1,17 @@
-import { useFocusEffect } from '@react-navigation/native';
-import { useQueryClient } from '@tanstack/react-query';
+import {useFocusEffect} from '@react-navigation/native';
+import {useQueryClient} from '@tanstack/react-query';
 import dayjs from 'dayjs';
-import { observer } from 'mobx-react-lite';
+import {observer} from 'mobx-react-lite';
 import React from 'react';
-import { View } from 'react-native';
-import { SheetManager } from 'react-native-actions-sheet';
-import { IWalletBalance } from '../../../@types/routes';
+import {View} from 'react-native';
+import {SheetManager} from 'react-native-actions-sheet';
+import {IWalletBalance} from '../../../@types/routes';
 import MainButton from '../../../components/button/MainButton';
 import Container from '../../../components/container/Index';
 import CustomFlatList from '../../../components/CustomFlatList';
 import Typography from '../../../components/Typography';
-import { UserTypes } from '../../../shared/Constant';
-import { appStore } from '../../../shared/stores/appStore';
+import {UserTypes} from '../../../shared/Constant';
+import {appStore} from '../../../shared/stores/appStore';
 import utils from '../../../shared/Utils';
 import TransactionCard from './components/TransactionCard';
 import WalletFunded from './components/WalletFunded';
@@ -76,7 +76,12 @@ const WalletBalance: IWalletBalance = ({navigation, route}) => {
         </MainButton>
       </Container>
 
-      <Container flex={1} marginTop={40} width={'95'} alignSelf="center">
+      <Container
+        flex={1}
+        marginTop={40}
+        width={'95'}
+        alignSelf="center"
+       >
         <Typography
           color="gray"
           size="md"
@@ -85,7 +90,7 @@ const WalletBalance: IWalletBalance = ({navigation, route}) => {
           Transaction history
         </Typography>
 
-        <View style={{flex: 1}}>
+        <Container flex={1} marginTop={10}>
           <CustomFlatList<TransactionDto>
             data={data}
             showsVerticalScrollIndicator={true}
@@ -100,7 +105,7 @@ const WalletBalance: IWalletBalance = ({navigation, route}) => {
             )}
             keyExtractor={(item, index) => index.toString()}
           />
-        </View>
+        </Container>
       </Container>
 
       <WalletFunded
