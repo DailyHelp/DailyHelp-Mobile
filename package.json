@@ -9,7 +9,19 @@
     "lint": "eslint .",
     "apk": "yarn android --mode release",
     "start": "react-native start --port 8082",
-    "test": "jest"
+    "test": "jest",
+    "fastlane:ios:build": "cd ios && bundle exec fastlane build",
+    "fastlane:ios:beta": "cd ios && bundle exec fastlane beta",
+    "fastlane:ios:release": "cd ios && bundle exec fastlane release",
+    "fastlane:ios:dev": "cd ios && bundle exec fastlane development",
+    "fastlane:android:build": "cd android && bundle exec fastlane build",
+    "fastlane:android:bundle": "cd android && bundle exec fastlane build_bundle",
+    "fastlane:android:internal": "cd android && bundle exec fastlane internal",
+    "fastlane:android:alpha": "cd android && bundle exec fastlane alpha",
+    "fastlane:android:beta": "cd android && bundle exec fastlane beta",
+    "fastlane:android:release": "cd android && bundle exec fastlane release",
+    "fastlane:android:dev": "cd android && bundle exec fastlane development",
+    "fastlane:install": "bundle install"
   },
   "dependencies": {
     "@gorhom/bottom-sheet": "^5.1.4",

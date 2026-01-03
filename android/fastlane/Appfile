@@ -1,0 +1,6 @@
+# Appfile for Android Google Play Store
+# More information: https://docs.fastlane.tools/advanced/#appfile
+
+json_key_file("path/to/your/google-play-service-account-key.json") # Path to the json secret file - Follow https://docs.fastlane.tools/getting-started/android/setup/#collect-your-google-credentials
+package_name("com.dailyhelp") # Package name of your app
+
