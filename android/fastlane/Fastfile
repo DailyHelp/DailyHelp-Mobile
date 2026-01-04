@@ -18,7 +18,7 @@ platform :android do
     gradle(
       task: "assemble",
       build_type: "Release",
-      project_dir: "android"
+      print_command: true
     )
   end
 
@@ -27,7 +27,7 @@ platform :android do
     gradle(
       task: "bundle",
       build_type: "Release",
-      project_dir: "android"
+      print_command: true,
     )
   end
 
@@ -37,13 +37,13 @@ platform :android do
     gradle(
       task: "bundle",
       build_type: "Release",
-      project_dir: "android"
+      print_command: true,
     )
     
     # Upload to Google Play Internal Testing
     upload_to_play_store(
       track: "internal",
-      aab: "android/app/build/outputs/bundle/release/app-release.aab",
+      aab: "app/build/outputs/bundle/release/app-release.aab",
       skip_upload_apk: true,
       skip_upload_metadata: true,
       skip_upload_images: true,
@@ -57,13 +57,13 @@ platform :android do
     gradle(
       task: "bundle",
       build_type: "Release",
-      project_dir: "android"
+      print_command: true,
     )
     
     # Upload to Google Play Alpha
     upload_to_play_store(
       track: "alpha",
-      aab: "android/app/build/outputs/bundle/release/app-release.aab",
+      aab: "app/build/outputs/bundle/release/app-release.aab",
       skip_upload_apk: true,
       skip_upload_metadata: true,
       skip_upload_images: true,
@@ -77,13 +77,13 @@ platform :android do
     gradle(
       task: "bundle",
       build_type: "Release",
-      project_dir: "android"
+      print_command: true
     )
     
     # Upload to Google Play Beta
     upload_to_play_store(
       track: "beta",
-      aab: "android/app/build/outputs/bundle/release/app-release.aab",
+      aab: "app/build/outputs/bundle/release/app-release.aab",
       skip_upload_apk: true,
       skip_upload_metadata: true,
       skip_upload_images: true,
@@ -97,13 +97,13 @@ platform :android do
     gradle(
       task: "bundle",
       build_type: "Release",
-      project_dir: "android"
+      print_command: true
     )
     
     # Upload to Google Play Production
     upload_to_play_store(
       track: "production",
-      aab: "android/app/build/outputs/bundle/release/app-release.aab",
+      aab: "app/build/outputs/bundle/release/app-release.aab",
       skip_upload_apk: true,
       skip_upload_metadata: false,
       skip_upload_images: false,
@@ -114,9 +114,9 @@ platform :android do
   desc "Build APK for development"
   lane :development do
     gradle(
-      task: "assemble",
-      build_type: "Debug",
-      project_dir: "android"
+      task: "assembleDebug",
+      print_command: true,
+      flags: "--stacktrace"
     )
   end
 end

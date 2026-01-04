@@ -173,8 +173,11 @@ cd DailyHelp
 yarn install
 
 # Install Ruby dependencies (CocoaPods, Fastlane)
+# Note: If you encounter bundler version issues, see Troubleshooting section
 bundle install
 ```
+
+**Important**: This project requires Ruby 3.2.2 and Bundler 2.7.2. If you're using system Ruby, you'll need a Ruby version manager (see Troubleshooting).
 
 ### Step 3: iOS Setup
 
@@ -494,6 +497,79 @@ export default class MyService extends MyApi {
 
 ### Common Issues
 
+#### Ruby/Bundler Version Issues
+
+If you encounter errors like:
+```
+Could not find 'bundler' (2.7.2) required by your Gemfile.lock
+uninitialized constant Gem::Resolver::APISet::GemParser
+```
+
+**Solution 1: Use Ruby Version Manager (Recommended)**
+
+Install and use rbenv or rvm to manage Ruby versions:
+
+**Using rbenv:**
+```bash
+# Install rbenv (if not installed)
+brew install rbenv ruby-build
+
+# Install Ruby 3.2.2
+rbenv install 3.2.2
+
+# Set local Ruby version for this project
+rbenv local 3.2.2
+
+# Install bundler
+gem install bundler:2.7.2
+
+# Now install dependencies
+bundle install
+```
+
+**Using rvm:**
+```bash
+# Install rvm (if not installed)
+curl -sSL https://get.rvm.io | bash -s stable
+
+# Install Ruby 3.2.2
+rvm install 3.2.2
+
+# Use Ruby 3.2.2 for this project
+rvm use 3.2.2
+
+# Install bundler
+gem install bundler:2.7.2
+
+# Now install dependencies
+bundle install
+```
+
+**Solution 2: Quick Fix (Update Gemfile.lock)**
+
+If you can't change Ruby versions, update Gemfile.lock to match your current bundler:
+
+```bash
+# Remove Gemfile.lock
+rm Gemfile.lock
+
+# Install correct bundler version
+gem install bundler:2.7.2
+
+# Regenerate Gemfile.lock
+bundle install
+```
+
+**Solution 3: Install Specific Bundler Version**
+
+```bash
+# Install the required bundler version
+gem install bundler:2.7.2
+
+# Use it for this project
+bundle _2.7.2_ install
+```
+
 #### iOS Build Failures
 
 1. **Pod Installation Issues**:
@@ -514,17 +590,38 @@ export default class MyService extends MyApi {
 
 #### Android Build Failures
 
-1. **Gradle Sync Issues**:
+1. **Gradle Build Fails with Exit Code 1**:
+   ```bash
+   # Run Gradle directly to see the actual error
+   cd android
+   ./gradlew assembleDebug --stacktrace
+   
+   # Common fixes:
+   # - Clean build
+   ./gradlew clean
+   
+   # - Check if local.properties exists with correct SDK path
+   # - Ensure Android SDK is properly configured
+   # - Check for missing dependencies or version conflicts
+   ```
+
+2. **Gradle Sync Issues**:
    ```bash
    cd android
    ./gradlew clean
    ```
 
-2. **Keystore Not Found**:
+3. **Keystore Not Found**:
    - Create release keystore for production builds
    - Update `android/app/build.gradle` with signing config
 
-3. **Metro Bundler Issues**:
+4. **Fastlane Gradle Build Fails**:
+   - The Fastfile uses `assembleDebug` task directly
+   - Try running Gradle manually first: `cd android && ./gradlew assembleDebug`
+   - Check for missing environment variables or configuration
+   - Ensure `local.properties` exists with `sdk.dir` path
+
+5. **Metro Bundler Issues**:
    ```bash
    yarn start --reset-cache
    ```

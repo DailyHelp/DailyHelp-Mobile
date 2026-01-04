@@ -2,6 +2,7 @@ import {CameraRoll} from '@react-native-camera-roll/camera-roll';
 import messaging from '@react-native-firebase/messaging';
 import {
   ParamListBase,
+  useFocusEffect,
   useNavigationContainerRef,
 } from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -196,12 +197,7 @@ class Utils {
     navigation: NativeStackNavigationProp<T, K, undefined>,
     hide = true,
   ) {
-    React.useEffect(() => {
-      hide ? hideBottomTab() : showBottomTab();
-      return () => showBottomTab();
-    }, [navigation]);
-
-    const showBottomTab = () => {
+    const showBottomTab = React.useCallback(() => {
       navigation?.getParent()?.setOptions({
         tabBarStyle: {
           height: verticalScale(64),
@@ -213,13 +209,21 @@ class Utils {
         },
         tabBarVisible: true,
       });
-    };
+    }, [navigation]);
 
-    const hideBottomTab = () => {
-      navigation
-        ?.getParent()
-        ?.setOptions({tabBarStyle: {display: 'none'}, tabBarVisible: false});
-    };
+    const hideBottomTab = React.useCallback(() => {
+      navigation?.getParent()?.setOptions({
+        tabBarStyle: {display: 'none'},
+        tabBarVisible: false,
+      });
+    }, [navigation]);
+
+    useFocusEffect(
+      React.useCallback(() => {
+        hide ? hideBottomTab() : showBottomTab();
+        return () => {};
+      }, [hide, hideBottomTab, showBottomTab]),
+    );
 
     return {
       hideBottomTab,
