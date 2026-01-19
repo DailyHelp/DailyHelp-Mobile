@@ -16,7 +16,7 @@ import utils from '../../../shared/Utils';
 import {TouchableOpacity} from 'react-native';
 
 const ProfileSetup: IProfileSetup = ({navigation}) => {
-  utils.useHideBottomTab(navigation);
+  utils.useHideBottomTab({navigation});
   const {upload, isLoading} = utils.useUploadImage();
   const {saveHelpersDetails, isPending} = homeService.useSaveHelpersDetails();
   const galleryBottomSheetRef = React.useRef<ActionSheetRef | null>(null);

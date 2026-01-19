@@ -31,7 +31,7 @@ const JobDetails: IViewDetails = ({navigation, route}) => {
 
   const [isOfferCancel, setIsOfferCancel] = React.useState(false);
 
-  utils.useHideBottomTab(navigation);
+  utils.useHideBottomTab({navigation});
 
   const [type, setType] = React.useState(
     (data?.job.status.toLowerCase() || route.params?.status)?.toLowerCase(),

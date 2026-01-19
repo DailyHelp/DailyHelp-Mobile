@@ -12,7 +12,7 @@ import utils from '../../../shared/Utils';
 import {NationalityDetailsDTO} from '../dto/VerifyIdentityDto';
 
 const IdentityVerification: IIdentityVerification = ({navigation, route}) => {
-  utils.useHideBottomTab(navigation);
+  utils.useHideBottomTab({navigation});
 
   return (
     <Container

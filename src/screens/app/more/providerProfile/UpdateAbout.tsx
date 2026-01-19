@@ -7,7 +7,7 @@ import utils from '../../../../shared/Utils';
 import homeService from '../../user/home/services/Home.service';
 
 const UpdateAbout: IUpdateAbout = ({route, navigation}) => {
-  utils.useHideBottomTab(navigation);
+  utils.useHideBottomTab({navigation});
   const {saveHelpersDetails} = homeService.useSaveHelpersDetails();
 
   return (

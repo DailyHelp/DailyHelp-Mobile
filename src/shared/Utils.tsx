@@ -193,10 +193,15 @@ class Utils {
     };
   }
 
-  useHideBottomTab<T extends ParamListBase, K extends keyof T>(
-    navigation: NativeStackNavigationProp<T, K, undefined>,
+  useHideBottomTab<T extends ParamListBase, K extends keyof T>({
     hide = true,
-  ) {
+    navigation,
+    autoShow = true,
+  }: {
+    navigation: NativeStackNavigationProp<T, K, undefined>;
+    hide?: boolean;
+    autoShow?: boolean;
+  }) {
     const showBottomTab = React.useCallback(() => {
       navigation?.getParent()?.setOptions({
         tabBarStyle: {
@@ -221,8 +226,12 @@ class Utils {
     useFocusEffect(
       React.useCallback(() => {
         hide ? hideBottomTab() : showBottomTab();
-        return () => {};
-      }, [hide, hideBottomTab, showBottomTab]),
+        return () => {
+          if (autoShow) {
+            showBottomTab();
+          }
+        };
+      }, [hide, autoShow, hideBottomTab, showBottomTab]),
     );
 
     return {

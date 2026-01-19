@@ -90,7 +90,7 @@ const VerifyAddress: IVerifyAddress = ({navigation}) => {
   const {onSubmit} = homeService.useLocation();
   const {onSubmit: onUpload, uploading} = homeService.useUpload();
 
-  utils.useHideBottomTab(navigation);
+  utils.useHideBottomTab({navigation});
 
   const galleryBottomSheetRef = React.useRef<ActionSheetRef | null>(null);
 

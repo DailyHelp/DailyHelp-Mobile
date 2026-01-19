@@ -4,7 +4,6 @@ import {
 } from '@react-navigation/native';
 import {observer} from 'mobx-react-lite';
 import React from 'react';
-import {SheetProvider} from 'react-native-actions-sheet';
 import {PaperProvider} from 'react-native-paper';
 import Toast from 'react-native-toast-message';
 import GlobalCallHandler from '../components/GlobalCallHandler';
@@ -32,15 +31,13 @@ const Routes: Props = () => {
       initialState={initialState}
       onStateChange={onStateChange}>
       <PaperProvider theme={theme}>
-        <SheetProvider>
-          {appStore.isAuthenticated ? <AppRouter /> : <AuthRouter />}
+        {appStore.isAuthenticated ? <AppRouter /> : <AuthRouter />}
 
-          {appStore.isAuthenticated && (
-            <GlobalCallHandler navigationRef={navigationRef} />
-          )}
+        {appStore.isAuthenticated && (
+          <GlobalCallHandler navigationRef={navigationRef} />
+        )}
 
-          <NotificationBadgeHandler />
-        </SheetProvider>
+        <NotificationBadgeHandler />
       </PaperProvider>
       <Toast config={toastConfig} />
     </NavigationContainer>

@@ -11,7 +11,7 @@ import moreService from './services/More.service';
 import createValidator from 'class-validator-formik';
 
 const Feedback: IFeedback = ({navigation}) => {
-  utils.useHideBottomTab(navigation);
+  utils.useHideBottomTab({navigation});
   const {data, isPending, mutate} = moreService.useFeedBack();
 
   return (

@@ -3,7 +3,7 @@ import Geolocation, {
 } from '@react-native-community/geolocation';
 import {RouteProp, useRoute} from '@react-navigation/native';
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
-import React from 'react';
+import React, {use} from 'react';
 import {SheetManager} from 'react-native-actions-sheet';
 import {IHomeRoute} from '../../../../../@types/routes';
 import AppStorage from '../../../../../shared/AppStorage';
@@ -520,14 +520,40 @@ class HomeService extends HomeApi {
 
     const user_type = React.useMemo(() => {
       if (user?.userTypes) {
-        return utils
-          .getUserType(user.userTypes)?.[0]
-          .toUpperCase() as UserTypes;
+        const type = utils.getUserType(user.userTypes)?.[0];
+        return type.toUpperCase() as UserTypes;
       }
       return appStore.user_types as UserTypes;
-    }, [user?.userTypes, appStore.user_types]);
+    }, [user?.userTypes]);
 
-    return {data: data?.data, isLoading, error, refetch, user_type};
+    let isOnboardingCompleted = user?.identityVerified! || false;
+    const userOnboarding = {
+      step1: false,
+      step2: false,
+      step3: false,
+    };
+
+    if (user_type === UserTypes.PROVIDER) {
+      isOnboardingCompleted = user?.onboardingCompleted! || false;
+
+      if (!user?.identityVerified) isOnboardingCompleted = false;
+    }
+
+    if (user?.identityVerified) {
+      userOnboarding.step1 = true;
+      userOnboarding.step2 = true;
+      userOnboarding.step3 = true;
+    }
+
+    return {
+      data: data?.data,
+      isLoading,
+      error,
+      refetch,
+      user_type,
+      isOnboardingCompleted,
+      userOnboarding,
+    };
   }
 
   useListCategory(type: ReasonType) {

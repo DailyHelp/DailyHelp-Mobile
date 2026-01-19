@@ -16,7 +16,7 @@ import utils from '../../../shared/Utils';
 import PersonalInformationDTO from '../dto/VerifyIdentityDto';
 
 const PersonalInformation: IPersonalInformation = ({navigation, route}) => {
-  utils.useHideBottomTab(navigation);
+  utils.useHideBottomTab({navigation});
 
   return (
     <Container

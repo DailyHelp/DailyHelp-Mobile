@@ -16,14 +16,18 @@ import utils from '../../../shared/Utils';
 
 const More: IMore = ({navigation}) => {
   const {onSwitch, isLoading, data} = moreService.useSwitchUser();
-  const {data: user, refetch: refetchUser, user_type} = homeService.useUser();
-
-  const isVerified = appStore.isIdentityVerified;
+  const {
+    data: user,
+    refetch: refetchUser,
+    user_type,
+    isOnboardingCompleted,
+    userOnboarding,
+  } = homeService.useUser();
 
   useFocusEffect(
     React.useCallback(() => {
       refetchUser();
-    }, [refetchUser]),
+    }, [refetchUser, data]),
   );
 
   React.useEffect(() => {
@@ -35,18 +39,13 @@ const More: IMore = ({navigation}) => {
   }, [user_type]);
 
   React.useEffect(() => {
-    if (
-      !user?.onboardingCompleted &&
-      user_type?.toUpperCase() === UserTypes.PROVIDER
-    ) {
-      appStore.setIsIdentityVerified(false);
-    }
-  }, [data, user_type]);
+    appStore.setIsIdentityVerified(isOnboardingCompleted);
+  }, [user]);
 
   let verificationUrl = utils.getVerificationRoutes(
     {
-      ...user?.providerOnboarding,
-      onboardingCompleted: user?.onboardingCompleted,
+      ...userOnboarding,
+      onboardingCompleted: isOnboardingCompleted,
     },
     user_type,
   );
@@ -148,17 +147,17 @@ const More: IMore = ({navigation}) => {
         <View
           style={{flexDirection: 'column', gap: 20, justifyContent: 'center'}}>
           <UserDataCard
-            isVerified={isVerified as boolean}
+            isVerified={isOnboardingCompleted as boolean}
             onSwitch={user => onSwitch(user!)}
             isLoading={isLoading}
           />
 
-          {!isVerified && (
+          {!isOnboardingCompleted && (
             <View
               style={{
                 flexDirection: 'row',
                 justifyContent: 'space-between',
-                backgroundColor: isVerified ? '#FDE9E7' : '#FDE9E7',
+                backgroundColor: isOnboardingCompleted ? '#FDE9E7' : '#FDE9E7',
                 padding: scale(10),
                 borderRadius: 15,
                 alignItems: 'center',

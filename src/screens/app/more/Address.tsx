@@ -16,7 +16,7 @@ import {appStore} from '../../../shared/stores/appStore';
 import {SaveLocationDto} from '../user/home/dto/savedLocationDto';
 
 const Address: IAddress = ({navigation, route}) => {
-  utils.useHideBottomTab(navigation);
+  utils.useHideBottomTab({navigation});
   const {onSubmit} = homeService.useLocation();
 
   const {
@@ -73,7 +73,7 @@ const Address: IAddress = ({navigation, route}) => {
   );
 
   return (
-    <Container flex={1} width={'full'} backgroundColor="white">
+    <Container flex={1} width={'full'} height={'full'} backgroundColor="white">
       <Container width={'97'} alignSelf="center">
         <CustomInput
           type="text"

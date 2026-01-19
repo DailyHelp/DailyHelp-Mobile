@@ -4,7 +4,6 @@ import {ScrollView, View} from 'react-native';
 import {IDisputeDetails} from '../../../@types/routes';
 import CustomHeader from '../../../components/customHeader/Index';
 import Typography from '../../../components/Typography';
-import {scale} from '../../../shared/Scaling';
 import utils from '../../../shared/Utils';
 import JobTimeline from '../user/jobs/components/JobTimeline';
 import jobService from '../user/jobs/service/Jobs.service';
@@ -13,7 +12,7 @@ import DisputeJobInfo from './components/DisputeJobInfo';
 import DisputeResolutionCard from './components/DisputeResolutionCard';
 
 const DisputeDetails: IDisputeDetails = ({navigation, route}) => {
-  utils.useHideBottomTab(navigation);
+  utils.useHideBottomTab({navigation});
 
   const dispute = route.params?.dispute;
 

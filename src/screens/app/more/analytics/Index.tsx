@@ -1,14 +1,14 @@
-import { useFocusEffect } from '@react-navigation/native';
-import React, { useMemo } from 'react';
-import { ScrollView, TouchableOpacity, View } from 'react-native';
-import { SheetManager } from 'react-native-actions-sheet';
-import { IAnalytics } from '../../../../@types/routes';
-import { tipsData } from '../../../../app_data';
+import {useFocusEffect} from '@react-navigation/native';
+import React, {useMemo} from 'react';
+import {ScrollView, TouchableOpacity, View} from 'react-native';
+import {SheetManager} from 'react-native-actions-sheet';
+import {IAnalytics} from '../../../../@types/routes';
+import {tipsData} from '../../../../app_data';
 import Container from '../../../../components/container/Index';
 import SectionBorderSeparatedCard from '../../../../components/SectionBorderSeparatedCard';
 import Typography from '../../../../components/Typography';
-import { scale } from '../../../../shared/Scaling';
-import { Colors } from '../../../../shared/themes/Index';
+import {scale} from '../../../../shared/Scaling';
+import {Colors} from '../../../../shared/themes/Index';
 import utils from '../../../../shared/Utils';
 import moreService from '../services/More.service';
 import MultipleProgressBar from './MultipleProgressBar';
@@ -17,7 +17,7 @@ import RevenueRings from './RevenueRings';
 import TipsContainer from './TipsContainer';
 
 const Analytics: IAnalytics = ({navigation}) => {
-  utils.useHideBottomTab(navigation);
+  utils.useHideBottomTab({navigation});
 
   const [selectedDateFilter, setSelectedDateFilter] = React.useState('Today');
   const [customStartDate, setCustomStartDate] = React.useState<
@@ -366,7 +366,41 @@ const Analytics: IAnalytics = ({navigation}) => {
             </View>
 
             {/* Horizontal Bar Chart - EXACTLY as in image */}
-            <MultipleProgressBar />
+            <MultipleProgressBar
+              segments={[
+                {
+                  width: `${
+                    analytics?.data.offers.breakdown.youAccepted.percent || 0
+                  }%`,
+                  color: '#27A535',
+                },
+                {
+                  width: `${
+                    analytics?.data.offers.breakdown.youDeclined.percent || 0
+                  }%`,
+                  color: '#FF6B01',
+                },
+                {
+                  width: `${
+                    analytics?.data.offers.breakdown.youCancelled.percent || 0
+                  }%`,
+                  color: '#F0443A',
+                },
+                {
+                  width: `${
+                    analytics?.data.offers.breakdown.clientDeclined.percent || 0
+                  }%`,
+                  color: '#FFD100',
+                },
+                {
+                  width: `${
+                    analytics?.data.offers.breakdown.clientCancelled.percent ||
+                    0
+                  }%`,
+                  color: '#757C91',
+                },
+              ]}
+            />
 
             {/* Color-coded legend - EXACTLY as in image */}
             <View style={{gap: 15}}>

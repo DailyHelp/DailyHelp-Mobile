@@ -10,7 +10,7 @@ import authService from '../services/Auth.service';
 import utils from '../../../shared/Utils';
 
 const Verifying: IVerifying = ({route, navigation}) => {
-  utils.useHideBottomTab(navigation);
+  utils.useHideBottomTab({navigation});
   const rotateAnim = React.useRef(new Animated.Value(0)).current;
 
   authService.useVerifyIdentity(

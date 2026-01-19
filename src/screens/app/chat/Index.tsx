@@ -1,24 +1,23 @@
+import { useFocusEffect } from '@react-navigation/native';
 import dayjs from 'dayjs';
+import { observer } from 'mobx-react-lite';
 import React from 'react';
-import {TouchableOpacity, View} from 'react-native';
-import {Divider} from 'react-native-paper';
-import {useFocusEffect} from '@react-navigation/native';
-import {IChat} from '../../../@types/routes';
+import { TouchableOpacity, View } from 'react-native';
+import { SheetManager } from 'react-native-actions-sheet';
+import { Divider } from 'react-native-paper';
+import { IChat } from '../../../@types/routes';
 import Assets from '../../../assets/Assets';
+import Container from '../../../components/container/Index';
 import CustomAvatar from '../../../components/CustomAvatar';
 import CustomFlatList from '../../../components/CustomFlatList';
 import CustomHeader from '../../../components/customHeader/Index';
 import EmptyState from '../../../components/EmptyState';
-import Typography from '../../../components/Typography';
-import {scale, verticalScale} from '../../../shared/Scaling';
-import chatService from './services/Chat.service';
-import utils from '../../../shared/Utils';
-import {observer} from 'mobx-react-lite';
-import {appStore} from '../../../shared/stores/appStore';
-import {UserTypes} from '../../../shared/Constant';
-import Container from '../../../components/container/Index';
 import ConversationSkeleton from '../../../components/skeleton/ConversationSkeleton';
-import {SheetManager} from 'react-native-actions-sheet';
+import Typography from '../../../components/Typography';
+import { UserTypes } from '../../../shared/Constant';
+import { scale, verticalScale } from '../../../shared/Scaling';
+import { appStore } from '../../../shared/stores/appStore';
+import chatService from './services/Chat.service';
 
 const Chat: IChat = ({navigation}) => {
   const {data, setQuery, isLoading, fetchMore, refetch} =
@@ -30,14 +29,8 @@ const Chat: IChat = ({navigation}) => {
     string | null
   >(null);
 
-  const {showBottomTab} = utils.useHideBottomTab(navigation);
-
   const {joinConversation, leaveConversation} =
     chatService.useWebSocketListeners(data);
-
-  React.useEffect(() => {
-    showBottomTab();
-  }, []);
 
   const hasNavigatedToChatBox = React.useRef(false);
 

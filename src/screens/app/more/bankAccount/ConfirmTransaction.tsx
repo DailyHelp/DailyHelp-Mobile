@@ -1,13 +1,14 @@
 import React from 'react';
-import {IConfirmTransaction} from '../../../../@types/routes';
-import Container from '../../../../components/container/Index';
-import Typography from '../../../../components/Typography';
+import { IConfirmTransaction } from '../../../../@types/routes';
 import Assets from '../../../../assets/Assets';
 import MainButton from '../../../../components/button/MainButton';
-import {SheetManager} from 'react-native-actions-sheet';
+import Container from '../../../../components/container/Index';
+import Typography from '../../../../components/Typography';
+import utils from '../../../../shared/Utils';
 import moreService from '../services/More.service';
 
 const ConfirmTransaction: IConfirmTransaction = ({navigation, route}) => {
+  utils.useHideBottomTab({navigation});
   const {mutate, isPending} = moreService.useWithdraw();
 
   return (

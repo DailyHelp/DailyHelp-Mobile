@@ -15,7 +15,7 @@ import {UserTypes} from '../../../shared/Constant';
 import utils from '../../../shared/Utils';
 
 const SetPrices: ISetPrices = ({navigation}) => {
-  utils.useHideBottomTab(navigation);
+  utils.useHideBottomTab({navigation});
   const {savePrice, isPending} = homeService.useSavePrice();
 
   return (

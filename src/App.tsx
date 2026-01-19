@@ -17,6 +17,7 @@ import {Colors} from 'react-native/Libraries/NewAppScreen';
 import 'reflect-metadata';
 import PushNotification from './components/pushNotification/Index';
 import Routes from './routes/Index';
+import {SheetProvider} from 'react-native-actions-sheet';
 
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
@@ -47,7 +48,10 @@ function App(): React.JSX.Element {
       <SafeAreaView edges={['top', 'bottom']} style={{flex: 1}}>
         <GestureHandlerRootView style={{flex: 1}}>
           <QueryClientProvider client={queryClient}>
-            <Routes />
+            <SheetProvider>
+              <Routes />
+            </SheetProvider>
+
             <PushNotification />
           </QueryClientProvider>
         </GestureHandlerRootView>

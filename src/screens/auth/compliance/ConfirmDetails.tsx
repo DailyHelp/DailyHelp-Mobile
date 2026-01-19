@@ -10,7 +10,7 @@ import {customFontSize, fonts} from '../../../shared/themes/Typography';
 import utils from '../../../shared/Utils';
 
 const ConfirmDetails: IConfirmDetails = ({navigation, route}) => {
-  utils.useHideBottomTab(navigation);
+  utils.useHideBottomTab({navigation});
   const user_data = [
     {
       title: 'Full name',

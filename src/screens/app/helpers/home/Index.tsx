@@ -1,16 +1,15 @@
 import React from 'react';
-import {IHome} from '../../../../@types/routes';
+import { IHome } from '../../../../@types/routes';
 import Assets from '../../../../assets/Assets';
 import Container from '../../../../components/container/Index';
-import HelperHomeSkeleton from '../../../../components/skeleton/HelperHomeSkeleton';
 import Typography from '../../../../components/Typography';
-import {HelpersStatus} from '../../../../shared/Constant';
-import {ColorKeys} from '../../../../shared/themes/Index';
+import { HelpersStatus } from '../../../../shared/Constant';
+import { ColorKeys } from '../../../../shared/themes/Index';
+import homeService from '../../user/home/services/Home.service';
 import Availability from './components/Availability';
 import BadgeContainer from './components/BadgeContainer';
 import HelperDetails from './components/HelperDetails';
 import StatsCard from './components/StatsCard';
-import homeService from '../../user/home/services/Home.service';
 
 const Home: IHome = () => {
   const [isSwitch, setIsSwitch] = React.useState(false);
@@ -74,20 +73,6 @@ const Home: IHome = () => {
       },
     });
   };
-
-  if (isLoading || !data) {
-    return (
-      <Container
-        type="scroll"
-        width={'full'}
-        borderTopRightRadius={20}
-        borderTopLeftRadius={20}
-        backgroundColor="lightDeepGrey"
-        flex={1}>
-        <HelperHomeSkeleton />
-      </Container>
-    );
-  }
 
   return (
     <Container

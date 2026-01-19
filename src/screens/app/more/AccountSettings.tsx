@@ -15,7 +15,7 @@ import homeService from '../user/home/services/Home.service';
 import dayjs from 'dayjs';
 
 const AccountSettings: IAccountSettings = ({navigation}) => {
-  utils.useHideBottomTab(navigation);
+  utils.useHideBottomTab({navigation});
   const {data} = homeService.useUser();
 
   const details = [

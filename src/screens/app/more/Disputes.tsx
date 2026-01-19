@@ -10,7 +10,7 @@ import moreService from './services/More.service';
 import DisputesDto from './dto/Disputes.dto';
 
 const Disputes: IDisputes = ({navigation, route}) => {
-  utils.useHideBottomTab(navigation);
+  utils.useHideBottomTab({navigation});
   const [index, setIndex] = React.useState('PENDING');
   const {data, isLoading, fetchMore} = moreService.useDisputes(index);
   

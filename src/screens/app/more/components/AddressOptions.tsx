@@ -41,17 +41,13 @@ const AddressOptions = React.forwardRef<
     <ActionSheet
       ref={ref}
       id="AddressOptions"
-      closeOnPressBack={true}
-      gestureEnabled={true}
       backgroundInteractionEnabled={true}
       containerStyle={{
         borderTopLeftRadius: 16,
         borderTopRightRadius: 16,
         backgroundColor: 'white',
       }}
-      initialSnapIndex={0}
-      overlayColor="black"
-      defaultOverlayOpacity={0.5}>
+      initialSnapIndex={0}>
       <View
         style={{
           padding: 16,

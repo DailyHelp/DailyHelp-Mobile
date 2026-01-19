@@ -11,7 +11,7 @@ import Container from '../../../components/container/Index';
 import utils from '../../../shared/Utils';
 
 const FacialVerification: IFacialVerification = ({navigation, route}) => {
-  utils.useHideBottomTab(navigation);
+  utils.useHideBottomTab({navigation});
   return (
     <ScrollView>
       <Container

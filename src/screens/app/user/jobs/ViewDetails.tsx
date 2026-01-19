@@ -25,7 +25,7 @@ import jobService from './service/Jobs.service';
 
 const ViewDetails: IViewDetails = ({navigation, route}) => {
   const jobs = route.params;
-  utils.useHideBottomTab(navigation);
+  utils.useHideBottomTab({navigation});
 
   jobService.useWebSocketListeners();
 

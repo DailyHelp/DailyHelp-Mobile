@@ -12,7 +12,7 @@ import authService from '../../auth/services/Auth.service';
 import UpdatePasswordDto from './dto/UpdatePassword.dto';
 
 const UpdatePassword: IUpdatePassword = ({navigation}) => {
-  utils.useHideBottomTab(navigation);
+  utils.useHideBottomTab({navigation});
 
   const {isPending, mutate} = authService.useChangePassword();
 

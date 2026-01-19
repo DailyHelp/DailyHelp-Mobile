@@ -20,7 +20,7 @@ import chatService from './services/Chat.service';
 import MessageSkeleton from '../../../components/skeleton/MessageSkeleton';
 
 const ChatBox: IChatBox = ({navigation, route}) => {
-  utils.useHideBottomTab(navigation);
+  utils.useHideBottomTab({navigation});
   const galleryBottomSheetRef = React.useRef<ActionSheetRef | null>(null);
   const userType = AppStorage.find('userType') as UserTypes;
   const isCustomer = userType === UserTypes.CUSTOMER;

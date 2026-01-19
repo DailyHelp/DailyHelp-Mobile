@@ -1,11 +1,13 @@
 import {ISelectBank} from '../../../../@types/routes';
 import Container from '../../../../components/container/Index';
 import CustomFlatList from '../../../../components/CustomFlatList';
+import utils from '../../../../shared/Utils';
 import moreService from '../services/More.service';
 import BankCard from './components/BankCard';
 import GetBankResponse from './dto/get.bank.dto';
 
 const SelectBank: ISelectBank = ({navigation, route}) => {
+  utils.useHideBottomTab({navigation});
   const {bankAccounts} = moreService.useGetBankAccount();
 
   const Item = (data: {item: GetBankResponse; index: number}) => (

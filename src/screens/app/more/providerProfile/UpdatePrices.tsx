@@ -8,7 +8,7 @@ import homeService from '../../user/home/services/Home.service';
 import utils from '../../../../shared/Utils';
 
 const UpdatePrices: IUpdatePrices = ({navigation, route}) => {
-  utils.useHideBottomTab(navigation);
+  utils.useHideBottomTab({navigation});
   const {savePrice, isPending} = homeService.useSavePrice();
 
   return (

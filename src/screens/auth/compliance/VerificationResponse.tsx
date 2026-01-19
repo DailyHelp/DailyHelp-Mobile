@@ -13,7 +13,7 @@ import {UserTypes} from '../../../shared/Constant';
 import utils from '../../../shared/Utils';
 
 const VerificationResponse: IVerificationResponse = ({route, navigation}) => {
-  utils.useHideBottomTab(navigation);
+  utils.useHideBottomTab({navigation});
   const user_type = route.params?.userType;
 
   const isCustomer = user_type === UserTypes.CUSTOMER;

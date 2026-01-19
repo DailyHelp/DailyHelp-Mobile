@@ -19,7 +19,7 @@ import TransactionDto from './dto/Transaction.dto';
 import moreService from './services/More.service';
 
 const WalletBalance: IWalletBalance = ({navigation, route}) => {
-  utils.useHideBottomTab(navigation);
+  utils.useHideBottomTab({navigation});
   const [walletFunded, setWalletFunded] = React.useState(false);
   const queryClient = useQueryClient();
 

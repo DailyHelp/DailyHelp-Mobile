@@ -44,7 +44,7 @@ const STATUS_MAP: any = {
 };
 
 const ServiceProfile: IServiceProfile = ({route, navigation}) => {
-  utils.useHideBottomTab(navigation);
+  utils.useHideBottomTab({navigation});
 
   const {data: reviews} = homeService.useReviews();
 

@@ -59,10 +59,9 @@ const HomeAddress = React.forwardRef<
       ref={ref}
       id="HomeAddress"
       closeOnPressBack={false}
-      gestureEnabled={true}
-      overlayColor="black"
-      initialSnapIndex={0}
       backgroundInteractionEnabled={true}
+      initialSnapIndex={0}
+      drawUnderStatusBar={false}
       closable={true}
       containerStyle={{
         borderTopLeftRadius: 16,

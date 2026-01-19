@@ -4,13 +4,7 @@ import {verticalScale} from '../../../../shared/Scaling';
 import utils from '../../../../shared/Utils';
 
 const MultipleProgressBar: IMultipleProgressBarProps = ({
-  segments = [
-    {width: '67.5%', color: '#27A535'},
-    {width: '7.5%', color: '#FF6B01'},
-    {width: '5%', color: '#F0443A'},
-    {width: '7.5%', color: '#FFD100'},
-    {width: '12.5%', color: '#757C91'},
-  ],
+  segments,
   height = 10,
   backgroundColor = '#F0F0F0',
   borderRadius = 20,
@@ -35,7 +29,7 @@ const MultipleProgressBar: IMultipleProgressBarProps = ({
           borderRadius,
           overflow: 'hidden',
         }}>
-        {segments.map((segment, index) => (
+        {segments?.map((segment, index) => (
           <View
             key={index}
             style={{
