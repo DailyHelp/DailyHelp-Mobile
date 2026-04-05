@@ -3,14 +3,14 @@ import {
   BottomSheetModalProvider,
   BottomSheetView,
 } from '@gorhom/bottom-sheet';
-import { observer } from 'mobx-react-lite';
+import {observer} from 'mobx-react-lite';
 import React from 'react';
-import { ScrollView, TouchableOpacity, View } from 'react-native';
-import { ActionSheetRef } from 'react-native-actions-sheet';
+import {ScrollView, TouchableOpacity, View} from 'react-native';
+import {ActionSheetRef} from 'react-native-actions-sheet';
 import FastImage from 'react-native-fast-image';
 import Icon2 from 'react-native-vector-icons/AntDesign';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { IServiceProfile } from '../../../../@types/routes';
+import {IServiceProfile} from '../../../../@types/routes';
 import Assets from '../../../../assets/Assets';
 import MainButton from '../../../../components/button/MainButton';
 import Container from '../../../../components/container/Index';
@@ -19,8 +19,8 @@ import Gallery from '../../../../components/Gallery';
 import Offer from '../../../../components/offers/Index';
 import ReviewsCard from '../../../../components/ReviewsCard';
 import Typography from '../../../../components/Typography';
-import { scale, verticalScale } from '../../../../shared/Scaling';
-import { appStore } from '../../../../shared/stores/appStore';
+import {scale, verticalScale} from '../../../../shared/Scaling';
+import {appStore} from '../../../../shared/stores/appStore';
 import utils from '../../../../shared/Utils';
 import ServiceImageGallery from './components/ServiceImageGallery';
 import homeStyle from './homeStyle';
@@ -93,6 +93,7 @@ const ServiceProfile: IServiceProfile = ({route, navigation}) => {
       return;
     }
 
+    appStore.clearOffer();
     setSendOffer(true);
   };
 
@@ -370,7 +371,7 @@ const ServiceProfile: IServiceProfile = ({route, navigation}) => {
         onClose={() => {
           setSendOffer(false);
           bottomSheetRef.current?.present();
-          appStore.clearSelectedGalleryImages();
+          appStore.clearOffer();
         }}
         openGallery={() => {
           setSendOffer(false);

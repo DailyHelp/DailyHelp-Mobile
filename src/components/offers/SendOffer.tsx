@@ -47,32 +47,22 @@ const SendOffer: IOffer<Message> = ({
     const currentDataUuid = data?.offer?.uuid;
     const dataUuidChanged = prevDataUuidRef.current !== currentDataUuid;
 
-    if (isOpening) {
-      appStore.clearOffer();
+    if (isOpening && data && dataUuidChanged) {
+      appStore.setOffer({
+        amount: data?.offer?.price?.toString(),
+        description: data?.offer?.description!,
+      });
+
+      if (data?.offer?.pictures) {
+        const attachment = data.offer.pictures.split(',').filter(Boolean);
+        appStore.clearSelectedGalleryImages();
+        attachment.forEach(img => appStore.setSelectedGalleryImages(img));
+      }
       prevDataUuidRef.current = currentDataUuid;
     }
 
     prevVisibleRef.current = isVisible;
   }, [isVisible, data]);
-
-  React.useEffect(() => {
-    if (isVisible && data) {
-      appStore.setOffer({
-        amount: data?.offer?.price?.toString(),
-        description: data?.offer?.description!,
-      });
-    }
-  }, [data, isVisible]);
-
-  React.useEffect(() => {
-    if (isVisible && data?.offer?.pictures) {
-      const attachment = data.offer.pictures.split(',').filter(Boolean);
-      if (attachment?.length !== appStore?.selectedGalleryImages?.length) {
-        appStore.clearSelectedGalleryImages();
-        attachment.forEach(img => appStore.setSelectedGalleryImages(img));
-      }
-    }
-  }, [data, isVisible]);
 
   return (
     <Portal>

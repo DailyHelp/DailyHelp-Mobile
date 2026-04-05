@@ -12,6 +12,7 @@ import AppStorage from '../../../shared/AppStorage';
 import {UserTypes} from '../../../shared/Constant';
 import {websocketService} from '../../../shared/services/WebSocket';
 import utils from '../../../shared/Utils';
+import { appStore } from '../../../shared/stores/appStore';
 import UserDTO from '../../auth/dto/UserDto';
 import homeService from '../user/home/services/Home.service';
 import ChatFooter from './components/ChatFooter';
@@ -189,6 +190,7 @@ const ChatBox: IChatBox = ({navigation, route}) => {
   };
 
   const send = (data?: Message) => {
+    appStore.clearOffer();
     setOffer({...offer, visible: true, type: 'send', data});
   };
 
@@ -221,7 +223,10 @@ const ChatBox: IChatBox = ({navigation, route}) => {
     setOffer({...offer, visible: true, type: 'cancel', data});
   };
 
-  const close = () => setOffer({visible: false});
+  const close = () => {
+    setOffer({visible: false});
+    appStore.clearOffer();
+  };
 
   const renderItem = React.useCallback(({item}: {item: Message<UserDTO>}) => {
     return (
@@ -304,7 +309,7 @@ const ChatBox: IChatBox = ({navigation, route}) => {
                 {
                   onSuccess: () => {
                     close();
-                    // Invalidate the specific conversation query to refresh the chat
+
                     queryClient.invalidateQueries({
                       queryKey: ['conversation', conversationUuid],
                     });
@@ -317,7 +322,7 @@ const ChatBox: IChatBox = ({navigation, route}) => {
                 {
                   onSuccess: () => {
                     close();
-                    // Invalidate the specific conversation query to refresh the chat
+
                     queryClient.invalidateQueries({
                       queryKey: ['conversation', conversationUuid],
                     });
@@ -333,7 +338,7 @@ const ChatBox: IChatBox = ({navigation, route}) => {
               data.uuid = offer?.data?.offer.uuid;
               handleUpdateOffer(data, () => {
                 close();
-                // Invalidate the specific conversation query to refresh the chat
+
                 queryClient.invalidateQueries({
                   queryKey: ['conversation', conversationUuid],
                 });
@@ -343,7 +348,7 @@ const ChatBox: IChatBox = ({navigation, route}) => {
 
               onSendOffer(data, () => {
                 close();
-                // Invalidate the specific conversation query to refresh the chat
+
                 queryClient.invalidateQueries({
                   queryKey: ['conversation', conversationUuid],
                 });

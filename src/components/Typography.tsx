@@ -129,6 +129,7 @@ const Typography: ITypography<ColorKeys> = ({
         marginTop,
         textDecorationLine,
         lineHeight,
+        marginBottom,
         backgroundColor,
         paddingBottom,
         width: typeof width === 'number' ? scale(width) : width,
