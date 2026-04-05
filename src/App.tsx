@@ -9,7 +9,6 @@
 import {QueryClientProvider} from '@tanstack/react-query';
 import React from 'react';
 import {StatusBar, useColorScheme, View} from 'react-native';
-import {SheetProvider} from 'react-native-actions-sheet';
 import 'react-native-gesture-handler';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import 'react-native-reanimated';
@@ -19,6 +18,7 @@ import 'reflect-metadata';
 import PushNotification from './components/pushNotification/Index';
 import Routes from './routes/Index';
 import {queryClient} from './shared/queryClient';
+import {KeyboardProvider} from 'react-native-keyboard-controller';
 
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
@@ -45,13 +45,12 @@ function App(): React.JSX.Element {
         backgroundColor={backgroundStyle.backgroundColor}
       />
       <SafeAreaView edges={['top', 'bottom']} style={{flex: 1}}>
-        <GestureHandlerRootView style={{flex: 1}}>
+        <GestureHandlerRootView>
           <QueryClientProvider client={queryClient}>
-            <SheetProvider>
+            <KeyboardProvider>
               <Routes />
-            </SheetProvider>
-
-            <PushNotification />
+              <PushNotification />
+            </KeyboardProvider>
           </QueryClientProvider>
         </GestureHandlerRootView>
       </SafeAreaView>

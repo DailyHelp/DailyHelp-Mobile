@@ -1,7 +1,6 @@
-import {
-  NavigationContainer,
-} from '@react-navigation/native';
+import {NavigationContainer} from '@react-navigation/native';
 import {observer} from 'mobx-react-lite';
+import {SheetProvider} from 'react-native-actions-sheet';
 import React from 'react';
 import {PaperProvider} from 'react-native-paper';
 import Toast from 'react-native-toast-message';
@@ -13,7 +12,7 @@ import {toastConfig} from '../shared/Toast';
 import utils from '../shared/Utils';
 import AppRouter from './app/Index';
 import AuthRouter from './auth/Index';
-import { navigationRef } from '../shared/navigationRef';
+import {navigationRef} from '../shared/navigationRef';
 
 const NotificationBadgeHandler = observer(() => {
   utils.useNotificationBadgeHandler();
@@ -21,7 +20,6 @@ const NotificationBadgeHandler = observer(() => {
 });
 
 const Routes: Props = () => {
-
   const {initialState, onStateChange} = utils.useBoot();
 
   return (
@@ -30,11 +28,13 @@ const Routes: Props = () => {
       initialState={initialState}
       onStateChange={onStateChange}>
       <PaperProvider theme={theme}>
-        {appStore.isAuthenticated ? <AppRouter /> : <AuthRouter />}
+        <SheetProvider>
+          {appStore.isAuthenticated ? <AppRouter /> : <AuthRouter />}
 
-        {appStore.isAuthenticated && (
-          <GlobalCallHandler navigationRef={navigationRef} />
-        )}
+          {appStore.isAuthenticated && (
+            <GlobalCallHandler navigationRef={navigationRef} />
+          )}
+        </SheetProvider>
 
         <NotificationBadgeHandler />
       </PaperProvider>
