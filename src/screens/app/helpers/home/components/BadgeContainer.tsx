@@ -4,6 +4,7 @@ import Typography from '../../../../../components/Typography';
 import {scale, verticalScale} from '../../../../../shared/Scaling';
 import {ProgressBar} from 'react-native-paper';
 import React from 'react';
+import Badge from '../../../../../components/Badge';
 
 const BadgeContainer: IBadgeContainer = ({marginTop, data}) => {
   return (
@@ -22,8 +23,9 @@ const BadgeContainer: IBadgeContainer = ({marginTop, data}) => {
           alignSelf="baseline"
           flexDirection="row"
           justifyContent="space-between"
-          width={'75'}>
-          <Container flexDirection="row">
+          width={'full'}>
+          <Container flexDirection="row" gap={6}>
+            <Badge data={{badge: data?.tier}} />
             <Typography size="sm" color="black" fontWeight="semibold">
               Become {data?.tier?.toLowerCase()} rated
             </Typography>

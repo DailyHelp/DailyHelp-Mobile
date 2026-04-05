@@ -11,6 +11,7 @@ import CustomAvatar from '../../../../components/CustomAvatar';
 import CustomFlatList from '../../../../components/CustomFlatList';
 import Gallery from '../../../../components/Gallery';
 import offerStyle from '../../../../components/offers/offerStyle';
+import Badge from '../../../../components/Badge';
 import ReviewsCard from '../../../../components/ReviewsCard';
 import Typography from '../../../../components/Typography';
 import { scale, verticalScale } from '../../../../shared/Scaling';
@@ -147,16 +148,8 @@ const ProviderProfile: IProviderProfile = ({navigation}) => {
     platinum: '#AAE60A',
   };
 
-  const tierBadge: {[x: string]: any} = {
-    bronze: Assets.BronzeBadge,
-    silver: Assets.SilverBadge,
-    gold: Assets.GoldBadge,
-    platinum: Assets.DiamondBadge,
-  };
-
   const tier = data?.tier?.toLowerCase();
   const progressColor = tier ? tierColor[tier] : tierColor.bronze;
-  const TierBadge = tier ? tierBadge[tier] : tierBadge.bronze;
 
   const handleRefresh = React.useCallback(async () => {
     await Promise.all([refetchUser(), refetchReviews()]);
@@ -217,7 +210,7 @@ const ProviderProfile: IProviderProfile = ({navigation}) => {
                 borderRadius={10}>
                 <Container flexDirection="row" justifyContent="space-between">
                   <Container flexDirection="row" gap={6}>
-                    <TierBadge />
+                    <Badge tier={tier} size={20} />
                     <Typography fontWeight="semibold" size="md" color="black">
                       {utils.capitalizeFirstLetter(data?.tier?.toLowerCase())}{' '}
                       rated

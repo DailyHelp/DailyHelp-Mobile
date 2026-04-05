@@ -1,7 +1,7 @@
-import { View } from 'react-native';
-import { Avatar } from 'react-native-paper';
-import Assets from '../assets/Assets';
-import { scale } from '../shared/Scaling';
+import {View} from 'react-native';
+import {Avatar} from 'react-native-paper';
+import {scale} from '../shared/Scaling';
+import Badge from './Badge';
 
 const CustomAvatar: ICustomAvatar = ({
   avatarSize = 40,
@@ -11,12 +11,6 @@ const CustomAvatar: ICustomAvatar = ({
   data,
   showBadge = true,
 }) => {
-  let Badge = Assets.BronzeBadge;
-
-  if (data?.badge === 'diamond') Badge = Assets.DiamondBadge;
-  if (data?.badge === 'gold') Badge = Assets.GoldBadge;
-  if (data?.badge === 'silver') Badge = Assets.SilverBadge;
-
   return (
     <View style={{position: 'relative'}}>
       {typeof data?.image === 'string' ? (
@@ -26,7 +20,8 @@ const CustomAvatar: ICustomAvatar = ({
       )}
       {showBadge && (
         <Badge
-          width={scale(badgeSize)}
+          size={badgeSize}
+          data={data}
           style={{position: 'absolute', bottom, right}}
         />
       )}

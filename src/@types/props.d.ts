@@ -524,6 +524,14 @@ type IAttachmentContainer = Props<
 >;
 
 type IBadgeContainer = Props<{}, {count: string; tier: string}>;
+type IBadge = Props<
+  {
+    size?: number;
+    tier?: string;
+    style?: any;
+  },
+  {badge?: string}
+>;
 
 type IHelperDetails<D = any> = Props<{}, D>;
 

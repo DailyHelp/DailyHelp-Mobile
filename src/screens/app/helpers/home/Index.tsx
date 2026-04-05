@@ -1,10 +1,10 @@
 import React from 'react';
-import { IHome } from '../../../../@types/routes';
+import {IHome} from '../../../../@types/routes';
 import Assets from '../../../../assets/Assets';
 import Container from '../../../../components/container/Index';
 import Typography from '../../../../components/Typography';
-import { HelpersStatus } from '../../../../shared/Constant';
-import { ColorKeys } from '../../../../shared/themes/Index';
+import {HelpersStatus} from '../../../../shared/Constant';
+import {ColorKeys} from '../../../../shared/themes/Index';
 import homeService from '../../user/home/services/Home.service';
 import Availability from './components/Availability';
 import BadgeContainer from './components/BadgeContainer';
@@ -98,7 +98,7 @@ const Home: IHome = () => {
 
         <BadgeContainer
           data={{
-            count: data?.user.progressToNextTier!,
+            count: data?.user.progressToNextTier ?? '0%',
             tier: data?.user.nextTier!,
           }}
         />
