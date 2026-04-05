@@ -677,13 +677,18 @@ class Utils {
     }, []);
 
     const fetchMore = React.useCallback(() => {
-      setQuery(prev => ({
-        ...prev,
-        pagination: {
-          ...prev.pagination,
-          page: prev.pagination?.page! + 1,
-        },
-      }));
+      setQuery(prev => {
+        const currentPage = prev.pagination?.page ?? 1;
+        const nextPage = isNaN(currentPage) ? 1 : currentPage + 1;
+
+        return {
+          ...prev,
+          pagination: {
+            ...prev.pagination,
+            page: nextPage,
+          },
+        };
+      });
     }, []);
 
     return {

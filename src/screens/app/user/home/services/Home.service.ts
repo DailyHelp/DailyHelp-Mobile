@@ -266,13 +266,14 @@ class HomeService extends HomeApi {
       setQuery({
         pagination: {
           limit: 10,
+          page: 1,
           orderBy: 'DESC',
         },
         filter: {
           isSearchPage,
         },
       });
-    }, []);
+    }, [isSearchPage]);
 
     const {
       data: dashboard,
