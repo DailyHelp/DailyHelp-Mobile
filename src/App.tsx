@@ -6,9 +6,10 @@
  * @format
  */
 
-import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
+import {QueryClientProvider} from '@tanstack/react-query';
 import React from 'react';
 import {StatusBar, useColorScheme, View} from 'react-native';
+import {SheetProvider} from 'react-native-actions-sheet';
 import 'react-native-gesture-handler';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import 'react-native-reanimated';
@@ -16,9 +17,8 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import 'reflect-metadata';
 import PushNotification from './components/pushNotification/Index';
-import { queryClient } from './shared/queryClient';
 import Routes from './routes/Index';
-import { SheetProvider } from 'react-native-actions-sheet';
+import {queryClient} from './shared/queryClient';
 
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
