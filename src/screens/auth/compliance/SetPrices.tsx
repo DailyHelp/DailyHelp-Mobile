@@ -13,13 +13,20 @@ import {observer} from 'mobx-react-lite';
 import {appStore} from '../../../shared/stores/appStore';
 import {UserTypes} from '../../../shared/Constant';
 import utils from '../../../shared/Utils';
+import {Platform} from 'react-native';
 
 const SetPrices: ISetPrices = ({navigation}) => {
   utils.useHideBottomTab({navigation});
   const {savePrice, isPending} = homeService.useSavePrice();
 
   return (
-    <Container padding={10} flex={1} gap={20}>
+    <Container
+      padding={10}
+      flex={1}
+      gap={20}
+      backgroundColor="white"
+      isKeyboardAvoidingView
+      behavior={Platform.OS == 'android' ? 'height' : 'padding'}>
       <ScreenHeader
         title="Set Your Prices"
         description="Let clients know what you charge. Be fair and realistic, you can always negotiate later."

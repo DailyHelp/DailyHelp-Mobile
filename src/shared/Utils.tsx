@@ -37,7 +37,7 @@ import {appStore} from './stores/appStore';
 import {SheetManager} from 'react-native-actions-sheet';
 import SplashScreen from 'react-native-splash-screen';
 import dayjs from 'dayjs';
-import { navigationRef } from './navigationRef';
+import {navigationRef} from './navigationRef';
 
 export interface PushNotificationConsultant {
   uuid: string;
@@ -367,16 +367,13 @@ class Utils {
     }, [query, calculateUnreadCount]);
 
     React.useEffect(() => {
-      const unsubscribe = onMessage(
-        messagingInstance,
-        async remoteMessage => {
-          query.invalidateQueries({queryKey: ['conversations']});
+      const unsubscribe = onMessage(messagingInstance, async remoteMessage => {
+        query.invalidateQueries({queryKey: ['conversations']});
 
-          setTimeout(() => {
-            calculateUnreadCount();
-          }, 500);
-        },
-      );
+        setTimeout(() => {
+          calculateUnreadCount();
+        }, 500);
+      });
 
       return () => {
         unsubscribe();
@@ -412,12 +409,9 @@ class Utils {
     }, [query, calculateUnreadCount]);
 
     React.useEffect(() => {
-      setBackgroundMessageHandler(
-        messagingInstance,
-        async remoteMessage => {
-          query.invalidateQueries({queryKey: ['conversations']});
-        },
-      );
+      setBackgroundMessageHandler(messagingInstance, async remoteMessage => {
+        query.invalidateQueries({queryKey: ['conversations']});
+      });
     }, [query, messagingInstance]);
   }
 
@@ -881,7 +875,7 @@ class Utils {
         (navigationRef as any).navigate('HomeResources', {});
         break;
       case 'kyc_status_change':
-        (navigationRef as any).navigate('Account', { screen: 'AccountDetails' });
+        (navigationRef as any).navigate('Account', {screen: 'AccountDetails'});
         break;
       case 'broadcast':
         (navigationRef as any).navigate('Notifications', {});

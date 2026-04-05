@@ -518,14 +518,7 @@ class HomeService extends HomeApi {
     });
 
     const user = data?.data;
-
-    const user_type = React.useMemo(() => {
-      if (user?.userTypes) {
-        const type = utils.getUserType(user.userTypes)?.[0];
-        return type.toUpperCase() as UserTypes;
-      }
-      return appStore.user_types as UserTypes;
-    }, [user?.userTypes]);
+    const type = appStore.user_types;
 
     let isOnboardingCompleted = user?.identityVerified! || false;
     const userOnboarding = {
@@ -534,7 +527,7 @@ class HomeService extends HomeApi {
       step3: false,
     };
 
-    if (user_type === UserTypes.PROVIDER) {
+    if (type === UserTypes.PROVIDER) {
       isOnboardingCompleted = user?.onboardingCompleted! || false;
 
       if (!user?.identityVerified) isOnboardingCompleted = false;
@@ -551,7 +544,7 @@ class HomeService extends HomeApi {
       isLoading,
       error,
       refetch,
-      user_type,
+      user_type: type as UserTypes,
       isOnboardingCompleted,
       userOnboarding,
     };

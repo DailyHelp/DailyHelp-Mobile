@@ -1,6 +1,6 @@
 import {City, State} from 'country-state-city';
 import React, {useReducer} from 'react';
-import {ActionSheetRef, SheetManager} from 'react-native-actions-sheet';
+import {ActionSheetRef} from 'react-native-actions-sheet';
 import {IVerifyAddress} from '../../../@types/routes';
 import Gallery from '../../../components/Gallery';
 import ScreenHeader from '../../../components/ScreenHeader';
@@ -11,7 +11,7 @@ import CustomInput from '../../../components/customInput/Index';
 import utils from '../../../shared/Utils';
 import {SaveLocationDto} from '../../app/user/home/dto/savedLocationDto';
 import homeService from '../../app/user/home/services/Home.service';
-import {TouchableOpacity} from 'react-native';
+import {Platform} from 'react-native';
 
 // Form state interface
 interface FormState {
@@ -198,7 +198,13 @@ const VerifyAddress: IVerifyAddress = ({navigation}) => {
   };
 
   return (
-    <Container flex={1} gap={20} padding={16}>
+    <Container
+      backgroundColor="white"
+      flex={1}
+      gap={20}
+      padding={16}
+      behavior={Platform.OS == 'android' ? 'height' : 'padding'}
+      isKeyboardAvoidingView>
       <ScreenHeader
         title="Verify residential address"
         description="This address will be physically verified"
@@ -209,7 +215,6 @@ const VerifyAddress: IVerifyAddress = ({navigation}) => {
           type="address"
           label="House address"
           placeholder="e.g 45 Odunlade street, Bariga"
-          disabled
           onAddressSelect={data => {
             try {
               if (data) {
@@ -244,8 +249,11 @@ const VerifyAddress: IVerifyAddress = ({navigation}) => {
               data,
             }))}
             onSelect={data => {
-              handleFieldChange('stateCode', data?.data.data?.isoCode);
-              handleFieldChange('state', data.value);
+              if (data?.data.data?.isoCode) {
+                handleFieldChange('stateCode', data?.data.data?.isoCode);
+              }
+
+              if (data.value) handleFieldChange('state', data.value);
             }}
             onBlur={() => handleFieldBlur('state')}
           />

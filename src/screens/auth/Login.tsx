@@ -2,7 +2,7 @@ import {createValidator} from 'class-validator-formik';
 import {Formik} from 'formik';
 import {observer} from 'mobx-react-lite';
 import React from 'react';
-import {TouchableOpacity, View} from 'react-native';
+import {Platform, TouchableOpacity, View} from 'react-native';
 import {Button, Text} from 'react-native-paper';
 import {ILogin} from '../../@types/routes';
 import Assets from '../../assets/Assets';
@@ -20,7 +20,12 @@ const Login: ILogin = ({navigation}) => {
   const {signIn, isGooglePending} = authService.useGoogleSignAuth();
 
   return (
-    <Container type="scroll" padding={10} gap={20}>
+    <Container
+      type="scroll"
+      padding={10}
+      gap={20}
+      isKeyboardAvoidingView
+      behavior={Platform.OS == 'android' ? 'height' : 'padding'}>
       <ScreenHeader
         title="Welcome back"
         description="Let’s get you right back into your account."

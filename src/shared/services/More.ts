@@ -30,7 +30,7 @@ export default class MoreApi extends Http {
     if (currentUser === UserTypes.CUSTOMER) {
       EventRegister.emit(EVENTS.SWITCH_USER, {
         userType: UserTypes.PROVIDER,
-        isVerified: data?.data.user?.identityVerified,
+        isVerified: data?.data.user?.onboardingCompleted,
       });
     } else {
       EventRegister.emit(EVENTS.SWITCH_USER, {

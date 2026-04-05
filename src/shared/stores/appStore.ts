@@ -11,7 +11,8 @@ class AppStore {
 
   currentLocation: SaveLocationDto = new SaveLocationDto();
 
-  messagePermissionCount = (AppStorage.find('messagePermissionCount') as number) || 0;
+  messagePermissionCount =
+    (AppStorage.find('messagePermissionCount') as number) || 0;
 
   isIdentityVerified?: boolean = AppStorage.find(
     'isIdentityVerified',
@@ -94,12 +95,8 @@ class AppStore {
     this.isAuthenticated = dto;
     AppStorage.save('isAuthenticated', dto);
 
-    if (dto) {
-      this.user_types = userType;
-      AppStorage.save('userType', userType);
-    } else {
-      AppStorage.removeAll();
-    }
+    if (dto) this.setUserTypes(userType);
+    else AppStorage.removeAll();
   }
 
   setActionSheetLoaders(dto: ActionSheetLoader) {
@@ -107,17 +104,16 @@ class AppStore {
   }
 
   setIsIdentityVerified(dto: boolean) {
-    AppStorage.save('isIdentityVerified', dto);
     this.isIdentityVerified = dto;
+    AppStorage.save('isIdentityVerified', dto);
   }
 
   setUserTypes(userType: UserTypes | string) {
     if (userType) {
-      const normalizedType = typeof userType === 'string' 
-        ? userType.toUpperCase() as UserTypes 
-        : userType;
-      this.user_types = normalizedType;
-      AppStorage.save('userType', normalizedType);
+      const upperCase = userType.toUpperCase() as UserTypes;
+      const type = typeof userType === 'string' ? upperCase : userType;
+      this.user_types = type;
+      AppStorage.save('userType', type);
     }
   }
 

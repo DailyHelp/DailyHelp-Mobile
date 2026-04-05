@@ -13,7 +13,7 @@ import homeService from '../../app/user/home/services/Home.service';
 import Gallery from '../../../components/Gallery';
 import React from 'react';
 import utils from '../../../shared/Utils';
-import {TouchableOpacity} from 'react-native';
+import {Platform, TouchableOpacity} from 'react-native';
 
 const ProfileSetup: IProfileSetup = ({navigation}) => {
   utils.useHideBottomTab({navigation});
@@ -28,7 +28,13 @@ const ProfileSetup: IProfileSetup = ({navigation}) => {
   >({});
 
   return (
-    <Container padding={10} flex={1} gap={20}>
+    <Container
+      padding={10}
+      flex={1}
+      gap={20}
+      backgroundColor="white"
+      isKeyboardAvoidingView
+      behavior={Platform.OS == 'android' ? 'height' : 'padding'}>
       <ScreenHeader
         title="Profile set-up"
         description="Let clients know what you do and why you’re the right fit."

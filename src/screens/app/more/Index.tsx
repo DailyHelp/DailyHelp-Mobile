@@ -31,14 +31,6 @@ const More: IMore = ({navigation}) => {
   );
 
   React.useEffect(() => {
-    if (user_type) {
-      if (user_type && user_type !== appStore.user_types) {
-        appStore.setUserTypes(user_type);
-      }
-    }
-  }, [user_type]);
-
-  React.useEffect(() => {
     appStore.setIsIdentityVerified(isOnboardingCompleted);
   }, [user]);
 

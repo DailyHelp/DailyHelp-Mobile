@@ -455,6 +455,8 @@ type IDisputeCard<D = any> = Props<
 type IContainer<C> = Props<{
   flex?: number;
   isTouchable?: boolean;
+  isKeyboardAvoidingView?: boolean;
+  behavior?: 'height' | 'padding' | 'translate-with-padding';
   type?: 'box' | 'scroll' | 'gradient';
   backgroundColor?: C;
   borderColor?: C;
