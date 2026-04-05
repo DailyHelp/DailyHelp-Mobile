@@ -2,13 +2,13 @@ import {useState} from 'react';
 import {
   Alert,
   Dimensions,
-  Image,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import {
   ImageLibraryOptions,
   ImagePickerResponse,
@@ -16,12 +16,12 @@ import {
   MediaType,
 } from 'react-native-image-picker';
 import {IDispute} from '../../../../../@types/routes';
-import Container from '../../../../../components/container/Index';
-import Typography from '../../../../../components/Typography';
-import {scale} from '../../../../../shared/Scaling';
-import CustomInput from '../../../../../components/customInput/Index';
 import Assets from '../../../../../assets/Assets';
 import MainButton from '../../../../../components/button/MainButton';
+import Container from '../../../../../components/container/Index';
+import CustomInput from '../../../../../components/customInput/Index';
+import Typography from '../../../../../components/Typography';
+import {scale} from '../../../../../shared/Scaling';
 
 interface Attachment {
   id: string;
@@ -92,7 +92,10 @@ const DisputeDetails: IDispute = ({
       <View key={item.id} style={styles.attachmentItem}>
         <View style={styles.attachmentContent}>
           {item.type === 'image' ? (
-            <Image source={{uri: item.uri}} style={styles.attachmentImage} />
+            <FastImage
+              source={{uri: item.uri}}
+              style={styles.attachmentImage}
+            />
           ) : (
             <View style={styles.documentIcon}>
               <Text style={styles.documentIconText}>📄</Text>

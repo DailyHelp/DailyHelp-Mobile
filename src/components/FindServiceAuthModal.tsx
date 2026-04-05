@@ -1,13 +1,13 @@
-import { useNavigation } from '@react-navigation/native';
-import { View } from 'react-native';
-import { Button, Modal, Portal, Text } from 'react-native-paper';
+import {useNavigation} from '@react-navigation/native';
+import {View} from 'react-native';
+import {Button, Modal, Portal, Text} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/AntDesign';
-import { IAuthRoute, Navigate } from '../@types/routes';
+import {IAuthRoute, Navigate} from '../@types/routes';
 import Assets from '../assets/Assets';
 import authService from '../screens/auth/services/Auth.service';
-import { UserTypes } from '../shared/Constant';
-import { scale, verticalScale } from '../shared/Scaling';
-import { customFontSize, fonts } from '../shared/themes/Typography';
+import {UserTypes} from '../shared/Constant';
+import {scale, verticalScale} from '../shared/Scaling';
+import {customFontSize, fonts} from '../shared/themes/Typography';
 import ScreenHeader from './ScreenHeader';
 
 const FindServiceAuthModal: IFindServiceAuthModal<UserTypes> = ({
@@ -75,6 +75,8 @@ const FindServiceAuthModal: IFindServiceAuthModal<UserTypes> = ({
               Continue with Email
             </Button>
             <Button
+              onPress={signIn}
+              loading={isGooglePending}
               icon={() => <Assets.GoogleColored />}
               mode="outlined"
               labelStyle={{

@@ -1,122 +1,141 @@
-// Core packages
-import messaging, {
+import notifee, {AndroidImportance, EventType} from '@notifee/react-native';
+import {
   FirebaseMessagingTypes,
-  getToken,
-  setBackgroundMessageHandler,
+  getInitialNotification,
+  getMessaging,
+  onMessage,
+  onNotificationOpenedApp,
 } from '@react-native-firebase/messaging';
-import React, {useEffect, useRef} from 'react';
-import NotificationPopup, {
-  ContentOptionsBase,
-} from 'react-native-push-notification-popup';
-import Assets from '../../assets/Assets';
-import CatchError from '../../shared/errors/catchError';
-import CustomNotification from './CustomNotification';
-import notifee from '@notifee/react-native';
+import React from 'react';
+import {queryClient} from '../../shared/queryClient';
+import utils, {PushNotificationData} from '../../shared/Utils';
 
 const PushNotification = () => {
-  const popupRef = useRef<any>(null);
-  const [showOnMessage, setShowOnMessage] = React.useState(false);
-  const [push, setPush] = React.useState<
-    Partial<FirebaseMessagingTypes.RemoteMessage>
-  >({});
-  const fcmToken = null;
+  utils.useNotificationBadgeHandler();
 
-  const requestPermission = async () => {
-    await requestUserPermission();
-  };
-  useEffect(() => {
-    requestPermission();
-    notificationListener();
-    backgroundNotification();
-    // return () => unsubscribe();
-  }, []);
-
-  const requestUserPermission = async () => {
-    try {
-      const authStatus = await messaging().requestPermission();
-      const enabled =
-        authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-        authStatus === messaging.AuthorizationStatus.PROVISIONAL;
-
-      if (enabled) {
-        await getFCMToken();
-      }
-    } catch (err: any) {
-      new CatchError(err);
-    }
-  };
-
-  const getFCMToken = async () => {
-    try {
-      if (!fcmToken) {
-        const newToken = await getToken(messaging());
-        return newToken;
-      }
-    } catch (err: any) {
-      new CatchError(err);
-    }
-  };
-
-  const showMessage = (
+  const showMessage = async (
     remoteMessage: FirebaseMessagingTypes.RemoteMessage,
-    from?: string,
   ) => {
-    setShowOnMessage(true);
-    popupRef?.current?.show({
-      appIconSource: Assets.Logo,
-      title: remoteMessage?.notification?.title,
+    const channelId = await notifee.createChannel({
+      id: 'default',
+      name: 'Default Channel',
+      importance: AndroidImportance.HIGH,
+    });
+
+    await notifee.displayNotification({
+      title: remoteMessage?.notification?.title || 'Notification',
       body: remoteMessage?.notification?.body,
-      timeText: remoteMessage?.sentTime,
-      slideOutTime: 5000,
+      data: remoteMessage?.data as any,
+      android: {
+        channelId,
+        // Icon shown in the Android status bar (from android/app/src/main/res/drawable)
+        smallIcon: 'notification_icon',
+        pressAction: {
+          id: 'default',
+        },
+      },
     });
   };
 
   const notificationListener = () => {
-    messaging().onNotificationOpenedApp(remoteMessage => {
-      setPush(remoteMessage);
-      showMessage?.(remoteMessage, 'onNotificationOpenedApp');
-    });
+    // Foreground messages
+    const unsubscribeMessaging = onMessage(
+      getMessaging(),
+      async remoteMessage => {
+        await showMessage(remoteMessage);
 
-    messaging().onMessage(async remoteMessage => {
-      setPush(remoteMessage);
-      showMessage?.(remoteMessage, 'onMessage');
-    });
+        const data = remoteMessage.data as unknown as PushNotificationData;
 
-    // Check whether an initial notification is available
-    messaging()
-      .getInitialNotification()
-      .then(remoteMessage => {
-        if (remoteMessage) {
-          setPush(remoteMessage);
-          showMessage?.(remoteMessage, 'getInitialNotification');
+        // Invalidate relevant queries based on notification type
+        if (data?.type === 'chat_message' && data?.consultation_id) {
+          queryClient.invalidateQueries({
+            queryKey: ['conversation', data.consultation_id],
+          });
         }
-      });
-  };
 
-  const backgroundNotification = () => {
-    return setBackgroundMessageHandler(messaging(), async remoteMessage => {
-      await notifee.displayNotification({
-        title: remoteMessage?.notification?.title,
-        body: remoteMessage?.notification?.body,
-        android: {
-          channelId: '',
-        },
-      });
+        // Always invalidate conversations to update unread counts
+        queryClient.invalidateQueries({queryKey: ['conversations']});
+
+        // Invalidate other relevant lists
+        if (data?.type === 'consultation_accepted') {
+          queryClient.invalidateQueries({queryKey: ['jobs']});
+          queryClient.invalidateQueries({queryKey: ['active-jobs']});
+        }
+
+        if (data?.type === 'broadcast') {
+          queryClient.invalidateQueries({queryKey: ['notifications']});
+        }
+      },
+    );
+
+    const unsubscribeNotifeeForeground = notifee.onForegroundEvent(
+      ({type, detail}) => {
+        if (type === EventType.PRESS) {
+          utils.handleNotificationNavigation(
+            detail.notification?.data as unknown as PushNotificationData,
+          );
+        }
+      },
+    );
+
+    // Background messages that caused the app to open
+    const unsubscribeMessagingOpenedApp = onNotificationOpenedApp(
+      getMessaging(),
+      remoteMessage => {
+        console.log(
+          'Notification caused app to open from background state:',
+          remoteMessage,
+        );
+        utils.handleNotificationNavigation(
+          remoteMessage.data as unknown as PushNotificationData,
+        );
+      },
+    );
+
+    // Check if the app was opened by a notification (quit state)
+    // 1. Firebase messaging
+    getInitialNotification(getMessaging()).then(remoteMessage => {
+      if (remoteMessage) {
+        console.log(
+          'Notification caused app to open from quit state (FCM):',
+          remoteMessage,
+        );
+        utils.handleNotificationNavigation(
+          remoteMessage.data as unknown as PushNotificationData,
+        );
+      }
     });
+
+    // 2. Notifee
+    notifee.getInitialNotification().then(initialNotification => {
+      if (initialNotification) {
+        console.log(
+          'Notification caused app to open from quit state (Notifee):',
+          initialNotification.notification,
+        );
+        utils.handleNotificationNavigation(
+          initialNotification.notification
+            .data as unknown as PushNotificationData,
+        );
+      }
+    });
+
+    return () => {
+      unsubscribeMessaging();
+      unsubscribeNotifeeForeground();
+      unsubscribeMessagingOpenedApp();
+    };
   };
 
-  return (
-    <React.Fragment>
-      <NotificationPopup
-        ref={popupRef}
-        renderPopupContent={(options: ContentOptionsBase) => (
-          <CustomNotification {...options} data={push.data} />
-        )}
-        shouldChildHandleResponderStart
-        shouldChildHandleResponderMove
-      />
-    </React.Fragment>
-  );
+  React.useEffect(() => {
+    utils.requestUserPermission();
+    const unsubscribe = notificationListener();
+    return () => {
+      if (unsubscribe) unsubscribe();
+    };
+  }, []);
+
+  return null;
 };
 
 export default PushNotification;

@@ -13,7 +13,7 @@ import DisputesDto from '../screens/app/more/dto/Disputes.dto';
 /**
  * Routes for `AuthStackRoute`
  */
-type IAuthRoute = {
+export type IAuthRoute = {
   Onboarding?: undefined;
   CreateAccount?: {
     userType: UserTypes;
@@ -203,7 +203,7 @@ type ISetPrices = Props<NativeStackScreenProps<IAuthRoute, 'SetPrices'>>;
  * Routes for `AppStackRoute`
  */
 
-type IAppRoute = {
+export type IAppRoute = {
   HomeIndex?: undefined;
   SearchIndex?: undefined;
   ChatIndex?: undefined;
@@ -213,7 +213,7 @@ type IAppRoute = {
  * Routes for `IHomeStackRoute`
  */
 
-type IHomeRoute = {
+export type IHomeRoute = {
   Home?: undefined;
   Search?: undefined;
   Reviews: {
@@ -254,7 +254,7 @@ type IServiceProfile = Props<
   NativeStackScreenProps<IHomeRoute, 'ServiceProfile'>
 >;
 
-type ISearchRoute = {
+export type ISearchRoute = {
   Home?: undefined;
   Search?: undefined;
 };
@@ -264,7 +264,7 @@ type ISearchRoute = {
  */
 type ISearch = Props<NativeStackScreenProps<ISearchRoute, 'Search'>>;
 
-type IChatRoute = {
+export type IChatRoute = {
   Chat?: undefined;
   HomeIndex?: undefined;
   SearchIndex?: undefined;
@@ -336,7 +336,7 @@ type IReport = Props<
   } & NativeStackScreenProps<IChatRoute, 'Report'>
 >;
 
-type IJobsRoute = {
+export type IJobsRoute = {
   Jobs?: undefined;
   Chat?: undefined;
   JobsIndex?: undefined;
@@ -376,7 +376,7 @@ type IWebViewComponent = Props<
   NativeStackScreenProps<IJobsRoute, 'WebViewComponent'>
 >;
 
-type IMoreRoute = {
+export type IMoreRoute = {
   MoreIndex?: undefined;
   UpdatePrices?: {
     offerStartingPrice?: number;
@@ -467,6 +467,7 @@ type IMoreRoute = {
   SelectBank?: {amount: number; bankAccountUuid: string};
   Reviews?: {uuid: string};
   DisputeDetails?: {dispute?: DisputesDto; uuid?: string};
+  TermsOfUse?: undefined;
 };
 
 type IMore = Props<NativeStackScreenProps<IMoreRoute, 'More'>>;
@@ -530,3 +531,5 @@ type IUpdateAbout = Props<NativeStackScreenProps<IMoreRoute, 'UpdateAbout'>>;
 type IUpdatePrices = Props<NativeStackScreenProps<IMoreRoute, 'UpdatePrices'>>;
 
 type ISelectBank = Props<NativeStackScreenProps<IMoreRoute, 'SelectBank'>>;
+
+type ITermsOfUse = Props<NativeStackScreenProps<IMoreRoute, 'TermsOfUse'>>;

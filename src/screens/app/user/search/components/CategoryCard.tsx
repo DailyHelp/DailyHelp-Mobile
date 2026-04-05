@@ -1,7 +1,8 @@
-import {Image, TouchableOpacity} from 'react-native';
-import {Text} from 'react-native-paper';
-import {scale, verticalScale} from '../../../../../shared/Scaling';
-import {fonts} from '../../../../../shared/themes/Typography';
+import { TouchableOpacity } from 'react-native';
+import FastImage from 'react-native-fast-image';
+import { Text } from 'react-native-paper';
+import { scale, verticalScale } from '../../../../../shared/Scaling';
+import { fonts } from '../../../../../shared/themes/Typography';
 
 const CategoryCard: ICategoryCard<InternalCategory> = ({data, onPress}) => {
   return (
@@ -15,7 +16,7 @@ const CategoryCard: ICategoryCard<InternalCategory> = ({data, onPress}) => {
         padding: scale(15),
         borderRadius: 10,
       }}>
-      <Image
+      <FastImage
         source={data?.image}
         style={{width: scale(30), height: verticalScale(30)}}
       />

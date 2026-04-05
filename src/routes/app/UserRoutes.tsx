@@ -32,6 +32,7 @@ import UpdatePrices from '../../screens/app/more/providerProfile/UpdatePrices';
 import UpdatePassword from '../../screens/app/more/UpdatePassword';
 import VerifyPhone from '../../screens/app/more/VerifyPhone';
 import WalletBalance from '../../screens/app/more/WalletBallance';
+import TermsOfUse from '../../screens/app/more/TermsOfUse';
 import Home from '../../screens/app/user/home/Index';
 import Reviews from '../../screens/app/user/home/Reviews';
 import ServiceProfile from '../../screens/app/user/home/ServiceProfile';
@@ -689,6 +690,21 @@ export const MoreStackRoutes = [
       headerShown: true,
       header: (props: NativeStackHeaderProps) => (
         <CustomHeader type="back" {...props} />
+      ),
+    },
+  },
+  {
+    name: 'TermsOfUse',
+    component: TermsOfUse,
+    options: {
+      headerShown: true,
+      header: (props: NativeStackHeaderProps) => (
+        <CustomHeader
+          type="back"
+          title="Terms of use"
+          {...props}
+          textMiddle
+        />
       ),
     },
   },

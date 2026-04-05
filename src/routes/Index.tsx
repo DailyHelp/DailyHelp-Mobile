@@ -1,6 +1,5 @@
 import {
   NavigationContainer,
-  useNavigationContainerRef,
 } from '@react-navigation/native';
 import {observer} from 'mobx-react-lite';
 import React from 'react';
@@ -14,6 +13,7 @@ import {toastConfig} from '../shared/Toast';
 import utils from '../shared/Utils';
 import AppRouter from './app/Index';
 import AuthRouter from './auth/Index';
+import { navigationRef } from '../shared/navigationRef';
 
 const NotificationBadgeHandler = observer(() => {
   utils.useNotificationBadgeHandler();
@@ -21,7 +21,6 @@ const NotificationBadgeHandler = observer(() => {
 });
 
 const Routes: Props = () => {
-  const navigationRef = useNavigationContainerRef();
 
   const {initialState, onStateChange} = utils.useBoot();
 

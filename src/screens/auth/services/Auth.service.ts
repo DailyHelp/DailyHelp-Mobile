@@ -1,5 +1,5 @@
 import {WEB_CLIENT_ID} from '@env';
-import messaging, {getToken} from '@react-native-firebase/messaging';
+import {getMessaging, getToken} from '@react-native-firebase/messaging';
 import {
   GoogleSignin,
   statusCodes,
@@ -70,11 +70,12 @@ export class AuthService extends AuthApi {
 
   useLogin() {
     const navigation = useNavigation<Navigate<IAuthRoute>>();
+    const messagingInstance = React.useMemo(() => getMessaging(), []);
 
     const {mutateAsync, isPending} = useMutation({
       mutationKey: ['login'],
       mutationFn: async (body: LoginDto) => {
-        body.deviceToken = await getToken(messaging());
+        body.deviceToken = await getToken(messagingInstance);
         return await this.login(body);
       },
       onSuccess: (data, body) => {
@@ -137,7 +138,7 @@ export class AuthService extends AuthApi {
     });
 
     const onSubmit = async (body: LoginDto) => {
-      body.deviceToken = await getToken(messaging());
+      body.deviceToken = await getToken(messagingInstance);
       return await mutateAsync(body);
     };
 

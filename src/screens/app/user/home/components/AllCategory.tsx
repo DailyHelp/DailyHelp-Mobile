@@ -1,18 +1,19 @@
 import React from 'react';
-import {Image, Text, TouchableOpacity, View} from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 import ActionSheet, {
   ActionSheetRef,
   ScrollView,
   SheetManager,
 } from 'react-native-actions-sheet';
 import Collapsible from 'react-native-collapsible';
+import FastImage from 'react-native-fast-image';
 import Icon2 from 'react-native-vector-icons/Ionicons';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Assets from '../../../../../assets/Assets';
 import CustomInput from '../../../../../components/customInput/Index';
 import Typography from '../../../../../components/Typography';
-import {verticalScale} from '../../../../../shared/Scaling';
-import {customFontSize, fonts} from '../../../../../shared/themes/Typography';
+import { verticalScale } from '../../../../../shared/Scaling';
+import { customFontSize, fonts } from '../../../../../shared/themes/Typography';
 import homeService from '../services/Home.service';
 
 const getCategoryImage = (categoryName: string) => {
@@ -207,7 +208,7 @@ const CategoryActionSheet = React.forwardRef<
                         alignItems: 'center',
                         gap: 9,
                       }}>
-                      <Image source={image} style={{width: 20, height: 20}} />
+                      <FastImage source={image} style={{width: 20, height: 20}} />
                       <Text
                         style={{
                           fontFamily: fonts.GeistBold,

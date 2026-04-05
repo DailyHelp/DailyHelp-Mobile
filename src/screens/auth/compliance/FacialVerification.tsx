@@ -45,17 +45,17 @@ const FacialVerification: IFacialVerification = ({navigation, route}) => {
             {[
               {
                 description: 'Ensure good lighting, remove hats or glasses.',
-                Image: Assets.Bulb,
+                Icon: Assets.Bulb,
               },
               {
                 description: 'Keep your face well within the frame.',
-                Image: Assets.Biometrics,
+                Icon: Assets.Biometrics,
               },
               {
                 description: 'Keep a neutral facial expression.',
-                Image: Assets.Smilie,
+                Icon: Assets.Smilie,
               },
-            ].map(({Image, description}, key) => (
+            ].map(({Icon, description}, key) => (
               <View style={{flexDirection: 'row', gap: 9}} key={key}>
                 <View
                   style={{
@@ -63,7 +63,7 @@ const FacialVerification: IFacialVerification = ({navigation, route}) => {
                     borderRadius: '100%',
                     backgroundColor: '#F3F4F6',
                   }}>
-                  <Image />
+                  <Icon />
                 </View>
 
                 <Text

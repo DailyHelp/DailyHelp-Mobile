@@ -1,7 +1,7 @@
-import {View} from 'react-native';
-import {Avatar, Badge} from 'react-native-paper';
+import { View } from 'react-native';
+import { Avatar } from 'react-native-paper';
 import Assets from '../assets/Assets';
-import {scale} from '../shared/Scaling';
+import { scale } from '../shared/Scaling';
 
 const CustomAvatar: ICustomAvatar = ({
   avatarSize = 40,

@@ -1,12 +1,15 @@
 import React from 'react';
-import { View } from 'react-native';
-import { Text, TextInput } from 'react-native-paper';
-import { default as Icon, default as IconF } from 'react-native-vector-icons/Feather';
+import {View} from 'react-native';
+import {Text, TextInput} from 'react-native-paper';
+import {
+  default as Icon,
+  default as IconF,
+} from 'react-native-vector-icons/Feather';
 import IconI from 'react-native-vector-icons/Ionicons';
 import IconM from 'react-native-vector-icons/MaterialCommunityIcons';
 import Assets from '../../assets/Assets';
-import { scale, verticalScale } from '../../shared/Scaling';
-import { customFontSize, fonts } from '../../shared/themes/Typography';
+import {scale, verticalScale} from '../../shared/Scaling';
+import {customFontSize, fonts} from '../../shared/themes/Typography';
 import Typography from '../Typography';
 
 const CustomPasswordInput: IInput = ({
@@ -88,25 +91,15 @@ const CustomPasswordInput: IInput = ({
           }}
           right={
             <TextInput.Icon
+              onPress={() => setShowPassword(!showPassword)}
+              rippleColor={'rgba(0,0,0,0.1)'}
               icon={() =>
                 !showPassword ? (
-                  <Icon
-                    name="eye"
-                    size={20}
-                    onPress={() => setShowPassword(true)}
-                    color={'#757C91'}
-                  />
+                  <Icon name="eye" size={20} color={'#757C91'} />
                 ) : (
-                  <Icon
-                    name="eye-off"
-                    size={20}
-                    onPress={() => setShowPassword(false)}
-                    color={'#757C91'}
-                  />
+                  <Icon name="eye-off" size={20} color={'#757C91'} />
                 )
               }
-              contentStyle={{width: 20}}
-              style={{marginRight: -20}}
             />
           }
         />

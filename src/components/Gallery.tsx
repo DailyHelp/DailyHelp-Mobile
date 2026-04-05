@@ -1,11 +1,12 @@
 import {PhotoIdentifier} from '@react-native-camera-roll/camera-roll';
 import {observer} from 'mobx-react-lite';
 import React from 'react';
-import {ActivityIndicator, Image, TouchableOpacity, View} from 'react-native';
+import {ActivityIndicator, TouchableOpacity, View} from 'react-native';
 import ActionSheet, {
   ActionSheetRef,
   FlatList,
 } from 'react-native-actions-sheet';
+import FastImage from 'react-native-fast-image';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Video from 'react-native-video';
 import {scale, verticalScale} from '../shared/Scaling';
@@ -29,7 +30,6 @@ const Gallery = React.forwardRef<ActionSheetRef, IGallery>(
       const response = await utils.getPhotos(page);
       const newPhotos = response.edges;
 
-      // Filter duplicates
       setImages(prev => {
         const existingUris = new Set(prev.map(img => img.node.image.uri));
         const uniquePhotos = newPhotos.filter(
@@ -60,7 +60,6 @@ const Gallery = React.forwardRef<ActionSheetRef, IGallery>(
           appStore.toggleGalleryImageSelection(uri);
         }
 
-        // If image was deselected, call onClose callback
         if (wasSelected && props.onClose) {
           props.onClose(uri);
         }
@@ -134,7 +133,7 @@ const Gallery = React.forwardRef<ActionSheetRef, IGallery>(
             />
           ) : (
             <>
-              <Image
+              <FastImage
                 source={{uri}}
                 style={{
                   width: scale(92),

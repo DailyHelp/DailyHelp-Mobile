@@ -1,17 +1,17 @@
 import React from 'react';
 import {
-  View,
-  Image,
-  TouchableOpacity,
-  FlatList,
   Dimensions,
+  FlatList,
   StyleSheet,
+  TouchableOpacity,
+  View
 } from 'react-native';
-import {Modal, Portal} from 'react-native-paper';
-import Icon from 'react-native-vector-icons/Ionicons';
+import FastImage from 'react-native-fast-image';
+import { Modal, Portal } from 'react-native-paper';
 import Icon2 from 'react-native-vector-icons/AntDesign';
+import Icon from 'react-native-vector-icons/Ionicons';
 import Typography from '../../../../../components/Typography';
-import {scale, verticalScale} from '../../../../../shared/Scaling';
+import { scale, verticalScale } from '../../../../../shared/Scaling';
 
 const {width: SCREEN_WIDTH, height: SCREEN_HEIGHT} = Dimensions.get('window');
 
@@ -67,7 +67,11 @@ const ServiceImageGallery: IServiceImageGalleryProps = ({
   const renderItem = ({item}: {item: string}) => {
     return (
       <View style={styles.imageContainer}>
-        <Image source={{uri: item}} style={styles.image} resizeMode="contain" />
+        <FastImage
+          source={{uri: item}}
+          style={styles.image}
+          resizeMode="contain"
+        />
       </View>
     );
   };
@@ -230,8 +234,3 @@ const styles = StyleSheet.create({
 });
 
 export default ServiceImageGallery;
-
-
-
-
-

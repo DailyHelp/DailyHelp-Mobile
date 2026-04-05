@@ -119,7 +119,7 @@ const More: IMore = ({navigation}) => {
         {
           name: 'Terms of use',
           Icon: Assets.TermsOfUse,
-          navigate: () => {},
+          navigate: () => navigation.navigate('TermsOfUse' as any),
           access: [UserTypes.CUSTOMER, UserTypes.PROVIDER],
         },
       ],

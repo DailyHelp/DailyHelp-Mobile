@@ -16,13 +16,12 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import 'reflect-metadata';
 import PushNotification from './components/pushNotification/Index';
+import { queryClient } from './shared/queryClient';
 import Routes from './routes/Index';
-import {SheetProvider} from 'react-native-actions-sheet';
+import { SheetProvider } from 'react-native-actions-sheet';
 
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
-
-  const queryClient = new QueryClient();
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,

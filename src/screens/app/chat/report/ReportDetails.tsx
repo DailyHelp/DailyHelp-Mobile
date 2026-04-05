@@ -1,27 +1,27 @@
-import {useState} from 'react';
+import { useState } from 'react';
 import {
   Alert,
   Dimensions,
-  Image,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import {
   ImageLibraryOptions,
   ImagePickerResponse,
   launchImageLibrary,
   MediaType,
 } from 'react-native-image-picker';
-import {IReport} from '../../../../@types/routes';
+import { IReport } from '../../../../@types/routes';
 import Assets from '../../../../assets/Assets';
 import MainButton from '../../../../components/button/MainButton';
 import Container from '../../../../components/container/Index';
 import CustomInput from '../../../../components/customInput/Index';
 import Typography from '../../../../components/Typography';
-import {scale} from '../../../../shared/Scaling';
+import { scale } from '../../../../shared/Scaling';
 interface Attachment {
   id: string;
   uri: string;
@@ -91,7 +91,7 @@ const ReportDetails: IReport = ({
       <View key={item.id} style={styles.attachmentItem}>
         <View style={styles.attachmentContent}>
           {item.type === 'image' ? (
-            <Image source={{uri: item.uri}} style={styles.attachmentImage} />
+            <FastImage source={{uri: item.uri}} style={styles.attachmentImage} />
           ) : (
             <View style={styles.documentIcon}>
               <Text style={styles.documentIconText}>📄</Text>

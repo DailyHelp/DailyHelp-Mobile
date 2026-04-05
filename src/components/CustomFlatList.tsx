@@ -1,6 +1,6 @@
 import React from 'react';
-import {FlatList} from 'react-native';
-import {scale, verticalScale} from '../shared/Scaling';
+import { FlatList } from 'react-native';
+import { verticalScale } from '../shared/Scaling';
 
 const CustomFlatList = <T extends unknown>({
   data,

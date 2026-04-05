@@ -1,5 +1,9 @@
 import {CameraRoll} from '@react-native-camera-roll/camera-roll';
-import messaging from '@react-native-firebase/messaging';
+import {
+  getMessaging,
+  onMessage,
+  setBackgroundMessageHandler,
+} from '@react-native-firebase/messaging';
 import {
   ParamListBase,
   useFocusEffect,
@@ -33,6 +37,32 @@ import {appStore} from './stores/appStore';
 import {SheetManager} from 'react-native-actions-sheet';
 import SplashScreen from 'react-native-splash-screen';
 import dayjs from 'dayjs';
+import { navigationRef } from './navigationRef';
+
+export interface PushNotificationConsultant {
+  uuid: string;
+  full_name: string;
+  avatar?: string;
+}
+
+export interface PushNotificationPatient {
+  uuid: string;
+  full_name: string;
+  avatar?: string;
+}
+
+export interface PushNotificationData {
+  type:
+    | 'chat_message'
+    | 'consultation_accepted'
+    | 'broadcast'
+    | 'resource_visibility_change'
+    | 'kyc_status_change';
+  consultation_id?: string;
+  patient?: string; // JSON string
+  consultant?: string; // JSON string
+  [key: string]: any;
+}
 
 class Utils {
   private static instance: Utils;
@@ -108,6 +138,21 @@ class Utils {
   async phoneCameraLibrary() {
     const res = await launchCamera({mediaType: 'photo'});
     return res;
+  }
+
+  async requestUserPermission() {
+    try {
+      const messagingInstance = getMessaging();
+      const authStatus = await messagingInstance.requestPermission();
+      const enabled =
+        authStatus === 1 || // AUTHORIZED
+        authStatus === 2; // PROVISIONAL
+
+      return enabled;
+    } catch (error) {
+      console.error('Failed to request notification permission:', error);
+      return false;
+    }
   }
 
   async requestLocationPermission(): Promise<boolean> {
@@ -259,8 +304,19 @@ class Utils {
     }
   };
 
-  useNotificationBadgeHandler() {
+  useNotificationBadgeHandler(count?: number) {
     const query = useQueryClient();
+    const messagingInstance = React.useMemo(() => getMessaging(), []);
+
+    const updateBadge = React.useCallback(async (newCount: number) => {
+      await this.badge(newCount);
+    }, []);
+
+    React.useEffect(() => {
+      if (typeof count === 'number') {
+        updateBadge(count);
+      }
+    }, [count, updateBadge]);
 
     const calculateUnreadCount = React.useCallback(async () => {
       try {
@@ -311,18 +367,21 @@ class Utils {
     }, [query, calculateUnreadCount]);
 
     React.useEffect(() => {
-      const unsubscribe = messaging().onMessage(async remoteMessage => {
-        query.invalidateQueries({queryKey: ['conversations']});
+      const unsubscribe = onMessage(
+        messagingInstance,
+        async remoteMessage => {
+          query.invalidateQueries({queryKey: ['conversations']});
 
-        setTimeout(() => {
-          calculateUnreadCount();
-        }, 500);
-      });
+          setTimeout(() => {
+            calculateUnreadCount();
+          }, 500);
+        },
+      );
 
       return () => {
         unsubscribe();
       };
-    }, [query, calculateUnreadCount]);
+    }, [query, calculateUnreadCount, messagingInstance]);
 
     React.useEffect(() => {
       const {websocketService} = require('./services/WebSocket');
@@ -353,10 +412,13 @@ class Utils {
     }, [query, calculateUnreadCount]);
 
     React.useEffect(() => {
-      messaging().setBackgroundMessageHandler(async remoteMessage => {
-        query.invalidateQueries({queryKey: ['conversations']});
-      });
-    }, [query]);
+      setBackgroundMessageHandler(
+        messagingInstance,
+        async remoteMessage => {
+          query.invalidateQueries({queryKey: ['conversations']});
+        },
+      );
+    }, [query, messagingInstance]);
   }
 
   async hasAndroidPermission() {
@@ -780,6 +842,49 @@ class Utils {
         return {};
     }
   };
+
+  handleNotificationNavigation(data: PushNotificationData) {
+    if (!data?.type) return;
+
+    switch (data.type) {
+      case 'chat_message':
+        if (data.consultation_id) {
+          const patient = data.patient ? JSON.parse(data.patient) : undefined;
+          const consultant = data.consultant
+            ? JSON.parse(data.consultant)
+            : undefined;
+
+          const otherUser = patient || consultant;
+
+          (navigationRef as any).navigate('ChatBox', {
+            uuid: data.consultation_id,
+            user: otherUser
+              ? {
+                  ...otherUser,
+                  initials: utils.capitalizeFirstLetter(
+                    otherUser.full_name?.split(' ')?.[0]?.[0] || '',
+                  ),
+                }
+              : undefined,
+          });
+        }
+        break;
+      case 'consultation_accepted':
+        (navigationRef as any).navigate('Consultations', {});
+        break;
+      case 'resource_visibility_change':
+        (navigationRef as any).navigate('HomeResources', {});
+        break;
+      case 'kyc_status_change':
+        (navigationRef as any).navigate('Account', { screen: 'AccountDetails' });
+        break;
+      case 'broadcast':
+        (navigationRef as any).navigate('Notifications', {});
+        break;
+      default:
+        console.log('Unhandled notification type:', data.type);
+    }
+  }
 }
 
 const utils = Utils.getInstance();

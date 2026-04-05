@@ -3,27 +3,28 @@ import {
   BottomSheetModalProvider,
   BottomSheetView,
 } from '@gorhom/bottom-sheet';
-import {observer} from 'mobx-react-lite';
+import { observer } from 'mobx-react-lite';
 import React from 'react';
-import {Image, ScrollView, TouchableOpacity, View} from 'react-native';
-import {ActionSheetRef} from 'react-native-actions-sheet';
+import { ScrollView, TouchableOpacity, View } from 'react-native';
+import { ActionSheetRef } from 'react-native-actions-sheet';
+import FastImage from 'react-native-fast-image';
 import Icon2 from 'react-native-vector-icons/AntDesign';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {IServiceProfile} from '../../../../@types/routes';
+import { IServiceProfile } from '../../../../@types/routes';
 import Assets from '../../../../assets/Assets';
 import MainButton from '../../../../components/button/MainButton';
 import Container from '../../../../components/container/Index';
 import CustomAvatar from '../../../../components/CustomAvatar';
 import Gallery from '../../../../components/Gallery';
 import Offer from '../../../../components/offers/Index';
-import Typography from '../../../../components/Typography';
-import {scale, verticalScale} from '../../../../shared/Scaling';
-import {appStore} from '../../../../shared/stores/appStore';
-import utils from '../../../../shared/Utils';
 import ReviewsCard from '../../../../components/ReviewsCard';
+import Typography from '../../../../components/Typography';
+import { scale, verticalScale } from '../../../../shared/Scaling';
+import { appStore } from '../../../../shared/stores/appStore';
+import utils from '../../../../shared/Utils';
+import ServiceImageGallery from './components/ServiceImageGallery';
 import homeStyle from './homeStyle';
 import homeService from './services/Home.service';
-import ServiceImageGallery from './components/ServiceImageGallery';
 
 const STATUS_MAP: any = {
   available: {
@@ -111,7 +112,10 @@ const ServiceProfile: IServiceProfile = ({route, navigation}) => {
               setSelectedImageIndex(key);
               setImageGalleryVisible(true);
             }}>
-            <Image source={{uri}} style={homeStyle.serviceProfileScrollImage} />
+            <FastImage
+              source={{uri}}
+              style={homeStyle.serviceProfileScrollImage}
+            />
           </TouchableOpacity>
         ))}
       </ScrollView>

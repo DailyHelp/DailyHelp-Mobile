@@ -1,10 +1,10 @@
-import {observer} from 'mobx-react-lite';
+import { observer } from 'mobx-react-lite';
 import React from 'react';
-import {Image} from 'react-native';
+import FastImage from 'react-native-fast-image';
+import { ActivityIndicator } from 'react-native-paper';
 import Assets from '../assets/Assets';
 import Container from './container/Index';
 import Typography from './Typography';
-import {ActivityIndicator} from 'react-native-paper';
 
 const UploadContainer: IUploadContainer = ({
   title,
@@ -84,14 +84,14 @@ const UploadContainer: IUploadContainer = ({
       borderColor="gray"
       borderStyle="dashed">
       {uri ? (
-        <Image 
+        <FastImage 
           source={{uri}} 
           style={{
             width: 50,
             height: 50,
             borderRadius: 8,
-            resizeMode: 'cover'
           }}
+          resizeMode='cover'
         />
       ) : isUploading ? (
         <ActivityIndicator color="#C1FF1D" />

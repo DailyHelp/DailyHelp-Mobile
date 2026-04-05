@@ -1,8 +1,9 @@
 import React from 'react';
-import {Image, TouchableOpacity, View} from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import Icon from 'react-native-vector-icons/AntDesign';
 import Video from 'react-native-video';
-import {appStore} from '../shared/stores/appStore';
+import { appStore } from '../shared/stores/appStore';
 import offerStyle from './offers/offerStyle';
 
 const Attachment: IAttachment = ({data, canClose = true, onClose}) => {
@@ -44,7 +45,7 @@ const Attachment: IAttachment = ({data, canClose = true, onClose}) => {
               />
             ) : (
               <>
-                <Image
+                <FastImage
                   source={{uri: trimmedUri}}
                   style={{
                     width: '100%',

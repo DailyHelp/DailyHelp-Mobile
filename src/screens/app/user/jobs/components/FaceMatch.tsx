@@ -1,16 +1,16 @@
 import React from 'react';
-import {Image, View} from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import ActionSheet, {
   ActionSheetRef,
   SheetManager,
   SheetProps,
 } from 'react-native-actions-sheet';
+import FastImage from 'react-native-fast-image';
 import Icon from 'react-native-vector-icons/AntDesign';
 import IconI from 'react-native-vector-icons/Ionicons';
 import MainButton from '../../../../../components/button/MainButton';
 import Typography from '../../../../../components/Typography';
-import {scale, verticalScale} from '../../../../../shared/Scaling';
-import {TouchableOpacity} from 'react-native';
+import { scale, verticalScale } from '../../../../../shared/Scaling';
 import jobService from '../service/Jobs.service';
 
 const FaceMatch = React.forwardRef<ActionSheetRef, SheetProps<'FaceMatch'>>(
@@ -54,7 +54,7 @@ const FaceMatch = React.forwardRef<ActionSheetRef, SheetProps<'FaceMatch'>>(
             </Typography>
           </View>
         </View>
-        <Image
+        <FastImage
           source={payload?.image}
           style={{
             width: '95%',

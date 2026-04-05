@@ -1,10 +1,7 @@
-import {
-  CommonActions,
-  NavigationContainerRef
-} from '@react-navigation/native';
+import {CommonActions, NavigationContainerRef} from '@react-navigation/native';
 import React from 'react';
 import AppStorage from '../shared/AppStorage';
-import { websocketService } from '../shared/services/WebSocket';
+import {websocketService} from '../shared/services/WebSocket';
 
 const GlobalCallHandler: React.FC<
   GlobalCallHandlerProps<NavigationContainerRef<any>>
@@ -27,7 +24,6 @@ const GlobalCallHandler: React.FC<
 
         const currentUserId = AppStorage.find('user_id');
 
-        // Only handle calls if we're not the caller
         if (
           callerUuid &&
           callerUuid !== currentUserId &&
@@ -38,7 +34,6 @@ const GlobalCallHandler: React.FC<
 
             const callScreenName = isCall ? 'VoiceCall' : 'VideoCall';
 
-            // Use CommonActions to navigate to nested screen
             navigationRef.current.dispatch(
               CommonActions.navigate({
                 name: 'ChatIndex',
@@ -59,7 +54,6 @@ const GlobalCallHandler: React.FC<
         }
       }
 
-      // Handle call:incoming event - only navigate if user is in chat screen
       if (eventType === 'call:incoming') {
         const {
           conversationUuid,
@@ -70,11 +64,8 @@ const GlobalCallHandler: React.FC<
           peerAvatar,
         } = message.data || {};
 
-        console.log(message);
-
         const currentUserId = AppStorage.find('user_id');
 
-        // Only handle if we're not the caller and navigation is available
         if (
           fromUuid &&
           fromUuid !== currentUserId &&
@@ -110,7 +101,6 @@ const GlobalCallHandler: React.FC<
               isInChatStack = chatScreenNames.includes(chatStackRoute?.name);
             }
 
-            // Only navigate if user is in chat screen
             if (isInChatStack) {
               navigationRef.current.dispatch(
                 CommonActions.navigate({
