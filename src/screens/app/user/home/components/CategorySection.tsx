@@ -12,10 +12,19 @@ const CategorySection: ICategorySection = ({data: cat, onFilter}) => {
     if (label === 'all categories') {
       SheetManager.show('AllCategory', {
         onClose: q => {
-          onFilter?.({
-            mainCategory: q?.mainCategory.join(','),
-            subCategory: q?.subCategory.join(','),
-          });
+          if (!q) return;
+
+          const filters: any = {};
+          if (q.mainCategory?.length) {
+            filters.mainCategory = q.mainCategory.join(',');
+          }
+          if (q.subCategory?.length) {
+            filters.subCategory = q.subCategory.join(',');
+          }
+
+          if (Object.keys(filters).length > 0) {
+            onFilter?.(filters);
+          }
         },
       });
       return;
@@ -24,8 +33,9 @@ const CategorySection: ICategorySection = ({data: cat, onFilter}) => {
     if (label === 'rating') {
       SheetManager.show('Rating', {
         onClose: q => {
+          if (!q) return;
           onFilter?.({
-            minRating: q?.minRating.toString(),
+            minRating: q.minRating?.toString(),
           });
         },
       });
@@ -35,10 +45,11 @@ const CategorySection: ICategorySection = ({data: cat, onFilter}) => {
     if (label === 'price') {
       SheetManager.show('PriceRange', {
         onClose: q => {
+          if (!q) return;
           onFilter?.({
             priceRange: {
-              maxPrice: q?.maxPrice!,
-              minPrice: q?.minPrice!,
+              maxPrice: q.maxPrice!,
+              minPrice: q.minPrice!,
             },
           });
         },

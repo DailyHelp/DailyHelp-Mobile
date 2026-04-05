@@ -45,7 +45,7 @@ class HomeService extends HomeApi {
     const {data, isLoading, error, refetch} = useQuery({
       queryKey: ['get-saved-location'],
       queryFn: async () => await this.getSavedLocation(),
-      enabled: Boolean(AppStorage.find('isAuthenticated')),
+      enabled: appStore.isAuthenticated,
     });
 
     const {mutate: setDefault, isPending: defaultLoading} = useMutation({
@@ -282,7 +282,7 @@ class HomeService extends HomeApi {
     } = useQuery({
       queryKey: ['customer-dashboard', query],
       queryFn: async () => await this.getCustomerDashboard(query!),
-      enabled: Boolean(AppStorage.find('isAuthenticated')),
+      enabled: appStore.isAuthenticated,
       refetchOnMount: true,
       retryOnMount: true,
     });
@@ -312,7 +312,7 @@ class HomeService extends HomeApi {
     } = useQuery({
       queryKey: ['provider-dashboard'],
       queryFn: async () => await this.getProviderDashboard(),
-      enabled: Boolean(AppStorage.find('isAuthenticated')),
+      enabled: appStore.isAuthenticated,
     });
 
     return {
@@ -473,7 +473,7 @@ class HomeService extends HomeApi {
     } = useQuery({
       queryKey: ['reviews', query],
       queryFn: async () => await this.getReviews(query),
-      enabled: Boolean(AppStorage.find('isAuthenticated')),
+      enabled: appStore.isAuthenticated,
     });
 
     React.useEffect(() => {
@@ -514,7 +514,7 @@ class HomeService extends HomeApi {
     const {data, isLoading, error, refetch} = useQuery({
       queryKey: ['user'],
       queryFn: async () => await this.getUser(),
-      enabled: Boolean(AppStorage.find('isAuthenticated')),
+      enabled: appStore.isAuthenticated,
     });
 
     const user = data?.data;
@@ -554,7 +554,7 @@ class HomeService extends HomeApi {
     const {data, isLoading, error} = useQuery({
       queryKey: ['category', type],
       queryFn: async () => await this.getReason(type),
-      enabled: Boolean(AppStorage.find('isAuthenticated')),
+      enabled: appStore.isAuthenticated,
     });
 
     return {data: data?.data, isLoading, error};
@@ -578,7 +578,7 @@ class HomeService extends HomeApi {
     const {data, isLoading, error} = useQuery({
       queryKey: ['rating-metrics', uuid],
       queryFn: async () => await this.customerProviderReview(uuid),
-      enabled: Boolean(AppStorage.find('isAuthenticated')),
+      enabled: appStore.isAuthenticated,
     });
 
     return {data: data?.data, isLoading, error};

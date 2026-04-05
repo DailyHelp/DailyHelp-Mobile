@@ -12,13 +12,14 @@ import AppStorage from '../../../shared/AppStorage';
 import {UserTypes} from '../../../shared/Constant';
 import {websocketService} from '../../../shared/services/WebSocket';
 import utils from '../../../shared/Utils';
-import { appStore } from '../../../shared/stores/appStore';
+import {appStore} from '../../../shared/stores/appStore';
 import UserDTO from '../../auth/dto/UserDto';
 import homeService from '../user/home/services/Home.service';
 import ChatFooter from './components/ChatFooter';
 import Messages from './components/messages/Index';
 import chatService from './services/Chat.service';
 import MessageSkeleton from '../../../components/skeleton/MessageSkeleton';
+import {Platform} from 'react-native';
 
 const ChatBox: IChatBox = ({navigation, route}) => {
   utils.useHideBottomTab({navigation});
@@ -265,6 +266,8 @@ const ChatBox: IChatBox = ({navigation, route}) => {
         width={'full'}
         flex={1}
         justifyContent="space-between"
+        isKeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         gap={10}>
         {isLoading && (!data || data.length === 0) ? (
           <MessageSkeleton

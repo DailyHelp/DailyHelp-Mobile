@@ -18,9 +18,11 @@ class AppStore {
     'isIdentityVerified',
   ) as boolean;
 
-  isAuthenticated = AppStorage.find('isAuthenticated') || false;
+  isAuthenticated = (AppStorage.find('isAuthenticated') as boolean) || false;
 
-  user_types = (AppStorage.find('userType') as UserTypes)?.toUpperCase();
+  user_types = (
+    AppStorage.find('userType') as string
+  )?.toUpperCase() as UserTypes;
 
   hideSelfieVerificationHeader: boolean = true;
 
