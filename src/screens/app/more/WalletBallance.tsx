@@ -26,17 +26,13 @@ const WalletBalance: IWalletBalance = ({navigation, route}) => {
   const {wallet} = moreService.useWalletBalance();
   const {data} = moreService.useWalletTransactions();
 
-  // Check if we're returning from a successful payment
   React.useEffect(() => {
     if (route.params?.paymentSuccess) {
       setWalletFunded(true);
-      // Clear the param to prevent showing it again
       navigation.setParams({paymentSuccess: undefined});
     }
   }, [route.params?.paymentSuccess, navigation]);
 
-  // Refetch wallet and transactions when screen comes into focus
-  // This ensures data refreshes after returning from payment webview
   useFocusEffect(
     React.useCallback(() => {
       queryClient.invalidateQueries({queryKey: ['wallet']});
@@ -76,12 +72,7 @@ const WalletBalance: IWalletBalance = ({navigation, route}) => {
         </MainButton>
       </Container>
 
-      <Container
-        flex={1}
-        marginTop={40}
-        width={'95'}
-        alignSelf="center"
-       >
+      <Container flex={1} marginTop={40} width={'95'} alignSelf="center">
         <Typography
           color="gray"
           size="md"

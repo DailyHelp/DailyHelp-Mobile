@@ -1,12 +1,13 @@
 import React from 'react';
-import { View } from 'react-native';
-import { ICheckout } from '../../../@types/routes';
+import {View} from 'react-native';
+import {ICheckout} from '../../../@types/routes';
 import MainButton from '../../../components/button/MainButton';
 import CustomInput from '../../../components/customInput/Index';
 import Typography from '../../../components/Typography';
-import { verticalScale } from '../../../shared/Scaling';
+import {verticalScale} from '../../../shared/Scaling';
 import moreService from '../more/services/More.service';
 import PaymentOption from './components/PaymentOption';
+import utils from '../../../shared/Utils';
 
 const Checkout: ICheckout = ({route, navigation}) => {
   const [selectedPayment, setSelectedPayment] = React.useState<
@@ -15,6 +16,8 @@ const Checkout: ICheckout = ({route, navigation}) => {
   const [description, setDescription] = React.useState('');
 
   const {data, isPending, mutate} = moreService.useFundWallet();
+
+  const {wallet} = moreService.useWalletBalance();
 
   React.useEffect(() => {
     if (data)
@@ -121,7 +124,9 @@ const Checkout: ICheckout = ({route, navigation}) => {
             id="wallet"
             icon="💳"
             title="Pay with wallet balance"
-            subtitle="₦40,000"
+            subtitle={utils.numberWithCommas(
+              wallet?.data.availableBalance || 0,
+            )}
             selected={selectedPayment === 'WALLET'}
             onPress={id => setSelectedPayment('WALLET')}
           />

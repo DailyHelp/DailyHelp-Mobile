@@ -10,7 +10,7 @@ const WebViewComponent: IWebViewComponent = ({route, navigation}) => {
     if (url.includes('success')) {
       // If this is from wallet funding, pass success param when navigating back
       if (route.params?.fromWalletFunding) {
-        navigation.navigate('WalletBalance', {paymentSuccess: true});
+        navigation.goBack();
       } else {
         navigation.goBack();
       }

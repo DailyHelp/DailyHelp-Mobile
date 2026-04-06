@@ -304,7 +304,11 @@ export type IChatRoute = {
     uuid: string;
   };
   ReportSubmitted?: undefined;
-  WebViewComponent?: {url: string; title?: string; fromWalletFunding?: boolean};
+  WebViewComponent?: {
+    url?: string;
+    title?: string;
+    fromWalletFunding?: boolean;
+  };
 };
 
 type IChat = Props<NativeStackScreenProps<IChatRoute, 'Chat'>>;
