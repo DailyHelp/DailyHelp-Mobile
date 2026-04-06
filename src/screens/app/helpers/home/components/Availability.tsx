@@ -1,18 +1,19 @@
 import React from 'react';
+import Assets from '../../../../../assets/Assets';
 import Container from '../../../../../components/container/Index';
 import CustomInput from '../../../../../components/customInput/Index';
 import Typography from '../../../../../components/Typography';
 import {HelpersStatus} from '../../../../../shared/Constant';
-import Assets from '../../../../../assets/Assets';
-import {Colors} from '../../../../../shared/themes/Index';
 import {scale, verticalScale} from '../../../../../shared/Scaling';
+import {ColorKeys} from '../../../../../shared/themes/Index';
 
-const Availability: IAvailability<HelpersStatus> = ({
+const Availability: IAvailability<HelpersStatus, ColorKeys> = ({
   status,
   setAvailability,
   isAvailable,
   engaged,
   jobStatus = 'accepted',
+  backgroundColor,
 }) => {
   const [isSwitch, setIsSwitch] = React.useState(() =>
     isAvailable ? 'true' : 'false',
@@ -40,25 +41,30 @@ const Availability: IAvailability<HelpersStatus> = ({
 
   const switchValue = isSwitch === 'true' ? true : false;
 
+  let statusText = 'Turn off Availability';
+
+  if (!switchValue) statusText = 'Available for Hire';
+  if (engaged) statusText = 'Engaged in a job';
+
   return (
     <Container width={'full'} gap={10} paddingBottom={engaged ? 0 : 7}>
       <Container
         flexDirection="row"
-        width={'90'}
-        height={40}
-        marginTop={7}
+        width={'full'}
+        padding={10}
+        height={engaged ? 50 : 40}
+        marginTop={engaged ? 0 : 7}
+        borderTopRightRadius={20}
+        borderTopLeftRadius={20}
         justifyContent="space-between"
+        backgroundColor={backgroundColor}
         alignSelf="center"
         alignItems="center">
         <Typography
           size="md"
           color={engaged || !isAvailable ? 'white' : 'black'}
           fontWeight="bold">
-          {engaged
-            ? 'Engaged in a job'
-            : !switchValue
-            ? 'Turn off Availability'
-            : 'Available for Hire'}
+          {statusText}
         </Typography>
         <CustomInput
           type="switch"

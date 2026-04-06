@@ -547,11 +547,12 @@ type IStatsCard = Props<
   }
 >;
 
-type IAvailability<S> = Props<{
+type IAvailability<S, C> = Props<{
   status?: S;
   setAvailability?: (val: boolean) => void;
   isAvailable?: boolean;
   color?: string;
+  backgroundColor?: C;
   engaged?: boolean;
   jobStatus?: 'accepted' | 'in_progress' | 'completed';
 }>;

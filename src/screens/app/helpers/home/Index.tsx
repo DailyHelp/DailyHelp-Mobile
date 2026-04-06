@@ -36,7 +36,7 @@ const Home: IHome = () => {
     }
   }, [data]);
 
-  const status = {
+  const status: Record<HelpersStatus, ColorKeys> = {
     [HelpersStatus.UNAVAILABLE]: 'lightDeepGrey',
     [HelpersStatus.AVAILABLE]: 'lemonGreen',
     [HelpersStatus.ENGAGED]: 'orange',
@@ -84,14 +84,15 @@ const Home: IHome = () => {
       width={'full'}
       borderTopRightRadius={20}
       borderTopLeftRadius={20}
-      backgroundColor={status[helpersStatus] as ColorKeys}
+      backgroundColor={data?.user.engaged ? 'black' : status[helpersStatus]}
       flex={1}>
       <Availability
         setAvailability={setAvailability}
         isAvailable={data?.user.availability}
         status={helpersStatus}
         engaged={data?.user.engaged}
-        jobStatus="completed"
+        jobStatus="accepted"
+        backgroundColor={status[helpersStatus]}
       />
 
       <Container
