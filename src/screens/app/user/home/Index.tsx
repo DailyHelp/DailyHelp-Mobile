@@ -13,8 +13,10 @@ import VerifyPhoneNumberContainer from './components/VerifyNumberContainer';
 import ProvidersDto from './dto/providersDto';
 import homeService from './services/Home.service';
 import HelperCardSkeleton from '../../../../components/skeleton/HelperCardSkeleton';
+import utils from '../../../../shared/Utils';
 
-const Home: IHome = () => {
+const Home: IHome = ({navigation}) => {
+  utils.useHideBottomTab({navigation, hide: false});
   const {data, setQuery, query, isLoading, allProviders, fetchMore} =
     homeService.useCustomerDashboard();
 

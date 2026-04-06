@@ -120,9 +120,15 @@ import ChatActivated from './svg/chat_activated.svg';
 import Bank from './svg/Bank.svg';
 import GreenPlus from './svg/green_plus.svg';
 import WalletIcon from './svg/walletIcon.svg';
+import ProgressSuitcase from './svg/suitcase.svg';
+import ProgressHourGlass from './svg/hourglass.svg';
+import ProgressCompleted from './svg/completed.svg';
 
 export default {
   ProfileEyeActive,
+  ProgressSuitcase,
+  ProgressHourGlass,
+  ProgressCompleted,
   Bank,
   WalletIcon,
   GreenPlus,

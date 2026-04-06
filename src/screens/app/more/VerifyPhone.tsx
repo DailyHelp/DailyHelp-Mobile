@@ -11,7 +11,7 @@ import {UserTypes} from '../../../shared/Constant';
 import AppStorage from '../../../shared/AppStorage';
 
 const VerifyPhone: IVerifyPhone = ({navigation}) => {
-  utils.useHideBottomTab({navigation});
+  utils.useHideBottomTab({navigation, autoShow: false});
   const {onResendOtp, resendLoading} = authService.useVerifyOtp();
   return (
     <Formik

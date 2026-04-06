@@ -15,8 +15,9 @@ const CodeContainer: ICodeContainer = ({code}) => {
       </Typography>
 
       <Container flexDirection="row" gap={3}>
-        {code.split('').map(c => (
+        {code.split('').map((c, index) => (
           <Container
+            key={index}
             width={40}
             backgroundColor="white"
             height={40}

@@ -482,10 +482,10 @@ type IContainer<C> = Props<{
   paddingVertical?: number;
   borderBottomWidth?: number;
   marginVertical?: number;
-  top?: number;
-  bottom?: number;
-  left?: number;
-  right?: number;
+  top?: number | string;
+  bottom?: number | string;
+  left?: number | string;
+  right?: number | string;
   flexWrap?: 'wrap' | 'nowrap' | 'wrap-reverse';
   horizontal?: boolean;
   vertical?: boolean;
@@ -501,6 +501,7 @@ type IContainer<C> = Props<{
   shadowRadius?: number;
   shadowOffset?: {width: number; height: number};
   overflow?: 'hidden' | 'scroll' | 'visible';
+  contentContainerStyle?: any;
 }>;
 
 type IUploadContainer = Props<{
@@ -551,6 +552,8 @@ type IAvailability<S> = Props<{
   setAvailability?: (val: boolean) => void;
   isAvailable?: boolean;
   color?: string;
+  engaged?: boolean;
+  jobStatus?: 'accepted' | 'in_progress' | 'completed';
 }>;
 
 type IJobPending<N = any, R = any> = Props<{

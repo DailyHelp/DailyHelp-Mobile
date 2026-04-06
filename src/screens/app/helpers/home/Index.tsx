@@ -30,6 +30,10 @@ const Home: IHome = () => {
     if (data?.user.availability) {
       setHelpersStatus(HelpersStatus.AVAILABLE);
     } else setHelpersStatus(HelpersStatus.UNAVAILABLE);
+
+    if (data?.user.engaged) {
+      setHelpersStatus(HelpersStatus.ENGAGED);
+    }
   }, [data]);
 
   const status = {
@@ -86,13 +90,15 @@ const Home: IHome = () => {
         setAvailability={setAvailability}
         isAvailable={data?.user.availability}
         status={helpersStatus}
+        engaged={data?.user.engaged}
+        jobStatus="completed"
       />
 
       <Container
         width={'full'}
-        backgroundColor="offWhite"
+        backgroundColor="white"
         borderTopLeftRadius={20}
-        gap={20}
+        gap={15}
         borderTopRightRadius={20}>
         <HelperDetails data={data?.user} />
 

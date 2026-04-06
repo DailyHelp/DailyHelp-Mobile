@@ -7,6 +7,7 @@ export const Scroll: IContainer<ColorKeys> = ({children, ...props}) => {
     showsHorizontalScrollIndicator,
     showsVerticalScrollIndicator,
     scrollsToTop,
+    contentContainerStyle,
   } = props;
 
   return (
@@ -14,7 +15,8 @@ export const Scroll: IContainer<ColorKeys> = ({children, ...props}) => {
       showsHorizontalScrollIndicator={showsHorizontalScrollIndicator}
       showsVerticalScrollIndicator={showsVerticalScrollIndicator}
       scrollsToTop={scrollsToTop}
-      horizontal={horizontal}>
+      horizontal={horizontal}
+      contentContainerStyle={contentContainerStyle}>
       {children}
     </ScrollView>
   );
