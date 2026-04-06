@@ -91,7 +91,7 @@ const Home: IHome = () => {
         isAvailable={data?.user.availability}
         status={helpersStatus}
         engaged={data?.user.engaged}
-        jobStatus="accepted"
+        jobStatus={data?.user.jobStatus}
         backgroundColor={status[helpersStatus]}
       />
 
