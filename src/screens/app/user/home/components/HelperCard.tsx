@@ -53,8 +53,8 @@ const HelperCard: IHelperCard<ProvidersDto> = ({data, mode, horizontal}) => {
                 padding: 3,
               }}>
               <CustomAvatar
-                badgeSize={40}
-                avatarSize={70}
+                badgeSize={30}
+                avatarSize={60}
                 bottom={-10}
                 right={15}
                 data={{image: data?.picture, badge: data?.tier.toLowerCase()}}

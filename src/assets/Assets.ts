@@ -122,6 +122,7 @@ import GreenPlus from './svg/green_plus.svg';
 import WalletIcon from './svg/walletIcon.svg';
 import ProgressSuitcase from './svg/suitcase.svg';
 import ProgressHourGlass from './svg/hourglass.svg';
+import ProgressWhiteHourGlass from './svg/progresswhitehourglas.svg';
 import ProgressCompleted from './svg/completed.svg';
 
 export default {
@@ -129,6 +130,7 @@ export default {
   ProgressSuitcase,
   ProgressHourGlass,
   ProgressCompleted,
+  ProgressWhiteHourGlass,
   Bank,
   WalletIcon,
   GreenPlus,

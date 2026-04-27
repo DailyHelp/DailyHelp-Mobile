@@ -481,10 +481,19 @@ class JobService extends JobsApi {
   }
 
   useIdentityVerification() {
+    const queryClient = useQueryClient();
     const {data, isPending, mutate} = useMutation({
       mutationKey: ['identity-verification'],
       mutationFn: (data: {uuid: string; verified: boolean}) => {
         return this.identifyVerification(data.uuid, data.verified);
+      },
+      onSuccess: (response, variables) => {
+        queryClient.invalidateQueries({
+          queryKey: ['job-details', variables.uuid],
+        });
+        queryClient.invalidateQueries({
+          queryKey: ['job-timeline', variables.uuid],
+        });
       },
       onError: error => new CatchError(error),
     });

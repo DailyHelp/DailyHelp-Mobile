@@ -1,4 +1,6 @@
+import {useNavigation} from '@react-navigation/native';
 import React from 'react';
+import {TouchableOpacity} from 'react-native';
 import Assets from '../../../../../assets/Assets';
 import Container from '../../../../../components/container/Index';
 import CustomInput from '../../../../../components/customInput/Index';
@@ -14,7 +16,9 @@ const Availability: IAvailability<HelpersStatus, ColorKeys> = ({
   engaged,
   jobStatus = 'accepted',
   backgroundColor,
+  uuid,
 }) => {
+  const navigation = useNavigation<any>();
   const [isSwitch, setIsSwitch] = React.useState(() =>
     isAvailable ? 'true' : 'false',
   );
@@ -91,9 +95,19 @@ const Availability: IAvailability<HelpersStatus, ColorKeys> = ({
               Job progress
             </Typography>
             <Container flexDirection="row" alignItems="center" gap={4}>
-              <Typography color="lemonGreen" size="sm" fontWeight="bold">
-                View details
-              </Typography>
+              <TouchableOpacity
+                onPress={() => {
+                  if (uuid) {
+                    navigation.navigate('JobsIndex', {
+                      screen: 'ViewDetails',
+                      params: {uuid},
+                    });
+                  }
+                }}>
+                <Typography color="lemonGreen" size="sm" fontWeight="bold">
+                  View details
+                </Typography>
+              </TouchableOpacity>
             </Container>
           </Container>
 
@@ -153,11 +167,11 @@ const Availability: IAvailability<HelpersStatus, ColorKeys> = ({
 
             <Step
               icon={
-                <Assets.ProgressHourGlass
-                  width={14}
-                  height={14}
-                  fill={jobStatus === 'completed' ? 'white' : '#757C91'}
-                />
+                jobStatus === 'completed' ? (
+                  <Assets.ProgressWhiteHourGlass width={14} height={14} />
+                ) : (
+                  <Assets.ProgressHourGlass width={14} height={14} />
+                )
               }
               label="In-progress"
               isActive={

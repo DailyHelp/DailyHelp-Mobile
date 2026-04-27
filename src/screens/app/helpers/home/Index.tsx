@@ -17,7 +17,7 @@ const Home: IHome = () => {
     HelpersStatus.UNAVAILABLE,
   );
 
-  const {data, isLoading} = homeService.useProviderDashboard();
+  const {data} = homeService.useProviderDashboard();
   const {mutate} = homeService.useAvailability();
 
   React.useEffect(() => {
@@ -93,6 +93,7 @@ const Home: IHome = () => {
         engaged={data?.user.engaged}
         jobStatus={data?.user.jobStatus}
         backgroundColor={status[helpersStatus]}
+        uuid={data?.user.inProgressJobId}
       />
 
       <Container

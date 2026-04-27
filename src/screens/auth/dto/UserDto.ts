@@ -62,6 +62,7 @@ export default class UserDTO {
   onboardingCompleted?: boolean;
   engaged?: boolean;
   jobStatus?: 'accepted' | 'in_progress' | 'completed';
+  inProgressJobId?: string;
   tier?: string;
   nextTier?: string;
   avgRating?: number;

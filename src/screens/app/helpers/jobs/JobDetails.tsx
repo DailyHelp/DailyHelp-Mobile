@@ -95,10 +95,8 @@ const JobDetails: IViewDetails = ({navigation, route}) => {
             }}
           />
           <Typography size="md" fontWeight="bold">
-            {route.params?.providerFirstname} {route.params?.providerLastname}
-          </Typography>
-          <Typography size="md" color="gray">
-            {route.params?.providerPrimaryJobRole}
+            {data?.job.serviceRequestor.firstname}{' '}
+            {data?.job.serviceRequestor.lastname}
           </Typography>
         </Container>
       )}
@@ -180,13 +178,13 @@ const JobDetails: IViewDetails = ({navigation, route}) => {
               gap={10}
               marginTop={10}>
               <Typography size="lg" fontWeight="bold" currency>
-                {route.params?.price}
+                {data?.job.price || route.params?.price}
               </Typography>
               <Container flexDirection="row" gap={10}>
                 <Assets.Accepted style={{marginTop: verticalScale(4)}} />
                 <Typography size="md" color="gray">
                   Accepted on{' '}
-                  {dayjs(route.params?.acceptedAt).format(
+                  {dayjs(data?.job.acceptedAt || route.params?.acceptedAt).format(
                     'DD MMM, YYYY, hh:mm',
                   )}
                 </Typography>
@@ -263,13 +261,14 @@ const JobDetails: IViewDetails = ({navigation, route}) => {
                 size="md"
                 color="lightBlack"
                 padding={6}>
-                {route.params?.description}
+                {data?.job.description || route.params?.description}
               </Typography>
 
-              {route.params?.pictures.split(',').length! > 0 && (
+              {(data?.job.pictures || route.params?.pictures)?.split(',').length! >
+                0 && (
                 <AttachmentContainer
                   allowUpload={false}
-                  data={route.params?.pictures.split(',')}
+                  data={(data?.job.pictures || route.params?.pictures)?.split(',')}
                   canClose={false}
                 />
               )}

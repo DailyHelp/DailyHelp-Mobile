@@ -44,7 +44,7 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
     isLoading: timelineLoading,
     refetch: refetchTimeline,
   } = jobService.useJobTimeline(route.params?.uuid || '');
-  
+
   const {declineJob, declinePending} = jobService.useJobsActions();
 
   const [type, setType] = React.useState(
@@ -193,7 +193,7 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
                   </Container>
                 )}
 
-                {data?.job.providerIdentifyVerified && (
+                {!data?.job.providerIdentifyVerified && (
                   <React.Fragment>
                     <OutlineButton
                       height={verticalScale(50)}

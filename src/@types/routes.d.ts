@@ -207,6 +207,8 @@ export type IAppRoute = {
   HomeIndex?: undefined;
   SearchIndex?: undefined;
   ChatIndex?: undefined;
+  JobsIndex?: undefined;
+  MoreIndex?: undefined;
 };
 
 /**

@@ -555,6 +555,7 @@ type IAvailability<S, C> = Props<{
   backgroundColor?: C;
   engaged?: boolean;
   jobStatus?: 'accepted' | 'in_progress' | 'completed';
+  uuid?: string;
 }>;
 
 type IJobPending<N = any, R = any> = Props<{
