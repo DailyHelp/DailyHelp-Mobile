@@ -4,6 +4,7 @@ type GoogleAuthDto = {
   familyName?: string;
   givenName?: string;
   idToken?: string;
+  type?: import('../../../shared/Constant').UserTypes;
 };
 
 type GoogleAuthResponse = {

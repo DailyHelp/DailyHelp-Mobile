@@ -1,6 +1,6 @@
 import {createValidator} from 'class-validator-formik';
 import {Formik} from 'formik';
-import {View} from 'react-native';
+import {Platform, View} from 'react-native';
 import Icon from 'react-native-vector-icons/Fontisto';
 import {IIdentityVerification} from '../../../@types/routes';
 import MainButton from '../../../components/button/MainButton';
@@ -16,6 +16,7 @@ const IdentityVerification: IIdentityVerification = ({navigation, route}) => {
 
   return (
     <Container
+      isKeyboardAvoidingView
       type="scroll"
       backgroundColor="white"
       flex={1}
@@ -44,7 +45,7 @@ const IdentityVerification: IIdentityVerification = ({navigation, route}) => {
               height: verticalScale(550),
               justifyContent: 'space-between',
             }}>
-            <View style={{flexDirection: 'column', gap: 10}}>
+            <View style={{flexDirection: 'column', gap: 40}}>
               <CustomInput
                 placeholder="Enter your NIN"
                 label="National Identification Number"

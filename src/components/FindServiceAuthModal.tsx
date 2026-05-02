@@ -75,7 +75,7 @@ const FindServiceAuthModal: IFindServiceAuthModal<UserTypes> = ({
               Continue with Email
             </Button>
             <Button
-              onPress={signIn}
+              onPress={() => signIn(userType, () => onClose())}
               loading={isGooglePending}
               icon={() => <Assets.GoogleColored />}
               mode="outlined"

@@ -80,8 +80,6 @@ export class AuthService extends AuthApi {
       },
       onSuccess: (data, body) => {
         if (data?.status) {
-          const userType = utils.getUserType(data.data.user?.userTypes)[0];
-
           if (data.data.pinId && data.data.uuid) {
             navigation.navigate('VerifyAccount', {
               email: body.email!,
@@ -92,12 +90,13 @@ export class AuthService extends AuthApi {
               payload: {
                 first_name: data.data.user?.firstname,
                 last_name: data.data.user?.lastname,
-                userType,
               },
             });
 
             return;
           }
+
+          const userType = utils.getUserType(data.data.user?.userTypes)[0];
 
           let verificationUrl = utils.getVerificationRoutes(
             {
@@ -223,23 +222,6 @@ export class AuthService extends AuthApi {
         if (data?.status) {
           const userType = utils.getUserType(data.data.user?.userTypes)[0];
 
-          if (data.data.pinId && data.data.uuid) {
-            navigation.navigate('VerifyAccount', {
-              email: body.email!,
-              pin: data.data.pinId,
-              type: OtpActionType.VERIFY_ACCOUNT,
-              user_id: data.data.uuid,
-              to: 'VerifyIdentity',
-              payload: {
-                first_name: data.data.user?.firstname,
-                last_name: data.data.user?.lastname,
-                userType,
-              },
-            });
-
-            return;
-          }
-
           let verificationUrl = utils.getVerificationRoutes(
             {
               ...data.data.user?.providerOnboarding,
@@ -280,19 +262,30 @@ export class AuthService extends AuthApi {
       },
     });
 
-    const signIn = async () => {
+    const signIn = async (
+      type?: UserTypes,
+      callback?: (
+        data?: ApiResponse<GoogleAuthResponse>,
+        variables?: GoogleAuthDto,
+        context?: any,
+      ) => void,
+    ) => {
       GoogleSignin.signOut();
       try {
         await GoogleSignin.hasPlayServices();
         const response = await GoogleSignin.signIn();
         if (response.type === 'success') {
-          mutate({
-            email: response.data.user.email,
-            familyName: response.data.user.familyName!,
-            givenName: response.data.user.givenName!,
-            id: response.data.user.id,
-            idToken: response.data.idToken!,
-          });
+          mutate(
+            {
+              email: response.data.user.email,
+              familyName: response.data.user.familyName!,
+              givenName: response.data.user.givenName!,
+              id: response.data.user.id,
+              idToken: response.data.idToken!,
+              type,
+            },
+            {onSuccess: callback},
+          );
         }
       } catch (error: any) {
         if (error.code === statusCodes.SIGN_IN_CANCELLED) {

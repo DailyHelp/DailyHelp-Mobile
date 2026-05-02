@@ -12,6 +12,7 @@ import {scale, verticalScale} from '../../shared/Scaling';
 import {customFontSize, fonts} from '../../shared/themes/Typography';
 import VerifyOtpDTO from './dto/VerifyOtpDto';
 import authService from './services/Auth.service';
+import utils from '../../shared/Utils';
 
 const VerifyAccount: IVerifyAccount = ({route, navigation}) => {
   const [code, setCode] = React.useState({
@@ -94,9 +95,12 @@ const VerifyAccount: IVerifyAccount = ({route, navigation}) => {
                       pinId: route.params?.pin,
                       userUuid: route.params?.user_id,
                     },
-                    () =>
+                    data =>
                       navigation.navigate(route?.params?.to!, {
                         ...route.params?.payload,
+                        userType: utils.getUserType(
+                          data?.data.user?.userTypes,
+                        )[0],
                       }),
                   );
                 }}

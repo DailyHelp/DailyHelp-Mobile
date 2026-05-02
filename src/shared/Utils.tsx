@@ -1,7 +1,9 @@
 import {CameraRoll} from '@react-native-camera-roll/camera-roll';
+import notifee from '@notifee/react-native';
 import {
   getMessaging,
   onMessage,
+  requestPermission,
   setBackgroundMessageHandler,
 } from '@react-native-firebase/messaging';
 import {
@@ -18,10 +20,6 @@ import ReactNativeBiometrics, {
   BiometryTypes,
 } from 'react-native-biometrics';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import {
-  getNotificationBadgeSetting,
-  setBadgeCount,
-} from 'react-native-notification-badge';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
@@ -143,7 +141,7 @@ class Utils {
   async requestUserPermission() {
     try {
       const messagingInstance = getMessaging();
-      const authStatus = await messagingInstance.requestPermission();
+      const authStatus = await requestPermission(messagingInstance);
       const enabled =
         authStatus === 1 || // AUTHORIZED
         authStatus === 2; // PROVISIONAL
@@ -287,20 +285,9 @@ class Utils {
 
   badge = async (count: number) => {
     try {
-      if (Platform.OS === 'ios') {
-        const permission = await getNotificationBadgeSetting();
-        if (permission === 'enabled') {
-          await setBadgeCount(count);
-        } else {
-          console.log(
-            "Badge permission has not yet been granted. I'll ask the user later",
-          );
-        }
-      } else {
-        await setBadgeCount(count);
-      }
+      await notifee.setBadgeCount(count);
     } catch (error) {
-      console.log('Badge setting not supported on this platform');
+      console.log('Badge setting not supported on this platform', error);
     }
   };
 

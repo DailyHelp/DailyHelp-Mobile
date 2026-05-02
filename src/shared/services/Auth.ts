@@ -71,6 +71,7 @@ export default class AuthApi extends Http {
     });
 
     const res = await this.handleResponse<GoogleAuthResponse>(req);
+    console.log({res});
 
     if (!res?.status) throw new ThrowError(res?.message!);
 
@@ -80,9 +81,15 @@ export default class AuthApi extends Http {
       AppStorage.save('user_id', res?.data.user?.uuid!);
       AppStorage.save('email', res?.data.user?.email!);
       AppStorage.save('access_token', res?.data.accessToken!);
-      AppStorage.save('phone', res?.data.user?.phone!);
-      AppStorage.save('firstname', res?.data.user?.firstname!);
-      AppStorage.save('lastname', res?.data.user?.lastname!);
+      if (res.data.user.phone) {
+        AppStorage.save('phone', res?.data.user?.phone!);
+      }
+      if (res.data.user.firstname) {
+        AppStorage.save('firstname', res?.data.user?.firstname!);
+      }
+      if (res.data.user.lastname) {
+        AppStorage.save('lastname', res?.data.user?.lastname!);
+      }
       AppStorage.save('isPhoneVerified', res?.data.user?.phoneVerified!);
       AppStorage.save('isIdentityVerified', res?.data.user?.identityVerified!);
       AppStorage.save('userType', currentUser!);
