@@ -80,6 +80,7 @@ declare module 'react-native-actions-sheet' {
       payload: {
         showCurrent?: boolean;
         label?: string;
+        skipSubmit?: boolean;
       };
       returnValue: {
         lat?: number;

@@ -48,16 +48,21 @@ const SetPrices: ISetPrices = ({navigation}) => {
             },
           );
         }}>
-        {({values, handleChange, handleSubmit, errors}) => (
+        {({values, setFieldValue, handleSubmit, errors}) => (
           <Container width={'full'} height={600} justifyContent="space-between">
             <Container width={'full'} gap={30}>
               <Container width={'full'} gap={3}>
                 <CustomInput
                   label="Starting price"
                   placeholder="₦ 5,000"
-                  value={values.offerStartingPrice?.toString() || '0'}
-                  onChangeText={handleChange('offerStartingPrice')}
+                  value={values.offerStartingPrice?.toString()}
+                  onChangeText={text =>
+                    setFieldValue('offerStartingPrice', +text)
+                  }
                   error={errors.offerStartingPrice}
+                  keyboardType="numeric"
+                  mask
+                  maskType="amount"
                 />
 
                 <Typography color="gray" size="sm">
@@ -69,9 +74,14 @@ const SetPrices: ISetPrices = ({navigation}) => {
                 <CustomInput
                   label="Minimum Acceptable Offer"
                   placeholder="₦ 0.00"
-                  value={values.minimumOfferPrice?.toString() || '0'}
-                  onChangeText={handleChange('minimumOfferPrice')}
+                  mask
+                  maskType="amount"
+                  value={values.minimumOfferPrice?.toString()}
+                  onChangeText={text =>
+                    setFieldValue('minimumOfferPrice', +text)
+                  }
                   error={errors.minimumOfferPrice}
+                  keyboardType="numeric"
                 />
                 <Typography color="gray" size="sm">
                   This is the lowest amount you can accept for a job.

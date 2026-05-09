@@ -118,6 +118,7 @@ const ProfileSetup: IProfileSetup = ({navigation}) => {
                 <TouchableOpacity
                   onPress={() => {
                     SheetManager.show('AllCategory', {
+                      payload: {selectMultiple: false, type: 'create'},
                       onClose: d => {
                         if (!d) return;
 

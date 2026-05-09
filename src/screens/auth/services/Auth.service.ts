@@ -98,9 +98,22 @@ export class AuthService extends AuthApi {
 
           const userType = utils.getUserType(data.data.user?.userTypes)[0];
 
+          let step1, step2, step3;
+          step1 = data.data.user?.providerOnboarding?.step1;
+          step2 = data.data.user?.providerOnboarding?.step2;
+          step3 = data.data.user?.providerOnboarding?.step3;
+
+          if (userType === UserTypes.PROVIDER && step1) {
+            step1 = true;
+            step2 = true;
+            step3 = true;
+          }
+
           let verificationUrl = utils.getVerificationRoutes(
             {
-              ...data.data.user?.providerOnboarding,
+              step1,
+              step2,
+              step3,
               onboardingCompleted: data.data.user?.onboardingCompleted,
             },
             userType,
@@ -222,9 +235,23 @@ export class AuthService extends AuthApi {
         if (data?.status) {
           const userType = utils.getUserType(data.data.user?.userTypes)[0];
 
+          let step1, step2, step3;
+
+          step1 = data.data.user?.providerOnboarding?.step1;
+          step2 = data.data.user?.providerOnboarding?.step2;
+          step3 = data.data.user?.providerOnboarding?.step3;
+
+          if (userType === UserTypes.PROVIDER && step1) {
+            step1 = true;
+            step2 = true;
+            step3 = true;
+          }
+
           let verificationUrl = utils.getVerificationRoutes(
             {
-              ...data.data.user?.providerOnboarding,
+              step1,
+              step2,
+              step3,
               onboardingCompleted: data.data.user?.onboardingCompleted,
             },
             userType,

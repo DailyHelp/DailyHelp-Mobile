@@ -43,7 +43,7 @@ const HomeAddress = React.forwardRef<
               ...metadata,
             },
           });
-        });
+        }, props.payload?.skipSubmit);
       } else {
         console.error('currentLocation is not a function:', currentLocation);
       }

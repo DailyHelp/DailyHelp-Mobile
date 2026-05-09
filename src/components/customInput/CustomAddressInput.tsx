@@ -36,7 +36,7 @@ const CustomAddressInput: IInput = ({
       <TouchableOpacity
         onPress={() => {
           SheetManager.show('HomeAddress', {
-            payload: {showCurrent: false, label},
+            payload: {showCurrent: false, label, skipSubmit: true},
             onClose: select,
           });
         }}>

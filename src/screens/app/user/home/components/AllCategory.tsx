@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import {Text, TouchableOpacity, View} from 'react-native';
 import ActionSheet, {
   ActionSheetRef,
   ScrollView,
@@ -12,8 +12,8 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Assets from '../../../../../assets/Assets';
 import CustomInput from '../../../../../components/customInput/Index';
 import Typography from '../../../../../components/Typography';
-import { verticalScale } from '../../../../../shared/Scaling';
-import { customFontSize, fonts } from '../../../../../shared/themes/Typography';
+import {verticalScale} from '../../../../../shared/Scaling';
+import {customFontSize, fonts} from '../../../../../shared/themes/Typography';
 import homeService from '../services/Home.service';
 
 const getCategoryImage = (categoryName: string) => {
@@ -138,11 +138,8 @@ const CategoryActionSheet = React.forwardRef<
       ref={ref}
       id="AllCategory"
       closeOnPressBack={false}
-      gestureEnabled={true}
-      overlayColor="black"
-      defaultOverlayOpacity={0.5}
-      initialSnapIndex={0}
-      closable={false}
+      backgroundInteractionEnabled={true}
+      closable={true}
       containerStyle={{
         borderTopLeftRadius: 16,
         borderTopRightRadius: 16,
@@ -208,7 +205,10 @@ const CategoryActionSheet = React.forwardRef<
                         alignItems: 'center',
                         gap: 9,
                       }}>
-                      <FastImage source={image} style={{width: 20, height: 20}} />
+                      <FastImage
+                        source={image}
+                        style={{width: 20, height: 20}}
+                      />
                       <Text
                         style={{
                           fontFamily: fonts.GeistBold,

@@ -21,7 +21,8 @@ const CustomSelectInput: IInput = ({
     setSelect(value!);
   }, [value]);
 
-  const onSelect = (data?: {label?: string; value: string; data?: string}) => {
+  const onSelect = (data?: {label?: string; value: string; data?: any}) => {
+    if (!data) return;
     const displayValue = data?.label || data?.data;
     const actualValue = data?.value || data?.data;
 

@@ -84,7 +84,12 @@ export type IAuthRoute = {
   };
   ForgotPassword?: undefined;
   ResetPassword?: undefined;
-  ProfileSetup?: undefined;
+  ProfileSetup?: VerifyIdentityDTO & {
+    step1?: boolean;
+    step2?: boolean;
+    step3?: boolean;
+    onboardingComplete?: boolean;
+  };
   SetPrices?: undefined;
 };
 

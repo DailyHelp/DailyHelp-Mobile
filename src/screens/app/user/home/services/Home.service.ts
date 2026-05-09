@@ -143,6 +143,7 @@ class HomeService extends HomeApi {
           description?: string;
         },
       ) => void,
+      skipSubmit = false,
     ) => {
       try {
         const hasPermission = await utils.requestLocationPermission();
@@ -189,15 +190,16 @@ class HomeService extends HomeApi {
             description: data.formatted_address,
           };
 
-          onSubmit(metadata);
+          if (!skipSubmit) onSubmit(metadata);
 
           formattedAddress = data.formatted_address;
         } catch (geocodeError) {
-          onSubmit({
-            lat: latitude,
-            lng: longitude,
-            description: 'Current location (address lookup failed)',
-          });
+          if (!skipSubmit)
+            onSubmit({
+              lat: latitude,
+              lng: longitude,
+              description: 'Current location (address lookup failed)',
+            });
         }
 
         if (onSuccess) onSuccess(formattedAddress, metadata);

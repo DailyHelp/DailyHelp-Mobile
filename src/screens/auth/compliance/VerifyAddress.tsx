@@ -249,11 +249,11 @@ const VerifyAddress: IVerifyAddress = ({navigation}) => {
               data,
             }))}
             onSelect={data => {
-              if (data?.data.data?.isoCode) {
-                handleFieldChange('stateCode', data?.data.data?.isoCode);
+              if (data?.data?.data?.isoCode) {
+                handleFieldChange('stateCode', data?.data?.data?.isoCode);
               }
 
-              if (data.value) handleFieldChange('state', data.value);
+              if (data?.value) handleFieldChange('state', data.value);
             }}
             onBlur={() => handleFieldBlur('state')}
           />
