@@ -72,7 +72,7 @@ export class AuthService extends AuthApi {
     const navigation = useNavigation<Navigate<IAuthRoute>>();
     const messagingInstance = React.useMemo(() => getMessaging(), []);
 
-    const {mutateAsync, isPending} = useMutation({
+    const {mutate, isPending} = useMutation({
       mutationKey: ['login'],
       mutationFn: async (body: LoginDto) => {
         body.deviceToken = await getToken(messagingInstance);
@@ -150,8 +150,10 @@ export class AuthService extends AuthApi {
     });
 
     const onSubmit = async (body: LoginDto) => {
-      body.deviceToken = await getToken(messagingInstance);
-      return await mutateAsync(body);
+      try {
+        body.deviceToken = await getToken(messagingInstance);
+        return await mutate(body);
+      } catch (error) {}
     };
 
     return {
@@ -164,7 +166,7 @@ export class AuthService extends AuthApi {
     const navigation = useNavigation<Navigate<IAuthRoute>>();
     const routes = useRoute<RouteProp<IAuthRoute, 'VerifyAccount'>>();
 
-    const {mutateAsync, isPending} = useMutation({
+    const {mutate, isPending} = useMutation({
       mutationKey: ['verify-otp'],
       mutationFn: async (body: VerifyOtpDTO) => await this.verifyOtp(body),
       onSuccess: (data, body) => {
@@ -177,7 +179,7 @@ export class AuthService extends AuthApi {
       onError: error => new CatchError(error, true),
     });
 
-    const {mutateAsync: sendOtp, isPending: rsLoading} = useMutation({
+    const {mutate: sendOtp, isPending: rsLoading} = useMutation({
       mutationKey: ['send-otp'],
       mutationFn: async (body: SendOtpDTO) => await this.sendOtp(body),
       onError: error => new CatchError(error, true),
@@ -195,7 +197,9 @@ export class AuthService extends AuthApi {
         body.otpActionType = OtpActionType.VERIFY_ACCOUNT;
       }
 
-      return await mutateAsync(body, {onSuccess: callback});
+      try {
+        return await mutate(body, {onSuccess: callback});
+      } catch (error) {}
     };
 
     const onResendOtp = async (
@@ -381,11 +385,15 @@ export class AuthService extends AuthApi {
     });
 
     const onSubmit = async (body: ForgotPasswordDTO) => {
-      return await mutateAsync(body);
+      try {
+        return await mutateAsync(body);
+      } catch (error) {}
     };
 
     const onResetPassword = async (body: ResetPasswordDTO) => {
-      return await resetPassword(body);
+      try {
+        return await resetPassword(body);
+      } catch (error) {}
     };
 
     return {
