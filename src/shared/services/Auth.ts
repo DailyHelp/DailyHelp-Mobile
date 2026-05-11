@@ -140,7 +140,7 @@ export default class AuthApi extends Http {
       path: Endpoints.sendOtp,
       body,
     });
-    const data = await this.handleResponse<VerifyOtpResponse>(res);
+    const data = await this.handleResponse<{pinId: string}>(res);
 
     this.success(data?.message);
 

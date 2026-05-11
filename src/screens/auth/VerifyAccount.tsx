@@ -130,7 +130,12 @@ const VerifyAccount: IVerifyAccount = ({route, navigation}) => {
                     userUuid: route.params?.user_id,
                     phone: route.params?.phone,
                   },
-                  () => onComplete(),
+                  d => {
+                    if (d?.status && d?.data?.pinId) {
+                      navigation.setParams({pin: d.data.pinId});
+                      onComplete();
+                    }
+                  },
                 );
               }}>
               {!code.show ? (
