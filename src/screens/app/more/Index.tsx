@@ -142,6 +142,7 @@ const More: IMore = ({navigation}) => {
             isVerified={isOnboardingCompleted as boolean}
             onSwitch={user => onSwitch(user!)}
             isLoading={isLoading}
+            data={user}
           />
 
           {!isOnboardingCompleted && (

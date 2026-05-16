@@ -31,6 +31,8 @@ const CustomTextInput: IInput = ({
   disabled,
   borderColor,
   backGroundColor,
+  selection,
+  onSelectionChange,
 }) => {
   let fontFamily = fonts.GeistBold;
   if (fontWeight === 'regular' || multiline) fontFamily = fonts.GeistRegular;
@@ -109,6 +111,8 @@ const CustomTextInput: IInput = ({
           }}
           value={value}
           onChangeText={onChangeText}
+          selection={selection}
+          onSelectionChange={onSelectionChange}
           error={hasError}
         />
         {rightIcon && (

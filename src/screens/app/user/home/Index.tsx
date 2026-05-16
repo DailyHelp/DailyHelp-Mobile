@@ -1,3 +1,4 @@
+import {useScrollToTop} from '@react-navigation/native';
 import React from 'react';
 import {FlatList} from 'react-native';
 import {IHome} from '../../../../@types/routes';
@@ -17,6 +18,10 @@ import utils from '../../../../shared/Utils';
 
 const Home: IHome = ({navigation}) => {
   utils.useHideBottomTab({navigation, hide: false});
+  const ref = React.useRef<FlatList>(null);
+
+  useScrollToTop(ref);
+
   const {data, setQuery, query, isLoading, allProviders, fetchMore} =
     homeService.useCustomerDashboard();
 
@@ -58,6 +63,7 @@ const Home: IHome = ({navigation}) => {
 
   return (
     <FlatList
+      ref={ref}
       data={[]}
       ListHeaderComponent={
         <Container width={'full'} gap={20}>

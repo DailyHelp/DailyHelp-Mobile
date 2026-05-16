@@ -12,24 +12,24 @@ import AppStorage from '../../../shared/AppStorage';
 
 const VerifyPhone: IVerifyPhone = ({navigation}) => {
   utils.useHideBottomTab({navigation, autoShow: false});
-  const {onResendOtp, resendLoading} = authService.useVerifyOtp();
+  const {onResendOtp, resendLoading, error, data} = authService.useVerifyOtp();
   return (
     <Formik
       initialValues={{phone: ''}}
       onSubmit={async ({phone}) => {
-        const res = await onResendOtp({
+        await onResendOtp({
           phone,
           otpActionType: OtpActionType.VERIFY_PHONE,
           userUuid: (await AppStorage.find('user_id')) as string,
         });
 
-        if (!res?.error) {
+        if (!error) {
           navigation.navigate('VerifyAccount', {
             type: OtpActionType.VERIFY_PHONE,
             phone,
             userType: (await AppStorage.find('userType')) as UserTypes,
             user_id: (await AppStorage.find('user_id')) as string,
-            pin: res?.data as string,
+            pin: data?.data.pinId,
           });
         }
       }}>

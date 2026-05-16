@@ -179,7 +179,12 @@ export class AuthService extends AuthApi {
       onError: error => new CatchError(error, true),
     });
 
-    const {mutate: sendOtp, isPending: rsLoading} = useMutation({
+    const {
+      mutate: sendOtp,
+      isPending: rsLoading,
+      error,
+      data,
+    } = useMutation({
       mutationKey: ['send-otp'],
       mutationFn: async (body: SendOtpDTO) => await this.sendOtp(body),
       onError: error => new CatchError(error, true),
@@ -222,6 +227,8 @@ export class AuthService extends AuthApi {
       resendLoading: rsLoading,
       onSubmit,
       onResendOtp,
+      data,
+      error,
     };
   }
 

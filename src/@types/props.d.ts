@@ -139,6 +139,7 @@ type IInput = Props<{
     start: number;
     end: number;
   };
+  onSelectionChange?: (event: any) => void;
   mask?: any;
   maskType?: 'amount';
 }>;

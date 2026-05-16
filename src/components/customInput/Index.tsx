@@ -16,6 +16,7 @@ const amount = createNumberMask({
 });
 
 const CustomInput: IInput = ({type = 'text', mask, maskType, ...props}) => {
+  const [selection, setSelection] = React.useState<any>();
   const amountCheck = ['amount'];
 
   const maskedInputProps = useMaskedInputProps({
@@ -39,9 +40,18 @@ const CustomInput: IInput = ({type = 'text', mask, maskType, ...props}) => {
   if (type === 'select') return <CustomSelectInput {...props} />;
 
   return mask ? (
-    <CustomTextInput {...props} {...maskedInputProps} />
+    <CustomTextInput
+      {...props}
+      {...maskedInputProps}
+      selection={selection}
+      onSelectionChange={(e: any) => setSelection(e.nativeEvent.selection)}
+    />
   ) : (
-    <CustomTextInput {...props} />
+    <CustomTextInput
+      {...props}
+      selection={selection}
+      onSelectionChange={(e: any) => setSelection(e.nativeEvent.selection)}
+    />
   );
 };
 export default CustomInput;

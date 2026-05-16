@@ -16,7 +16,7 @@ export default StyleSheet.create({
   },
   amountInput: {
     height: verticalScale(55),
-    minWidth: scale(60),
+    minWidth: scale(150),
     color: '#121921',
     fontFamily: fonts.GeistBold,
     fontSize: customFontSize.lg,
