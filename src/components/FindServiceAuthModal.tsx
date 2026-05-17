@@ -1,5 +1,5 @@
 import {useNavigation} from '@react-navigation/native';
-import {View} from 'react-native';
+import {Linking, TouchableOpacity, View} from 'react-native';
 import {Button, Modal, Portal, Text} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {IAuthRoute, Navigate} from '../@types/routes';
@@ -118,21 +118,31 @@ const FindServiceAuthModal: IFindServiceAuthModal<UserTypes> = ({
               <Text style={{color: '#121419', fontFamily: fonts.GeistBold}}>
                 our{' '}
               </Text>
-              <Text style={{color: '#006633', fontFamily: fonts.GeistBold}}>
-                Terms of Use
-              </Text>
+              <TouchableOpacity
+                onPress={() =>
+                  Linking.openURL('https://dailyhelpint.org/terms-of-use')
+                }>
+                <Text style={{color: '#006633', fontFamily: fonts.GeistBold}}>
+                  Terms of Use
+                </Text>
+              </TouchableOpacity>
               <Text style={{color: '#121419', fontFamily: fonts.GeistBold}}>
                 {' '}
                 and{' '}
               </Text>
-              <Text
-                style={{
-                  color: '#006633',
-                  textAlign: 'center',
-                  fontFamily: fonts.GeistBold,
-                }}>
-                Privacy Policies
-              </Text>
+              <TouchableOpacity
+                onPress={() =>
+                  Linking.openURL('https://dailyhelpint.org/privacy-policy')
+                }>
+                <Text
+                  style={{
+                    color: '#006633',
+                    textAlign: 'center',
+                    fontFamily: fonts.GeistBold,
+                  }}>
+                  Privacy Policies
+                </Text>
+              </TouchableOpacity>
             </Text>
           </View>
         </View>
