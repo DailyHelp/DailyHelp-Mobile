@@ -72,7 +72,7 @@ export class AuthService extends AuthApi {
     const navigation = useNavigation<Navigate<IAuthRoute>>();
     const messagingInstance = React.useMemo(() => getMessaging(), []);
 
-    const {mutate, isPending} = useMutation({
+    const {mutateAsync, isPending} = useMutation({
       mutationKey: ['login'],
       mutationFn: async (body: LoginDto) => {
         body.deviceToken = await getToken(messagingInstance);
@@ -150,10 +150,8 @@ export class AuthService extends AuthApi {
     });
 
     const onSubmit = async (body: LoginDto) => {
-      try {
-        body.deviceToken = await getToken(messagingInstance);
-        return await mutate(body);
-      } catch (error) {}
+      body.deviceToken = await getToken(messagingInstance);
+      return await mutateAsync(body);
     };
 
     return {
@@ -166,7 +164,7 @@ export class AuthService extends AuthApi {
     const navigation = useNavigation<Navigate<IAuthRoute>>();
     const routes = useRoute<RouteProp<IAuthRoute, 'VerifyAccount'>>();
 
-    const {mutate, isPending} = useMutation({
+    const {mutateAsync, isPending} = useMutation({
       mutationKey: ['verify-otp'],
       mutationFn: async (body: VerifyOtpDTO) => await this.verifyOtp(body),
       onSuccess: (data, body) => {
@@ -180,7 +178,7 @@ export class AuthService extends AuthApi {
     });
 
     const {
-      mutate: sendOtp,
+      mutateAsync: sendOtp,
       isPending: rsLoading,
       error,
       data,
@@ -202,9 +200,7 @@ export class AuthService extends AuthApi {
         body.otpActionType = OtpActionType.VERIFY_ACCOUNT;
       }
 
-      try {
-        return await mutate(body, {onSuccess: callback});
-      } catch (error) {}
+      return await mutateAsync(body, {onSuccess: callback});
     };
 
     const onResendOtp = async (
@@ -392,15 +388,11 @@ export class AuthService extends AuthApi {
     });
 
     const onSubmit = async (body: ForgotPasswordDTO) => {
-      try {
-        return await mutateAsync(body);
-      } catch (error) {}
+      return await mutateAsync(body);
     };
 
     const onResetPassword = async (body: ResetPasswordDTO) => {
-      try {
-        return await resetPassword(body);
-      } catch (error) {}
+      return await resetPassword(body);
     };
 
     return {

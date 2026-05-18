@@ -9,7 +9,7 @@ export default class CatchError extends Error {
     this.cause = err?.cause || '';
     this.name = err?.name || '';
 
-    if (this.toast) this.handleError();
+    if (this.toast) this.handelError();
 
     Error.captureStackTrace(this, this.constructor);
   }
@@ -19,7 +19,7 @@ export default class CatchError extends Error {
   name: string;
   stack?: string | undefined;
 
-  handleError = () => {
+  handelError = () => {
     Toast.show({
       type: 'error',
       text1: 'Error',

@@ -51,7 +51,7 @@ export default class AuthApi extends Http {
       AppStorage.save('user_id', data?.data.user?.uuid!);
       AppStorage.save('email', data?.data.user?.email!);
       AppStorage.save('access_token', data?.data.accessToken!);
-      AppStorage.save('phone', data?.data.user?.phone! ?? '');
+      AppStorage.save('phone', data?.data.user?.phone!);
       AppStorage.save('firstname', data?.data.user?.firstname!);
       AppStorage.save('lastname', data?.data.user?.lastname!);
       AppStorage.save('isPhoneVerified', data?.data.user?.phoneVerified!);
@@ -140,7 +140,7 @@ export default class AuthApi extends Http {
       path: Endpoints.sendOtp,
       body,
     });
-    const data = await this.handleResponse<{pinId: string}>(res);
+    const data = await this.handleResponse<VerifyOtpResponse>(res);
 
     this.success(data?.message);
 

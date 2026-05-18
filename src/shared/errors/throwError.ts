@@ -10,17 +10,11 @@ export type ThrowErrorConfig = {
 
 export default class ThrowError extends Error {
   constructor(config: string | ThrowErrorConfig, cause?: string) {
-    const message = typeof config === 'string' ? config : config.message;
-    super(message);
+    super((config as string) || (config as ThrowErrorConfig).message);
 
-    this.message = message;
-    if (typeof config === 'object') {
-      this.name = config.name || 'ThrowError';
-      this.cause = config.cause;
-    } else {
-      this.name = 'ThrowError';
-      this.cause = cause;
-    }
+    this.message = (config as string) || (config as ThrowErrorConfig).message;
+    this.name = (config as ThrowErrorConfig).message || '';
+    this.cause = cause || (config as ThrowErrorConfig).cause;
   }
 
   message: string;
