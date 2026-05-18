@@ -23,8 +23,8 @@ const RecentSearches: IRecentSearches = ({onPress}) => {
         </Container>
 
         <Container flexDirection="column" gap={16} padding={6}>
-          {searches.map(search => (
-            <TouchableOpacity onPress={() => onPress?.(search)}>
+          {searches.map((search, index) => (
+            <TouchableOpacity key={`${search}-${index}`} onPress={() => onPress?.(search)}>
               <Container flexDirection="row" gap={4}>
                 <Assets.Time />
                 <Typography size="sm" color="lightBlack" fontWeight="medium">

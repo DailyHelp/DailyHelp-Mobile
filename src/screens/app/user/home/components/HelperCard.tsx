@@ -13,6 +13,7 @@ const HelperCard: IHelperCard<ProvidersDto> = ({data, mode, horizontal}) => {
   const navigation = useNavigation<Navigate<IHomeRoute>>();
 
   let serviceImages = (data?.serviceImages as string).split(',');
+  const firstImage = serviceImages?.[0];
 
   return (
     <Card
@@ -39,10 +40,12 @@ const HelperCard: IHelperCard<ProvidersDto> = ({data, mode, horizontal}) => {
               paddingBottom: 10,
               borderRadius: 20,
             }}>
-            <Card.Cover
-              style={{height: verticalScale(150)}}
-              source={{uri: serviceImages?.[0]}}
-            />
+            {firstImage && (
+              <Card.Cover
+                style={{height: verticalScale(150)}}
+                source={{uri: firstImage}}
+              />
+            )}
             <View
               style={{
                 position: 'absolute',
@@ -160,10 +163,12 @@ const HelperCard: IHelperCard<ProvidersDto> = ({data, mode, horizontal}) => {
               paddingBottom: 10,
               borderRadius: 20,
             }}>
-            <Card.Cover
-              style={{height: verticalScale(150)}}
-              source={{uri: serviceImages?.[0]}}
-            />
+            {firstImage && (
+              <Card.Cover
+                style={{height: verticalScale(150)}}
+                source={{uri: firstImage}}
+              />
+            )}
 
             <View
               style={{
