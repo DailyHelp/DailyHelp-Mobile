@@ -86,10 +86,18 @@ const Search: ISearch = ({navigation}) => {
         onBlur={() => setIsFocused(false)}
         value={search}
         onRightIconPress={() => {
-          setQuery(q => ({...q, filter: {...q?.filter, search: ''}}));
+          setQuery(q => ({
+            ...q,
+            pagination: {...q?.pagination, page: 1},
+            filter: {...q?.filter, search: ''},
+          }));
         }}
         onSearch={search => {
-          setQuery(q => ({...q, filter: {...q?.filter, search}}));
+          setQuery(q => ({
+            ...q,
+            pagination: {...q?.pagination, page: 1},
+            filter: {...q?.filter, search},
+          }));
         }}
       />
 
@@ -98,6 +106,7 @@ const Search: ISearch = ({navigation}) => {
           onPress={search => {
             setQuery(q => ({
               ...q,
+              pagination: {...q?.pagination, page: 1},
               filter: {...q?.filter, search},
             }));
           }}
@@ -144,6 +153,7 @@ const Search: ISearch = ({navigation}) => {
                   onPress={cat => {
                     setQuery(q => ({
                       ...q,
+                      pagination: {...q?.pagination, page: 1},
                       filter: {...q?.filter, search: cat?.name},
                     }));
                     utils.saveRecentSearch(cat?.name!);

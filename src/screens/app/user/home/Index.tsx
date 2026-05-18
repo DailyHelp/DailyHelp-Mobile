@@ -80,6 +80,7 @@ const Home: IHome = ({navigation}) => {
                 if (isEmpty) {
                   setQuery({
                     ...query!,
+                    pagination: {...query?.pagination, page: 1},
                     filter: {
                       isSearchPage: query?.filter?.isSearchPage,
                     },
@@ -87,7 +88,11 @@ const Home: IHome = ({navigation}) => {
                   return;
                 }
 
-                setQuery({...query!, filter: {...query?.filter, ...q}});
+                setQuery({
+                  ...query!,
+                  pagination: {...query?.pagination, page: 1},
+                  filter: {...query?.filter, ...q},
+                });
               }}
               data={[
                 {label: 'Reset'},

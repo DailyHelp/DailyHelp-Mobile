@@ -253,7 +253,7 @@ class HomeService extends HomeApi {
   }
 
   useCustomerDashboard(isSearchPage = false) {
-    const {query, setQuery, appendPageData, data, fetchMore} =
+    const {query, setQuery, appendPageData, data, fetchMore, resetHistory} =
       utils.usePagination<ProvidersQuery, ProvidersDto>({
         pagination: {
           limit: 10,
@@ -291,9 +291,12 @@ class HomeService extends HomeApi {
 
     React.useEffect(() => {
       if (dashboard?.data) {
+        if (query.pagination?.page === 1) {
+          resetHistory();
+        }
         appendPageData(dashboard?.data?.allProviders?.data!);
       }
-    }, [dashboard?.data]);
+    }, [dashboard?.data, query.pagination?.page, resetHistory]);
 
     return {
       data: dashboard?.data,
