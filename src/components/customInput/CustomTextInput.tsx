@@ -1,4 +1,4 @@
-import {TouchableOpacity, View} from 'react-native';
+import {TextInput as RNTextInput, TouchableOpacity, View} from 'react-native';
 import {Text, TextInput} from 'react-native-paper';
 import IconF from 'react-native-vector-icons/Feather';
 import {verticalScale} from '../../shared/Scaling';
@@ -80,41 +80,70 @@ const CustomTextInput: IInput = ({
           </TouchableOpacity>
         )}
 
-        <TextInput
-          onFocus={onFocus}
-          onBlur={onBlur}
-          multiline={multiline}
-          numberOfLines={numberOfLines}
-          keyboardType={keyboardType}
-          mode="outlined"
-          outlineColor={borderColor || 'transparent'}
-          activeOutlineColor="transparent"
-          placeholder={placeholder}
-          textColor={multiline ? Colors.gray : '#3B4152'}
-          disabled={disabled}
-          placeholderTextColor={'#A9AFC2'}
-          maxLength={maxLength}
-          cursorColor="#A9AFC2"
-          contentStyle={{
-            color: '#757C91',
-            fontFamily,
-            fontSize: customFontSize.sm,
-          }}
-          outlineStyle={{
-            borderRadius: 10,
-            borderColor: borderColor || 'transparent',
-          }}
-          style={{
-            backgroundColor: backGroundColor || '#F9F9FB',
-            height,
-            flex: 1,
-          }}
-          value={value}
-          onChangeText={onChangeText}
-          selection={selection}
-          onSelectionChange={onSelectionChange}
-          error={hasError}
-        />
+        {multiline ? (
+          <RNTextInput
+            onFocus={onFocus}
+            onBlur={onBlur}
+            multiline
+            numberOfLines={numberOfLines}
+            keyboardType={keyboardType}
+            placeholder={placeholder}
+            placeholderTextColor={'#A9AFC2'}
+            maxLength={maxLength}
+            editable={!disabled}
+            style={{
+              backgroundColor: backGroundColor || '#F9F9FB',
+              height,
+              flex: 1,
+              borderRadius: 10,
+              paddingHorizontal: 14,
+              paddingTop: 14,
+              paddingBottom: 14,
+              color: '#757C91',
+              fontFamily,
+              fontSize: customFontSize.sm,
+              textAlignVertical: 'top',
+            }}
+            value={value}
+            onChangeText={onChangeText}
+          />
+        ) : (
+          <TextInput
+            onFocus={onFocus}
+            onBlur={onBlur}
+            multiline={false}
+            numberOfLines={numberOfLines}
+            keyboardType={keyboardType}
+            mode="outlined"
+            outlineColor={borderColor || 'transparent'}
+            activeOutlineColor="transparent"
+            placeholder={placeholder}
+            textColor={'#3B4152'}
+            disabled={disabled}
+            placeholderTextColor={'#A9AFC2'}
+            maxLength={maxLength}
+            cursorColor="#A9AFC2"
+            contentStyle={{
+              color: '#757C91',
+              fontFamily,
+              fontSize: customFontSize.sm,
+            }}
+            outlineStyle={{
+              borderRadius: 10,
+              borderColor: borderColor || 'transparent',
+            }}
+            style={{
+              backgroundColor: backGroundColor || '#F9F9FB',
+              height,
+              flex: 1,
+            }}
+            value={value}
+            onChangeText={onChangeText}
+            selection={selection}
+            onSelectionChange={onSelectionChange}
+            error={hasError}
+          />
+        )}
         {rightIcon && (
           <TouchableOpacity
             onPress={onRightIconPress}

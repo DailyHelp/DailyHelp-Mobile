@@ -20,16 +20,25 @@ const Checkout: ICheckout = ({route, navigation}) => {
   const {wallet} = moreService.useWalletBalance();
 
   React.useEffect(() => {
-    if (data)
-      navigation.navigate('WebViewComponent', {
-        url: data.data.authorizationUrl,
-      });
+    if (data) {
+      if (data.data.authorizationUrl) {
+        // PAYSTACK: redirect to Paystack's hosted payment page
+        navigation.navigate('WebViewComponent', {
+          url: data.data.authorizationUrl,
+        });
+      } else {
+        // WALLET: payment was debited directly — no redirect needed, go back to chat
+        navigation.goBack();
+      }
+    }
   }, [data]);
 
+  const price = route.params?.price ?? 0;
+  const serviceFee = Math.round(price * 0.1) + 130;
   const summary = [
-    {title: 'Amount', value: route.params?.price},
-    {title: 'Service fee', value: 2000},
-    {title: 'Total', value: route.params?.price},
+    {title: 'Amount', value: price},
+    {title: 'Service fee', value: serviceFee},
+    {title: 'Total', value: price + serviceFee},
   ];
 
   return (
@@ -125,7 +134,7 @@ const Checkout: ICheckout = ({route, navigation}) => {
             icon="💳"
             title="Pay with wallet balance"
             subtitle={utils.numberWithCommas(
-              wallet?.data.availableBalance || 0,
+              wallet?.data?.availableBalance || 0,
             )}
             selected={selectedPayment === 'WALLET'}
             onPress={id => setSelectedPayment('WALLET')}

@@ -47,11 +47,7 @@ const CustomInput: IInput = ({type = 'text', mask, maskType, ...props}) => {
       onSelectionChange={(e: any) => setSelection(e.nativeEvent.selection)}
     />
   ) : (
-    <CustomTextInput
-      {...props}
-      selection={selection}
-      onSelectionChange={(e: any) => setSelection(e.nativeEvent.selection)}
-    />
+    <CustomTextInput {...props} />
   );
 };
 export default CustomInput;

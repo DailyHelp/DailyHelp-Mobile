@@ -38,6 +38,7 @@ export class AuthService extends AuthApi {
   useCreateAccount() {
     const navigation = useNavigation<Navigate<IAuthRoute>>();
     const routes = useRoute<RouteProp<IAuthRoute, 'CreateAccount'>>();
+    const messagingInstance = React.useMemo(() => getMessaging(), []);
 
     const {mutate, isPending, data} = useMutation({
       mutationKey: ['create-account'],
@@ -59,6 +60,7 @@ export class AuthService extends AuthApi {
 
     const onSubmit = async (body: RegisterDTO) => {
       body.type = routes.params?.userType;
+      body.deviceToken = await getToken(messagingInstance);
       mutate(body);
     };
 
@@ -74,10 +76,7 @@ export class AuthService extends AuthApi {
 
     const {mutateAsync, isPending} = useMutation({
       mutationKey: ['login'],
-      mutationFn: async (body: LoginDto) => {
-        body.deviceToken = await getToken(messagingInstance);
-        return await this.login(body);
-      },
+      mutationFn: async (body: LoginDto) => await this.login(body),
       onSuccess: (data, body) => {
         if (data?.status) {
           if (data.data.pinId && data.data.uuid) {

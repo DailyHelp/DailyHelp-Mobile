@@ -12,25 +12,29 @@ import AppStorage from '../../../shared/AppStorage';
 
 const VerifyPhone: IVerifyPhone = ({navigation}) => {
   utils.useHideBottomTab({navigation, autoShow: false});
-  const {onResendOtp, resendLoading, error, data} = authService.useVerifyOtp();
+  const {onResendOtp, resendLoading} = authService.useVerifyOtp();
   return (
     <Formik
       initialValues={{phone: ''}}
       onSubmit={async ({phone}) => {
-        await onResendOtp({
-          phone,
-          otpActionType: OtpActionType.VERIFY_PHONE,
-          userUuid: (await AppStorage.find('user_id')) as string,
-        });
-
-        if (!error) {
-          navigation.navigate('VerifyAccount', {
-            type: OtpActionType.VERIFY_PHONE,
+        try {
+          const result = await onResendOtp({
             phone,
-            userType: (await AppStorage.find('userType')) as UserTypes,
-            user_id: (await AppStorage.find('user_id')) as string,
-            pin: data?.data.pinId,
+            otpActionType: OtpActionType.VERIFY_PHONE,
+            userUuid: (await AppStorage.find('user_id')) as string,
           });
+
+          if (result?.status) {
+            navigation.navigate('VerifyAccount', {
+              type: OtpActionType.VERIFY_PHONE,
+              phone,
+              userType: (await AppStorage.find('userType')) as UserTypes,
+              user_id: (await AppStorage.find('user_id')) as string,
+              pin: result?.data?.pinId,
+            });
+          }
+        } catch (_) {
+          // error already handled by CatchError inside the mutation
         }
       }}>
       {({values, handleChange, handleSubmit}) => (

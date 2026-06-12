@@ -97,9 +97,11 @@ const Chat: IChat = ({navigation}) => {
 
             if (appStore.shouldShowMessagePermission()) {
               SheetManager.show('ChatDisclaimer', {
-                onClose: () => {
-                  appStore.setMessagePermissionCount();
-                  join();
+                payload: {
+                  onAgree: () => {
+                    appStore.setMessagePermissionCount();
+                    join();
+                  },
                 },
               });
               return;

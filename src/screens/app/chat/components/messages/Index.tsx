@@ -16,7 +16,7 @@ const Messages: IMessages<UserDTO> = props => {
   const status = data!?.offer!?.status?.toLowerCase() || 'accepted';
   const time = dayjs(data?.createdAt).format('h:mm A'); // fallback time
 
-  let attachment = data?.offer?.pictures.split(',');
+  let attachment = data?.offer?.pictures?.split(',').filter(Boolean);
 
   let backgroundColor = props.backgroundColor;
   if (!backgroundColor) {

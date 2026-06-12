@@ -20,8 +20,11 @@ import {verticalScale} from '../../../../shared/Scaling';
 import {ColorKeys} from '../../../../shared/themes/Index';
 import {customFontSize, fonts} from '../../../../shared/themes/Typography';
 import utils from '../../../../shared/Utils';
+import AppStorage from '../../../../shared/AppStorage';
 import JobTimeline from './components/JobTimeline';
 import jobService from './service/Jobs.service';
+
+const suggestionsShownForJob = new Set<string>();
 
 const ViewDetails: IViewDetails = ({navigation, route}) => {
   const jobs = route.params;
@@ -64,6 +67,34 @@ const ViewDetails: IViewDetails = ({navigation, route}) => {
       setType(jobs.status.toLowerCase());
     }
   }, [data?.job?.status, jobs?.status]);
+
+  React.useEffect(() => {
+    const job = data?.job;
+    const jobUuid = route.params?.uuid;
+    if (!job || !jobUuid) return;
+    if (
+      job.status !== 'CANCELED' ||
+      job.cancelledByUserType !== 'PROVIDER' ||
+      AppStorage.find('user_id') !== job.serviceRequestor?.uuid ||
+      suggestionsShownForJob.has(jobUuid)
+    ) {
+      return;
+    }
+    suggestionsShownForJob.add(jobUuid);
+    jobService
+      .fetchAlternateProviders(jobUuid)
+      .then(res => {
+        if ((res?.data ?? []).length > 0) {
+          SheetManager.show('WorkerSuggestion', {payload: {uuid: jobUuid}});
+        }
+      })
+      .catch(() => {});
+  }, [
+    data?.job?.status,
+    data?.job?.cancelledByUserType,
+    data?.job?.serviceRequestor?.uuid,
+    route.params?.uuid,
+  ]);
 
   let headerText = 'Have they arrived? Tap “Confirm face” to verify.';
   let headerBgColor = '#95D21A';

@@ -1,5 +1,5 @@
 import React from 'react';
-import {TouchableOpacity, View} from 'react-native';
+import {Dimensions, TouchableOpacity, View} from 'react-native';
 import ActionSheet, {
   ActionSheetRef,
   ScrollView,
@@ -11,6 +11,8 @@ import MainButton from '../../../../components/button/MainButton';
 import Container from '../../../../components/container/Index';
 import Typography from '../../../../components/Typography';
 import {scale, verticalScale} from '../../../../shared/Scaling';
+
+const SCREEN_HEIGHT = Dimensions.get('window').height;
 
 const ChatDisclaimer = React.forwardRef<
   ActionSheetRef<'ChatDisclaimer'>,
@@ -44,7 +46,6 @@ const ChatDisclaimer = React.forwardRef<
           paddingTop: verticalScale(20),
           backgroundColor: 'white',
         }}>
-        {/* Header */}
         <View
           style={{
             flexDirection: 'row',
@@ -66,12 +67,8 @@ const ChatDisclaimer = React.forwardRef<
           </View>
         </View>
 
-        {/* Content */}
         <ScrollView
-          style={{
-            maxHeight: verticalScale(500),
-            marginBottom: verticalScale(20),
-          }}
+          style={{maxHeight: SCREEN_HEIGHT * 0.6, marginBottom: verticalScale(16)}}
           showsVerticalScrollIndicator={true}>
           <View style={{gap: verticalScale(16)}}>
             <Typography size="md">
@@ -116,8 +113,7 @@ const ChatDisclaimer = React.forwardRef<
           </View>
         </ScrollView>
 
-        {/* Action Button */}
-        <Container marginTop={verticalScale(10)}>
+        <Container marginTop={verticalScale(10)} marginBottom={verticalScale(10)}>
           <MainButton
             onPress={handleAgree}
             enableButtonColor="primary"

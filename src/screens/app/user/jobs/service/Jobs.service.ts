@@ -7,6 +7,7 @@ import AppStorage from '../../../../../shared/AppStorage';
 import DeclineOfferDto from '../dto/DeclineOffer.dto';
 import {websocketService} from '../../../../../shared/services/WebSocket';
 import CatchError from '../../../../../shared/errors/catchError';
+import {SheetManager} from 'react-native-actions-sheet';
 
 class JobService extends JobsApi {
   private static instance: JobService;
@@ -397,6 +398,7 @@ class JobService extends JobsApi {
                 serviceProviderUuid,
                 serviceRequestorUuid,
                 status,
+                cancelledByUserType,
               } = message.data || {};
               if (uuid) {
                 console.log('Job updated:', uuid);
@@ -412,6 +414,27 @@ class JobService extends JobsApi {
                   queryClient.invalidateQueries({
                     queryKey: ['conversation', conversationUuid],
                   });
+                }
+
+                if (
+                  status === 'CANCELED' &&
+                  cancelledByUserType === 'PROVIDER' &&
+                  AppStorage.find('user_id') === serviceRequestorUuid
+                ) {
+                  this.alternateProviders(uuid)
+                    .then(res => {
+                      const providers = res?.data ?? [];
+                      if (providers.length > 0) {
+                        queryClient.setQueryData(
+                          ['alternateProvider', uuid],
+                          res,
+                        );
+                        SheetManager.show('WorkerSuggestion', {
+                          payload: {uuid},
+                        });
+                      }
+                    })
+                    .catch(() => {});
                 }
               }
               break;
@@ -515,6 +538,10 @@ class JobService extends JobsApi {
       data: data?.data,
       isLoading,
     };
+  }
+
+  fetchAlternateProviders(uuid: string) {
+    return this.alternateProviders(uuid);
   }
 }
 

@@ -121,7 +121,7 @@ declare module 'react-native-actions-sheet' {
     WorkerSuggestion: SheetDefinition<{
       payload: {
         uuid: string;
-        navigation: Navigate<IHomeRoute>;
+        navigation?: Navigate<IHomeRoute>;
       };
     }>;
     RateService: SheetDefinition<{

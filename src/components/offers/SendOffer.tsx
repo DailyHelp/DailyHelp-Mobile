@@ -100,13 +100,14 @@ const SendOffer: IOffer<Message> = ({
 
   return (
     <Portal>
-      <Modal visible={isVisible}>
+      <Modal
+        visible={isVisible}
+        onDismiss={onClose}
+        contentContainerStyle={{width: '95%', alignSelf: 'center'}}>
         <Container
           flexDirection="column"
           gap={10}
-          width={'95'}
-          alignSelf="center"
-          position="absolute">
+          width={'full'}>
           <Container
             backgroundColor={!isAvailable ? 'orange' : 'transparent'}
             borderRadius={20}

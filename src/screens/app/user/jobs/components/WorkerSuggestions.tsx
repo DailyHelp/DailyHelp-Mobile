@@ -1,8 +1,9 @@
 import React from 'react';
-import {View} from 'react-native';
+import {ActivityIndicator, Pressable, View} from 'react-native';
 import ActionSheet, {
   ActionSheetRef,
   FlatList,
+  SheetManager,
   SheetProps,
 } from 'react-native-actions-sheet';
 import Icon from 'react-native-vector-icons/AntDesign';
@@ -11,6 +12,7 @@ import StatusChip from '../../../../../components/StatusChip';
 import Typography from '../../../../../components/Typography';
 import MainButton from '../../../../../components/button/MainButton';
 import {scale, verticalScale} from '../../../../../shared/Scaling';
+import {navigate} from '../../../../../shared/navigationRef';
 import ProvidersDto from '../../home/dto/providersDto';
 import jobService from '../service/Jobs.service';
 
@@ -21,90 +23,109 @@ const WorkerSuggestions = React.forwardRef<
   const {data, isLoading} = jobService.useAlternateProviders(
     props.payload?.uuid!,
   );
+  const navigation = props.payload?.navigation;
 
-  const renderItem = React.useCallback((item: ProvidersDto, index: number) => {
-    return (
-      <View
-        style={{
-          borderWidth: 1,
-          borderColor: '#F1F2F4',
-          borderRadius: 10,
-          padding: scale(10),
-          marginTop: scale(20),
-          flexDirection: 'column',
-          gap: 15,
-        }}>
+  const close = React.useCallback(() => SheetManager.hide('WorkerSuggestion'), []);
+
+  const goToProfile = React.useCallback(
+    (item: ProvidersDto) => {
+      close();
+      if (navigation) {
+        navigation.navigate('ServiceProfile', item);
+      } else {
+        navigate('ServiceProfile', item);
+      }
+    },
+    [close, navigation],
+  );
+
+  const renderItem = React.useCallback(
+    (item: ProvidersDto) => {
+      const isAvailable = item.availability && !item.engaged;
+      return (
         <View
           style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
+            borderWidth: 1,
+            borderColor: '#F1F2F4',
+            borderRadius: 10,
+            padding: scale(10),
+            marginTop: scale(20),
+            flexDirection: 'column',
+            gap: 15,
           }}>
-          <View style={{flexDirection: 'row', gap: 10}}>
-            <CustomAvatar data={{image: item.picture, badge: item.tier}} />
-            <View style={{flexDirection: 'column', gap: 5, width: '83%'}}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                }}>
-                <Typography fontWeight="bold" size="m2d">
-                  {item.lastname} {item.firstname}
-                </Typography>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+            }}>
+            <View style={{flexDirection: 'row', gap: 10}}>
+              <CustomAvatar data={{image: item.picture, badge: item.tier}} />
+              <View style={{flexDirection: 'column', gap: 5, width: '83%'}}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                  }}>
+                  <Typography fontWeight="bold" size="m2d">
+                    {item.firstname} {item.lastname}
+                  </Typography>
 
-                <View style={{flexDirection: 'row', gap: 3}}>
-                  <Icon name="star" size={15} color={'#FFD100'} />
-                  <Typography
-                    fontWeight="regular"
-                    color="gray"
-                    textAlign="center">
-                    {item.avgRating}
+                  <View style={{flexDirection: 'row', gap: 3}}>
+                    <Icon name="star" size={15} color={'#FFD100'} />
+                    <Typography
+                      fontWeight="regular"
+                      color="gray"
+                      textAlign="center">
+                      {item.avgRating}
+                    </Typography>
+                  </View>
+                </View>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    gap: 5,
+                  }}>
+                  <Typography fontWeight="medium" color="gray">
+                    {item.primaryJobRole}
+                  </Typography>
+                  <Typography fontWeight="bold" color="gray">
+                    |
+                  </Typography>
+                  <Typography fontWeight="regular" color="gray">
+                    From
+                  </Typography>
+                  <Typography fontWeight="bold" currency>
+                    {item.offerStartingPrice}
                   </Typography>
                 </View>
               </View>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  gap: 5,
-                }}>
-                <Typography fontWeight="medium" color="gray">
-                  {item.primaryJobRole}
-                </Typography>
-                <Typography fontWeight="bold" color="gray">
-                  |
-                </Typography>
-                <Typography fontWeight="regular" color="gray">
-                  From
-                </Typography>
-                <Typography fontWeight="bold" currency>
-                  {item.offerStartingPrice}
-                </Typography>
-              </View>
             </View>
           </View>
-        </View>
 
-        <View style={{flexDirection: 'row', gap: 10}}>
-          <StatusChip>{item.engaged ? 'Available' : 'UnAvailable'}</StatusChip>
-          <StatusChip backgroundColor="#F3F4F6">
-            {item.completedJobs} jobs completed
-          </StatusChip>
-        </View>
+          <View style={{flexDirection: 'row', gap: 10}}>
+            <StatusChip>{isAvailable ? 'Available' : 'Unavailable'}</StatusChip>
+            <StatusChip backgroundColor="#F3F4F6">
+              {item.completedJobs} jobs completed
+            </StatusChip>
+          </View>
 
-        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-          <MainButton
-            enableButtonColor="lightGrey"
-            onPress={() => {
-              props?.payload?.navigation?.navigate('ServiceProfile', item);
-            }}
-            color="black"
-            width={'48%'}>
-            View profile
-          </MainButton>
-          <MainButton width={'48%'}>Send offers</MainButton>
+          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+            <MainButton
+              enableButtonColor="lightGrey"
+              onPress={() => goToProfile(item)}
+              color="black"
+              width={'48%'}>
+              View profile
+            </MainButton>
+            <MainButton width={'48%'} onPress={() => goToProfile(item)}>
+              Send offer
+            </MainButton>
+          </View>
         </View>
-      </View>
-    );
-  }, []);
+      );
+    },
+    [goToProfile],
+  );
 
   return (
     <ActionSheet
@@ -119,7 +140,9 @@ const WorkerSuggestions = React.forwardRef<
             justifyContent: 'flex-end',
             margin: scale(5),
           }}>
-          <Icon name="close" color={'#757C91'} size={15} />
+          <Pressable onPress={close} hitSlop={10}>
+            <Icon name="close" color={'#757C91'} size={18} />
+          </Pressable>
         </View>
         {/* Header */}
         <View
@@ -139,14 +162,20 @@ const WorkerSuggestions = React.forwardRef<
         </View>
 
         {/* FlatList */}
-        <FlatList
-          data={data}
-          renderItem={({item, index}) => renderItem(item, index)}
-          keyExtractor={(item, index) => index.toString() + item.uuid}
-          contentContainerStyle={{
-            paddingBottom: verticalScale(100),
-          }}
-        />
+        {isLoading ? (
+          <View style={{paddingVertical: verticalScale(40)}}>
+            <ActivityIndicator />
+          </View>
+        ) : (
+          <FlatList
+            data={data}
+            renderItem={({item}) => renderItem(item)}
+            keyExtractor={(item, index) => index.toString() + item.uuid}
+            contentContainerStyle={{
+              paddingBottom: verticalScale(100),
+            }}
+          />
+        )}
       </View>
     </ActionSheet>
   );

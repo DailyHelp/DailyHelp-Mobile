@@ -352,9 +352,17 @@ export const UserChatStackRoutes = [
   {
     name: 'WebViewComponent',
     component: WebViewComponent,
-    options: {
-      headerShown: false,
-    },
+    options: ({route}: any) => ({
+      headerShown: true,
+      header: (props: NativeStackHeaderProps) => (
+        <CustomHeader
+          type="back"
+          title={route.params?.title || 'Payment'}
+          {...props}
+          textMiddle
+        />
+      ),
+    }),
   },
   {
     name: 'Checkout',
@@ -455,9 +463,17 @@ export const MoreStackRoutes = [
   {
     name: 'WebViewComponent',
     component: WebViewComponent,
-    options: {
-      headerShown: false,
-    },
+    options: ({route}: any) => ({
+      headerShown: true,
+      header: (props: NativeStackHeaderProps) => (
+        <CustomHeader
+          type="back"
+          title={route.params?.title || 'Payment'}
+          {...props}
+          textMiddle
+        />
+      ),
+    }),
   },
   {
     name: 'UpdatePassword',

@@ -23,7 +23,7 @@ export default class RegisterDTO {
   })
   password?: string;
 
-  deviceToken: string = 'string';
+  deviceToken?: string;
 
   type?: UserTypes;
 
@@ -33,7 +33,7 @@ export default class RegisterDTO {
     this.lastname = dto?.lastname;
     this.password = dto?.password;
     this.phone = dto?.phone;
-    this.deviceToken = 'string';
+    this.deviceToken = dto?.deviceToken;
     this.type = dto?.type
   }
 }

@@ -10,7 +10,8 @@ import OtpCountDown from '../../components/OtpCountDown';
 import Typography from '../../components/Typography';
 import {scale, verticalScale} from '../../shared/Scaling';
 import {customFontSize, fonts} from '../../shared/themes/Typography';
-import VerifyOtpDTO from './dto/VerifyOtpDto';
+import {useQueryClient} from '@tanstack/react-query';
+import VerifyOtpDTO, {OtpActionType} from './dto/VerifyOtpDto';
 import authService from './services/Auth.service';
 import utils from '../../shared/Utils';
 
@@ -22,6 +23,7 @@ const VerifyAccount: IVerifyAccount = ({route, navigation}) => {
 
   const {loading, onSubmit, resendLoading, onResendOtp} =
     authService.useVerifyOtp();
+  const queryClient = useQueryClient();
 
   React.useEffect(() => {
     if (!route.params?.user_id || !route.params?.pin) {
@@ -95,13 +97,23 @@ const VerifyAccount: IVerifyAccount = ({route, navigation}) => {
                       pinId: route.params?.pin,
                       userUuid: route.params?.user_id,
                     },
-                    data =>
-                      navigation.navigate(route?.params?.to!, {
-                        ...route.params?.payload,
-                        userType: utils.getUserType(
-                          data?.data.user?.userTypes,
-                        )[0],
-                      }),
+                    async data => {
+                      if (
+                        route.params?.type === OtpActionType.VERIFY_PHONE
+                      ) {
+                        await queryClient.invalidateQueries({
+                          queryKey: ['user'],
+                        });
+                        (navigation as any).navigate('AccountSettings');
+                      } else {
+                        navigation.navigate(route?.params?.to!, {
+                          ...route.params?.payload,
+                          userType: utils.getUserType(
+                            data?.data.user?.userTypes,
+                          )[0],
+                        });
+                      }
+                    },
                   );
                 }}
                 width={scale(13)}

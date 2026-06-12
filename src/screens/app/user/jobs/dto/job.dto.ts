@@ -55,6 +55,7 @@ export default class JobsDto {
   'cancelledAt': string;
   'cancellationReason': string;
   'cancellationCategory': string;
+  'cancelledByUserType'?: 'PROVIDER' | 'CUSTOMER' | null;
   providerPrimaryJobRole?: string;
   providerFirstname?: string;
   providerLastname?: string;
