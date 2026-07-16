@@ -10,14 +10,16 @@ import MainButton from '../../components/button/MainButton';
 import Container from '../../components/container/Index';
 import CustomInput from '../../components/customInput/Index';
 import ScreenHeader from '../../components/ScreenHeader';
+import SwitchAccountModal from '../../components/SwitchAccountModal';
 import {verticalScale} from '../../shared/Scaling';
 import {customFontSize, fonts} from '../../shared/themes/Typography';
 import LoginDto from './dto/LoginDto';
 import authService from './services/Auth.service';
 
 const Login: ILogin = ({navigation}) => {
-  const {loading, onSubmit} = authService.useLogin();
-  const {signIn, isGooglePending} = authService.useGoogleSignAuth();
+  const {loading, onSubmit, switchModal} = authService.useLogin();
+  const {signIn, isGooglePending, switchModal: googleSwitchModal} =
+    authService.useGoogleSignAuth();
 
   return (
     <Container
@@ -132,6 +134,9 @@ const Login: ILogin = ({navigation}) => {
           Forgot password?
         </Text>
       </TouchableOpacity>
+
+      <SwitchAccountModal {...switchModal} />
+      <SwitchAccountModal {...googleSwitchModal} />
     </Container>
   );
 };

@@ -18,7 +18,9 @@ export type IAuthRoute = {
   CreateAccount?: {
     userType: UserTypes;
   };
-  Login?: undefined;
+  Login?: {
+    userType?: UserTypes;
+  };
   VerifyIdentity?: {
     first_name?: string;
     last_name?: string;

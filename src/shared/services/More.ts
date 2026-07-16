@@ -28,10 +28,15 @@ export default class MoreApi extends Http {
     AppStorage.save('access_token', data?.data.accessToken!);
 
     if (currentUser === UserTypes.CUSTOMER) {
-      EventRegister.emit(EVENTS.SWITCH_USER, {
-        userType: UserTypes.PROVIDER,
-        isVerified: data?.data.user?.onboardingCompleted,
-      });
+      // Switching to provider. Only flip straight into provider mode when the
+      // provider profile is already onboarded; otherwise leave the flip to the
+      // caller, which routes the user through provider onboarding first.
+      if (data?.data.user?.onboardingCompleted) {
+        EventRegister.emit(EVENTS.SWITCH_USER, {
+          userType: UserTypes.PROVIDER,
+          isVerified: data?.data.user?.onboardingCompleted,
+        });
+      }
     } else {
       EventRegister.emit(EVENTS.SWITCH_USER, {
         userType: UserTypes.CUSTOMER,

@@ -9,6 +9,7 @@ import {UserTypes} from '../shared/Constant';
 import {scale, verticalScale} from '../shared/Scaling';
 import {customFontSize, fonts} from '../shared/themes/Typography';
 import ScreenHeader from './ScreenHeader';
+import SwitchAccountModal from './SwitchAccountModal';
 
 const FindServiceAuthModal: IFindServiceAuthModal<UserTypes> = ({
   isVisible,
@@ -16,9 +17,11 @@ const FindServiceAuthModal: IFindServiceAuthModal<UserTypes> = ({
   userType = UserTypes.CUSTOMER,
 }) => {
   const navigation = useNavigation<Navigate<IAuthRoute>>();
-  const {signIn, isGooglePending} = authService.useGoogleSignAuth();
+  const {signIn, isGooglePending, switchModal} =
+    authService.useGoogleSignAuth();
 
   return (
+    <>
     <Portal>
       <Modal
         visible={isVisible}
@@ -104,6 +107,30 @@ const FindServiceAuthModal: IFindServiceAuthModal<UserTypes> = ({
               style={{borderRadius: 10, borderColor: '#DDDFE4'}}>
               Continue with Apple
             </Button>
+
+            <TouchableOpacity
+              onPress={() => {
+                onClose();
+                navigation.navigate('Login', {userType});
+              }}
+              style={{flexDirection: 'row', justifyContent: 'center', gap: 4}}>
+              <Text
+                style={{
+                  fontFamily: fonts.GeistBold,
+                  fontSize: customFontSize.sm,
+                  color: '#3B4152',
+                }}>
+                Already have an account?
+              </Text>
+              <Text
+                style={{
+                  fontFamily: fonts.GeistBold,
+                  fontSize: customFontSize.sm,
+                  color: '#017441',
+                }}>
+                Log in
+              </Text>
+            </TouchableOpacity>
           </View>
           <View style={{width: '100%'}}>
             <Text
@@ -148,6 +175,8 @@ const FindServiceAuthModal: IFindServiceAuthModal<UserTypes> = ({
         </View>
       </Modal>
     </Portal>
+    <SwitchAccountModal {...switchModal} />
+    </>
   );
 };
 export default FindServiceAuthModal;

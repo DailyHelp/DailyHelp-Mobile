@@ -119,6 +119,19 @@ class AppStore {
     }
   }
 
+  /**
+   * Drop into the (unauthenticated) auth stack to run provider onboarding while
+   * preserving the freshly-issued provider session token. Unlike
+   * setIsAuthenticated(false), this does NOT clear storage — the onboarding
+   * screens need the provider token, and endpoints key off userType=PROVIDER.
+   * Completing onboarding calls setIsAuthenticated(true, PROVIDER).
+   */
+  startProviderOnboarding() {
+    this.isAuthenticated = false;
+    AppStorage.save('isAuthenticated', false);
+    this.setUserTypes(UserTypes.PROVIDER);
+  }
+
   setOffer(dto: {amount?: string; description?: string; attachments?: string}) {
     this.offerDto = {...this.offerDto, ...dto};
   }

@@ -22,7 +22,7 @@ const Checkout: ICheckout = ({route, navigation}) => {
   React.useEffect(() => {
     if (data) {
       if (data.data.authorizationUrl) {
-        // PAYSTACK: redirect to Paystack's hosted payment page
+        // Card/online: redirect to the active gateway's hosted payment page
         navigation.navigate('WebViewComponent', {
           url: data.data.authorizationUrl,
         });

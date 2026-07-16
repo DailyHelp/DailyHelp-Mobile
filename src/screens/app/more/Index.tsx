@@ -13,6 +13,7 @@ import UserDataCard from './components/UserDataCard';
 import moreService from './services/More.service';
 import homeService from '../user/home/services/Home.service';
 import utils from '../../../shared/Utils';
+import {routeAfterProviderSwitch} from '../../auth/services/useAccountSwitch';
 
 const More: IMore = ({navigation}) => {
   const {onSwitch, isLoading, data} = moreService.useSwitchUser();
@@ -140,7 +141,14 @@ const More: IMore = ({navigation}) => {
           style={{flexDirection: 'column', gap: 20, justifyContent: 'center'}}>
           <UserDataCard
             isVerified={isOnboardingCompleted as boolean}
-            onSwitch={user => onSwitch(user!)}
+            onSwitch={target =>
+              target === UserTypes.PROVIDER
+                ? onSwitch(target, {
+                    onSuccess: (data: any) =>
+                      routeAfterProviderSwitch(data?.data?.user),
+                  })
+                : onSwitch(target!)
+            }
             isLoading={isLoading}
             data={user}
           />

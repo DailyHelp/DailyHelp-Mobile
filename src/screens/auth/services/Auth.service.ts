@@ -10,7 +10,6 @@ import React from 'react';
 import {IAuthRoute, Navigate} from '../../../@types/routes';
 import CatchError from '../../../shared/errors/catchError';
 import AuthApi from '../../../shared/services/Auth';
-import {appStore} from '../../../shared/stores/appStore';
 import ForgotPasswordDTO, {ResetPasswordDTO} from '../dto/ForgotPasswordDto';
 import LoginDto from '../dto/LoginDto';
 import RegisterDTO from '../dto/RegisterDto';
@@ -21,8 +20,8 @@ import VerifyOtpDTO, {
   VerifyOtpResponse,
 } from '../dto/VerifyOtpDto';
 import UpdatePasswordDto from '../../app/more/dto/UpdatePassword.dto';
-import utils from '../../../shared/Utils';
 import {UserTypes} from '../../../shared/Constant';
+import {useAccountSwitch} from './useAccountSwitch';
 
 export class AuthService extends AuthApi {
   private static instance: AuthService;
@@ -72,7 +71,9 @@ export class AuthService extends AuthApi {
 
   useLogin() {
     const navigation = useNavigation<Navigate<IAuthRoute>>();
+    const routes = useRoute<RouteProp<IAuthRoute, 'Login'>>();
     const messagingInstance = React.useMemo(() => getMessaging(), []);
+    const {evaluate, switchModal} = useAccountSwitch();
 
     const {mutateAsync, isPending} = useMutation({
       mutationKey: ['login'],
@@ -95,54 +96,9 @@ export class AuthService extends AuthApi {
             return;
           }
 
-          const userType = utils.getUserType(data.data.user?.userTypes)[0];
-
-          let step1, step2, step3;
-          step1 = data.data.user?.providerOnboarding?.step1;
-          step2 = data.data.user?.providerOnboarding?.step2;
-          step3 = data.data.user?.providerOnboarding?.step3;
-
-          if (userType === UserTypes.PROVIDER && step1) {
-            step1 = true;
-            step2 = true;
-            step3 = true;
-          }
-
-          let verificationUrl = utils.getVerificationRoutes(
-            {
-              step1,
-              step2,
-              step3,
-              onboardingCompleted: data.data.user?.onboardingCompleted,
-            },
-            userType,
-          );
-
-          if (
-            !data.data.user?.identityVerified &&
-            userType === UserTypes.CUSTOMER
-          ) {
-            navigation.navigate('VerifyIdentity', {
-              first_name: data.data.user?.firstname,
-              last_name: data.data.user?.lastname,
-              userType,
-            });
-            return;
-          }
-
-          if (
-            !data.data.user?.onboardingCompleted &&
-            userType === UserTypes.PROVIDER
-          ) {
-            navigation.navigate(verificationUrl, {
-              first_name: data.data.user?.firstname,
-              last_name: data.data.user?.lastname,
-              userType,
-            });
-            return;
-          }
-
-          appStore.setIsAuthenticated(true, userType);
+          // Detect a mismatch between the selected onboarding side and the
+          // account type; prompts to switch when needed, otherwise routes.
+          evaluate(data.data.user, routes.params?.userType);
         }
       },
       onError: error => new CatchError(error, true),
@@ -156,6 +112,7 @@ export class AuthService extends AuthApi {
     return {
       loading: isPending,
       onSubmit,
+      switchModal,
     };
   }
 
@@ -228,7 +185,7 @@ export class AuthService extends AuthApi {
   }
 
   useGoogleSignAuth() {
-    const navigation = useNavigation<Navigate<IAuthRoute>>();
+    const {evaluate, switchModal} = useAccountSwitch();
 
     React.useEffect(() => {
       GoogleSignin.configure({webClientId: WEB_CLIENT_ID});
@@ -239,55 +196,8 @@ export class AuthService extends AuthApi {
       mutationFn: async (body: GoogleAuthDto) => await this.googleAuth(body),
       onSuccess: (data, body) => {
         if (data?.status) {
-          const userType = utils.getUserType(data.data.user?.userTypes)[0];
-
-          let step1, step2, step3;
-
-          step1 = data.data.user?.providerOnboarding?.step1;
-          step2 = data.data.user?.providerOnboarding?.step2;
-          step3 = data.data.user?.providerOnboarding?.step3;
-
-          if (userType === UserTypes.PROVIDER && step1) {
-            step1 = true;
-            step2 = true;
-            step3 = true;
-          }
-
-          let verificationUrl = utils.getVerificationRoutes(
-            {
-              step1,
-              step2,
-              step3,
-              onboardingCompleted: data.data.user?.onboardingCompleted,
-            },
-            userType,
-          );
-
-          if (
-            !data.data.user?.identityVerified &&
-            userType === UserTypes.CUSTOMER
-          ) {
-            navigation.navigate('VerifyIdentity', {
-              first_name: data.data.user?.firstname,
-              last_name: data.data.user?.lastname,
-              userType,
-            });
-            return;
-          }
-
-          if (
-            !data.data.user?.onboardingCompleted &&
-            userType === UserTypes.PROVIDER
-          ) {
-            navigation.navigate(verificationUrl, {
-              first_name: data.data.user?.firstname,
-              last_name: data.data.user?.lastname,
-              userType,
-            });
-            return;
-          }
-
-          appStore.setIsAuthenticated(true, userType);
+          // `body.type` is the side selected on onboarding (if any).
+          evaluate(data.data.user, body.type);
         }
       },
       onError: error => {
@@ -336,6 +246,7 @@ export class AuthService extends AuthApi {
     return {
       signIn,
       isGooglePending: isPending,
+      switchModal,
     };
   }
 
